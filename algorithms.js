@@ -1,13 +1,14 @@
 /** Class implementing the Algorithms on the data. */
 class Algorithms {
 
-    constructor(data, noc, ini_obs) {
+    constructor(data, noc) {
         this.data = data;
         this.noc = noc;
-        this.ini_obs = ini_obs; 
     }
 
-    furthest_Sum() {
+    furthest_Sum(ini_obs) {
+
+        this.ini_obs = ini_obs; 
 
         let dimensions = [this.data[0].length, this.data.length];
         let index = [];
