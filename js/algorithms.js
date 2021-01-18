@@ -1,4 +1,6 @@
 /** Class implementing the Algorithms on the data. */
+import { dot } from "mathjs";
+
 class Algorithms {
 
     constructor(data, noc) {
@@ -27,19 +29,20 @@ class Algorithms {
             sum_dist.push(0);
         }
 
-        // if (this.data.length > this.noc * this.data.length) {
-        //     kt = this.data;
-        //     kt_2 = kt.array.forEach(element, kt_index, kt_array => {
-        //         kt_array[kt_index] = element * element;
-        //     });
+        if (this.data.length > this.noc * this.data.length) {
+            kt = this.data;
+            kt_2 = kt.array.forEach(element, kt_index, kt_array => {
+                kt_array[kt_index] = element * element;
+            });
             
-        //     for (let i = 1; i < this.noc + 10; i++) {
-        //         if (i > this.noc - 1) {
-        //             kq = 
-        //         }
-        //     }
+            for (let i = 1; i < this.noc + 10; i++) {
+                if (i > this.noc - 1) {
+                    kq = math.dot(kt[0][ini_obs[0]],kt);
 
-        // }
+                }
+            }
+
+        }
         
 
 
