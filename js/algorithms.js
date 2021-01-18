@@ -1,5 +1,5 @@
 /** Class implementing the Algorithms on the data. */
-import { dot } from "mathjs";
+//import { dot } from "mathjs";
 
 class Algorithms {
 
