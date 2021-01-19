@@ -1,11 +1,11 @@
 /** Class implementing the Algorithms on the data. */
-//import { dot } from "mathjs";
 
 class Algorithms {
 
     constructor(data, noc) {
         this.data = data;
         this.noc = noc;
+
     }
 
     furthest_Sum(ini_obs) {
@@ -30,11 +30,19 @@ class Algorithms {
         }
 
         if (this.data[0].columns.length > 0) {
-            kt = this.data;
-            kt_temp = kt.array.forEach(element, kt_index, kt_array => {
-                kt_array[kt_index] = element * element;
-            });
-            kt_2 = math.sum(kt_temp);
+            let kt = this.data;
+            let kt_temp = 0;
+
+
+
+            // for (let l = 0; l < this.data[0].length; l++) {
+            //     for (let p = 0; p < this.data[0].columns.length; p++) {
+            //         let squared_elem = this.data[0][l][p] * this.data[0][l][p];
+            //         kt_temp[l][p] = squared_elem;
+            //     }
+            // }
+
+            let kt_2 = (kt_temp);
             
             for (let i = 1; i < this.noc + 10; i++) {
                 if (i > this.noc - 1) {
