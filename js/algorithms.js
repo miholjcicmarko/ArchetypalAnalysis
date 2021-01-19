@@ -1,5 +1,4 @@
 /** Class implementing the Algorithms on the data. */
-import { dot } from "math";
 
 class Algorithms {
 
