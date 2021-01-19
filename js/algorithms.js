@@ -25,11 +25,11 @@ class Algorithms {
 
         let sum_dist = [];
 
-        for (let i = 0; i < this.data.length; i++) {
+        for (let i = 0; i < this.data[0].columns.length; i++) {
             sum_dist.push(0);
         }
 
-        if (this.data.length > this.noc * this.data.length) {
+        if (this.data[0].columns.length > 0) {
             kt = this.data;
             kt_temp = kt.array.forEach(element, kt_index, kt_array => {
                 kt_array[kt_index] = element * element;
