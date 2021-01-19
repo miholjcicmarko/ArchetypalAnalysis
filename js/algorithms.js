@@ -1,4 +1,5 @@
 /** Class implementing the Algorithms on the data. */
+import { dot } from "math";
 
 class Algorithms {
 
@@ -31,7 +32,7 @@ class Algorithms {
 
         if (this.data[0].columns.length > 0) {
             let kt = this.data;
-            let kt_temp = 0;
+            let kt_temp = mathjs.square(kt);
 
 
 
@@ -42,10 +43,13 @@ class Algorithms {
             //     }
             // }
 
-            let kt_2 = (kt_temp);
+            let kt_2 = math.sum(kt_temp);
             
             for (let i = 1; i < this.noc + 10; i++) {
                 if (i > this.noc - 1) {
+                    kq = dot(kt[0][ini_obs[0]],kt);
+                    
+                    
                     kq = math.dot(kt[0][ini_obs[0]],kt);
                     sum_dist[i] -=  math.sqrt(kt_2 - 2*kq + kt_2[ind_t]);
                     index[ini_obs[0]] = ini_obs[0];
