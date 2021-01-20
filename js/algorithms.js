@@ -7,13 +7,15 @@
 
 // console.log(math.square(4));
 
-const math = require("mathjs");
-
 class Algorithms {
 
     constructor(data, noc) {
         this.data = data;
         this.noc = noc;
+        let mathjs = require('mathjs');
+
+        let num = mathjs.square(4);
+        console.log(num);
     }
 
     furthest_Sum(ini_obs) {
@@ -23,7 +25,8 @@ class Algorithms {
         // const config = { };
         // const math = create(all, config);
 
-        //console.log(math.square(4));
+        let num = mathjs.square(4);
+        console.log(num);
 
         this.ini_obs = ini_obs; 
 

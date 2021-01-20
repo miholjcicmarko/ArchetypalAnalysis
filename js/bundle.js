@@ -13,7 +13,10 @@ class Algorithms {
     constructor(data, noc) {
         this.data = data;
         this.noc = noc;
+        let mathjs = require('mathjs');
 
+        let num = mathjs.square(4);
+        console.log(num);
     }
 
     furthest_Sum(ini_obs) {
@@ -23,9 +26,8 @@ class Algorithms {
         // const config = { };
         // const math = create(all, config);
 
-        //console.log(math.square(4));
-
-        const math = require("./node_modules/mathjs");
+        let num = mathjs.square(4);
+        console.log(num);
 
         this.ini_obs = ini_obs; 
 
@@ -82,7 +84,7 @@ class Algorithms {
 
 
 }
-},{"./node_modules/mathjs":834}],2:[function(require,module,exports){
+},{"mathjs":834}],2:[function(require,module,exports){
 /**
  * @license Complex.js v2.0.11 11/02/2016
  *

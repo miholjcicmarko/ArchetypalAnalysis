@@ -3,7 +3,7 @@ let data = d3.csv("./data/small.csv");
 
 Promise.all([data]).then(data => {
 
-    let webpage = new Algorithms(data, 3);
+    let webpage = new algorithms(data, 3);
 
     webpage.furthest_Sum([1]);
 
