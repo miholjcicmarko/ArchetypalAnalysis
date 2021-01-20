@@ -7,15 +7,17 @@
 
 // console.log(math.square(4));
 
-class Algorithms {
+import * as mathjs from "./node_modules/mathjs/lib/browser/";
+
+class algorithms {
 
     constructor(data, noc) {
         this.data = data;
         this.noc = noc;
-        let mathjs = require('mathjs');
+        // let mathjs = require('mathjs');
 
-        let num = mathjs.square(4);
-        console.log(num);
+        // let num = mathjs.square(4);
+        // console.log(num);
     }
 
     furthest_Sum(ini_obs) {
