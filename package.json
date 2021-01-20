@@ -1,0 +1,23 @@
+{
+  "name": "archetypalanalysis",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "mathjs": "^9.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miholjcicmarko/ArchetypalAnalysis.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/miholjcicmarko/ArchetypalAnalysis/issues"
+  },
+  "homepage": "https://github.com/miholjcicmarko/ArchetypalAnalysis#readme"
+}
