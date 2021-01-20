@@ -1,5 +1,8 @@
 /** Class implementing the Algorithms on the data. */
 
+import {round, e} from 'mathjs';
+console.log(round(e, 3));
+
 class Algorithms {
 
     constructor(data, noc) {
@@ -31,7 +34,7 @@ class Algorithms {
 
         if (this.data[0].columns.length > 0) {
             let kt = this.data;
-            let kt_temp = mathjs.square(kt);
+            let kt_temp = Math.multiply(kt,kt);
 
 
 
