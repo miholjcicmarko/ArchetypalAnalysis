@@ -27,8 +27,8 @@ class Algorithms {
         // const config = { };
         // const math = create(all, config);
 
-        let num = math.square(4);
-        console.log(num);
+        let num = math.matrix([[4,2],[5,5]]);
+        console.log(math.square(num));
 
         this.ini_obs = ini_obs; 
 
