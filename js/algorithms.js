@@ -9,7 +9,7 @@
 
 import * as mathjs from "./node_modules/mathjs/lib/browser/";
 
-class algorithms {
+class Algorithms {
 
     constructor(data, noc) {
         this.data = data;
