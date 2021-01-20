@@ -7,7 +7,7 @@
 
 // console.log(math.square(4));
 
-import { matrix } from 'mathjs';
+// import { matrix } from 'mathjs';
 
 class Algorithms {
 
@@ -27,8 +27,8 @@ class Algorithms {
         // const config = { };
         // const math = create(all, config);
 
-        // let num = math.square(4)
-        // console.log(num);
+        let num = math.square(4);
+        console.log(num);
 
         this.ini_obs = ini_obs; 
 
