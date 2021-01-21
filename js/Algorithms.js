@@ -45,39 +45,39 @@ class Algorithms {
 
         let sum_dist = [];
 
-        // for (let i = 0; i < this.data[0].columns.length; i++) {
-        //     sum_dist.push(0);
-        // }
+        for (let i = 0; i < this.data[0].columns.length; i++) {
+            sum_dist.push(0);
+        }
 
-        // if (this.data[0].columns.length > 0) {
-        //     let kt = this.data;
-        //     let kt_temp = Math.multiply(kt,kt);
-
-
-
-        //     // for (let l = 0; l < this.data[0].length; l++) {
-        //     //     for (let p = 0; p < this.data[0].columns.length; p++) {
-        //     //         let squared_elem = this.data[0][l][p] * this.data[0][l][p];
-        //     //         kt_temp[l][p] = squared_elem;
-        //     //     }
-        //     // }
-
-        //     let kt_2 = math.sum(kt_temp);
+        if (this.data[0].columns.length > 0) { // noc * I instead of 0
+            let kt = this.data;
+            let kt_temp = math.square(kt);
             
-        //     for (let i = 1; i < this.noc + 10; i++) {
-        //         if (i > this.noc - 1) {
-        //             kq = dot(kt[0][ini_obs[0]],kt);
-                    
-                    
-        //             kq = math.dot(kt[0][ini_obs[0]],kt);
-        //             sum_dist[i] -=  math.sqrt(kt_2 - 2*kq + kt_2[ind_t]);
-        //             index[ini_obs[0]] = ini_obs[0];
-        //             ini_obs = [];
-        //             t = index.find(element => element != -1);
-        //         }
-        //     }
+            
 
-        // }
+            // for (let l = 0; l < this.data[0].length; l++) {
+            //     for (let p = 0; p < this.data[0].columns.length; p++) {
+            //         let squared_elem = this.data[0][l][p] * this.data[0][l][p];
+            //         kt_temp[l][p] = squared_elem;
+            //     }
+            // }
+
+            let kt_2 = math.sum(kt_temp);
+            
+            for (let i = 1; i < this.noc + 10; i++) {
+                if (i > this.noc - 1) {
+                    kq = dot(kt[0][ini_obs[0]],kt);
+                    
+                    
+                    kq = math.dot(kt[0][ini_obs[0]],kt);
+                    sum_dist[i] -=  math.sqrt(kt_2 - 2*kq + kt_2[ind_t]);
+                    index[ini_obs[0]] = ini_obs[0];
+                    ini_obs = [];
+                    t = index.find(element => element != -1);
+                }
+            }
+
+        }
         
 
 
