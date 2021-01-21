@@ -30,13 +30,17 @@ class Algorithms {
         [N, M] = math.size(X);
 
         if (I === null) {
-            I = math.range(M);
+            I = math.range(0,M);
         }
         if (U === null) {
-            U = math.range(M);
+            U = math.range(0,M);
         }
 
-        // 149
+        let subset_X = []
+
+        for(let i = 0; i < X.length; i++){
+            subset_X.push(X[i].slice(0,M));
+        }
 
 
     }
