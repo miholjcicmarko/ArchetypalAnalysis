@@ -27,8 +27,8 @@ class Algorithms {
         // const config = { };
         // const math = create(all, config);
 
-        let num = math.matrix([[4,2],[5,5]]);
-        console.log(math.square(num));
+        // let num = math.matrix([[4,2],[5,5]]);
+        // console.log(math.square(num));
 
         this.ini_obs = ini_obs; 
 
@@ -49,11 +49,16 @@ class Algorithms {
             sum_dist.push(0);
         }
 
+        debugger;
+
         if (this.data[0].columns.length > 0) { // noc * I instead of 0
-            let kt = this.data;
+            let kt = this.data[0];
+            for (let l = 0; l < this.data[0].length; l++) {
+
+            }
             let kt_temp = math.square(kt);
             
-            
+
 
             // for (let l = 0; l < this.data[0].length; l++) {
             //     for (let p = 0; p < this.data[0].columns.length; p++) {
