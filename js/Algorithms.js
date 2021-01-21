@@ -1,25 +1,10 @@
 /** Class implementing the Algorithms on the data. */
 
-// const { matrix, number, null } = require("mathjs");
-
-// import { create, all } from 'mathjs';
-
-// const config = { };
-// const math = create(all, config);
-
-// console.log(math.square(4));
-
-// import { matrix } from 'mathjs';
-
 class Algorithms {
 
     constructor(data, noc) {
         this.data = data;
         this.noc = noc;
-        // let mathjs = require('mathjs');
-        
-        // let num = mathjs.square(4);
-        // console.log(num);
     }
 
     phca(X, noc, I, U, delta, verbose, conv_crit, maxiter) {
@@ -36,13 +21,21 @@ class Algorithms {
             U = math.range(0,M);
         }
 
-        let subset_X = []
+        let subset_X_U = []
 
         for(let i = 0; i < X.length; i++){
-            subset_X.push(X[i].slice(0,M));
+            subset_X_U.push(X[i].slice(0,M+1));
         }
 
+        let subset_X_I = []
 
+        for (let k = 0; k < X.length; k++) {
+            subset_X_I.push(X[k].slice(0,M+1))
+        }
+
+        let random
+        
+        this.furthest_Sum(subset_X_I, noc, )
     }
 
     S_update(S, XCtX, CtXtXC, muS, SST, SSE, niter) {
@@ -185,14 +178,6 @@ class Algorithms {
     }
 
     furthest_Sum(ini_obs) {
-
-        // import { create, all } from 'mathjs';
-
-        // const config = { };
-        // const math = create(all, config);
-
-        // let num = math.matrix([[4,2],[5,5]]);
-        // console.log(math.square(num));
 
         this.ini_obs = ini_obs; 
 
