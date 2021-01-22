@@ -1,6 +1,6 @@
 /** Class implementing the Algorithms on the data. */
 
-const { sparse, SparseMatrixDependencies, matrix } = require("mathjs");
+const { sparse, SparseMatrixDependencies, matrix, number } = require("mathjs");
 
 class Algorithms {
 
@@ -9,7 +9,7 @@ class Algorithms {
         this.noc = noc;
     }
 
-    phca(X, noc, I, U, delta, verbose, conv_crit, maxiter) {
+    phca(X, noc, I, U, delta, conv_crit, maxiter) {
 
         let conv_crit = 1*e^-6;
         let maxiter = 500;
@@ -42,9 +42,8 @@ class Algorithms {
         let i = this.furthest_Sum(subset_X_I, noc, ini_obs);
 
         let j = math.range(noc);
-        let C = math.matrix().resize(I.length, noc);
-        C_diag = math.ones(i.length);
-        C.diagonal(C_diag);
+        let C = math.diag(math.ones(i.length));
+        C.resize(I.length, noc);
         
         let XC = math.dot(subset_X_I, C);
 
@@ -52,11 +51,52 @@ class Algorithms {
         let muC = 1;
         let mualpha = 1;
         
-        XCtX = math.dot(math.transpose(XC), subset_X_U);
+        let XCtX = math.dot(math.transpose(XC), subset_X_U);
 
-        CtXtXC = math.dot(math.transpose(XC), XC);
+        let CtXtXC = math.dot(math.transpose(XC), XC);
 
-        
+        let S = math.log(math.random([noc, U.length]));
+
+        let temp_S = math.dot(math.ones(math.matrix([noc, 1])), math.matrix(math.sum(S)));
+
+        S = math.divide(temp_S);
+
+        let SSt = math.dot(S, math.transpose(S));
+
+        let SSE_temp1 = math.multiply(2, math.sum(math.multiply(XCtX, S)));
+        let SSE_temp2 = math.subtract(SST, SSE_temp1);
+        let SSE = math.add(SSE_temp2, math.sum(CtXtXC, SSt));
+
+        S, SSE, muS, SSt = this.S_update(S, XCtX, CtXtXC, muS, SST, SSE, 25);
+
+        let iter_ = 0;
+        let dSSE = Number.POSITIVE_INFINITY;
+
+        let varexpl_temp = math.subtract(SST, SSE);
+        let varexpl = math.divide(varexpl_temp, SST);
+
+        while (math.abs(dSSE) >= math.multiply(conv_crit, math.abs(SSE)) && (iter_ < maxiter) && (varexpl < 0.9999)) {
+                SSE_old = SSE;
+
+                let XSt = math.dot(subset_X_U, math.transpose(S));
+
+                C, SSE, muC, mualpha, CtXtXC, XC = this.C_update(subset_X_I, XSt,
+                    XC, SSt, C, delta, muC, mua, SST, SSE, 10);
+
+                XCtX = math.dot(math.transpose(XC), subset_X_U);
+                S, SSE, muS, SSt = this.S_update(S, XCtX, CtXtXC, muS, SST, SSE, 10);
+
+                dSSE = SSE_old - SSE;
+
+                if ((iter_ % 1) === 0) {
+                    varexpl_temp = math.subtract(SST, SSE);
+                    varexpl = math.divide(varexpl_temp, SST);
+                }
+
+        }
+
+        varexpl_temp = math.subtract(SST, SSE);
+        varexpl = math.divide(varexpl_temp, SST);
 
     }
 
