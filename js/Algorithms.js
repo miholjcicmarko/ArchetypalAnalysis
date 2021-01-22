@@ -1,5 +1,7 @@
 /** Class implementing the Algorithms on the data. */
 
+const { sparse, SparseMatrixDependencies, matrix } = require("mathjs");
+
 class Algorithms {
 
     constructor(data, noc) {
@@ -23,9 +25,11 @@ class Algorithms {
 
         let subset_X_U = []
 
-        for(let i = 0; i < X.length; i++){
-            subset_X_U.push(X[i].slice(0,M+1));
+        for(let p = 0; p < X.length; p++){
+            subset_X_U.push(X[p].slice(0,M+1));
         }
+
+        let SST = math.sum(math.multiply(subset_X_U, subset_X_U));
 
         let subset_X_I = []
 
@@ -33,9 +37,27 @@ class Algorithms {
             subset_X_I.push(X[k].slice(0,M+1))
         }
 
-        let random
+        let ini_obs = [(Math.ceil(I.length * Math.random()))];
         
-        this.furthest_Sum(subset_X_I, noc, )
+        let i = this.furthest_Sum(subset_X_I, noc, ini_obs);
+
+        let j = math.range(noc);
+        let C = math.matrix().resize(I.length, noc);
+        C_diag = math.ones(i.length);
+        C.diagonal(C_diag);
+        
+        let XC = math.dot(subset_X_I, C);
+
+        let muS = 1;
+        let muC = 1;
+        let mualpha = 1;
+        
+        XCtX = math.dot(math.transpose(XC), subset_X_U);
+
+        CtXtXC = math.dot(math.transpose(XC), XC);
+
+        
+
     }
 
     S_update(S, XCtX, CtXtXC, muS, SST, SSE, niter) {
@@ -177,61 +199,44 @@ class Algorithms {
         return C, SSE, muC, mualpha, CtXtXC, XC;
     }
 
-    furthest_Sum(ini_obs) {
+    max_ind_val(L) {
 
-        this.ini_obs = ini_obs; 
+    }
 
-        let dimensions = [this.data[0].length, this.data[0].columns.length];
-        let index = [];
+    furthest_Sum(K, noc, ini_obs) {
 
-        for (let i = 0; i < this.data[0].columns.length; i++) {
-            index.push(i);
-        }
+        let [I, J] = math.size(K);
 
-        index[this.ini_obs] = -1;
+        let index = math.range(0,J);
 
-        let ind_t = this.ini_obs;
+        index[ini_obs] = -1;
 
-        let sum_dist = [];
+        let ind_t = ini_obs;
 
-        for (let i = 0; i < this.data[0].columns.length; i++) {
-            sum_dist.push(0);
-        }
+        let sum_dist = math.zeros(J);
 
-        debugger;
+        if (J > noc * I) {
+            let Kt = K;
+            let Kt_2 = math.sum(math.square(Kt));
 
-        if (this.data[0].columns.length > 0) { // noc * I instead of 0
-            let kt = this.data[0];
-            for (let l = 0; l < this.data[0].length; l++) {
+            for (let i = 1; i < noc + 11; i++) {
+                if (k > noc - 1) {
+                    let Kt_col = math.column(Kt,0);
+                    let Kq = math.dot(Kt_col, Kt);
 
-            }
-            let kt_temp = math.square(kt);
-            
-            // for (let l = 0; l < this.data[0].length; l++) {
-            //     for (let p = 0; p < this.data[0].columns.length; p++) {
-            //         let squared_elem = this.data[0][l][p] * this.data[0][l][p];
-            //         kt_temp[l][p] = squared_elem;
-            //     }
-            // }
+                    let sum_dist_temp1 = math.subtract(Kt_2, math.multiply(2,Kq));
+                    let sum_dist_temp2 = math.add(sum_dist_temp1, Kt_2[ini_obs[0]]);
+                    sum_dist -= math.sqrt(sum_dist_temp2);
 
-            let kt_2 = math.sum(kt_temp);
-            
-            for (let i = 1; i < this.noc + 10; i++) {
-                if (i > this.noc - 1) {
-                    kq = dot(kt[0][ini_obs[0]],kt);
-                    
-                    
-                    kq = math.dot(kt[0][ini_obs[0]],kt);
-                    sum_dist[i] -=  math.sqrt(kt_2 - 2*kq + kt_2[ind_t]);
                     index[ini_obs[0]] = ini_obs[0];
+
                     ini_obs = [];
-                    t = index.find(element => element != -1);
                 }
+                //let t = // 52
             }
 
         }
         
-
 
     }
 
