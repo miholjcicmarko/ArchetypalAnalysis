@@ -98,6 +98,8 @@ class Algorithms {
         varexpl_temp = math.subtract(SST, SSE);
         varexpl = math.divide(varexpl_temp, SST);
 
+        let S_sum = math._apply(S, 1, sum); // 226. fix the spare matrix and all the sums
+
     }
 
     S_update(S, XCtX, CtXtXC, muS, SST, SSE, niter) {
