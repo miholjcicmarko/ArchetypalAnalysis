@@ -42,8 +42,10 @@ class Algorithms {
         let i = this.furthest_Sum(subset_X_I, noc, ini_obs);
 
         let j = math.range(noc);
-        let C = math.diag(math.ones(i.length));
-        C.resize(I.length, noc);
+        let C = math._createDiagonalMatrix(math.ones(i.length), 0, 'sparse', 0, I.length, noc);
+
+        //let C = math.diag(math.ones(i.length));
+        //C.resize(I.length, noc);
         
         let XC = math.dot(subset_X_I, C);
 
@@ -263,7 +265,7 @@ class Algorithms {
 
             for (let i = 1; i < noc + 11; i++) {
                 if (k > noc - 1) {
-                    let Kt_col = math.column(Kt,0);
+                    let Kt_col = math._column(Kt,0);
                     let Kq = math.dot(Kt_col, Kt);
 
                     let sum_dist_temp1 = math.subtract(Kt_2, math.multiply(2,Kq));
@@ -274,9 +276,34 @@ class Algorithms {
 
                     ini_obs = [];
                 }
-                //let t = // 52
+                let t = [];
+                for (let p = 0; p < index.length; p++) {
+                    if (index[p] !== -1) {
+                        t.push(index[p]); 
+                    }
+                }
+                Kt_ind_t = math._column(Kt, ind_t);
+                let Kq = math.dot(math.transpose(Kt_ind_t), Kt);
+
+                let sum_dist_temp1 = math.subtract(Kt_2, math.multiply(2,Kq));
+                let sum_dist_temp2 = math.add(sum_dist_temp1, Kt_2[ind_t]);
+                sum_dist += math.sqrt(sum_dist_temp2);
+
+                let ind, val = this.max_ind_val(); //55
+
+                ind_t = t[ind];
+
+                ini_obs.push(ind_t);
+                index[ind_t] = -1;
             }
 
+        }
+        else {
+            if (I !== J || math.sum(math.subtract(K, math.transpose(K))) !== 0) {
+                Kt = K;
+                K = math.dot(math.transpose(Kt), Kt);
+                
+            }
         }
         
 
