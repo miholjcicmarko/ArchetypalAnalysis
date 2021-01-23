@@ -100,8 +100,14 @@ class Algorithms {
         varexpl_temp = math.subtract(SST, SSE);
         varexpl = math.divide(varexpl_temp, SST);
 
-        let S_sum = math._apply(S, 1, sum); // 226. fix the spare matrix and all the sums
+        let S_sum = math._apply(S, 1, sum); 
+        // 226. fix the spare matrix and all the sums
 
+        S = math._row(S, ind);
+        C = math._column(C, ind);
+        XC = math._column(XC, ind);
+
+        return XC, S, C, SSE, varexpl;
     }
 
     S_update(S, XCtX, CtXtXC, muS, SST, SSE, niter) {
@@ -289,7 +295,8 @@ class Algorithms {
                 let sum_dist_temp2 = math.add(sum_dist_temp1, Kt_2[ind_t]);
                 sum_dist += math.sqrt(sum_dist_temp2);
 
-                let ind, val = this.max_ind_val(); //55
+                let ind, val = this.max_ind_val();
+                //55
 
                 ind_t = t[ind];
 
@@ -302,11 +309,30 @@ class Algorithms {
             if (I !== J || math.sum(math.subtract(K, math.transpose(K))) !== 0) {
                 Kt = K;
                 K = math.dot(math.transpose(Kt), Kt);
-                
+                // 63 - 66
+            }
+            let Kt_2 = math.diag(K);
+            for (k = 0; k < noc + 11; k++) {
+                if (k > noc - 1) {
+                    // 71
+                    index[ini_obs[0]] = ini_obs[0];
+                    ini_obs = [];
+                }
+                let t = [];
+                for (let p = 0; p < index.length; p++) {
+                    if (index[p] !== -1) {
+                        t.push(index[p]); 
+                    }
+                }
+                // 75
+                let ind, val = this.max_ind_val();
+                // 76
+                ind_t = t[ind];
+                ini_obs.push(ind_t);
+                index[ind_t] = -1;                
             }
         }
-        
-
+        return ini_obs;
     }
 
 
