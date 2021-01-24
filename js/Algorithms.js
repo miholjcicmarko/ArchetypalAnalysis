@@ -1,6 +1,6 @@
 /** Class implementing the Algorithms on the data. */
 
-const { sparse } = require("mathjs");
+const { sparse, sum } = require("mathjs");
 
 class Algorithms {
 
@@ -10,6 +10,8 @@ class Algorithms {
     }
 
     phca(X, noc, I, U, delta, conv_crit, maxiter) {
+
+        const sum = math.sum;
 
         let conv_crit = 1*e^-6;
         let maxiter = 500;
@@ -55,8 +57,6 @@ class Algorithms {
         //let C = math.diag(math.ones(i.length));
         //C.resize(I.length, noc);
 
-        
-        
         let XC = math.dot(subset_X_I, C);
 
         let muS = 1;
@@ -67,11 +67,11 @@ class Algorithms {
 
         let CtXtXC = math.dot(math.transpose(XC), XC);
 
-        let S = math.log(math.random([noc, U.length]));
+        let S = math.multiply(-1, math.log(math.random([noc, U.length])));
 
-        let temp_S = math.dot(math.ones(math.matrix([noc, 1])), math.matrix(math.sum(S)));
+        let temp_S = math.dot(math.ones(math.matrix([noc, 1])), math.matrix(math.apply(S, 0, sum)));
 
-        S = math.divide(temp_S);
+        S = math.divide(S,temp_S);
 
         let SSt = math.dot(S, math.transpose(S));
 
@@ -88,6 +88,7 @@ class Algorithms {
         let varexpl = math.divide(varexpl_temp, SST);
 
         while (math.abs(dSSE) >= math.multiply(conv_crit, math.abs(SSE)) && (iter_ < maxiter) && (varexpl < 0.9999)) {
+                iter_ += 1;
                 SSE_old = SSE;
 
                 let XSt = math.dot(subset_X_U, math.transpose(S));
@@ -111,7 +112,7 @@ class Algorithms {
         varexpl = math.divide(varexpl_temp, SST);
 
         let S_sum = math._apply(S, 1, sum); 
-        // 226. fix the spare matrix and all the sums
+        // Finish from 226 in PCHA
 
         S = math._row(S, ind);
         C = math._column(C, ind);
@@ -151,8 +152,11 @@ class Algorithms {
                 S = math.divide(S, math.dot(e, math.apply(S, 0, sum)));
                 let SSt = math.multiply(S, math.transpose(S));
 
-                let SSE = math.subtract(SST, math.multiply(2, math.sum(math.multiply(XCtX,S)) + 
-                            math.sum(math.multiply(CtXtXC,SSt))));
+
+
+                let SSE_temp = math.subtract(SST, math.multiply(2, math.sum(math.multiply(XCtX,S)))); 
+                
+                let SSE = math.add(SSE_temp, math.sum(math.multiply(CtXtXC,SSt)));
 
                 if (SSE <= SSE_old * (1 + 1e-9)) {
                     muS = math.multiply(muS, 1.2);
@@ -169,9 +173,11 @@ class Algorithms {
     C_update(X, XSt, XC, SSt, C, delta, muC, mualpha, SST, SSE, niter) {
         let [noc, J] = math.size(C);
 
+        const sum = math.sum;
+
         if (delta != 0) {
-            alphaC = math.sum(C);
-            C = math.dot(C, math.diag(math.divide(1,alphaC)));
+            let alphaC = math.apply(C, 0, sum);
+            let C = math.dot(C, math.diag(math.divide(1,alphaC)));
         }
 
         let e = math.ones(J, 1);
@@ -186,7 +192,10 @@ class Algorithms {
             if (delta != 0) {
                 g = math.dot(g, math.diag(alphaC))
             }
-            g = math.subtract(g, math.multiply(e,math.sum(math.multiply(g,C))));
+            
+            let g_temp = math.apply((math.multiply(g,C)),0,sum);
+
+            g = math.subtract(g, math.multiply(e,g_temp));
 
             C_old = C;
             while (true) {
@@ -200,7 +209,7 @@ class Algorithms {
                     }
                 }
 
-                nC = math.sum(C) + Number.EPSILON;
+                let nC = math.apply(C, 0, sum) + Number.EPSILON;
                 C = math.dot(C, math.diag(math.divide(1, nC[0])));
 
                 if (delta != 0) {
@@ -267,6 +276,8 @@ class Algorithms {
 
     furthest_Sum(K, noc, ini_obs) {
 
+        const sum = math.sum;
+
         let [I, J] = math.size(K);
 
         let index = math.range(0,J);
@@ -275,11 +286,11 @@ class Algorithms {
 
         let ind_t = ini_obs;
 
-        let sum_dist = math.zeros(J);
+        let sum_dist = math.zeros(1,J);
 
         if (J > noc * I) {
             let Kt = K;
-            let Kt_2 = math.sum(math.square(Kt));
+            let Kt_2 = math.apply(math.square(Kt), 0, sum);
 
             for (let i = 1; i < noc + 11; i++) {
                 if (k > noc - 1) {
