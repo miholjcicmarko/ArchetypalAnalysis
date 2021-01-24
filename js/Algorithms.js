@@ -13,8 +13,8 @@ class Algorithms {
 
         const sum = math.sum;
 
-        let conv_crit = 1*e^-6;
-        let maxiter = 500;
+        // conv_crit = 1*e^-6;
+        // maxiter = 500;
 
         [N, M] = math.size(X);
 
