@@ -1,6 +1,6 @@
 /** Class implementing the Algorithms on the data. */
 
-const { sparse, sum } = require("mathjs");
+const { sparse, sum, i, matrix, concat } = require("mathjs");
 
 class Algorithms {
 
@@ -112,11 +112,24 @@ class Algorithms {
         varexpl = math.divide(varexpl_temp, SST);
 
         let S_sum = math._apply(S, 1, sum); 
-        // Finish from 226 in PCHA
+        S = S_sum.sort(function (a,b) {
+            return a[0] < b[0];
+        })
 
-        S = math._row(S, ind);
-        C = math._column(C, ind);
-        XC = math._column(XC, ind);
+        let C_temp = [];
+        for (let p = 0; p > C.length; p++) {
+            C_temp.push(C[p].reverse());
+        }
+
+        C = C_temp;
+
+        let XC_temp = [];
+
+        for (let p = 0; p > XC.length; p++) {
+            XC_temp.push(C[p].reverse);
+        }
+
+        XC = XC_temp;
 
         return XC, S, C, SSE, varexpl;
     }
@@ -271,7 +284,39 @@ class Algorithms {
     }
 
     max_ind_val(L) {
+        let max = L[0];
+        let maxIndex = 0;
 
+        for (let p = 0; p < L.length; p++) {
+            if (L[p] > max) {
+                maxIndex = p;
+                max = L[p];
+            }
+        }
+        return maxIndex, max;
+    }
+
+    repmat (matrix, repeat_rows, repeat_cols) {
+        let [I, J] = math.size(matrix);
+        
+        let numberOfColumns = J;
+        let numberOfRows = I;
+
+        let original_m = matrix;
+
+        let rep_matrix = math.matrix();
+
+        for (let p = 0; p < repeat_cols; p++) {
+            rep_matrix = math.apply(original_m, 0, concat);
+        }
+
+        let rep_final = math.matrix();
+
+        for (let p = 0; p < repeat_rows; p++) {
+            rep_final = math.apply(rep_matrix, 1, concat);
+        }
+
+        return rep_final;
     }
 
     furthest_Sum(K, noc, ini_obs) {
@@ -294,7 +339,7 @@ class Algorithms {
 
             for (let i = 1; i < noc + 11; i++) {
                 if (k > noc - 1) {
-                    let Kt_col = math._column(Kt,0);
+                    let Kt_col = math.column(Kt,0);
                     let Kq = math.dot(Kt_col, Kt);
 
                     let sum_dist_temp1 = math.subtract(Kt_2, math.multiply(2,Kq));
@@ -311,15 +356,14 @@ class Algorithms {
                         t.push(index[p]); 
                     }
                 }
-                Kt_ind_t = math._column(Kt, ind_t);
+                Kt_ind_t = math.column(Kt, ind_t);
                 let Kq = math.dot(math.transpose(Kt_ind_t), Kt);
 
                 let sum_dist_temp1 = math.subtract(Kt_2, math.multiply(2,Kq));
                 let sum_dist_temp2 = math.add(sum_dist_temp1, Kt_2[ind_t]);
                 sum_dist += math.sqrt(sum_dist_temp2);
 
-                let ind, val = this.max_ind_val();
-                //55
+                let ind, val = this.max_ind_val(sum_dist);
 
                 ind_t = t[ind];
 
@@ -332,12 +376,24 @@ class Algorithms {
             if (I !== J || math.sum(math.subtract(K, math.transpose(K))) !== 0) {
                 Kt = K;
                 K = math.dot(math.transpose(Kt), Kt);
-                // 63 - 66
+
+                let repmat_1 = this.repmat(math.diag(K), J, 1);
+                let repmat_2 = this.repmat(math.transpose(math.diag(K)), 1, J); 
+
+                let K_temp1 = math.subtract(repmat_1, math.multiply(2,K));
+                let K_temp2 = math.add(K_temp1, repmat_2);
+                K = math.sqrt(K_temp2);
+
             }
             let Kt_2 = math.diag(K);
             for (k = 0; k < noc + 11; k++) {
                 if (k > noc - 1) {
-                    // 71
+                    K_i_0_row = math.row(K, 0);
+                    
+                    let sum_dist_temp1 = math.subtract(Kt_2, math.multiply(2, K_i_0_row));
+                    let sum_dist_temp2 = math.add(sum_dist_temp1, Kt_2[ini_obs[0]]);
+                    sum_dist -= math.sqrt(sum_dist_temp2); 
+
                     index[ini_obs[0]] = ini_obs[0];
                     ini_obs = [];
                 }
@@ -347,9 +403,14 @@ class Algorithms {
                         t.push(index[p]); 
                     }
                 }
-                // 75
-                let ind, val = this.max_ind_val();
-                // 76
+                Kt_ind_t_row = math.row(Kt, ind_t);
+
+                let sum_dist_temp1 = math.subtract(Kt_2, math.multiply(2,Kt_ind_t_row));
+                let sum_dist_temp2 = math.add(sum_dist_temp1, Kt_2[ind_t]);
+                sum_dist += math.sqrt(sum_dist_temp2);
+
+                let ind, val = this.max_ind_val(sum_dist);
+            
                 ind_t = t[ind];
                 ini_obs.push(ind_t);
                 index[ind_t] = -1;                
