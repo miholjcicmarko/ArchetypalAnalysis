@@ -1,7 +1,4 @@
 /** Class implementing the Algorithms on the data. */
-
-const { sparse, sum, i, matrix, concat } = require("mathjs");
-
 class Algorithms {
 
     constructor(data, noc) {
