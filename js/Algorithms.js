@@ -120,7 +120,7 @@ class Algorithms {
             let g_temp2 = math.divide(SST, J);
             let g = math.divide(g_temp1,g_temp2);
 
-            g = math.subtract(g, math.multiply(e, math._apply(math.multiply(g,S), 0, sum))); // apply
+            g = math.subtract(g, math.multiply(e, math._apply(math.multiply(g,S), 0, sum)));
 
             S_old = S
             while (true) {
