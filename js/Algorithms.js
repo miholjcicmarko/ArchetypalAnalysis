@@ -1,7 +1,5 @@
 /** Class implementing the Algorithms on the data. */
 
-const { sparse, SparseMatrixDependencies, matrix, number } = require("mathjs");
-
 class Algorithms {
 
     constructor(data, noc) {
@@ -122,7 +120,7 @@ class Algorithms {
             let g_temp2 = math.divide(SST, J);
             let g = math.divide(g_temp1,g_temp2);
 
-            g = math.subtract(g, math.multiply(e, math.sum(math.multiply(g,S))));
+            g = math.subtract(g, math.multiply(e, math._apply(math.multiply(g,S), 0, sum))); // apply
 
             S_old = S
             while (true) {
@@ -136,7 +134,7 @@ class Algorithms {
                     }
                 }
 
-                S = math.divide(S, math.dot(e, math.sum(S)));
+                S = math.divide(S, math.dot(e, math._apply(S, 0, sum)));
                 let SSt = math.multiply(S, math.transpose(S));
 
                 let SSE = math.subtract(SST, math.multiply(2, math.sum(math.multiply(XCtX,S)) + 
