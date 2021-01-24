@@ -1,5 +1,7 @@
 /** Class implementing the Algorithms on the data. */
 
+const { sparse } = require("mathjs");
+
 class Algorithms {
 
     constructor(data, noc) {
@@ -40,10 +42,20 @@ class Algorithms {
         let i = this.furthest_Sum(subset_X_I, noc, ini_obs);
 
         let j = math.range(noc);
-        let C = math._createDiagonalMatrix(math.ones(i.length), 0, 'sparse', 0, I.length, noc);
+        
+        let C_size = math.zeros(I.length,noc);
+
+        for (let p = 0; p < p + j.length; p++) {
+            C_size[i][p] = 1;
+        }
+
+        let C = math.matrix(C_size, "sparse");
+        //let C = math._createDiagonalMatrix(math.ones(i.length), 0, 'sparse', 0, I.length, noc);
 
         //let C = math.diag(math.ones(i.length));
         //C.resize(I.length, noc);
+
+        
         
         let XC = math.dot(subset_X_I, C);
 
