@@ -316,13 +316,13 @@ class Algorithms {
         return rep_final;
     }
 
-    furthest_Sum(K, noc, ini_obs) {
+    furthest_Sum(K, noc, [ini_obs]) {
 
         const sum = math.sum;
 
         let [I, J] = math.size(K);
 
-        let index = math.range(0,J);
+        let index = math.range(J);
 
         index[ini_obs] = -1;
 
@@ -336,7 +336,7 @@ class Algorithms {
 
             for (let i = 1; i < noc + 11; i++) {
                 if (k > noc - 1) {
-                    let Kt_col = math.column(Kt,0);
+                    let Kt_col = math.column(Kt,ini_obs[0]);
                     let Kq = math.dot(Kt_col, Kt);
 
                     let sum_dist_temp1 = math.subtract(Kt_2, math.multiply(2,Kq));
@@ -375,7 +375,7 @@ class Algorithms {
                 K = math.dot(math.transpose(Kt), Kt);
 
                 let repmat_1 = this.repmat(math.diag(K), J, 1);
-                let repmat_2 = this.repmat(math.transpose(math.diag(K)), 1, J); 
+                let repmat_2 = this.repmat(math.matrix(math.transpose(math.diag(K))), 1, J); 
 
                 let K_temp1 = math.subtract(repmat_1, math.multiply(2,K));
                 let K_temp2 = math.add(K_temp1, repmat_2);
