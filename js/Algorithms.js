@@ -120,7 +120,9 @@ class Algorithms {
             let g_temp2 = math.divide(SST, J);
             let g = math.divide(g_temp1,g_temp2);
 
-            g = math.subtract(g, math.multiply(e, math._apply(math.multiply(g,S), 0, sum)));
+            const sum = math.sum;
+
+            g = math.subtract(g, math.multiply(e, math.apply(math.multiply(g,S), 0, sum)));
 
             S_old = S
             while (true) {
@@ -134,7 +136,7 @@ class Algorithms {
                     }
                 }
 
-                S = math.divide(S, math.dot(e, math._apply(S, 0, sum)));
+                S = math.divide(S, math.dot(e, math.apply(S, 0, sum)));
                 let SSt = math.multiply(S, math.transpose(S));
 
                 let SSE = math.subtract(SST, math.multiply(2, math.sum(math.multiply(XCtX,S)) + 
