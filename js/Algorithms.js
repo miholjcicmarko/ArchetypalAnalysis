@@ -21,7 +21,7 @@ class Algorithms {
             U = null;
         }
 
-        this.phca(matrix_data, noc, I, U, 0, 1*10^-6, 500)
+        this.phca(matrix_data, noc, I, U, 0, 1 * (math.pow(10, -6)), 500)
     }
 
     phca(X, noc, I, U, delta, conv_crit, maxiter) {
@@ -39,7 +39,7 @@ class Algorithms {
 
         let subset_X_U = [];
 
-        let n = nj.array([2,3,4]);
+        let n = nj.array([[2,3],[4,7],[8,1],[6,7]]);
 
         for(let p = 0; p < X._size[1]; p++){
             subset_X_U.push(X[p].slice(0,M+1));
