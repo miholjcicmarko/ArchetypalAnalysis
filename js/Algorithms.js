@@ -1,17 +1,17 @@
 /** Class implementing the Algorithms on the data. */
 class Algorithms {
 
-    constructor(data, noc) {
+    constructor(data, noc, I, U) {
         this.data = data;
-        this.noc = noc;
+
+        let matrix_data = math.matrix(data);
+
+        this.phca(matrix_data, noc, I, U, 0, 1*e^-6, 500)
     }
 
     phca(X, noc, I, U, delta, conv_crit, maxiter) {
 
         const sum = math.sum;
-
-        // conv_crit = 1*e^-6;
-        // maxiter = 500;
 
         [N, M] = math.size(X);
 
