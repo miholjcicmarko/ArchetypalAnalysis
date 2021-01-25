@@ -24,10 +24,10 @@ class Algorithms {
         let M = math.size(X);
 
         if (I === null) {
-            let I = math.range(0,M._data[1]);
+            I = math.range(0,M._data[1]);
         }
         if (U === null) {
-            let U = math.range(0,M._data[1]);
+            U = math.range(0,M._data[1]);
         }
 
         let subset_X_U = []
