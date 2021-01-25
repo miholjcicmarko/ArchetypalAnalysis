@@ -37,13 +37,13 @@ class Algorithms {
             U = math.range(0,M[1]);
         }
 
+        const numpy_data = nj.array();
+
         // let numpy_data = nj.array.apply(null, math.row(X,0));
 
         // for (let p = 1; p < M[1]; p++) {
         //     numpy_data = nj.stack([numpy_data, nj.array.apply(null, math.row(X,p))]);
         // }
-        
-        
 
         let subset_X_U = [];
 
