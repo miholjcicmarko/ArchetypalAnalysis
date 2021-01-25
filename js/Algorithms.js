@@ -37,7 +37,9 @@ class Algorithms {
             U = math.range(0,M[1]);
         }
 
-        let subset_X_U = []
+        let subset_X_U = [];
+
+        let n = nj.array([2,3,4]);
 
         for(let p = 0; p < X._size[1]; p++){
             subset_X_U.push(X[p].slice(0,M+1));
