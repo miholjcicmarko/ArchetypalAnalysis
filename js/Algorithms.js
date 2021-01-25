@@ -32,9 +32,11 @@ class Algorithms {
 
         let subset_X_U = []
 
-        for(let p = 0; p < X.length; p++){
+        for(let p = 0; p < X._size[1]; p++){
             subset_X_U.push(X[p].slice(0,M+1));
         }
+
+        rep_matrix = math.apply(original_m, 0, concat);
 
         let SST = math.sum(math.multiply(subset_X_U, subset_X_U));
 
