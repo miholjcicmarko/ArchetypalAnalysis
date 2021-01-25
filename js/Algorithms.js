@@ -37,31 +37,21 @@ class Algorithms {
             U = math.range(0,M[1]);
         }
 
-        const numpy_data = nj.array();
+        let subset_X_U = math.column(X,Math.min.apply(null, U._data));
 
-        // let numpy_data = nj.array.apply(null, math.row(X,0));
-
-        // for (let p = 1; p < M[1]; p++) {
-        //     numpy_data = nj.stack([numpy_data, nj.array.apply(null, math.row(X,p))]);
-        // }
-
-        let subset_X_U = [];
-
-        for(let p = 0; p < X._size[1]; p++){
-            subset_X_U.push(X[p].slice(0,M+1));
+        for (let p = Math.min.apply(null, U._data) + 1; p < Math.max.apply(null, U._data); p++){
+            subset_X_U = math.concat(subset_X_U, math.column(X,p));
         }
 
-        //rep_matrix = math.apply(original_m, 0, concat);
+        let SST = math.sum(math.dotMultiply(subset_X_U, subset_X_U));
 
-        let SST = math.sum(math.multiply(subset_X_U, subset_X_U));
+        let ini_obs = [(Math.ceil(I._data.length * Math.random()))];
 
-        let subset_X_I = []
+        let subset_X_I = math.column(X,Math.min.apply(null, I._data));
 
-        for (let k = 0; k < X.length; k++) {
-            subset_X_I.push(X[k].slice(0,M+1))
+        for (let p = Math.min.apply(null, I._data) + 1; p < Math.max.apply(null, I._data); p++){
+            subset_X_I = math.concat(subset_X_I, math.column(X,p));
         }
-
-        let ini_obs = [(Math.ceil(I.length * Math.random()))];
         
         let i = this.furthest_Sum(subset_X_I, noc, ini_obs);
 
@@ -345,9 +335,13 @@ class Algorithms {
 
         const sum = math.sum;
 
-        let [I, J] = math.size(K);
+        let M = math.size(K);
 
-        let index = math.range(J);
+        let I = parseInt(M[0], 10);
+
+        let J = parseInt(M[1],10);
+
+        let index = math.range(0,J);
 
         index[ini_obs] = -1;
 
@@ -402,8 +396,9 @@ class Algorithms {
         }
         else {
             if (I !== J || math.sum(math.subtract(K, math.transpose(K))) !== 0) {
-                Kt = K;
-                K = math.dot(math.transpose(Kt), Kt);
+                let Kt = K;
+                
+                K = math.dot(math.transpose(Kt), Kt); //HERE
 
                 let repmat_1 = this.repmat(math.diag(K), J, 1);
                 let repmat_2 = this.repmat(math.matrix(math.transpose(math.diag(K))), 1, J); 
