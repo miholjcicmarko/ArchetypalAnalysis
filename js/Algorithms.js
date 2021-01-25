@@ -6,6 +6,14 @@ class Algorithms {
 
         let matrix_data = math.matrix(data);
 
+        if (I === undefined) {
+            I = null;
+        }
+
+        if (U === undefined) {
+            U = null;
+        }
+
         this.phca(matrix_data, noc, I, U, 0, 1*10^-6, 500)
     }
 
@@ -16,10 +24,10 @@ class Algorithms {
         let M = math.size(X);
 
         if (I === null) {
-            let I = math.range(0,M);
+            let I = math.range(0,M._data[1]);
         }
         if (U === null) {
-            let U = math.range(0,M);
+            let U = math.range(0,M._data[1]);
         }
 
         let subset_X_U = []
