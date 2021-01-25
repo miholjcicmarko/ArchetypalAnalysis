@@ -13,7 +13,7 @@ class Algorithms {
 
         const sum = math.sum;
 
-        let [N, M] = math.size(X);
+        let M = math.size(X);
 
         if (I === null) {
             let I = math.range(0,M);
