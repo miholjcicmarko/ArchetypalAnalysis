@@ -13,13 +13,13 @@ class Algorithms {
 
         const sum = math.sum;
 
-        [N, M] = math.size(X);
+        let [N, M] = math.size(X);
 
         if (I === null) {
-            I = math.range(0,M);
+            let I = math.range(0,M);
         }
         if (U === null) {
-            U = math.range(0,M);
+            let U = math.range(0,M);
         }
 
         let subset_X_U = []
