@@ -406,7 +406,16 @@ class Algorithms {
                 let sum_dist_temp2 = math.add(sum_dist_temp1, Kt_2[ind_t]);
                 sum_dist += math.sqrt(sum_dist_temp2);
 
-                let ind, val = this.max_ind_val(sum_dist);
+                let ind = 0;
+                let val = Number.NEGATIVE_INFINITY;
+
+                for (let p = 0; p < t.length; p++) {
+                    let ind_2, val_2 = this.max_ind_val(math.column(sum_dist,t[p]));
+                    if (val_2 > val) {
+                        val = val_2;
+                        ind = t[p];
+                    }
+                }
             
                 ind_t = t[ind];
                 ini_obs.push(ind_t);
