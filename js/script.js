@@ -5,6 +5,6 @@ Promise.all([data]).then(data => {
 
     let webpage = new Algorithms(data, 3);
 
-    webpage.furthest_Sum([1]);
+    
 
 })

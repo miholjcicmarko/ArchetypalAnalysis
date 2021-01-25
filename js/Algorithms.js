@@ -6,7 +6,7 @@ class Algorithms {
 
         let matrix_data = math.matrix(data);
 
-        this.phca(matrix_data, noc, I, U, 0, 1*e^-6, 500)
+        this.phca(matrix_data, noc, I, U, 0, 1*10^-6, 500)
     }
 
     phca(X, noc, I, U, delta, conv_crit, maxiter) {
