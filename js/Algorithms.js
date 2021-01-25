@@ -37,15 +37,21 @@ class Algorithms {
             U = math.range(0,M[1]);
         }
 
-        let subset_X_U = [];
+        // let numpy_data = nj.array.apply(null, math.row(X,0));
 
-        let n = nj.array([[2,3],[4,7],[8,1],[6,7]]);
+        // for (let p = 1; p < M[1]; p++) {
+        //     numpy_data = nj.stack([numpy_data, nj.array.apply(null, math.row(X,p))]);
+        // }
+        
+        
+
+        let subset_X_U = [];
 
         for(let p = 0; p < X._size[1]; p++){
             subset_X_U.push(X[p].slice(0,M+1));
         }
 
-        rep_matrix = math.apply(original_m, 0, concat);
+        //rep_matrix = math.apply(original_m, 0, concat);
 
         let SST = math.sum(math.multiply(subset_X_U, subset_X_U));
 
