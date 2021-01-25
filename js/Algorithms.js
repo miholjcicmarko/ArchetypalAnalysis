@@ -398,7 +398,7 @@ class Algorithms {
             if (I !== J || math.sum(math.subtract(K, math.transpose(K))) !== 0) {
                 let Kt = K;
                 
-                K = math.dot(math.transpose(Kt), Kt); //HERE
+                K = math.dot(math.transpose(Kt), Kt); //HERE FIX
 
                 let repmat_1 = this.repmat(math.diag(K), J, 1);
                 let repmat_2 = this.repmat(math.matrix(math.transpose(math.diag(K))), 1, J); 
