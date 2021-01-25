@@ -4,7 +4,14 @@ class Algorithms {
     constructor(data, noc, I, U) {
         this.data = data;
 
-        let matrix_data = math.matrix(data);
+        let matrix_data = [];
+
+        for (let m = 0; m < this.data[0].length; m++) {
+            let vals = Object.values(this.data[0][m]);
+            matrix_data.push(vals);
+        }
+
+        //let matrix_data = math.matrix(data);
 
         if (I === undefined) {
             I = null;
@@ -24,10 +31,10 @@ class Algorithms {
         let M = math.size(X);
 
         if (I === null) {
-            I = math.range(0,M._data[1]);
+            I = math.range(0,M[1]);
         }
         if (U === null) {
-            U = math.range(0,M._data[1]);
+            U = math.range(0,M[1]);
         }
 
         let subset_X_U = []
