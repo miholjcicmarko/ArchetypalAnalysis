@@ -397,6 +397,8 @@ class Algorithms {
         else {
             if (I !== J || math.sum(math.subtract(K, math.transpose(K))) !== 0) {
                 let Kt = K;
+
+                // parse evaluate
                 
                 K = math.dot(math.transpose(Kt), Kt); //HERE FIX
 
