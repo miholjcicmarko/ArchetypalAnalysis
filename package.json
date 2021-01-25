@@ -4,6 +4,7 @@
   "description": "",
   "main": "Algorithms.js",
   "dependencies": {
+    "collect.js": "^4.28.6",
     "dataframe-js": "^1.4.4",
     "mathjs": "^9.0.0"
   },

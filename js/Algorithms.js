@@ -309,7 +309,7 @@ class Algorithms {
                 max = L[p];
             }
         }
-        return maxIndex, max;
+        return maxIndex, max;  // zip package from collect
     }
 
     repmat (matrix, repeat_rows, repeat_cols) {     // possible
