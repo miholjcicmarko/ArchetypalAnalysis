@@ -293,7 +293,7 @@ class Algorithms {
         return maxIndex, max;
     }
 
-    repmat (matrix, repeat_rows, repeat_cols) {
+    repmat (matrix, repeat_rows, repeat_cols) {     // possible
         let [I, J] = math.size(matrix);
         
         let numberOfColumns = J;
@@ -350,7 +350,7 @@ class Algorithms {
                 let t = [];
                 for (let p = 0; p < index.length; p++) {
                     if (index[p] !== -1) {
-                        t.push(index[p]); 
+                        t.push(index[p]);        // possible
                     }
                 }
                 Kt_ind_t = math.column(Kt, ind_t);
@@ -364,7 +364,7 @@ class Algorithms {
                     let ind_2, val_2 = this.max_ind_val(math.column(sum_dist,t[p]));
                     if (val_2 > val) {
                         val = val_2;
-                        ind = p;
+                        ind = t[p];        // possible
                     }
                 }
 
@@ -403,7 +403,7 @@ class Algorithms {
                 let t = [];
                 for (let p = 0; p < index.length; p++) {
                     if (index[p] !== -1) {
-                        t.push(index[p]); 
+                        t.push(index[p]);     // possible
                     }
                 }
                 Kt_ind_t_row = math.row(Kt, ind_t);
@@ -419,7 +419,7 @@ class Algorithms {
                     let ind_2, val_2 = this.max_ind_val(math.column(sum_dist,t[p]));
                     if (val_2 > val) {
                         val = val_2;
-                        ind = p;
+                        ind = t[p];   // possible
                     }
                 }
             
