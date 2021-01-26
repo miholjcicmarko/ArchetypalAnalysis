@@ -362,7 +362,7 @@ class Algorithms {
 
         let index = math.range(0,J);
 
-        index[ini_obs] = -1;
+        index._data[ini_obs] = -1;
 
         let ind_t = ini_obs;
 
