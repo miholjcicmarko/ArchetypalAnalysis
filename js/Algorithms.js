@@ -327,7 +327,7 @@ class Algorithms {
             rep_matrix = math.concat(rep_matrix, original_m);
         }
 
-        let original_m = [matrix._data];
+        original_m = [matrix._data];
 
         let rep_matrix = original_m;
 
