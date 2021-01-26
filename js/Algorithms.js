@@ -348,7 +348,7 @@ class Algorithms {
         }
     }
 
-    furthest_Sum(K, noc, [ini_obs]) {
+    furthest_Sum(K, noc, ini_obs) {
 
         const sum = math.sum;
 
@@ -360,13 +360,16 @@ class Algorithms {
 
         let index = math.range(0,J);
 
-        index._data[ini_obs] = -1;
+        let ini_obs_num = ini_obs[0];
 
-        let ind_t = ini_obs;
+        index._data[ini_obs_num] = -1;
+        index = index._data;
+
+        let ind_t = ini_obs[0];
 
         let sum_dist = math.zeros(1,J);
 
-        if (J > noc * I) {
+        if (J > noc * I) { // entire statements within brackets must be fixed
             let Kt = K;
             let Kt_2 = math.apply(math.square(Kt), 0, sum);
 
@@ -379,7 +382,8 @@ class Algorithms {
                     let sum_dist_temp2 = math.add(sum_dist_temp1, Kt_2[ini_obs[0]]);
                     sum_dist -= math.sqrt(sum_dist_temp2);
 
-                    index[ini_obs[0]] = ini_obs[0];
+                    ini_obs_num = ini_obs[0];
+                    index[ini_obs_num] = ini_obs[0];
 
                     ini_obs = [];
                 }
@@ -437,7 +441,8 @@ class Algorithms {
             let Kt_2 = math.diag(K);
             for (let k = 0; k < noc + 11; k++) {
                 if (k > noc - 1) {
-                    let K_i_0_row = math.row(K, ini_obs); // where I am at
+                    ini_obs_num = ini_obs[0];
+                    let K_i_0_row = math.row(K, ini_obs_num); // where I am at
 
                     // let Kt_2_arr1 = [Kt_2._data[0]];
 
@@ -457,18 +462,24 @@ class Algorithms {
 
                     let sum_dist_temp2 = math.add(sum_dist_temp1, math.matrix(Kt2_ind_o_arr));
                     
-                    
-                    sum_dist -= math.sqrt(sum_dist_temp2); 
+                    let sum_dist_temp3 = math.sqrt(sum_dist_temp2);
 
-                    index[ini_obs[0]] = ini_obs[0];
-                    ini_obs = [];
+                    sum_dist = math.subtract(sum_dist, sum_dist_temp3);
+
+                    ini_obs_num = ini_obs[0];
+                    index[ini_obs_num] = ini_obs[0];
+
+                    ini_obs = ini_obs.slice(1);
                 }
-                let t = [];
-                for (let p = 0; p < index._data.length; p++) {
-                    if (index._data[p] !== -1) {
-                        t.push(index._data[p]);     // possible
-                    }
-                }
+                let t = index.filter(function (value) {
+                    return value !== -1;
+                });
+                // let t = [];
+                // for (let p = 0; p < index._data.length; p++) {
+                //     if (index._data[p] !== -1) {
+                //         t.push(index._data[p]);     // possible
+                //     }
+                // }
                 
                 let K_ind_t_row = math.row(K, ind_t);
 
@@ -523,8 +534,8 @@ class Algorithms {
                 }
             
                 ind_t = t[ind];
-                ini_obs = [ini_obs].push(ind_t);
-                index._data[ind_t] = -1;                
+                ini_obs.push(ind_t);
+                index[ind_t] = -1;                
             }
         }
         return ini_obs;
