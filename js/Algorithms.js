@@ -314,6 +314,7 @@ class Algorithms {
         
         // let numberOfColumns = J;
         // let numberOfRows = 1;
+        debugger;
 
         let original_m = [matrix._data];
 
