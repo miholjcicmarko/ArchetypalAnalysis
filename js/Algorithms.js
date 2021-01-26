@@ -316,25 +316,34 @@ class Algorithms {
         // let numberOfRows = 1;
         debugger;
 
-        let original_m = [matrix._data];
+        if (repeat_cols > 1) {
 
-        for (let p = 0; p < original_m.length; p++) {
+            let original_m = [matrix._data];
+
             let column = [];
-            column.push([original_m[p]]);
+
+            for (let p = 0; p < original_m[0].length; p++) {
+                column.push([original_m[0][p]]);
+            }
+
+            let rep_matrix = column;
+
+            for (let p = 1; p < repeat_cols; p++) {
+                rep_matrix = math.concat(rep_matrix, column);
+            }
         }
 
-        for (let p = 1; p < repeat_cols; p++) {
-            rep_matrix = math.concat(rep_matrix, original_m);
-        }
+        if (repeat_rows > 1) {
+            
+            original_m = [matrix._data];
 
-        original_m = [matrix._data];
+            rep_matrix = original_m;
 
-        let rep_matrix = original_m;
+            let concat_matrix = rep_matrix;
 
-        let concat_matrix = rep_matrix;
-
-        for (let p = 1; p < repeat_rows; p++) {
-            rep_matrix = math.concat(rep_matrix, concat_matrix, 0);
+            for (let p = 1; p < repeat_rows; p++) {
+                rep_matrix = math.concat(rep_matrix, concat_matrix, 0);
+            }
         }
 
         return rep_matrix;
