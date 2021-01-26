@@ -295,18 +295,18 @@ class Algorithms {
         return C, SSE, muC, mualpha, CtXtXC, XC;
     }
 
-    max_ind_val(L) {
-        let max = L[0];
-        let maxIndex = 0;
+    // max_ind_val(val, ind) {
+    //     let max = val;
+    //     let maxIndex = ind;
 
-        for (let p = 0; p < L.length; p++) {
-            if (L[p] > max) {
-                maxIndex = p;
-                max = L[p];
-            }
-        }
-        return maxIndex, max;  // zip package from collect
-    }
+    //     for (let p = 0; p < L.length; p++) {
+    //         if (L[p] > max) {
+    //             maxIndex = p;
+    //             max = L[p];
+    //         }
+    //     }
+    //     return [maxIndex, max];  // zip package from collect
+    // }
 
     repmat (matrix, repeat_rows, repeat_cols) {     // possible
         const concat = math.concat;
@@ -437,7 +437,7 @@ class Algorithms {
             let Kt_2 = math.matrix(math.diag(K));
             for (let k = 0; k < noc + 11; k++) {
                 if (k > noc - 1) {
-                    let K_i_0_row = math.row(K, 0);
+                    let K_i_0_row = math.row(K, 0); // where I am at
                     
                     let sum_dist_temp1 = math.subtract(Kt_2, math.multiply(2, K_i_0_row));
                     let sum_dist_temp2 = math.add(sum_dist_temp1, Kt_2[ini_obs[0]]);
@@ -479,15 +479,26 @@ class Algorithms {
                 }
 
                 let sum_dist_temp2 = math.add(sum_dist_temp1, Kt2_ind_t_arr);
-                let sum_dist_temp3 = math.sqrt(sum_dist_temp2)
+                let sum_dist_temp3 = math.sqrt(sum_dist_temp2);
+
+                let sum_dist_temp4 = [sum_dist_temp3[0]];
+
+                for (let p = 1; p < sum_dist_temp3.length; p++) {
+                    sum_dist_temp4 = math.concat(sum_dist_temp4, [sum_dist_temp3[p]]);
+                }
                 
-                sum_dist = math.add(sum_dist, sum_dist_temp3); 
+                sum_dist = math.matrix(sum_dist_temp4);
+
+                sum_dist = math.add(sum_dist, sum_dist_temp4); 
 
                 let ind = 0;
                 let val = Number.NEGATIVE_INFINITY;
 
                 for (let p = 0; p < t.length; p++) {
-                    let ind_2, val_2 = this.max_ind_val(math.column(sum_dist,t[p]));
+                    let ind = t[p];
+                    let val_2 = math.column(sum_dist,t[p]).re;
+
+                    //let [ind, val_2] = this.max_ind_val(math.column(sum_dist,t[p]).re, t[p]);
                     if (val_2 > val) {
                         val = val_2;
                         ind = t[p];   // possible
@@ -495,8 +506,8 @@ class Algorithms {
                 }
             
                 ind_t = t[ind];
-                ini_obs.push(ind_t);
-                index[ind_t] = -1;                
+                ini_obs = [ini_obs].push(ind_t);
+                index._data[ind_t] = -1;                
             }
         }
         return ini_obs;
