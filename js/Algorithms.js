@@ -309,26 +309,31 @@ class Algorithms {
     }
 
     repmat (matrix, repeat_rows, repeat_cols) {     // possible
-        let [I, J] = math.size(matrix);
+        const concat = math.concat;
+        // let J = matrix._size;
         
-        let numberOfColumns = J;
-        let numberOfRows = I;
+        // let numberOfColumns = J;
+        // let numberOfRows = 1;
 
-        let original_m = matrix;
+        let original_m = matrix._data;
 
-        let rep_matrix = math.matrix();
+        let rep_matrix = original_m;
 
-        for (let p = 0; p < repeat_cols; p++) {
-            rep_matrix = math.apply(original_m, 0, concat);
+        for (let p = 1; p < repeat_cols; p++) {
+            rep_matrix = math.concat(rep_matrix, original_m);
         }
 
-        let rep_final = math.matrix();
+        rep_matrix = math.matrix(rep_matrix);
 
-        for (let p = 0; p < repeat_rows; p++) {
-            rep_final = math.apply(rep_matrix, 1, concat);
+        let secondary_m = rep_matrix._data;
+
+        let concat_matrix = secondary_m;
+
+        for (let p = 1; p < repeat_rows; p++) {
+            rep_matrix = math.concat(secondary_m, concat_matrix, 0);
         }
 
-        return rep_final;
+        return rep_matrix;
     }
 
     furthest_Sum(K, noc, [ini_obs]) {
@@ -399,9 +404,15 @@ class Algorithms {
                 let Kt = K;
                 let Kt_transpose = math.matrix(math.transpose(Kt));
                 
-                K = math.multiply(Kt_transpose, Kt);
+                K = math.matrix(math.multiply(Kt_transpose, Kt));
 
                 let K_diag = math.matrix(math.diag(K));
+
+                // let K_diag_arr = [];
+
+                // for (let p = 0; p < K_diag._size; p++) {
+                //     K_diag_arr.push(K_diag._data[p]);
+                // }
 
                 let repmat_1 = this.repmat(K_diag, J, 1);
                 let repmat_2 = this.repmat(math.matrix(math.transpose(math.diag(K))), 1, J); 
