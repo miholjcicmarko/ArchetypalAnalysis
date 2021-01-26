@@ -315,22 +315,25 @@ class Algorithms {
         // let numberOfColumns = J;
         // let numberOfRows = 1;
 
-        let original_m = matrix._data;
+        let original_m = [matrix._data];
 
-        let rep_matrix = original_m;
+        for (let p = 0; p < original_m.length; p++) {
+            let column = [];
+            column.push([original_m[p]]);
+        }
 
         for (let p = 1; p < repeat_cols; p++) {
             rep_matrix = math.concat(rep_matrix, original_m);
         }
 
-        rep_matrix = math.matrix(rep_matrix);
+        let original_m = [matrix._data];
 
-        let secondary_m = rep_matrix._data;
+        let rep_matrix = original_m;
 
-        let concat_matrix = secondary_m;
+        let concat_matrix = rep_matrix;
 
         for (let p = 1; p < repeat_rows; p++) {
-            rep_matrix = math.concat(secondary_m, concat_matrix, 0);
+            rep_matrix = math.concat(rep_matrix, concat_matrix, 0);
         }
 
         return rep_matrix;
