@@ -420,11 +420,11 @@ class Algorithms {
 
                 let K_diag = math.matrix(math.diag(K));
 
-                // let K_diag_arr = [];
+                let K_diag_arr = [];
 
-                // for (let p = 0; p < K_diag._size; p++) {
-                //     K_diag_arr.push(K_diag._data[p]);
-                // }
+                for (let p = 0; p < K_diag._size; p++) {
+                    K_diag_arr.push(K_diag._data[p]);
+                }
 
                 let repmat_1 = this.repmat(K_diag, J, 1);
                 let repmat_2 = this.repmat(math.matrix(math.transpose(math.diag(K))), 1, J); 
@@ -434,13 +434,30 @@ class Algorithms {
                 K = math.sqrt(K_temp2);
 
             }
-            let Kt_2 = math.matrix(math.diag(K));
+            let Kt_2 = math.diag(K);
             for (let k = 0; k < noc + 11; k++) {
                 if (k > noc - 1) {
-                    let K_i_0_row = math.row(K, 0); // where I am at
+                    let K_i_0_row = math.row(K, ini_obs); // where I am at
+
+                    // let Kt_2_arr1 = [Kt_2._data[0]];
+
+                    // for (let p = 1; p < Kt_2._size; p++) {
+                    //     Kt_2_arr1 = math.concat(Kt_2_arr1, [Kt_2._data[p]]);
+                    // }
+
+                    let Kt_2_arr = math.matrix([Kt_2]);
                     
-                    let sum_dist_temp1 = math.subtract(Kt_2, math.multiply(2, K_i_0_row));
-                    let sum_dist_temp2 = math.add(sum_dist_temp1, Kt_2[ini_obs[0]]);
+                    let sum_dist_temp1 = math.subtract(Kt_2_arr, math.multiply(2, K_i_0_row));
+
+                    let Kt2_ind_o_arr = [Kt_2_arr._data[0]];
+
+                    for (let p = 1; p < Kt_2_arr._size[1]; p++) {
+                        Kt2_ind_o_arr = math.concat(Kt2_ind_o_arr, Kt_2_arr._data[0][p]);
+                    }
+
+                    let sum_dist_temp2 = math.add(sum_dist_temp1, math.matrix(Kt2_ind_o_arr));
+                    
+                    
                     sum_dist -= math.sqrt(sum_dist_temp2); 
 
                     index[ini_obs[0]] = ini_obs[0];
