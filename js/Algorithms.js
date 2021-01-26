@@ -55,7 +55,7 @@ class Algorithms {
         
         let i = this.furthest_Sum(subset_X_I, noc, ini_obs);
 
-        let j = math.range(noc);
+        let j = math.range(0,noc);
         
         let C_size = math.zeros(I.length,noc);
 
@@ -176,8 +176,6 @@ class Algorithms {
 
                 S = math.divide(S, math.dot(e, math.apply(S, 0, sum)));
                 let SSt = math.multiply(S, math.transpose(S));
-
-
 
                 let SSE_temp = math.subtract(SST, math.multiply(2, math.sum(math.multiply(XCtX,S)))); 
                 
