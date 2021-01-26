@@ -314,7 +314,8 @@ class Algorithms {
         
         // let numberOfColumns = J;
         // let numberOfRows = 1;
-        debugger;
+
+        let rep_matrix = [];
 
         if (repeat_cols > 1) {
 
@@ -331,22 +332,22 @@ class Algorithms {
             for (let p = 1; p < repeat_cols; p++) {
                 rep_matrix = math.concat(rep_matrix, column);
             }
+            return rep_matrix;
         }
 
         if (repeat_rows > 1) {
             
-            original_m = [matrix._data];
+            let original_m = [matrix._data];
 
-            rep_matrix = original_m;
+            let rep_matrix = original_m;
 
             let concat_matrix = rep_matrix;
 
             for (let p = 1; p < repeat_rows; p++) {
                 rep_matrix = math.concat(rep_matrix, concat_matrix, 0);
             }
+            return rep_matrix;
         }
-
-        return rep_matrix;
     }
 
     furthest_Sum(K, noc, [ini_obs]) {
@@ -436,9 +437,9 @@ class Algorithms {
 
             }
             let Kt_2 = math.diag(K);
-            for (k = 0; k < noc + 11; k++) {
+            for (let k = 0; k < noc + 11; k++) {
                 if (k > noc - 1) {
-                    K_i_0_row = math.row(K, 0);
+                    let K_i_0_row = math.row(K, 0);
                     
                     let sum_dist_temp1 = math.subtract(Kt_2, math.multiply(2, K_i_0_row));
                     let sum_dist_temp2 = math.add(sum_dist_temp1, Kt_2[ini_obs[0]]);
@@ -453,7 +454,7 @@ class Algorithms {
                         t.push(index[p]);     // possible
                     }
                 }
-                Kt_ind_t_row = math.row(Kt, ind_t);
+                let Kt_ind_t_row = math.row(Kt, ind_t);
 
                 let sum_dist_temp1 = math.subtract(Kt_2, math.multiply(2,Kt_ind_t_row));
                 let sum_dist_temp2 = math.add(sum_dist_temp1, Kt_2[ind_t]);
