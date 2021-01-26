@@ -452,17 +452,36 @@ class Algorithms {
                         t.push(index._data[p]);     // possible
                     }
                 }
-
-                K = math.matrix(K._data);
                 
                 let K_ind_t_row = math.row(K, ind_t);
-                debugger;
 
-                let K_ind_t_row2 = math.multiply(2,K_ind_t_row)
+                let K_ind_t_row2 = math.multiply(2,K_ind_t_row);
 
-                let sum_dist_temp1 = math.subtract(Kt_2._data, K_ind_t_row2._data);
-                let sum_dist_temp2 = math.add(sum_dist_temp1, Kt_2[ind_t]);
-                sum_dist += math.sqrt(sum_dist_temp2);
+                let K_ind_t_arr = [];
+
+                for (let p = 0; p < K_ind_t_row2._data[0].length; p++) {
+                    K_ind_t_arr.push([K_ind_t_row2._data[0][p]]);
+                }
+
+                let Kt_2_arr = [];
+
+                for (let p = 0; p < Kt_2._data.length; p++) {
+                    Kt_2_arr.push([Kt_2._data[p]]);
+                }
+
+                let sum_dist_temp1 = math.subtract(Kt_2_arr, K_ind_t_arr);
+
+                let Kt2_ind_t_arr = [];
+
+                for (let p = 0; p < Kt_2_arr.length; p++) {
+                    let Kt2_ind_t = Kt_2._data[ind_t];
+                    Kt2_ind_t_arr.push([Kt2_ind_t]);
+                }
+
+                let sum_dist_temp2 = math.add(sum_dist_temp1, Kt2_ind_t_arr);
+                let sum_dist_temp3 = math.sqrt(sum_dist_temp2)
+                
+                sum_dist = math.add(sum_dist, sum_dist_temp3); 
 
                 let ind = 0;
                 let val = Number.NEGATIVE_INFINITY;
