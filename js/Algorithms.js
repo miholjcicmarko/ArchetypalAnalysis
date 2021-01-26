@@ -315,8 +315,6 @@ class Algorithms {
         // let numberOfColumns = J;
         // let numberOfRows = 1;
 
-        let rep_matrix = [];
-
         if (repeat_cols > 1) {
 
             let original_m = [matrix._data];
@@ -436,7 +434,7 @@ class Algorithms {
                 K = math.sqrt(K_temp2);
 
             }
-            let Kt_2 = math.diag(K);
+            let Kt_2 = math.matrix(math.diag(K));
             for (let k = 0; k < noc + 11; k++) {
                 if (k > noc - 1) {
                     let K_i_0_row = math.row(K, 0);
@@ -449,14 +447,20 @@ class Algorithms {
                     ini_obs = [];
                 }
                 let t = [];
-                for (let p = 0; p < index.length; p++) {
-                    if (index[p] !== -1) {
-                        t.push(index[p]);     // possible
+                for (let p = 0; p < index._data.length; p++) {
+                    if (index._data[p] !== -1) {
+                        t.push(index._data[p]);     // possible
                     }
                 }
-                let Kt_ind_t_row = math.row(Kt, ind_t);
 
-                let sum_dist_temp1 = math.subtract(Kt_2, math.multiply(2,Kt_ind_t_row));
+                K = math.matrix(K._data);
+                
+                let K_ind_t_row = math.row(K, ind_t);
+                debugger;
+
+                let K_ind_t_row2 = math.multiply(2,K_ind_t_row)
+
+                let sum_dist_temp1 = math.subtract(Kt_2._data, K_ind_t_row2._data);
                 let sum_dist_temp2 = math.add(sum_dist_temp1, Kt_2[ind_t]);
                 sum_dist += math.sqrt(sum_dist_temp2);
 
