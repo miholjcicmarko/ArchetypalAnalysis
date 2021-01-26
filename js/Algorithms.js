@@ -397,12 +397,13 @@ class Algorithms {
         else {
             if (I !== J || math.sum(math.subtract(K, math.transpose(K))) !== 0) {
                 let Kt = K;
-
-                // parse evaluate
+                let Kt_transpose = math.matrix(math.transpose(Kt));
                 
-                K = math.dot(math.transpose(Kt), Kt); //HERE FIX
+                K = math.multiply(Kt_transpose, Kt);
 
-                let repmat_1 = this.repmat(math.diag(K), J, 1);
+                let K_diag = math.matrix(math.diag(K));
+
+                let repmat_1 = this.repmat(K_diag, J, 1);
                 let repmat_2 = this.repmat(math.matrix(math.transpose(math.diag(K))), 1, J); 
 
                 let K_temp1 = math.subtract(repmat_1, math.multiply(2,K));
