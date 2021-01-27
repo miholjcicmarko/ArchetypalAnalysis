@@ -279,20 +279,23 @@ class Algorithms {
                 let nC_temp = math.matrix([math.apply(C, 0, sum)]);
 
                 let nC = math.add(nC_temp, Number.EPSILON);
-                let one_div_nC = math.divide(1,nC[0]);
+                let one_div_nC = math.dotDivide(1,math.matrix(nC._data[0]));
                 let one_div_nC_diag = math.diag(one_div_nC);
 
                 C = math.multiply(C, one_div_nC_diag);
 
-                if (delta != 0) {
-                    Ct = math.multiply(C,math.diag(alphaC));
+                if (delta != 0) { //
+                    Ct = math.multiply(C,math.diag(alphaC)); // statement: must FIX
                 }
                 else {
                     Ct = C;
                 }
 
-                let XC = math.dot(X, Ct);
-                let CtXtXC = math.dot(math.transpose(XC), XC);
+                let XC = math.multiply(X, Ct);
+                let CtXtXC = math.multiply(math.transpose(XC), XC);
+
+                
+
                 let SSE_temp = math.subtract(SST,math.multiply(2,math.sum(XC,XSt)));
                 let SSE = math.add(SSE_temp, math.sum(math.multiply(CtXtXC,SSt)));
 
