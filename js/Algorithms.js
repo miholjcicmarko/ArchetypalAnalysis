@@ -247,10 +247,14 @@ class Algorithms {
 
         for (let k = 0; k < niter; k++) {
             let SSE_old = SSE;
-            let g_temp1 = math.subtract((math.dot(math.transpose(X), math.dot(XC,SSt)),XtXSt)); 
-            let g = math.divide(g_temp1,SST);
 
-            if (delta != 0) {
+            let g_temp1 = math.multiply(XC,SSt);
+            let g_temp2 = math.multiply(math.transpose(X), g_temp1)
+
+            let g_temp3 = math.subtract(g_temp2,XtXSt); 
+            let g = math.divide(g_temp3, SST);
+
+            if (delta != 0) { // entire statements within this if bracket: must FIX
                 g = math.dot(g, math.diag(alphaC))
             }
             
