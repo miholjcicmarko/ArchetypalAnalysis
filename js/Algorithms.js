@@ -276,7 +276,9 @@ class Algorithms {
                     }
                 }
 
-                let nC = math.apply(C, 0, sum) + Number.EPSILON;
+                let nC_temp = math.matrix([math.apply(C, 0, sum)]);
+
+                let nC = math.add(nC_temp, Number.EPSILON);
                 C = math.dot(C, math.diag(math.divide(1, nC[0])));
 
                 if (delta != 0) {
