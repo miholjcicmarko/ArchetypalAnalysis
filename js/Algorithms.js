@@ -230,9 +230,9 @@ class Algorithms {
     C_update(X, XSt, XC, SSt, C, delta, muC, mualpha, SST, SSE, niter) {
         let M = C._size;
 
-        let noc = parseInt(M[0], 10);
+        let J = parseInt(M[0], 10);
 
-        let J = parseInt(M[1],10);
+        let noc = parseInt(M[1],10);
 
         const sum = math.sum;
 
@@ -258,18 +258,20 @@ class Algorithms {
                 g = math.dot(g, math.diag(alphaC))
             }
             
-            let g_temp = math.apply((math.multiply(g,C)),0,sum);
+            g_temp1 = math.dotMultiply(g,C);
 
-            g = math.subtract(g, math.multiply(e,g_temp));
+            g_temp2 = math.matrix([math.apply(g_temp1,0,sum)]);
 
-            C_old = C;
+            g = math.subtract(g, math.multiply(e,g_temp2));
+
+            let C_old = C;
             while (true) {
                 let C = math.subtract(C_old, math.multiply(muC,g));
 
-                for (let p = 0; p < C.length; p++) {
-                    for (let n = 0; n < C[p].length; n++) {
-                        if (C[p][n] < 0) {
-                            C[p][n] = 0;
+                for (let p = 0; p < C._data.length; p++) {
+                    for (let n = 0; n < C._data[p].length; n++) {
+                        if (C._data[p][n] < 0) {
+                            C._data[p][n] = 0;
                         }
                     }
                 }
