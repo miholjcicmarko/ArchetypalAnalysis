@@ -57,10 +57,12 @@ class Algorithms {
 
         let j = math.range(0,noc);
         
-        let C_size = math.zeros(I.length,noc);
+        let C_size = math.zeros(I._data.length,noc);
 
-        for (let p = 0; p < p + j.length; p++) {
-            C_size[i][p] = 1;
+        for (let p = 0; p < j._data.length; p++) {
+            let i_index = i[p];
+            let j_index = j._data[p];
+            C_size = C_size.subset(math.index(i_index,j_index),1);
         }
 
         let C = math.matrix(C_size, "sparse");
