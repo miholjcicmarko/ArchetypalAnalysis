@@ -85,9 +85,17 @@ class Algorithms {
 
         let CtXtXC = math.multiply(math.matrix(math.transpose(XC)), math.matrix(XC));
 
-        let S = math.multiply(-1, math.log(math.random([noc, U.length])));
+        let S = math.multiply(-1, math.log(math.random([noc, U._data.length])));
 
-        let temp_S = math.dot(math.ones(math.matrix([noc, 1])), math.matrix(math.apply(S, 0, sum)));
+        let S_sum_0axis = math.matrix(math.apply(S, 0, sum));
+
+        let ones_matrix = math.ones([noc, 1]);
+
+
+
+        
+
+        let temp_S = math.multiply(, S_sum_0axis);
 
         S = math.divide(S,temp_S);
 
