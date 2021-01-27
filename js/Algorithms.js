@@ -49,7 +49,7 @@ class Algorithms {
 
         let subset_X_I = math.column(X,Math.min.apply(null, I._data));
 
-        for (let p = Math.min.apply(null, I._data); p < Math.max.apply(null, I._data); p++){
+        for (let p = Math.min.apply(null, I._data) + 1; p < Math.max.apply(null, I._data) + 1; p++){
             subset_X_I = math.concat(subset_X_I, math.column(X,p));
         }
         
@@ -71,15 +71,19 @@ class Algorithms {
         //let C = math.diag(math.ones(i.length));
         //C.resize(I.length, noc);
 
-        let XC = math.dot(subset_X_I, C);
+        subset_X_I = math.matrix(subset_X_I);
+
+        let XC = math.multiply(subset_X_I, C);
 
         let muS = 1;
         let muC = 1;
         let mualpha = 1;
-        
-        let XCtX = math.dot(math.transpose(XC), subset_X_U);
 
-        let CtXtXC = math.dot(math.transpose(XC), XC);
+        subset_X_U = math.matrix(subset_X_U);
+
+        let XCtX = math.multiply(math.matrix(math.transpose(XC)), subset_X_U);
+
+        let CtXtXC = math.multiply(math.matrix(math.transpose(XC)), math.matrix(XC));
 
         let S = math.multiply(-1, math.log(math.random([noc, U.length])));
 
