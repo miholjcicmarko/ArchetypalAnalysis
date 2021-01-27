@@ -120,8 +120,8 @@ class Algorithms {
                 [C, SSE, muC, mualpha, CtXtXC, XC] = this.C_update(subset_X_I, XSt,
                     XC, SSt, C, delta, muC, mualpha, SST, SSE, 10);
 
-                XCtX = math.dot(math.transpose(XC), subset_X_U);
-                S, SSE, muS, SSt = this.S_update(S, XCtX, CtXtXC, muS, SST, SSE, 10);
+                XCtX = math.multiply(math.transpose(XC), subset_X_U);
+                [S, SSE, muS, SSt] = this.S_update(S, XCtX, CtXtXC, muS, SST, SSE, 10);
 
                 dSSE = SSE_old - SSE;
 
@@ -129,7 +129,6 @@ class Algorithms {
                     varexpl_temp = math.subtract(SST, SSE);
                     varexpl = math.divide(varexpl_temp, SST);
                 }
-
         }
 
         varexpl_temp = math.subtract(SST, SSE);
@@ -228,6 +227,10 @@ class Algorithms {
     }
 
     C_update(X, XSt, XC, SSt, C, delta, muC, mualpha, SST, SSE, niter) {
+        let Ct = 0;
+
+        let CtXtXC = 0;
+
         let M = C._size;
 
         let J = parseInt(M[0], 10);
@@ -292,12 +295,17 @@ class Algorithms {
                 }
 
                 let XC = math.multiply(X, Ct);
-                let CtXtXC = math.multiply(math.transpose(XC), XC);
+                CtXtXC = math.multiply(math.transpose(XC), XC);
 
-                
+                let XC_mult_XSt = math.dotMultiply(XC,XSt);
 
-                let SSE_temp = math.subtract(SST,math.multiply(2,math.sum(XC,XSt)));
-                let SSE = math.add(SSE_temp, math.sum(math.multiply(CtXtXC,SSt)));
+                let XC_mult_XSt_sum = math.sum(XC_mult_XSt);
+
+                let SSE_temp = math.subtract(SST,math.multiply(2,XC_mult_XSt_sum));
+
+                let CtXtXC_mult_SSt = math.dotMultiply(CtXtXC,SSt);
+ 
+                let SSE = math.add(SSE_temp, math.sum(CtXtXC_mult_SSt));
 
                 if (SSE <= SSE_old * (1 + 1e-9)) {
                     muC = math.multiply(muC,1.2);
@@ -309,7 +317,7 @@ class Algorithms {
             }
 
             SSE_old = SSE;
-            if (delta != 0) {
+            if (delta != 0) { // entire statements within this bracket before else: must FIX
                 let g_temp1 = math.transpose(math.diag(math.multiply(CtXtXC, SSt)));  
                 let g_temp2 = math.divide(g_temp1,alphaC);
                 let g_temp3 = math.sum(math.multiply(C,XtXSt));
@@ -342,7 +350,7 @@ class Algorithms {
         if (delta != 0) {
             C = math.multiply(C,math.diag(alphaC));
         }
-        return C, SSE, muC, mualpha, CtXtXC, XC;
+        return [C, SSE, muC, mualpha, CtXtXC, XC];
     }
 
     // max_ind_val(val, ind) {
