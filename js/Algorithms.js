@@ -113,12 +113,12 @@ class Algorithms {
 
         while (math.abs(dSSE) >= math.multiply(conv_crit, math.abs(SSE)) && (iter_ < maxiter) && (varexpl < 0.9999)) {
                 iter_ += 1;
-                SSE_old = SSE;
+                let SSE_old = SSE;
 
-                let XSt = math.dot(subset_X_U, math.transpose(S));
+                let XSt = math.multiply(subset_X_U, math.transpose(S));
 
-                C, SSE, muC, mualpha, CtXtXC, XC = this.C_update(subset_X_I, XSt,
-                    XC, SSt, C, delta, muC, mua, SST, SSE, 10);
+                [C, SSE, muC, mualpha, CtXtXC, XC] = this.C_update(subset_X_I, XSt,
+                    XC, SSt, C, delta, muC, mualpha, SST, SSE, 10);
 
                 XCtX = math.dot(math.transpose(XC), subset_X_U);
                 S, SSE, muS, SSt = this.S_update(S, XCtX, CtXtXC, muS, SST, SSE, 10);
@@ -159,6 +159,8 @@ class Algorithms {
     }
 
     S_update(S, XCtX, CtXtXC, muS, SST, SSE, niter) {
+
+        let SSt = 0;
 
         let M = S._size;
 
@@ -204,14 +206,14 @@ class Algorithms {
                     }
                 }
 
-                // THIS IS WHERE I AM !!!!!!!!!!!!!!!!!!!!!
+                let sum_S_axis0 = math.apply(S, 0, sum);
 
-                S = math.dotDivide(S, math.multiply(e, math.apply(S, 0, sum)));
-                let SSt = math.multiply(S, math.transpose(S));
+                S = math.dotDivide(S, math.multiply(e, math.matrix([sum_S_axis0])));
+                SSt = math.multiply(S, math.transpose(S));
 
-                let SSE_temp = math.subtract(SST, math.multiply(2, math.sum(math.multiply(XCtX,S)))); 
+                let SSE_temp = math.subtract(SST, math.multiply(2, math.sum(math.dotMultiply(XCtX,S)))); 
                 
-                let SSE = math.add(SSE_temp, math.sum(math.multiply(CtXtXC,SSt)));
+                let SSE = math.add(SSE_temp, math.sum(math.dotMultiply(CtXtXC,SSt)));
 
                 if (SSE <= SSE_old * (1 + 1e-9)) {
                     muS = math.multiply(muS, 1.2);
@@ -226,18 +228,22 @@ class Algorithms {
     }
 
     C_update(X, XSt, XC, SSt, C, delta, muC, mualpha, SST, SSE, niter) {
-        let [noc, J] = math.size(C);
+        let M = C._size;
+
+        let noc = parseInt(M[0], 10);
+
+        let J = parseInt(M[1],10);
 
         const sum = math.sum;
 
-        if (delta != 0) {
+        if (delta != 0) { // entire statements within this if bracket: must FIX
             let alphaC = math.apply(C, 0, sum);
             let C = math.dot(C, math.diag(math.divide(1,alphaC)));
         }
 
         let e = math.ones(J, 1);
 
-        let XtXSt = math.dot(math.transpose(X), XSt);
+        let XtXSt = math.multiply(math.transpose(X), XSt);
 
         for (let k = 0; k < niter; k++) {
             let SSE_old = SSE;
@@ -399,7 +405,7 @@ class Algorithms {
 
         let sum_dist = math.zeros(1,J);
 
-        if (J > noc * I) { // entire statements within brackets must be fixed
+        if (J > noc * I) { // entire statements within this bracket before else: must FIX
             let Kt = K;
             let Kt_2 = math.apply(math.square(Kt), 0, sum);
 
