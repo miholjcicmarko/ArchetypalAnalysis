@@ -39,7 +39,7 @@ class Algorithms {
 
         let subset_X_U = math.column(X,Math.min.apply(null, U._data));
 
-        for (let p = Math.min.apply(null, U._data) + 1; p < Math.max.apply(null, U._data); p++){
+        for (let p = Math.min.apply(null, U._data); p < Math.max.apply(null, U._data); p++){
             subset_X_U = math.concat(subset_X_U, math.column(X,p));
         }
 
@@ -49,13 +49,13 @@ class Algorithms {
 
         let subset_X_I = math.column(X,Math.min.apply(null, I._data));
 
-        for (let p = Math.min.apply(null, I._data) + 1; p < Math.max.apply(null, I._data); p++){
+        for (let p = Math.min.apply(null, I._data); p < Math.max.apply(null, I._data); p++){
             subset_X_I = math.concat(subset_X_I, math.column(X,p));
         }
         
         let i = this.furthest_Sum(subset_X_I, noc, ini_obs);
 
-        let j = math.range(noc);
+        let j = math.range(0,noc);
         
         let C_size = math.zeros(I.length,noc);
 
@@ -176,8 +176,6 @@ class Algorithms {
 
                 S = math.divide(S, math.dot(e, math.apply(S, 0, sum)));
                 let SSt = math.multiply(S, math.transpose(S));
-
-
 
                 let SSE_temp = math.subtract(SST, math.multiply(2, math.sum(math.multiply(XCtX,S)))); 
                 
@@ -424,11 +422,11 @@ class Algorithms {
 
                 let K_diag = math.matrix(math.diag(K));
 
-                let K_diag_arr = [];
+                // let K_diag_arr = [];
 
-                for (let p = 0; p < K_diag._size; p++) {
-                    K_diag_arr.push(K_diag._data[p]);
-                }
+                // for (let p = 0; p < K_diag._size; p++) {
+                //     K_diag_arr.push(K_diag._data[p]);
+                // }
 
                 let repmat_1 = this.repmat(K_diag, J, 1);
                 let repmat_2 = this.repmat(math.matrix(math.transpose(math.diag(K))), 1, J); 
@@ -439,10 +437,10 @@ class Algorithms {
 
             }
             let Kt_2 = math.diag(K);
-            for (let k = 0; k < noc + 11; k++) {
+            for (let k = 1; k < noc + 11; k++) {
                 if (k > noc - 1) {
                     ini_obs_num = ini_obs[0];
-                    let K_i_0_row = math.row(K, ini_obs_num); // where I am at
+                    let K_i_0_row = math.row(K, ini_obs_num); 
 
                     // let Kt_2_arr1 = [Kt_2._data[0]];
 
@@ -515,9 +513,9 @@ class Algorithms {
                     sum_dist_temp4 = math.concat(sum_dist_temp4, [sum_dist_temp3[p]]);
                 }
                 
-                sum_dist = math.matrix(sum_dist_temp4);
+                let sum_dist_temp5 = math.matrix(sum_dist_temp4);
 
-                sum_dist = math.add(sum_dist, sum_dist_temp4); 
+                sum_dist = math.add(sum_dist, sum_dist_temp5); 
 
                 let ind = 0;
                 let val = Number.NEGATIVE_INFINITY;
