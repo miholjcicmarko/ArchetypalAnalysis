@@ -39,7 +39,7 @@ class Algorithms {
 
         let subset_X_U = math.column(X,Math.min.apply(null, U._data));
 
-        for (let p = Math.min.apply(null, U._data) + 1; p < Math.max.apply(null, U._data); p++){
+        for (let p = Math.min.apply(null, U._data); p < Math.max.apply(null, U._data); p++){
             subset_X_U = math.concat(subset_X_U, math.column(X,p));
         }
 
@@ -49,7 +49,7 @@ class Algorithms {
 
         let subset_X_I = math.column(X,Math.min.apply(null, I._data));
 
-        for (let p = Math.min.apply(null, I._data) + 1; p < Math.max.apply(null, I._data); p++){
+        for (let p = Math.min.apply(null, I._data); p < Math.max.apply(null, I._data); p++){
             subset_X_I = math.concat(subset_X_I, math.column(X,p));
         }
         
@@ -513,7 +513,7 @@ class Algorithms {
                     sum_dist_temp4 = math.concat(sum_dist_temp4, [sum_dist_temp3[p]]);
                 }
                 
-                sum_dist_temp5 = math.matrix(sum_dist_temp4);
+                let sum_dist_temp5 = math.matrix(sum_dist_temp4);
 
                 sum_dist = math.add(sum_dist, sum_dist_temp5); 
 
