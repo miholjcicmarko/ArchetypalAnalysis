@@ -65,7 +65,7 @@ class Algorithms {
             C_size = C_size.subset(math.index(i_index,j_index),1);
         }
 
-        let C = math.matrix(C_size, "sparse");
+        let C = math.matrix(C_size, "dense");
         //let C = math._createDiagonalMatrix(math.ones(i.length), 0, 'sparse', 0, I.length, noc);
 
         //let C = math.diag(math.ones(i.length));
@@ -182,9 +182,17 @@ class Algorithms {
 
             let g_multiply_S_sum = math.apply(g_multiply_S, 0, sum);
 
-            g = math.subtract(g, math.dotMultiply(e, [g_multiply_S_sum]));
+            let g_multiply_S_sum_arr = [g_multiply_S_sum._data[0]];
 
-            S_old = S
+            for (let p = 1; p < g_multiply_S_sum._data.length; p++) {
+                g_multiply_S_sum_arr = math.concat(g_multiply_S_sum_arr, [g_multiply_S_sum._data[p]]);
+            }
+
+            let g_multiply_S_sum_matrix = math.matrix([g_multiply_S_sum_arr])
+
+            g = math.subtract(g, math.multiply(e, g_multiply_S_sum_matrix));
+
+            let S_old = S
             while (true) {
                 let S = math.subtract(S_old, math.multiply(g,muS));
 
