@@ -279,7 +279,10 @@ class Algorithms {
                 let nC_temp = math.matrix([math.apply(C, 0, sum)]);
 
                 let nC = math.add(nC_temp, Number.EPSILON);
-                C = math.dot(C, math.diag(math.divide(1, nC[0])));
+                let one_div_nC = math.divide(1,nC[0]);
+                let one_div_nC_diag = math.diag(one_div_nC);
+
+                C = math.multiply(C, one_div_nC_diag);
 
                 if (delta != 0) {
                     Ct = math.multiply(C,math.diag(alphaC));
