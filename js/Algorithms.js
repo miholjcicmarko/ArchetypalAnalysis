@@ -103,7 +103,7 @@ class Algorithms {
         let SSE_temp2 = math.subtract(SST, SSE_temp1);
         let SSE = math.add(SSE_temp2, math.sum(math.dotMultiply(CtXtXC, SSt)));
 
-        S, SSE, muS, SSt = this.S_update(S, XCtX, CtXtXC, muS, SST, SSE, 25);
+        [S, SSE, muS, SSt] = this.S_update(S, XCtX, CtXtXC, muS, SST, SSE, 25);
 
         let iter_ = 0;
         let dSSE = Number.POSITIVE_INFINITY;
@@ -196,15 +196,17 @@ class Algorithms {
             while (true) {
                 let S = math.subtract(S_old, math.multiply(g,muS));
 
-                for (let p = 0; p < S.length; p++) {
-                    for (let n = 0; n < S[p].length; n++) {
-                        if (S[p][n] < 0) {
-                            S[p][n] = 0;
+                for (let p = 0; p < S._data.length; p++) {
+                    for (let n = 0; n < S._data[p].length; n++) {
+                        if (S._data[p][n] < 0) {
+                            S._data[p][n] = 0;
                         }
                     }
                 }
 
-                S = math.divide(S, math.dot(e, math.apply(S, 0, sum)));
+                // THIS IS WHERE I AM !!!!!!!!!!!!!!!!!!!!!
+
+                S = math.dotDivide(S, math.multiply(e, math.apply(S, 0, sum)));
                 let SSt = math.multiply(S, math.transpose(S));
 
                 let SSE_temp = math.subtract(SST, math.multiply(2, math.sum(math.multiply(XCtX,S)))); 
@@ -220,7 +222,7 @@ class Algorithms {
                 }
             }
         }
-        return S, SSE, muS, SSt;
+        return [S, SSE, muS, SSt];
     }
 
     C_update(X, XSt, XC, SSt, C, delta, muC, mualpha, SST, SSE, niter) {
