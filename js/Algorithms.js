@@ -89,21 +89,19 @@ class Algorithms {
 
         let S_sum_0axis = math.matrix(math.apply(S, 0, sum));
 
-        let ones_matrix = math.ones([noc, 1]);
+        S_sum_0axis = math.matrix([S_sum_0axis]);
 
+        let ones_matrix = math.matrix(math.ones([noc, 1]));
 
+        let temp_S = math.multiply(ones_matrix, S_sum_0axis);
 
-        
+        S = math.dotDivide(S,temp_S);
 
-        let temp_S = math.multiply(, S_sum_0axis);
+        let SSt = math.multiply(S, math.transpose(S));
 
-        S = math.divide(S,temp_S);
-
-        let SSt = math.dot(S, math.transpose(S));
-
-        let SSE_temp1 = math.multiply(2, math.sum(math.multiply(XCtX, S)));
+        let SSE_temp1 = math.multiply(2, math.sum(math.dotMultiply(XCtX, S)));
         let SSE_temp2 = math.subtract(SST, SSE_temp1);
-        let SSE = math.add(SSE_temp2, math.sum(CtXtXC, SSt));
+        let SSE = math.add(SSE_temp2, math.sum(math.dotMultiply(CtXtXC, SSt)));
 
         S, SSE, muS, SSt = this.S_update(S, XCtX, CtXtXC, muS, SST, SSE, 25);
 
@@ -162,19 +160,29 @@ class Algorithms {
 
     S_update(S, XCtX, CtXtXC, muS, SST, SSE, niter) {
 
-        let [noc, J] = math.size(S);
+        let M = S._size;
+
+        let noc = parseInt(M[0], 10);
+
+        let J = parseInt(M[1],10);
 
         let e = math.ones(noc, 1);
 
         for (let k = 0; k < niter; k++) {
             let SSE_old = SSE;
-            let g_temp1 = math.subtract((math.dot(CtXtXC, S), XCtX))
+            let CtXtXC_dot_S = math.multiply(CtXtXC, S);
+
+            let g_temp1 = math.subtract(CtXtXC_dot_S, XCtX)
             let g_temp2 = math.divide(SST, J);
-            let g = math.divide(g_temp1,g_temp2);
+            let g = math.dotDivide(g_temp1,g_temp2);
 
             const sum = math.sum;
 
-            g = math.subtract(g, math.multiply(e, math.apply(math.multiply(g,S), 0, sum)));
+            let g_multiply_S = math.matrix(math.dotMultiply(g,S));
+
+            let g_multiply_S_sum = math.apply(g_multiply_S, 0, sum);
+
+            g = math.subtract(g, math.dotMultiply(e, [g_multiply_S_sum]));
 
             S_old = S
             while (true) {
