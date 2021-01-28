@@ -138,11 +138,17 @@ class Algorithms {
 
         let S_sum_arr = [];
 
+        let ind = [];
+
         for (let p = 0; p < S_sum._data.length; p++) {
             S_sum_arr.push(S_sum._data[p]);
+            ind.push(p);
         }
 
-        S_sum_arr = S_sum_arr.reverse();
+        let vals = S_sum_arr.reverse();
+
+        ind = ind.reverse();
+
         // S = S_sum.sort(function (a,b) {
         //     return a[0] < b[0];
         // })
