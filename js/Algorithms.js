@@ -11,8 +11,6 @@ class Algorithms {
             matrix_data.push(vals);
         }
 
-        //let matrix_data = math.matrix(data);
-
         if (I === undefined) {
             I = null;
         }
@@ -21,7 +19,13 @@ class Algorithms {
             U = null;
         }
 
-        this.phca(matrix_data, noc, I, U, 0, 1 * (math.pow(10, -6)), 500)
+        let [XC, S, C, SSE, varexpl] = this.phca(matrix_data, noc, I, U, 0, 1 * (math.pow(10, -6)), 500);
+
+        this.XC = XC;
+        this.S = S;
+        this.C = C;
+        this.SSE = SSE;
+        this.varexpl = varexpl;
     }
 
     phca(X, noc, I, U, delta, conv_crit, maxiter) {
@@ -66,10 +70,6 @@ class Algorithms {
         }
 
         let C = math.matrix(C_size, "dense");
-        //let C = math._createDiagonalMatrix(math.ones(i.length), 0, 'sparse', 0, I.length, noc);
-
-        //let C = math.diag(math.ones(i.length));
-        //C.resize(I.length, noc);
 
         subset_X_I = math.matrix(subset_X_I);
 
@@ -367,30 +367,13 @@ class Algorithms {
             }
         }
         if (delta != 0) {
-            C = math.multiply(C,math.diag(alphaC));
+            C = math.multiply(C,math.diag(alphaC)); // fix this statement
         }
         return [C, SSE, muC, mualpha, CtXtXC, XC];
     }
 
-    // max_ind_val(val, ind) {
-    //     let max = val;
-    //     let maxIndex = ind;
-
-    //     for (let p = 0; p < L.length; p++) {
-    //         if (L[p] > max) {
-    //             maxIndex = p;
-    //             max = L[p];
-    //         }
-    //     }
-    //     return [maxIndex, max];  // zip package from collect
-    // }
-
     repmat (matrix, repeat_rows, repeat_cols) {     // possible
         const concat = math.concat;
-        // let J = matrix._size;
-        
-        // let numberOfColumns = J;
-        // let numberOfRows = 1;
 
         if (repeat_cols > 1) {
 
@@ -501,12 +484,6 @@ class Algorithms {
 
                 let K_diag = math.matrix(math.diag(K));
 
-                // let K_diag_arr = [];
-
-                // for (let p = 0; p < K_diag._size; p++) {
-                //     K_diag_arr.push(K_diag._data[p]);
-                // }
-
                 let repmat_1 = this.repmat(K_diag, J, 1);
                 let repmat_2 = this.repmat(math.matrix(math.transpose(math.diag(K))), 1, J); 
 
@@ -520,12 +497,6 @@ class Algorithms {
                 if (k > noc - 1) {
                     ini_obs_num = ini_obs[0];
                     let K_i_0_row = math.row(K, ini_obs_num); 
-
-                    // let Kt_2_arr1 = [Kt_2._data[0]];
-
-                    // for (let p = 1; p < Kt_2._size; p++) {
-                    //     Kt_2_arr1 = math.concat(Kt_2_arr1, [Kt_2._data[p]]);
-                    // }
 
                     let Kt_2_arr = math.matrix([Kt_2]);
                     
@@ -551,12 +522,6 @@ class Algorithms {
                 let t = index.filter(function (value) {
                     return value !== -1;
                 });
-                // let t = [];
-                // for (let p = 0; p < index._data.length; p++) {
-                //     if (index._data[p] !== -1) {
-                //         t.push(index._data[p]);     // possible
-                //     }
-                // }
                 
                 let K_ind_t_row = math.row(K, ind_t);
 
@@ -603,7 +568,6 @@ class Algorithms {
                     let ind = t[p];
                     let val_2 = math.column(sum_dist,t[p]).re;
 
-                    //let [ind, val_2] = this.max_ind_val(math.column(sum_dist,t[p]).re, t[p]);
                     if (val_2 > val) {
                         val = val_2;
                         ind = t[p];   // possible
@@ -617,6 +581,4 @@ class Algorithms {
         }
         return ini_obs;
     }
-
-
 }
