@@ -149,10 +149,6 @@ class Algorithms {
 
         ind = ind.reverse();
 
-        // S = S_sum.sort(function (a,b) {
-        //     return a[0] < b[0];
-        // })
-
         let subset_S_ind = math.row(S, Math.max.apply(null, ind));
 
         for (let p = Math.max.apply(null, ind) - 1; p >= Math.min.apply(null, ind); p--){
@@ -163,21 +159,19 @@ class Algorithms {
 
         let subset_C_ind = math.column(C, Math.max.apply(null, ind));
 
-        for (let p = Math.max.apply(null, ind) -1 ; p >= Math.min.apply(null, ind); p--) {
+        for (let p = Math.max.apply(null, ind) - 1; p >= Math.min.apply(null, ind); p--) {
             subset_C_ind = math.concat(subset_C_ind, math.column(C,p));
         }
 
         C = subset_C_ind;
 
-        let subset_XC_ind = 0;
+        let subset_XC_ind = math.column(XC, Math.max.apply(null, ind));
 
-        let XC_temp = [];
-
-        for (let p = 0; p > XC.length; p++) {
-            XC_temp.push(C[p].reverse);
+        for (let p = Math.max.apply(null, ind) - 1; p >= Math.min.apply(null,ind); p--) {
+            subset_XC_ind = math.concat(subset_XC_ind, math.column(XC, p));
         }
 
-        XC = XC_temp;
+        XC = subset_XC_ind;
 
         return [XC, S, C, SSE, varexpl];
     }
