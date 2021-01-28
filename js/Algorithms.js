@@ -153,12 +153,23 @@ class Algorithms {
         //     return a[0] < b[0];
         // })
 
-        let C_temp = [];
-        for (let p = 0; p > C.length; p++) {
-            C_temp.push(C[p].reverse());
+        let subset_S_ind = math.row(S, Math.max.apply(null, ind));
+
+        for (let p = Math.max.apply(null, ind) - 1; p >= Math.min.apply(null, ind); p--){
+            subset_S_ind = math.concat(subset_S_ind, math.row(S,p), 0);
         }
 
-        C = C_temp;
+        S = subset_S_ind;
+
+        let subset_C_ind = math.column(C, Math.max.apply(null, ind));
+
+        for (let p = Math.max.apply(null, ind) -1 ; p >= Math.min.apply(null, ind); p--) {
+            subset_C_ind = math.concat(subset_C_ind, math.column(C,p));
+        }
+
+        C = subset_C_ind;
+
+        let subset_XC_ind = 0;
 
         let XC_temp = [];
 
@@ -168,7 +179,7 @@ class Algorithms {
 
         XC = XC_temp;
 
-        return XC, S, C, SSE, varexpl;
+        return [XC, S, C, SSE, varexpl];
     }
 
     S_update(S, XCtX, CtXtXC, muS, SST, SSE, niter) {
