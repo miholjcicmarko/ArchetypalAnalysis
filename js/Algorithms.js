@@ -19,7 +19,7 @@ class Algorithms {
             U = null;
         }
 
-        let [XC, S, C, SSE, varexpl] = this.phca(matrix_data, noc, I, U, 0, 1 * (math.pow(10, -6)), 500);
+        let [XC, S, C, SSE, varexpl] = this.phca(matrix_data, noc, I, U, 0.1, 1 * (math.pow(10, -6)), 500);
 
         this.XC = XC;
         this.S = S;
@@ -69,7 +69,7 @@ class Algorithms {
             C_size = C_size.subset(math.index(i_index,j_index),1);
         }
 
-        let C = math.matrix(C_size, "dense");
+        let C = math.matrix(C_size, "dense"); // possible issue (maybe sparse)
 
         subset_X_I = math.matrix(subset_X_I);
 
@@ -246,6 +246,8 @@ class Algorithms {
     }
 
     C_update(X, XSt, XC, SSt, C, delta, muC, mualpha, SST, SSE, niter) {
+        let alphaC = 0;
+        
         let Ct = 0;
 
         let CtXtXC = 0;
@@ -258,9 +260,10 @@ class Algorithms {
 
         const sum = math.sum;
 
-        if (delta != 0) { // entire statements within this if bracket: must FIX
-            let alphaC = math.apply(C, 0, sum);
-            let C = math.dot(C, math.diag(math.divide(1,alphaC)));
+        if (delta != 0) {
+            alphaC = math.apply(C, 0, sum);
+            alphaC = math.dotDivide(1,alphaC);
+            C = math.multiply(C, math.diag(alphaC));
         }
 
         let e = math.ones(J, 1);
@@ -276,8 +279,8 @@ class Algorithms {
             let g_temp3 = math.subtract(g_temp2,XtXSt); 
             let g = math.divide(g_temp3, SST);
 
-            if (delta != 0) { // entire statements within this if bracket: must FIX
-                g = math.dot(g, math.diag(alphaC))
+            if (delta != 0) {
+                g = math.multiply(g, math.diag(alphaC))
             }
             
             g_temp1 = math.dotMultiply(g,C);
@@ -306,8 +309,8 @@ class Algorithms {
 
                 C = math.multiply(C, one_div_nC_diag);
 
-                if (delta != 0) { //
-                    Ct = math.multiply(C,math.diag(alphaC)); // statement: must FIX
+                if (delta != 0) {
+                    Ct = math.multiply(C, math.diag(alphaC));
                 }
                 else {
                     Ct = C;
@@ -372,7 +375,7 @@ class Algorithms {
         return [C, SSE, muC, mualpha, CtXtXC, XC];
     }
 
-    repmat (matrix, repeat_rows, repeat_cols) {     // possible
+    repmat (matrix, repeat_rows, repeat_cols) {     // possible issue
         const concat = math.concat;
 
         if (repeat_cols > 1) {
@@ -450,7 +453,7 @@ class Algorithms {
                 let t = [];
                 for (let p = 0; p < index.length; p++) {
                     if (index[p] !== -1) {
-                        t.push(index[p]);        // possible
+                        t.push(index[p]);        // possible issue
                     }
                 }
                 Kt_ind_t = math.column(Kt, ind_t);
@@ -464,7 +467,7 @@ class Algorithms {
                     let ind_2, val_2 = this.max_ind_val(math.column(sum_dist,t[p]));
                     if (val_2 > val) {
                         val = val_2;
-                        ind = t[p];        // possible
+                        ind = t[p];        // possible issue
                     }
                 }
 
@@ -570,7 +573,7 @@ class Algorithms {
 
                     if (val_2 > val) {
                         val = val_2;
-                        ind = t[p];   // possible
+                        ind = t[p];   // possible issue
                     }
                 }
             
