@@ -134,10 +134,18 @@ class Algorithms {
         varexpl_temp = math.subtract(SST, SSE);
         varexpl = math.divide(varexpl_temp, SST);
 
-        let S_sum = math._apply(S, 1, sum); 
-        S = S_sum.sort(function (a,b) {
-            return a[0] < b[0];
-        })
+        let S_sum = math.apply(S, 1, sum); 
+
+        let S_sum_arr = [];
+
+        for (let p = 0; p < S_sum._data.length; p++) {
+            S_sum_arr.push(S_sum._data[p]);
+        }
+
+        S_sum_arr = S_sum_arr.reverse();
+        // S = S_sum.sort(function (a,b) {
+        //     return a[0] < b[0];
+        // })
 
         let C_temp = [];
         for (let p = 0; p > C.length; p++) {
