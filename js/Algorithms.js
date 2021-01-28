@@ -291,7 +291,7 @@ class Algorithms {
 
             let C_old = C;
             while (true) {
-                let C = math.subtract(C_old, math.multiply(muC,g));
+                let C = math.subtract(C_old, math.dotMultiply(muC,g));
 
                 for (let p = 0; p < C._data.length; p++) {
                     for (let n = 0; n < C._data[p].length; n++) {
@@ -339,24 +339,39 @@ class Algorithms {
             }
 
             SSE_old = SSE;
-            if (delta != 0) { // entire statements within this bracket before else: must FIX
-                let g_temp1 = math.transpose(math.diag(math.multiply(CtXtXC, SSt)));  
-                let g_temp2 = math.divide(g_temp1,alphaC);
-                let g_temp3 = math.sum(math.multiply(C,XtXSt));
-                let g_temp4 = math.divide(g_temp3, math.multiply(SST,J));
+            if (delta != 0) {
+                let g_temp1 = math.transpose(math.diag(math.dotMultiply(CtXtXC, SSt)));  
+                let g_temp2 = math.dotDivide(g_temp1,alphaC);
+                let g_temp3 = math.sum(math.dotMultiply(C,XtXSt));
+                let g_temp4 = math.dotDivide(g_temp3, math.multiply(SST,J));
                 let g = math.subtract(g_temp2, g_temp4);
 
-                alphaC_old = alphaC;
+                let alphaC_old = alphaC;
 
                 while (true) {
                     alphaC = math.subtract(alphaC_old, math.multiply(mualpha,g));
-                    alphaC[alphaC < 1 - delta] = 1 - delta;
-                    alphaC[alphaC > 1 + delta] = 1 + delta;
 
-                    let XCt = math.dot(XC, math.diag(math.divide(alphaC,alphaC_old)));
-                    CtXtXC = math.dot(math.transpose(XCt), XCt);
-                    let SSE_temp = math.subtract(SST,math.multiply(2,math.sum(XCt,XSt)));
-                    let SSE = math.add(SSE_temp, math.sum(math.multiply(CtXtXC,SSt)));
+                    for (let p = 0; p < alphaC._data.length; p++) {
+                        if (alphaC._data[p] < 1 - delta) {
+                            alphaC._data[p] = 1 - delta;
+                        }
+                        if (alphaC._data[p] > 1 + delta) {
+                            alphaC._data[p] = 1 + delta;
+                        }
+                    }
+
+                    let alphaC_div_alphaC_old = math.dotDivide(alphaC,alphaC_old);
+
+                    let XCt = math.multiply(XC, math.diag(alphaC_div_alphaC_old));
+
+                    CtXtXC = math.multiply(math.transpose(XCt), XCt);
+
+                    let XCt_mult_Xst = math.dotMultiply(XCt, XSt);
+
+                    let XCt_mult_XSt_sum = math.sum(XCt_mult_Xst);
+
+                    let SSE_temp = math.subtract(SST,math.multiply(2,XCt_mult_XSt_sum));
+                    let SSE = math.add(SSE_temp, math.sum(math.dotMultiply(CtXtXC,SSt)));
 
                     if (SSE <= SSE_old * (1 + 1e-9)) {
                         mualpha = math.multiply(mualpha,1.2);
@@ -370,7 +385,7 @@ class Algorithms {
             }
         }
         if (delta != 0) {
-            C = math.multiply(C,math.diag(alphaC)); // fix this statement
+            C = math.dotMultiply(C,math.diag(alphaC)); // fix this statement Line 136
         }
         return [C, SSE, muC, mualpha, CtXtXC, XC];
     }
