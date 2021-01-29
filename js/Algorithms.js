@@ -19,7 +19,7 @@ class Algorithms {
             U = null;
         }
 
-        let [XC, S, C, SSE, varexpl] = this.phca(matrix_data, noc, I, U, 0.1, 1 * (math.pow(10, -6)), 500);
+        let [XC, S, C, SSE, varexpl] = this.phca(matrix_data, noc, I, U, 0, 1 * (math.pow(10, -6)), 500);
 
         this.XC = XC;
         this.S = S;
@@ -120,6 +120,8 @@ class Algorithms {
                 [C, SSE, muC, mualpha, CtXtXC, XC] = this.C_update(subset_X_I, XSt,
                     XC, SSt, C, delta, muC, mualpha, SST, SSE, 10);
 
+                console.log(C);
+
                 XCtX = math.multiply(math.transpose(XC), subset_X_U);
                 [S, SSE, muS, SSt] = this.S_update(S, XCtX, CtXtXC, muS, SST, SSE, 10);
 
@@ -178,6 +180,8 @@ class Algorithms {
 
     S_update(S, XCtX, CtXtXC, muS, SST, SSE, niter) {
 
+        let stop = 0;
+
         let SSt = 0;
 
         let M = S._size;
@@ -213,7 +217,7 @@ class Algorithms {
             g = math.subtract(g, math.multiply(e, g_multiply_S_sum_matrix));
 
             let S_old = S
-            while (true) {
+            while (stop === 0) {
                 let S = math.subtract(S_old, math.multiply(g,muS));
 
                 for (let p = 0; p < S._data.length; p++) {
@@ -235,6 +239,7 @@ class Algorithms {
 
                 if (SSE <= SSE_old * (1 + 1e-9)) {
                     muS = math.multiply(muS, 1.2);
+                    stop = 1;
                     break;
                 }
                 else {
@@ -246,6 +251,8 @@ class Algorithms {
     }
 
     C_update(X, XSt, XC, SSt, C, delta, muC, mualpha, SST, SSE, niter) {
+        let stop = 0;
+        
         let alphaC = 0;
         
         let Ct = 0;
@@ -290,7 +297,7 @@ class Algorithms {
             g = math.subtract(g, math.multiply(e,g_temp2));
 
             let C_old = C;
-            while (true) {
+            while (stop === 0) {
                 let C = math.subtract(C_old, math.dotMultiply(muC,g));
 
                 for (let p = 0; p < C._data.length; p++) {
@@ -331,6 +338,7 @@ class Algorithms {
 
                 if (SSE <= SSE_old * (1 + 1e-9)) {
                     muC = math.multiply(muC,1.2);
+                    stop = 1;
                     break;
                 }
                 else {
