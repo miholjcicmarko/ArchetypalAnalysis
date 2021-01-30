@@ -120,7 +120,7 @@ class Algorithms {
                 [C, SSE, muC, mualpha, CtXtXC, XC] = this.C_update(subset_X_I, XSt,
                     XC, SSt, C, delta, muC, mualpha, SST, SSE, 10);
 
-                console.log(C);
+                //console.log(C);
 
                 XCtX = math.multiply(math.transpose(XC), subset_X_U);
                 [S, SSE, muS, SSt] = this.S_update(S, XCtX, CtXtXC, muS, SST, SSE, 10);
@@ -237,7 +237,7 @@ class Algorithms {
                 
                 let SSE = math.add(SSE_temp, math.sum(math.dotMultiply(CtXtXC,SSt)));
 
-                if (SSE <= SSE_old * (1 + 1e-9)) {
+                if (SSE <= (SSE_old * 1 * (math.pow(10, -6)))) {
                     muS = math.multiply(muS, 1.2);
                     stop = 1;
                     break;
@@ -336,7 +336,7 @@ class Algorithms {
  
                 let SSE = math.add(SSE_temp, math.sum(CtXtXC_mult_SSt));
 
-                if (SSE <= SSE_old * (1 + 1e-9)) {
+                if (SSE <= (SSE_old * 1 * (math.pow(10, -6)))) {
                     muC = math.multiply(muC,1.2);
                     stop = 1;
                     break;
@@ -381,7 +381,7 @@ class Algorithms {
                     let SSE_temp = math.subtract(SST,math.multiply(2,XCt_mult_XSt_sum));
                     let SSE = math.add(SSE_temp, math.sum(math.dotMultiply(CtXtXC,SSt)));
 
-                    if (SSE <= SSE_old * (1 + 1e-9)) {
+                    if (SSE <= (SSE_old * 1 * (math.pow(10, -6)))) {
                         mualpha = math.multiply(mualpha,1.2);
                         XC = XCt;
                         break;
