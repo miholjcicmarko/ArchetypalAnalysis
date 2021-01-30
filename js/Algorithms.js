@@ -237,7 +237,7 @@ class Algorithms {
 
                 let SSE_temp = math.subtract(SST, math.multiply(2, math.sum(math.dotMultiply(XCtX,S)))); 
                 
-                let SSE = math.add(SSE_temp, math.sum(math.dotMultiply(CtXtXC,SSt)));
+                SSE = math.add(SSE_temp, math.sum(math.dotMultiply(CtXtXC,SSt)));
 
                 if (SSE <= (SSE_old * (1 + (math.pow(10, -9))))) {
                     muS = math.multiply(muS, 1.2);
