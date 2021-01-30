@@ -43,13 +43,11 @@ class Algorithms {
 
         let subset_X_U = math.column(X,Math.min.apply(null, U._data));
 
-        for (let p = Math.min.apply(null, U._data); p < Math.max.apply(null, U._data); p++){
+        for (let p = Math.min.apply(null, U._data) + 1; p < Math.max.apply(null, U._data) + 1; p++){
             subset_X_U = math.concat(subset_X_U, math.column(X,p));
         }
 
         let SST = math.sum(math.dotMultiply(subset_X_U, subset_X_U));
-
-        console.log(SST);
 
         let ini_obs = [(Math.ceil(I._data.length * Math.random()))];
 
@@ -87,7 +85,9 @@ class Algorithms {
 
         let CtXtXC = math.multiply(math.matrix(math.transpose(XC)), math.matrix(XC));
 
-        let S = math.multiply(-1, math.log(math.random([noc, U._data.length])));
+        //let S = math.multiply(-1, math.log(math.random([noc, U._data.length])));
+
+        let S = math.multiply(-1, math.log(math.subtract(math.ones([noc,U._data.length]),0.5)));
 
         let S_sum_0axis = math.matrix(math.apply(S, 0, sum));
 
@@ -178,7 +178,7 @@ class Algorithms {
         return [XC, S, C, SSE, varexpl];
     }
 
-    S_update(S, XCtX, CtXtXC, muS, SST, SSE, niter) {
+    S_update(S, XCtX, CtXtXC, muS, SST, SSE, niter) { // looping incorrect IAM HERE
 
         let stop = 0;
 
@@ -239,7 +239,6 @@ class Algorithms {
 
                 if (SSE <= (SSE_old * (1 + (math.pow(10, -9))))) {
                     muS = math.multiply(muS, 1.2);
-                    stop = 1;
                     break;
                 }
                 else {
