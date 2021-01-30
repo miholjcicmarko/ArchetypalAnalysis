@@ -49,6 +49,8 @@ class Algorithms {
 
         let SST = math.sum(math.dotMultiply(subset_X_U, subset_X_U));
 
+        console.log(SST);
+
         let ini_obs = [(Math.ceil(I._data.length * Math.random()))];
 
         let subset_X_I = math.column(X,Math.min.apply(null, I._data));
@@ -119,8 +121,6 @@ class Algorithms {
 
                 [C, SSE, muC, mualpha, CtXtXC, XC] = this.C_update(subset_X_I, XSt,
                     XC, SSt, C, delta, muC, mualpha, SST, SSE, 10);
-
-                console.log(C);
 
                 XCtX = math.multiply(math.transpose(XC), subset_X_U);
                 [S, SSE, muS, SSt] = this.S_update(S, XCtX, CtXtXC, muS, SST, SSE, 10);
