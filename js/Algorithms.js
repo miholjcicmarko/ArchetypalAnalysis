@@ -11,8 +11,6 @@ class Algorithms {
             matrix_data.push(vals);
         }
 
-        //let matrix_data = math.matrix(data);
-
         if (I === undefined) {
             I = null;
         }
@@ -21,7 +19,13 @@ class Algorithms {
             U = null;
         }
 
-        this.phca(matrix_data, noc, I, U, 0, 1 * (math.pow(10, -6)), 500)
+        let [XC, S, C, SSE, varexpl] = this.phca(matrix_data, noc, I, U, 0, 1 * (math.pow(10, -6)), 500);
+
+        this.XC = XC;
+        this.S = S;
+        this.C = C;
+        this.SSE = SSE;
+        this.varexpl = varexpl;
     }
 
     phca(X, noc, I, U, delta, conv_crit, maxiter) {
@@ -65,11 +69,7 @@ class Algorithms {
             C_size = C_size.subset(math.index(i_index,j_index),1);
         }
 
-        let C = math.matrix(C_size, "dense");
-        //let C = math._createDiagonalMatrix(math.ones(i.length), 0, 'sparse', 0, I.length, noc);
-
-        //let C = math.diag(math.ones(i.length));
-        //C.resize(I.length, noc);
+        let C = math.matrix(C_size, "dense"); // possible issue (maybe sparse)
 
         subset_X_I = math.matrix(subset_X_I);
 
@@ -113,15 +113,17 @@ class Algorithms {
 
         while (math.abs(dSSE) >= math.multiply(conv_crit, math.abs(SSE)) && (iter_ < maxiter) && (varexpl < 0.9999)) {
                 iter_ += 1;
-                SSE_old = SSE;
+                let SSE_old = SSE;
 
-                let XSt = math.dot(subset_X_U, math.transpose(S));
+                let XSt = math.multiply(subset_X_U, math.transpose(S));
 
-                C, SSE, muC, mualpha, CtXtXC, XC = this.C_update(subset_X_I, XSt,
-                    XC, SSt, C, delta, muC, mua, SST, SSE, 10);
+                [C, SSE, muC, mualpha, CtXtXC, XC] = this.C_update(subset_X_I, XSt,
+                    XC, SSt, C, delta, muC, mualpha, SST, SSE, 10);
 
-                XCtX = math.dot(math.transpose(XC), subset_X_U);
-                S, SSE, muS, SSt = this.S_update(S, XCtX, CtXtXC, muS, SST, SSE, 10);
+                //console.log(C);
+
+                XCtX = math.multiply(math.transpose(XC), subset_X_U);
+                [S, SSE, muS, SSt] = this.S_update(S, XCtX, CtXtXC, muS, SST, SSE, 10);
 
                 dSSE = SSE_old - SSE;
 
@@ -129,36 +131,58 @@ class Algorithms {
                     varexpl_temp = math.subtract(SST, SSE);
                     varexpl = math.divide(varexpl_temp, SST);
                 }
-
         }
 
         varexpl_temp = math.subtract(SST, SSE);
         varexpl = math.divide(varexpl_temp, SST);
 
-        let S_sum = math._apply(S, 1, sum); 
-        S = S_sum.sort(function (a,b) {
-            return a[0] < b[0];
-        })
+        let S_sum = math.apply(S, 1, sum); 
 
-        let C_temp = [];
-        for (let p = 0; p > C.length; p++) {
-            C_temp.push(C[p].reverse());
+        let S_sum_arr = [];
+
+        let ind = [];
+
+        for (let p = 0; p < S_sum._data.length; p++) {
+            S_sum_arr.push(S_sum._data[p]);
+            ind.push(p);
         }
 
-        C = C_temp;
+        let vals = S_sum_arr.reverse();
 
-        let XC_temp = [];
+        ind = ind.reverse();
 
-        for (let p = 0; p > XC.length; p++) {
-            XC_temp.push(C[p].reverse);
+        let subset_S_ind = math.row(S, Math.max.apply(null, ind));
+
+        for (let p = Math.max.apply(null, ind) - 1; p >= Math.min.apply(null, ind); p--){
+            subset_S_ind = math.concat(subset_S_ind, math.row(S,p), 0);
         }
 
-        XC = XC_temp;
+        S = subset_S_ind;
 
-        return XC, S, C, SSE, varexpl;
+        let subset_C_ind = math.column(C, Math.max.apply(null, ind));
+
+        for (let p = Math.max.apply(null, ind) - 1; p >= Math.min.apply(null, ind); p--) {
+            subset_C_ind = math.concat(subset_C_ind, math.column(C,p));
+        }
+
+        C = subset_C_ind;
+
+        let subset_XC_ind = math.column(XC, Math.max.apply(null, ind));
+
+        for (let p = Math.max.apply(null, ind) - 1; p >= Math.min.apply(null,ind); p--) {
+            subset_XC_ind = math.concat(subset_XC_ind, math.column(XC, p));
+        }
+
+        XC = subset_XC_ind;
+
+        return [XC, S, C, SSE, varexpl];
     }
 
     S_update(S, XCtX, CtXtXC, muS, SST, SSE, niter) {
+
+        let stop = 0;
+
+        let SSt = 0;
 
         let M = S._size;
 
@@ -193,7 +217,7 @@ class Algorithms {
             g = math.subtract(g, math.multiply(e, g_multiply_S_sum_matrix));
 
             let S_old = S
-            while (true) {
+            while (stop === 0) {
                 let S = math.subtract(S_old, math.multiply(g,muS));
 
                 for (let p = 0; p < S._data.length; p++) {
@@ -204,17 +228,18 @@ class Algorithms {
                     }
                 }
 
-                // THIS IS WHERE I AM !!!!!!!!!!!!!!!!!!!!!
+                let sum_S_axis0 = math.apply(S, 0, sum);
 
-                S = math.dotDivide(S, math.multiply(e, math.apply(S, 0, sum)));
-                let SSt = math.multiply(S, math.transpose(S));
+                S = math.dotDivide(S, math.multiply(e, math.matrix([sum_S_axis0])));
+                SSt = math.multiply(S, math.transpose(S));
 
-                let SSE_temp = math.subtract(SST, math.multiply(2, math.sum(math.multiply(XCtX,S)))); 
+                let SSE_temp = math.subtract(SST, math.multiply(2, math.sum(math.dotMultiply(XCtX,S)))); 
                 
-                let SSE = math.add(SSE_temp, math.sum(math.multiply(CtXtXC,SSt)));
+                let SSE = math.add(SSE_temp, math.sum(math.dotMultiply(CtXtXC,SSt)));
 
-                if (SSE <= SSE_old * (1 + 1e-9)) {
+                if (SSE <= (SSE_old * 1 * (math.pow(10, -6)))) {
                     muS = math.multiply(muS, 1.2);
+                    stop = 1;
                     break;
                 }
                 else {
@@ -226,61 +251,94 @@ class Algorithms {
     }
 
     C_update(X, XSt, XC, SSt, C, delta, muC, mualpha, SST, SSE, niter) {
-        let [noc, J] = math.size(C);
+        let stop = 0;
+        
+        let alphaC = 0;
+        
+        let Ct = 0;
+
+        let CtXtXC = 0;
+
+        let M = C._size;
+
+        let J = parseInt(M[0], 10);
+
+        let noc = parseInt(M[1],10);
 
         const sum = math.sum;
 
         if (delta != 0) {
-            let alphaC = math.apply(C, 0, sum);
-            let C = math.dot(C, math.diag(math.divide(1,alphaC)));
+            alphaC = math.apply(C, 0, sum);
+            alphaC = math.dotDivide(1,alphaC);
+            C = math.multiply(C, math.diag(alphaC));
         }
 
         let e = math.ones(J, 1);
 
-        let XtXSt = math.dot(math.transpose(X), XSt);
+        let XtXSt = math.multiply(math.transpose(X), XSt);
 
         for (let k = 0; k < niter; k++) {
             let SSE_old = SSE;
-            let g_temp1 = math.subtract((math.dot(math.transpose(X), math.dot(XC,SSt)),XtXSt)); 
-            let g = math.divide(g_temp1,SST);
+
+            let g_temp1 = math.multiply(XC,SSt);
+            let g_temp2 = math.multiply(math.transpose(X), g_temp1)
+
+            let g_temp3 = math.subtract(g_temp2,XtXSt); 
+            let g = math.divide(g_temp3, SST);
 
             if (delta != 0) {
-                g = math.dot(g, math.diag(alphaC))
+                g = math.multiply(g, math.diag(alphaC))
             }
             
-            let g_temp = math.apply((math.multiply(g,C)),0,sum);
+            g_temp1 = math.dotMultiply(g,C);
 
-            g = math.subtract(g, math.multiply(e,g_temp));
+            g_temp2 = math.matrix([math.apply(g_temp1,0,sum)]);
 
-            C_old = C;
-            while (true) {
-                let C = math.subtract(C_old, math.multiply(muC,g));
+            g = math.subtract(g, math.multiply(e,g_temp2));
 
-                for (let p = 0; p < C.length; p++) {
-                    for (let n = 0; n < C[p].length; n++) {
-                        if (C[p][n] < 0) {
-                            C[p][n] = 0;
+            let C_old = C;
+            while (stop === 0) {
+                let C = math.subtract(C_old, math.dotMultiply(muC,g));
+
+                for (let p = 0; p < C._data.length; p++) {
+                    for (let n = 0; n < C._data[p].length; n++) {
+                        if (C._data[p][n] < 0) {
+                            C._data[p][n] = 0;
                         }
                     }
                 }
 
-                let nC = math.apply(C, 0, sum) + Number.EPSILON;
-                C = math.dot(C, math.diag(math.divide(1, nC[0])));
+                let nC_temp = math.matrix([math.apply(C, 0, sum)]);
+
+                let nC = math.add(nC_temp, Number.EPSILON);
+                let one_div_nC = math.dotDivide(1,math.matrix(nC._data[0]));
+                let one_div_nC_diag = math.diag(one_div_nC);
+
+                C = math.multiply(C, one_div_nC_diag);
 
                 if (delta != 0) {
-                    Ct = math.multiply(C,math.diag(alphaC));
+                    Ct = math.multiply(C, math.diag(alphaC));
                 }
                 else {
                     Ct = C;
                 }
 
-                let XC = math.dot(X, Ct);
-                let CtXtXC = math.dot(math.transpose(XC), XC);
-                let SSE_temp = math.subtract(SST,math.multiply(2,math.sum(XC,XSt)));
-                let SSE = math.add(SSE_temp, math.sum(math.multiply(CtXtXC,SSt)));
+                let XC = math.multiply(X, Ct);
+                CtXtXC = math.multiply(math.transpose(XC), XC);
 
-                if (SSE <= SSE_old * (1 + 1e-9)) {
+                let XC_mult_XSt = math.dotMultiply(XC,XSt);
+
+                let XC_mult_XSt_sum = math.sum(XC_mult_XSt);
+
+                let SSE_temp = math.subtract(SST,math.multiply(2,XC_mult_XSt_sum));
+
+                let CtXtXC_mult_SSt = math.dotMultiply(CtXtXC,SSt);
+ 
+                let SSE = math.add(SSE_temp, math.sum(CtXtXC_mult_SSt));
+
+                if (SSE <= (SSE_old * 1 * (math.pow(10, -6)))) {
                     muC = math.multiply(muC,1.2);
+                    stop = 1;
                     break;
                 }
                 else {
@@ -291,24 +349,39 @@ class Algorithms {
             SSE_old = SSE;
             if (delta != 0) {
                 let g_temp1 = math.transpose(math.diag(math.multiply(CtXtXC, SSt)));  
-                let g_temp2 = math.divide(g_temp1,alphaC);
-                let g_temp3 = math.sum(math.multiply(C,XtXSt));
-                let g_temp4 = math.divide(g_temp3, math.multiply(SST,J));
+                let g_temp2 = math.dotDivide(g_temp1,alphaC);
+                let g_temp3 = math.sum(math.dotMultiply(C,XtXSt));
+                let g_temp4 = math.dotDivide(g_temp3, math.multiply(SST,J));
                 let g = math.subtract(g_temp2, g_temp4);
 
-                alphaC_old = alphaC;
+                let alphaC_old = alphaC;
 
                 while (true) {
                     alphaC = math.subtract(alphaC_old, math.multiply(mualpha,g));
-                    alphaC[alphaC < 1 - delta] = 1 - delta;
-                    alphaC[alphaC > 1 + delta] = 1 + delta;
 
-                    let XCt = math.dot(XC, math.diag(math.divide(alphaC,alphaC_old)));
-                    CtXtXC = math.dot(math.transpose(XCt), XCt);
-                    let SSE_temp = math.subtract(SST,math.multiply(2,math.sum(XCt,XSt)));
-                    let SSE = math.add(SSE_temp, math.sum(math.multiply(CtXtXC,SSt)));
+                    for (let p = 0; p < alphaC._data.length; p++) {
+                        if (alphaC._data[p] < 1 - delta) {
+                            alphaC._data[p] = 1 - delta;
+                        }
+                        if (alphaC._data[p] > 1 + delta) {
+                            alphaC._data[p] = 1 + delta;
+                        }
+                    }
 
-                    if (SSE <= SSE_old * (1 + 1e-9)) {
+                    let alphaC_div_alphaC_old = math.dotDivide(alphaC,alphaC_old);
+
+                    let XCt = math.multiply(XC, math.diag(alphaC_div_alphaC_old));
+
+                    CtXtXC = math.multiply(math.transpose(XCt), XCt);
+
+                    let XCt_mult_Xst = math.dotMultiply(XCt, XSt);
+
+                    let XCt_mult_XSt_sum = math.sum(XCt_mult_Xst);
+
+                    let SSE_temp = math.subtract(SST,math.multiply(2,XCt_mult_XSt_sum));
+                    let SSE = math.add(SSE_temp, math.sum(math.dotMultiply(CtXtXC,SSt)));
+
+                    if (SSE <= (SSE_old * 1 * (math.pow(10, -6)))) {
                         mualpha = math.multiply(mualpha,1.2);
                         XC = XCt;
                         break;
@@ -322,28 +395,11 @@ class Algorithms {
         if (delta != 0) {
             C = math.multiply(C,math.diag(alphaC));
         }
-        return C, SSE, muC, mualpha, CtXtXC, XC;
+        return [C, SSE, muC, mualpha, CtXtXC, XC];
     }
 
-    // max_ind_val(val, ind) {
-    //     let max = val;
-    //     let maxIndex = ind;
-
-    //     for (let p = 0; p < L.length; p++) {
-    //         if (L[p] > max) {
-    //             maxIndex = p;
-    //             max = L[p];
-    //         }
-    //     }
-    //     return [maxIndex, max];  // zip package from collect
-    // }
-
-    repmat (matrix, repeat_rows, repeat_cols) {     // possible
+    repmat (matrix, repeat_rows, repeat_cols) {     // possible issue
         const concat = math.concat;
-        // let J = matrix._size;
-        
-        // let numberOfColumns = J;
-        // let numberOfRows = 1;
 
         if (repeat_cols > 1) {
 
@@ -399,7 +455,7 @@ class Algorithms {
 
         let sum_dist = math.zeros(1,J);
 
-        if (J > noc * I) { // entire statements within brackets must be fixed
+        if (J > noc * I) { // entire statements within this bracket before else: must FIX
             let Kt = K;
             let Kt_2 = math.apply(math.square(Kt), 0, sum);
 
@@ -420,7 +476,7 @@ class Algorithms {
                 let t = [];
                 for (let p = 0; p < index.length; p++) {
                     if (index[p] !== -1) {
-                        t.push(index[p]);        // possible
+                        t.push(index[p]);        // possible issue
                     }
                 }
                 Kt_ind_t = math.column(Kt, ind_t);
@@ -434,7 +490,7 @@ class Algorithms {
                     let ind_2, val_2 = this.max_ind_val(math.column(sum_dist,t[p]));
                     if (val_2 > val) {
                         val = val_2;
-                        ind = t[p];        // possible
+                        ind = t[p];        // possible issue
                     }
                 }
 
@@ -454,12 +510,6 @@ class Algorithms {
 
                 let K_diag = math.matrix(math.diag(K));
 
-                // let K_diag_arr = [];
-
-                // for (let p = 0; p < K_diag._size; p++) {
-                //     K_diag_arr.push(K_diag._data[p]);
-                // }
-
                 let repmat_1 = this.repmat(K_diag, J, 1);
                 let repmat_2 = this.repmat(math.matrix(math.transpose(math.diag(K))), 1, J); 
 
@@ -473,12 +523,6 @@ class Algorithms {
                 if (k > noc - 1) {
                     ini_obs_num = ini_obs[0];
                     let K_i_0_row = math.row(K, ini_obs_num); 
-
-                    // let Kt_2_arr1 = [Kt_2._data[0]];
-
-                    // for (let p = 1; p < Kt_2._size; p++) {
-                    //     Kt_2_arr1 = math.concat(Kt_2_arr1, [Kt_2._data[p]]);
-                    // }
 
                     let Kt_2_arr = math.matrix([Kt_2]);
                     
@@ -504,12 +548,6 @@ class Algorithms {
                 let t = index.filter(function (value) {
                     return value !== -1;
                 });
-                // let t = [];
-                // for (let p = 0; p < index._data.length; p++) {
-                //     if (index._data[p] !== -1) {
-                //         t.push(index._data[p]);     // possible
-                //     }
-                // }
                 
                 let K_ind_t_row = math.row(K, ind_t);
 
@@ -556,10 +594,9 @@ class Algorithms {
                     let ind = t[p];
                     let val_2 = math.column(sum_dist,t[p]).re;
 
-                    //let [ind, val_2] = this.max_ind_val(math.column(sum_dist,t[p]).re, t[p]);
                     if (val_2 > val) {
                         val = val_2;
-                        ind = t[p];   // possible
+                        ind = t[p];   // possible issue
                     }
                 }
             
@@ -570,6 +607,4 @@ class Algorithms {
         }
         return ini_obs;
     }
-
-
 }
