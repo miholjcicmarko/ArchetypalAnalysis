@@ -180,6 +180,8 @@ class Algorithms {
 
     S_update(S, XCtX, CtXtXC, muS, SST, SSE, niter) { // looping incorrect IAM HERE
 
+        let SSE_old = 0;
+
         let stop = 0;
 
         let SSt = 0;
@@ -193,7 +195,7 @@ class Algorithms {
         let e = math.ones(noc, 1);
 
         for (let k = 0; k < niter; k++) {
-            let SSE_old = SSE;
+            SSE_old = SSE;
             let CtXtXC_dot_S = math.multiply(CtXtXC, S);
 
             let g_temp1 = math.subtract(CtXtXC_dot_S, XCtX)
@@ -218,7 +220,7 @@ class Algorithms {
 
             let S_old = S
             while (stop === 0) {
-                let S = math.subtract(S_old, math.multiply(g,muS));
+                S = math.subtract(S_old, math.multiply(g,muS));
 
                 for (let p = 0; p < S._data.length; p++) {
                     for (let n = 0; n < S._data[p].length; n++) {
