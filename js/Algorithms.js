@@ -252,6 +252,10 @@ class Algorithms {
     }
 
     C_update(X, XSt, XC, SSt, C, delta, muC, mualpha, SST, SSE, niter) {
+        let XCt = 0;
+
+        let SSE_old = 0;
+        
         let stop = 0;
         
         let alphaC = 0;
@@ -279,7 +283,7 @@ class Algorithms {
         let XtXSt = math.multiply(math.transpose(X), XSt);
 
         for (let k = 0; k < niter; k++) {
-            let SSE_old = SSE;
+            SSE_old = SSE;
 
             let g_temp1 = math.multiply(XC,SSt);
             let g_temp2 = math.multiply(math.transpose(X), g_temp1)
@@ -324,7 +328,7 @@ class Algorithms {
                     Ct = C;
                 }
 
-                let XC = math.multiply(X, Ct);
+                XC = math.multiply(X, Ct);
                 CtXtXC = math.multiply(math.transpose(XC), XC);
 
                 let XC_mult_XSt = math.dotMultiply(XC,XSt);
@@ -335,7 +339,7 @@ class Algorithms {
 
                 let CtXtXC_mult_SSt = math.dotMultiply(CtXtXC,SSt);
  
-                let SSE = math.add(SSE_temp, math.sum(CtXtXC_mult_SSt));
+                SSE = math.add(SSE_temp, math.sum(CtXtXC_mult_SSt));
 
                 if (SSE <= (SSE_old * (1 + (math.pow(10, -9))))) {
                     muC = math.multiply(muC,1.2);
@@ -371,7 +375,7 @@ class Algorithms {
 
                     let alphaC_div_alphaC_old = math.dotDivide(alphaC,alphaC_old);
 
-                    let XCt = math.multiply(XC, math.diag(alphaC_div_alphaC_old));
+                    XCt = math.multiply(XC, math.diag(alphaC_div_alphaC_old));
 
                     CtXtXC = math.multiply(math.transpose(XCt), XCt);
 
@@ -380,7 +384,7 @@ class Algorithms {
                     let XCt_mult_XSt_sum = math.sum(XCt_mult_Xst);
 
                     let SSE_temp = math.subtract(SST,math.multiply(2,XCt_mult_XSt_sum));
-                    let SSE = math.add(SSE_temp, math.sum(math.dotMultiply(CtXtXC,SSt)));
+                    SSE = math.add(SSE_temp, math.sum(math.dotMultiply(CtXtXC,SSt)));
 
                     if (SSE <= (SSE_old * (1 + (math.pow(10, -9))))) {
                         mualpha = math.multiply(mualpha,1.2);
