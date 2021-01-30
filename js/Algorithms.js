@@ -303,7 +303,7 @@ class Algorithms {
 
             let C_old = C;
             while (stop === 0) {
-                let C = math.subtract(C_old, math.dotMultiply(muC,g));
+                C = math.subtract(C_old, math.dotMultiply(muC,g));
 
                 for (let p = 0; p < C._data.length; p++) {
                     for (let n = 0; n < C._data[p].length; n++) {
