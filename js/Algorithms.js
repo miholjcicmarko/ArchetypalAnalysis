@@ -40,10 +40,10 @@ class Algorithms {
         let M = math.size(X);
 
         if (I === null) {
-            I = math.range(0,M[1]);
+            I = math.range(0,M._data[1]);
         }
         if (U === null) {
-            U = math.range(0,M[1]);
+            U = math.range(0,M._data[1]);
         }
 
         let subset_X_U = math.column(X,Math.min.apply(null, U._data));
@@ -454,9 +454,9 @@ class Algorithms {
 
         let M = math.size(K);
 
-        let I = parseInt(M[0], 10);
+        let I = parseInt(M._data[0], 10);
 
-        let J = parseInt(M[1],10);
+        let J = parseInt(M._data[1],10);
 
         let index = math.range(0,J);
 
@@ -469,12 +469,12 @@ class Algorithms {
 
         let sum_dist = math.zeros(1,J);
 
-        if (J > noc * I) { // entire statements within this bracket before else: must FIX
+        if (J > noc * I) {
             let Kt = K;
             let Kt_2 = math.apply(math.square(Kt), 0, sum);
 
-            for (let i = 1; i < noc + 11; i++) {
-                if (k > noc - 1) {
+            for (let k = 1; k < noc + 11; k++) {
+                if (k > noc - 1) { // entire statements within this bracket before t: must FIX
                     let Kt_col = math.column(Kt,ini_obs[0]);
                     let Kq = math.dot(Kt_col, Kt);
 
@@ -487,33 +487,56 @@ class Algorithms {
 
                     ini_obs = [];
                 }
-                let t = [];
-                for (let p = 0; p < index.length; p++) {
-                    if (index[p] !== -1) {
-                        t.push(index[p]);        // possible issue
-                    }
-                }
+                let t = index.filter(function (value) {
+                    return value !== -1;
+                });
+                // let t = [];
+                // for (let p = 0; p < index.length; p++) {
+                //     if (index[p] !== -1) {
+                //         t.push(index[p]);        // possible issue
+                //     }
+                // }
                 Kt_ind_t = math.column(Kt, ind_t);
-                let Kq = math.dot(math.transpose(Kt_ind_t), Kt);
 
-                let sum_dist_temp1 = math.subtract(Kt_2, math.multiply(2,Kq));
-                let sum_dist_temp2 = math.add(sum_dist_temp1, Kt_2[ind_t]);
+                let Kq = math.dotMultiply(math.transpose(Kt_ind_t), Kt);
+
+                let Kq_2 = math.multiply(2,Kq);
+
+                let Kt_2_arr = [];
+
+                for (let p = 0; p < Kt_2._data.length; p++) {
+                    Kt_2_arr.push([Kt_2._data[p]]);
+                }
+
+                let sum_dist_temp1 = math.subtract(Kt_2_arr, Kq_2);
+
+                let Kt2_ind_t_arr = [];
+
+                for (let p = 0; p < Kt_2_arr.length; p++) {
+                    let Kt2_ind_t = Kt_2._data[ind_t];
+                    Kt2_ind_t_arr.push([Kt2_ind_t]);
+                }
+
+                let sum_dist_temp2 = math.add(sum_dist_temp1, Kt2_ind_t_arr);
                 sum_dist += math.sqrt(sum_dist_temp2);
 
+                let ind = 0;
+                let val = Number.NEGATIVE_INFINITY;
+
                 for (let p = 0; p < t.length; p++) {
-                    let ind_2, val_2 = this.max_ind_val(math.column(sum_dist,t[p]));
+                    let ind = t[p];
+                    let val_2 = math.column(sum_dist,t[p]).re;
+
                     if (val_2 > val) {
                         val = val_2;
-                        ind = t[p];        // possible issue
+                        ind = t[p];   // possible issue
                     }
                 }
-
+            
                 ind_t = t[ind];
-
                 ini_obs.push(ind_t);
-                index[ind_t] = -1;
+                index[ind_t] = -1; 
             }
-
         }
         else {
             if (I !== J || math.sum(math.subtract(K, math.transpose(K))) !== 0) {
