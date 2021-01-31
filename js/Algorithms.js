@@ -252,6 +252,8 @@ class Algorithms {
     }
 
     C_update(X, XSt, XC, SSt, C, delta, muC, mualpha, SST, SSE, niter) {
+        let g = 0;
+        
         let alphaC_old = 0;
         
         let XCt = 0;
@@ -291,7 +293,7 @@ class Algorithms {
             let g_temp2 = math.multiply(math.transpose(X), g_temp1)
 
             let g_temp3 = math.subtract(g_temp2,XtXSt); 
-            let g = math.divide(g_temp3, SST);
+            g = math.divide(g_temp3, SST);
 
             if (delta != 0) {
                 g = math.multiply(g, math.diag(alphaC))
@@ -357,8 +359,9 @@ class Algorithms {
                 let g_temp1 = math.transpose(math.diag(math.multiply(CtXtXC, SSt)));  
                 let g_temp2 = math.dotDivide(g_temp1,alphaC);
                 let g_temp3 = math.sum(math.dotMultiply(C,XtXSt));
-                let g_temp4 = math.dotDivide(g_temp3, math.multiply(SST,J));
-                g = math.subtract(g_temp2, g_temp4);
+                let g_temp4 = math.subtract(g_temp2,g_temp3);
+                let g_temp5 = math.multiply(SST,J)
+                let g = math.dotDivide(g_temp4, g_temp5);
 
                 alphaC_old = alphaC;
 
