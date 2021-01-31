@@ -126,7 +126,6 @@ class Algorithms {
 
                 XCtX = math.multiply(math.transpose(XC), subset_X_U);
                 [S, SSE, muS, SSt] = this.S_update(S, XCtX, CtXtXC, muS, SST, SSE, 10);
-                console.log(SSE)
 
                 dSSE = SSE_old - SSE;
 
