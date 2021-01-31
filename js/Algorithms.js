@@ -136,7 +136,7 @@ class Algorithms {
         varexpl_temp = math.subtract(SST, SSE);
         varexpl = math.divide(varexpl_temp, SST);
 
-        let S_sum = math.apply(S, 1, sum); 
+        let S_sum = math.apply(S, 1, sum); // I AM HERE
 
         let S_sum_arr = [];
 
@@ -178,7 +178,7 @@ class Algorithms {
         return [XC, S, C, SSE, varexpl];
     }
 
-    S_update(S, XCtX, CtXtXC, muS, SST, SSE, niter) { // looping incorrect IAM HERE
+    S_update(S, XCtX, CtXtXC, muS, SST, SSE, niter) { 
 
         let SSE_old = 0;
 
@@ -343,7 +343,6 @@ class Algorithms {
 
                 if (SSE <= (SSE_old * (1 + (math.pow(10, -9))))) {
                     muC = math.multiply(muC,1.2);
-                    stop = 1;
                     break;
                 }
                 else {
