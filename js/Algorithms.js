@@ -19,7 +19,7 @@ class Algorithms {
             U = null;
         }
 
-        let [XC, S, C, SSE, varexpl] = this.phca(matrix_data, noc, I, U, 0.1, 1 * (math.pow(10, -6)), 500);
+        let [XC, S, C, SSE, varexpl] = this.phca(matrix_data, noc, I, U, 0, 1 * (math.pow(10, -6)), 500);
 
         this.XC = XC;
         this.S = S;
@@ -29,6 +29,8 @@ class Algorithms {
     }
 
     phca(X, noc, I, U, delta, conv_crit, maxiter) {
+
+        let SSE_old = 0;
 
         const sum = math.sum;
 
@@ -115,7 +117,7 @@ class Algorithms {
 
         while (math.abs(dSSE) >= math.multiply(conv_crit, math.abs(SSE)) && (iter_ < maxiter) && (varexpl < 0.9999)) {
                 iter_ += 1;
-                let SSE_old = SSE;
+                SSE_old = SSE;
 
                 let XSt = math.multiply(subset_X_U, math.transpose(S));
 
@@ -124,6 +126,7 @@ class Algorithms {
 
                 XCtX = math.multiply(math.transpose(XC), subset_X_U);
                 [S, SSE, muS, SSt] = this.S_update(S, XCtX, CtXtXC, muS, SST, SSE, 10);
+                console.log(SSE)
 
                 dSSE = SSE_old - SSE;
 
@@ -132,7 +135,7 @@ class Algorithms {
                     varexpl = math.divide(varexpl_temp, SST);
                 }
         }
-        debugger;
+       
         varexpl_temp = math.subtract(SST, SSE);
         varexpl = math.divide(varexpl_temp, SST);
 
