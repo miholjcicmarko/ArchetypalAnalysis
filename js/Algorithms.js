@@ -19,7 +19,7 @@ class Algorithms {
             U = null;
         }
 
-        let [XC, S, C, SSE, varexpl] = this.phca(matrix_data, noc, I, U, 0, 1 * (math.pow(10, -6)), 500);
+        let [XC, S, C, SSE, varexpl] = this.phca(matrix_data, noc, I, U, 0.1, 1 * (math.pow(10, -6)), 500);
 
         this.XC = XC;
         this.S = S;
@@ -136,7 +136,7 @@ class Algorithms {
         varexpl_temp = math.subtract(SST, SSE);
         varexpl = math.divide(varexpl_temp, SST);
 
-        let S_sum = math.apply(S, 1, sum); // I AM HERE
+        let S_sum = math.apply(S, 1, sum); 
 
         let S_sum_arr = [];
 
@@ -252,6 +252,8 @@ class Algorithms {
     }
 
     C_update(X, XSt, XC, SSt, C, delta, muC, mualpha, SST, SSE, niter) {
+        let alphaC_old = 0;
+        
         let XCt = 0;
 
         let SSE_old = 0;
@@ -358,7 +360,7 @@ class Algorithms {
                 let g_temp4 = math.dotDivide(g_temp3, math.multiply(SST,J));
                 let g = math.subtract(g_temp2, g_temp4);
 
-                let alphaC_old = alphaC;
+                alphaC_old = alphaC;
 
                 while (true) {
                     alphaC = math.subtract(alphaC_old, math.multiply(mualpha,g));
