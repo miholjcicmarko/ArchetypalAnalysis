@@ -496,7 +496,7 @@ class Algorithms {
                 //         t.push(index[p]);        // possible issue
                 //     }
                 // }
-                Kt_ind_t = math.column(Kt, ind_t);
+                let Kt_ind_t = math.column(Kt, ind_t);
 
                 let Kq = math.dotMultiply(math.transpose(Kt_ind_t), Kt);
 
