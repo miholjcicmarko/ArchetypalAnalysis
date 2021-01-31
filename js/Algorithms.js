@@ -358,7 +358,7 @@ class Algorithms {
                 let g_temp2 = math.dotDivide(g_temp1,alphaC);
                 let g_temp3 = math.sum(math.dotMultiply(C,XtXSt));
                 let g_temp4 = math.dotDivide(g_temp3, math.multiply(SST,J));
-                let g = math.subtract(g_temp2, g_temp4);
+                g = math.subtract(g_temp2, g_temp4);
 
                 alphaC_old = alphaC;
 
