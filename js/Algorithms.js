@@ -393,7 +393,7 @@ class Algorithms {
                         break;
                     }
                     else {
-                        mualpha = mualpha.divide(mualpha,2);
+                        mualpha = math.divide(mualpha,2);
                     }   
                 }
             }
