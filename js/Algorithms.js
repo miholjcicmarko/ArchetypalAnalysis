@@ -476,16 +476,51 @@ class Algorithms {
             for (let k = 1; k < noc + 11; k++) {
                 if (k > noc - 1) { // entire statements within this bracket before t: must FIX
                     let Kt_col = math.column(Kt,ini_obs[0]);
-                    let Kq = math.dot(Kt_col, Kt);
 
-                    let sum_dist_temp1 = math.subtract(Kt_2, math.multiply(2,Kq));
-                    let sum_dist_temp2 = math.add(sum_dist_temp1, Kt_2[ini_obs[0]]);
-                    sum_dist -= math.sqrt(sum_dist_temp2);
+                    let Kt_col_arr = [Kt_col._data[0]];
+
+                    for (let p = 1; p < Kt_col._size[0]; p++) {
+                        Kt_col_arr = math.concat(Kt_col_arr, [Kt_col._data[p]]);
+                    }
+                    
+                    // let Kt_col_arr = [];
+
+                    // for (let p = 0; p < Kt_col._data.length; p++) {
+                    //     Kt_col_arr.push(Kt_col._data[p]);
+                    // }
+
+                    let Kt_col_matrix = math.matrix(Kt_col_arr);
+
+                    let Kq = math.multiply(Kt_col_matrix, Kt);
+
+                    let Kt_2_arr = [Kt_2._data[0]];
+
+                    for (let p = 1; p < Kt_2._data.length; p++) {
+                        Kt_2_arr = math.concat(Kt_2_arr, [Kt_2._data[p]]);
+                    }
+
+                    let Kt_2_matrix = math.matrix([Kt_2_arr]);
+
+                    let sum_dist_temp1 = math.subtract(Kt_2_matrix, math.multiply(2,Kq));
+
+                    let Kt2_obs_arr = [];
+
+                    for (let p = 0; p < Kt_2_arr.length; p++) {
+                        let Kt2_obs = Kt_2._data[ini_obs[0]];
+                        Kt2_obs_arr.push(Kt2_obs);
+                    }
+
+                    let Kt2_obs_matrix = math.matrix([Kt2_obs_arr]);
+
+                    let sum_dist_temp2 = math.add(sum_dist_temp1, Kt2_obs_matrix);
+                    let sum_dist_temp3 = math.sqrt(sum_dist_temp2);
+                    
+                    sum_dist = math.subtract(sum_dist,sum_dist_temp3);
 
                     ini_obs_num = ini_obs[0];
                     index[ini_obs_num] = ini_obs[0];
 
-                    ini_obs = [];
+                    ini_obs = ini_obs.slice(1);
                 }
                 let t = index.filter(function (value) {
                     return value !== -1;
