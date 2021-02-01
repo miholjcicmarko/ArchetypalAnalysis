@@ -20,7 +20,7 @@ class Algorithms {
         }
 
         matrix_data = math.matrix(matrix_data);
-        //matrix_data = math.transpose(matrix_data);
+        matrix_data = math.transpose(matrix_data);
 
         let [XC, S, C, SSE, varexpl] = this.phca(matrix_data, noc, I, U, 0, 1 * (math.pow(10, -6)), 500);
 
@@ -62,8 +62,7 @@ class Algorithms {
             subset_X_I = math.concat(subset_X_I, math.column(X,p));
         }
         
-        //let i = this.furthest_Sum(subset_X_I, noc, ini_obs);
-        let i = [1,2,0];
+        let i = this.furthest_Sum(subset_X_I, noc, ini_obs);
 
         let j = math.range(0,noc);
         
