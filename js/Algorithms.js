@@ -20,7 +20,7 @@ class Algorithms {
         }
 
         matrix_data = math.matrix(matrix_data);
-        matrix_data = math.transpose(matrix_data);
+        //matrix_data = math.transpose(matrix_data);
 
         let [XC, S, C, SSE, varexpl] = this.phca(matrix_data, noc, I, U, 0, 1 * (math.pow(10, -6)), 500);
 
@@ -505,20 +505,26 @@ class Algorithms {
                 let Kt_2_arr = [];
 
                 for (let p = 0; p < Kt_2._data.length; p++) {
-                    Kt_2_arr.push([Kt_2._data[p]]);
+                    Kt_2_arr.push(Kt_2._data[p]);
                 }
 
-                let sum_dist_temp1 = math.subtract(Kt_2_arr, Kq_2);
+                let Kt_2_matrix = math.matrix([Kt_2_arr]);
+
+                let sum_dist_temp1 = math.subtract(Kt_2_matrix, Kq_2);
 
                 let Kt2_ind_t_arr = [];
 
                 for (let p = 0; p < Kt_2_arr.length; p++) {
                     let Kt2_ind_t = Kt_2._data[ind_t];
-                    Kt2_ind_t_arr.push([Kt2_ind_t]);
+                    Kt2_ind_t_arr.push(Kt2_ind_t);
                 }
 
-                let sum_dist_temp2 = math.add(sum_dist_temp1, Kt2_ind_t_arr);
-                sum_dist += math.sqrt(sum_dist_temp2);
+                let Kt2_ind_t_matrix = math.matrix([Kt2_ind_t_arr]);
+
+                let sum_dist_temp2 = math.add(sum_dist_temp1, Kt2_ind_t_matrix);
+                let sum_dist_temp3 = math.sqrt(sum_dist_temp2);
+
+                sum_dist = math.add(sum_dist, sum_dist_temp3);
 
                 let ind = 0;
                 let val = Number.NEGATIVE_INFINITY;
@@ -608,7 +614,7 @@ class Algorithms {
 
                 for (let p = 0; p < Kt_2_arr.length; p++) {
                     let Kt2_ind_t = Kt_2._data[ind_t];
-                    Kt2_ind_t_arr.push([Kt2_ind_t]);
+                    Kt2_ind_t_arr.push(Kt2_ind_t);
                 }
 
                 let sum_dist_temp2 = math.add(sum_dist_temp1, Kt2_ind_t_arr);
