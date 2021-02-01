@@ -91,7 +91,7 @@ class Algorithms {
 
         //let S = math.multiply(-1, math.log(math.random([noc, U._data.length])));
 
-        let S = math.multiply(-1, math.log(math.subtract(math.ones([noc,U._data.length]),0.5)));
+        let S = math.multiply(-1, math.log(math.subtract(math.ones([noc,48]),0.5)));
 
         let S_sum_0axis = math.matrix(math.apply(S, 0, sum));
 
