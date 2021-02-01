@@ -20,7 +20,6 @@ class Algorithms {
         }
 
         matrix_data = math.matrix(matrix_data);
-        //matrix_data = math.transpose(matrix_data);
 
         let [XC, S, C, SSE, varexpl] = this.phca(matrix_data, noc, I, U, 0, 1 * (math.pow(10, -6)), 500);
 
@@ -474,7 +473,7 @@ class Algorithms {
             let Kt_2 = math.apply(math.square(Kt), 0, sum);
 
             for (let k = 1; k < noc + 11; k++) {
-                if (k > noc - 1) { // entire statements within this bracket before t: must FIX
+                if (k > noc - 1) { 
                     let Kt_col = math.column(Kt,ini_obs[0]);
 
                     let Kt_col_arr = [Kt_col._data[0]];
@@ -482,12 +481,6 @@ class Algorithms {
                     for (let p = 1; p < Kt_col._size[0]; p++) {
                         Kt_col_arr = math.concat(Kt_col_arr, [Kt_col._data[p]]);
                     }
-                    
-                    // let Kt_col_arr = [];
-
-                    // for (let p = 0; p < Kt_col._data.length; p++) {
-                    //     Kt_col_arr.push(Kt_col._data[p]);
-                    // }
 
                     let Kt_col_matrix = math.matrix(Kt_col_arr);
 
@@ -525,12 +518,7 @@ class Algorithms {
                 let t = index.filter(function (value) {
                     return value !== -1;
                 });
-                // let t = [];
-                // for (let p = 0; p < index.length; p++) {
-                //     if (index[p] !== -1) {
-                //         t.push(index[p]);        // possible issue
-                //     }
-                // }
+      
                 let Kt_ind_t = math.column(Kt, ind_t);
 
                 let Kq = math.multiply(math.transpose(Kt_ind_t), Kt);
