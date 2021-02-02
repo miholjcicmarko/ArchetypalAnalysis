@@ -15,7 +15,7 @@ class visuals {
 
         let arch1 = math.column(this.matrix_data,0);
 
-        let arch1_d = [arch1._data[0]];
+        let arch1_d = arch1._data[0];
 
         for (let p = 1; p < arch1._data.length; p++) {
             arch1_d = math.concat(arch1_d, arch1._data[p]);
@@ -38,13 +38,17 @@ class visuals {
         }
 
         let w = 500;
-        let h = 100;
+        let h = 200;
         let barpadding = 1;
+
+        let yScale = d3.scaleLinear()
+            .domain(0, d3.max(arch1_d))
+            .range(0,h);
 
         let svg = d3.select("#barCharts")
             .append("svg")
             .attr("width", w)
-            .attr("hegiht", h);
+            .attr("height", h);
 
         svg.selectAll("rect")
             .data(arch1_d)
@@ -54,11 +58,11 @@ class visuals {
                 return i * (w/arch1_d.length)
             })
             .attr("y",function(d) {
-                return h - d;
+                return h;
             })
             .attr("width", w/arch1_d.length - barpadding)
             .attr("height", function(d) {
-                return d;
+                return yScale(d);
             });
 
         
@@ -70,7 +74,7 @@ class visuals {
         // let height = svg.attr("height") - margin;
 
         // let xScale = d3.scaleBand().range ([0, width]).padding(0.4);
-        // let yScale = d3.scaleLinear().range ([height, 0]);
+        let yScale = d3.scaleLinear().range ([height, 0]);
 
         
 
