@@ -18,7 +18,7 @@ class visuals {
         let arch1_d = [arch1._data[0]];
 
         for (let p = 1; p < arch1._data.length; p++) {
-            arch1_d = math.concat(arch1_d, arch1_d._data[p]);
+            arch1_d = math.concat(arch1_d, arch1._data[p]);
         }
 
         let arch2 = math.column(this.matrix_data,1);
