@@ -1,13 +1,19 @@
 class visuals {
 
-    constructor(data) {
+    constructor(phca_result, data) {
 
-        this.XC = data.XC;
-        this.S = data.S;
+        this.XC = phca_result.XC;
+        this.S = phca_result.S;
 
+        this.data = data;
 
     }
 
+    addBars() {
+
+        
+
+    }
 
 
 
