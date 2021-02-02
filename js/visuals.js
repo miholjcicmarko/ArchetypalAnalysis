@@ -21,31 +21,37 @@ class visuals {
             arch1_d = math.concat(arch1_d, arch1._data[p]);
         }
 
+        console.log(arch1_d);
+
         let arch2 = math.column(this.matrix_data,1);
 
-        let arch2_d = [];
+        let arch2_d = arch2._data[0];
 
-        for (let p = 0; p < arch2._data.length; p++) {
-            arch2_d.push(arch2._data[p]);
+        for (let p = 1; p < arch2._data.length; p++) {
+            arch2_d = math.concat(arch2_d, arch2._data[p]);
         }
+
+        console.log(arch2_d);
 
         let arch3 = math.column(this.matrix_data,2);
 
-        let arch3_d = [];
+        let arch3_d = arch3._data[0];
 
-        for (let p = 0; p < arch3._data.length; p++) {
-            arch3_d.push(arch3._data.length);
+        for (let p = 1; p < arch3._data.length; p++) {
+            arch3_d = math.concat(arch3_d, arch3._data[p]);
         }
+
+        console.log(arch3_d);
 
         let w = 500;
         let h = 200;
         let barpadding = 1;
 
-        let yScale = d3.scaleLinear()
-            .domain(0, d3.max(arch1_d))
-            .range(0,h);
+        let yScale1 = d3.scaleLinear()
+            .domain([0, d3.max(arch1_d)])
+            .range([0,h-5]);
 
-        let svg = d3.select("#barCharts")
+        let svg = d3.select("#bar1")
             .append("svg")
             .attr("width", w)
             .attr("height", h);
@@ -57,30 +63,64 @@ class visuals {
             .attr("x", function (d,i) {
                 return i * (w/arch1_d.length)
             })
-            .attr("y",function(d) {
-                return h;
+            .attr("y", function(d,i) {
+                return h-yScale1(d);
             })
             .attr("width", w/arch1_d.length - barpadding)
             .attr("height", function(d) {
-                return yScale(d);
-            });
+                return yScale1(d);
+            })
+            .attr("fill","steelblue");
 
+        let yScale2 = d3.scaleLinear()
+            .domain([0, d3.max(arch2_d)])
+            .range([0,h-5]);
         
+        let svg2 = d3.select("#bar2")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
 
+        svg2.selectAll("rect")
+            .data(arch2_d)
+            .enter()
+            .append("rect")
+            .attr("x", function (d,i) {
+                return i * (w/arch1_d.length)
+            })
+            .attr("y", function(d,i) {
+                return h-yScale2(d);
+            })
+            .attr("width", w/arch1_d.length - barpadding)
+            .attr("height", function(d) {
+                return yScale2(d);
+            })
+            .attr("fill","orange");;
 
-
-        // let margin = 10;
-        // let width = svg.attr("width") - margin;
-        // let height = svg.attr("height") - margin;
-
-        // let xScale = d3.scaleBand().range ([0, width]).padding(0.4);
-        let yScale = d3.scaleLinear().range ([height, 0]);
-
+        let yScale3 = d3.scaleLinear()
+            .domain([0, d3.max(arch3_d)])
+            .range([0,h-5]);
         
+        let svg3 = d3.select("#bar3")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
 
-
+        svg3.selectAll("rect")
+            .data(arch2_d)
+            .enter()
+            .append("rect")
+            .attr("x", function (d,i) {
+                return i * (w/arch1_d.length)
+            })
+            .attr("y", function(d,i) {
+                return h-yScale3(d);
+            })
+            .attr("width", w/arch1_d.length - barpadding)
+            .attr("height", function(d) {
+                return yScale3(d);
+            })
+            .attr("fill", "darkgreen");
     }
-
-
 
 }
