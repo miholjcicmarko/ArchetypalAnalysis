@@ -190,7 +190,14 @@ class visuals {
             .attr("transform", "translate(" + 6*margin.top + "," + "5)")
             .attr("class", "axis_line");
 
-        let tooltip = d3.selectAll('plot-svg').selectAll("rect");
+        d3.select('.ContainerA')
+            .append('div')
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        let that = this;
+
+        let tooltip = d3.selectAll('.plot-svg').selectAll("rect");
 
         tooltip.on("mouseover", function(d) {
     
@@ -198,9 +205,13 @@ class visuals {
             .attr("class", "div.tooltip")
             .attr("class", "tooltip h2")
             .text(that.tooltipRender(d));
-        })
+        });
 
+    }
 
+    tooltipRender(data) {
+        let text = data.name;
+        return text;
     }
 
 }
