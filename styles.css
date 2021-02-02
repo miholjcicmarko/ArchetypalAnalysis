@@ -1,0 +1,14 @@
+.ContainerA {
+    display: grid;
+    position: relative;
+    left: 10%;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 1fr;
+    column-gap: 5%;
+
+    grid-template-areas: "barCharts", "Scatter";
+}
+
+#barCharts {
+    width: fit-content;
+}
