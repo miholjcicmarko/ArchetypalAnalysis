@@ -5,5 +5,5 @@ Promise.all([data]).then(data => {
 
     let aa_result = new Algorithms(data, 3);
 
-    console.log(aa_result.XC)
+    let plots = new visuals(aa_result);
 })
