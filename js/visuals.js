@@ -43,18 +43,20 @@ class visuals {
 
         console.log(arch3_d);
 
-        let w = 500;
-        let h = 200;
+        let margin = {top: 10, right: 20, bottom: 10, left: 20};
+
+        let w = 500 - margin.right - margin.left;
+        let h = 200 - margin.bottom - margin.top;
         let barpadding = 1;
 
         let yScale1 = d3.scaleLinear()
-            .domain([0, d3.max(arch1_d)])
+            .domain([d3.max(arch1_d), 0])
             .range([0,h-5]);
 
         let svg = d3.select("#bar1")
             .append("svg")
-            .attr("width", w)
-            .attr("height", h);
+            .attr("width", w + margin.right + margin.left)
+            .attr("height", h + margin.top + margin.bottom);
 
         svg.selectAll("rect")
             .data(arch1_d)
@@ -64,22 +66,38 @@ class visuals {
                 return i * (w/arch1_d.length)
             })
             .attr("y", function(d,i) {
-                return h-yScale1(d);
+                return yScale1(d);
             })
             .attr("width", w/arch1_d.length - barpadding)
             .attr("height", function(d) {
-                return yScale1(d);
+                return h-yScale1(d);
             })
-            .attr("fill","steelblue");
+            .attr("fill","steelblue")
+            .attr("transform", "translate(" + 3.25*margin.left +
+            "," + 0+")");
+
+        let yaxis = svg.append("g")
+            .attr("id", "y-axis");
+
+        yaxis.append("text")
+            .attr("class", "axis-label")
+            .attr("transform", "translate(-" + 0
+            + "," + 0)
+            .attr("text-anchor", "middle")
+            .attr("class", "y-label");
+
+        yaxis.call(d3.axisLeft(yScale1).ticks(5))
+            .attr("transform", "translate(" + 6*margin.top + "," + "5)")
+            .attr("class", "axis_line");
 
         let yScale2 = d3.scaleLinear()
-            .domain([0, d3.max(arch2_d)])
+            .domain([d3.max(arch2_d), 0])
             .range([0,h-5]);
         
         let svg2 = d3.select("#bar2")
             .append("svg")
-            .attr("width", w)
-            .attr("height", h);
+            .attr("width", w + margin.right + margin.left)
+            .attr("height", h + margin.top + margin.bottom);
 
         svg2.selectAll("rect")
             .data(arch2_d)
@@ -89,38 +107,70 @@ class visuals {
                 return i * (w/arch1_d.length)
             })
             .attr("y", function(d,i) {
-                return h-yScale2(d);
+                return yScale2(d);
             })
             .attr("width", w/arch1_d.length - barpadding)
             .attr("height", function(d) {
-                return yScale2(d);
+                return h-yScale2(d);
             })
-            .attr("fill","orange");;
+            .attr("fill","orange")
+            .attr("transform", "translate(" + 3.25*margin.left +
+            "," + 0+")");
+
+        let yaxis2 = svg2.append("g")
+            .attr("id", "y-axis2");
+
+        yaxis2.append("text")
+            .attr("class", "axis-label")
+            .attr("transform", "translate(-" + 0
+            + "," + 0)
+            .attr("text-anchor", "middle")
+            .attr("class", "y-label");
+
+        yaxis2.call(d3.axisLeft(yScale2).ticks(5))
+            .attr("transform", "translate(" + 6*margin.top + "," + "5)")
+            .attr("class", "axis_line");
 
         let yScale3 = d3.scaleLinear()
-            .domain([0, d3.max(arch3_d)])
+            .domain([d3.max(arch3_d), 0])
             .range([0,h-5]);
         
         let svg3 = d3.select("#bar3")
             .append("svg")
-            .attr("width", w)
-            .attr("height", h);
+            .attr("width", w + margin.right + margin.left) 
+            .attr("height", h + margin.top + margin.bottom);
 
         svg3.selectAll("rect")
-            .data(arch2_d)
+            .data(arch3_d)
             .enter()
             .append("rect")
             .attr("x", function (d,i) {
                 return i * (w/arch1_d.length)
             })
             .attr("y", function(d,i) {
-                return h-yScale3(d);
+                return yScale3(d);
             })
             .attr("width", w/arch1_d.length - barpadding)
             .attr("height", function(d) {
-                return yScale3(d);
+                return h-yScale3(d);
             })
-            .attr("fill", "darkgreen");
+            .attr("fill", "darkgreen")
+            .attr("transform", "translate(" + 3.25*margin.left +
+            "," + 0+")");
+
+        let yaxis3 = svg3.append("g")
+            .attr("id", "y-axis3");
+
+        yaxis3.append("text")
+            .attr("class", "axis-label")
+            .attr("transform", "translate(-" + 0
+            + "," + 0)
+            .attr("text-anchor", "middle")
+            .attr("class", "y-label");
+
+        yaxis3.call(d3.axisLeft(yScale3).ticks(5))
+            .attr("transform", "translate(" + 6*margin.top + "," + "5)")
+            .attr("class", "axis_line");
     }
 
 }

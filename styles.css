@@ -6,9 +6,25 @@
     grid-template-rows: 1fr;
     column-gap: 5%;
 
-    grid-template-areas: "barCharts", "Scatter";
+    grid-template-areas: "bar1", "Scatter";
 }
 
-#barCharts {
+#bar1 {
     width: fit-content;
+}
+
+.axis-label {
+    font-size: 11px;
+}
+
+.y-label {
+    display: inline-block;
+    float: left;
+    padding-right: 5px;
+}
+
+.axis_line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
 }
