@@ -5,6 +5,8 @@ class PlotData {
         this.value = value;
         this.state = state;
         this.variable = variable;
+
+        this.country = null;
     }
 }
 
@@ -181,19 +183,23 @@ class visuals {
                 .attr("class", "div.tooltip")
                 .attr("class", "tooltip h2")
                 .text(that.tooltipRender(d));
+
+            that.addBars(d);
         })
 
 
 
     }
 
-    addBars() {
+    addBars(data) {
+
+        let margin = {top: 5, right: 20, bottom: 5, left: 20};
         
         let w = 500 - margin.right - margin.left;
-        let h = 200 - margin.bottom - margin.top;
+        let h = 400 - margin.bottom - margin.top;
         let barpadding = 1;
 
-        let yScale1 = d3.scaleLinear()
+        let yScale = d3.scaleLinear()
             .domain([d3.max(arch1_d), 0])
             .range([0,h-5]);
 
@@ -203,23 +209,27 @@ class visuals {
             .attr("width", w + margin.right + margin.left)
             .attr("height", h + margin.top + margin.bottom);
 
-        svg.selectAll("rect")
-            .data(arch1_data)
-            .enter()
-            .append("rect")
-            .attr("x", function (d,i) {
-                return i * (w/arch1_d.length)
-            })
-            .attr("y", function(d,i) {
-                return yScale1(d.value);
-            })
-            .attr("width", w/arch1_d.length - barpadding)
-            .attr("height", function(d) {
-                return h-yScale1(d.value);
-            })
-            .attr("fill","steelblue")
-            .attr("transform", "translate(" + 3.25*margin.left +
-            "," + 0+")");
+        state_data = [];
+
+
+
+        // svg.selectAll("rect")
+        //     .data(arch1_data)
+        //     .enter()
+        //     .append("rect")
+        //     .attr("x", function (d,i) {
+        //         return i * (w/arch1_d.length)
+        //     })
+        //     .attr("y", function(d,i) {
+        //         return yScale1(d.value);
+        //     })
+        //     .attr("width", w/arch1_d.length - barpadding)
+        //     .attr("height", function(d) {
+        //         return h-yScale1(d.value);
+        //     })
+        //     .attr("fill","steelblue")
+        //     .attr("transform", "translate(" + 3.25*margin.left +
+        //     "," + 0+")");
     
 
     }
