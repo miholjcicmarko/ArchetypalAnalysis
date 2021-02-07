@@ -1,3 +1,11 @@
+class PlotData {
+    constructor (value, name) {
+        this.value = value;
+        this.name = name;
+    }
+}
+
+
 class visuals {
 
     constructor(phca_result, data) {
@@ -13,12 +21,21 @@ class visuals {
 
     addBars() {
 
+        let names = ["positive", "negative", "totalTestResults", "recovered", "death"]
+
         let arch1 = math.column(this.matrix_data,0);
 
         let arch1_d = arch1._data[0];
 
         for (let p = 1; p < arch1._data.length; p++) {
             arch1_d = math.concat(arch1_d, arch1._data[p]);
+        }
+
+        let arch1_data = [];
+
+        for (let p = 0; p < arch1_d.length; p++) {
+            let data = new PlotData(arch1_d[p], name[p]);
+            arch1_data.push(data);
         }
 
         console.log(arch1_d);
@@ -55,22 +72,23 @@ class visuals {
 
         let svg = d3.select("#bar1")
             .append("svg")
+            .classed("plot-svg", true)
             .attr("width", w + margin.right + margin.left)
             .attr("height", h + margin.top + margin.bottom);
 
         svg.selectAll("rect")
-            .data(arch1_d)
+            .data(arch1_data)
             .enter()
             .append("rect")
             .attr("x", function (d,i) {
                 return i * (w/arch1_d.length)
             })
             .attr("y", function(d,i) {
-                return yScale1(d);
+                return yScale1(d.value);
             })
             .attr("width", w/arch1_d.length - barpadding)
             .attr("height", function(d) {
-                return h-yScale1(d);
+                return h-yScale1(d.value);
             })
             .attr("fill","steelblue")
             .attr("transform", "translate(" + 3.25*margin.left +
@@ -171,6 +189,29 @@ class visuals {
         yaxis3.call(d3.axisLeft(yScale3).ticks(5))
             .attr("transform", "translate(" + 6*margin.top + "," + "5)")
             .attr("class", "axis_line");
+
+        d3.select('.ContainerA')
+            .append('div')
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        let that = this;
+
+        let tooltip = d3.selectAll('.plot-svg').selectAll("rect");
+
+        tooltip.on("mouseover", function(d) {
+    
+        d3.select(this).append("title")
+            .attr("class", "div.tooltip")
+            .attr("class", "tooltip h2")
+            .text(that.tooltipRender(d));
+        });
+
+    }
+
+    tooltipRender(data) {
+        let text = data.name;
+        return text;
     }
 
 }
