@@ -19,6 +19,8 @@ Promise.all([data]).then(data => {
  
     let plots = new visuals(data);
     
-    plots.addBars();
+    plots.addArch();
+    plots.addOneD();
+    //plots.addBars();
 
 })

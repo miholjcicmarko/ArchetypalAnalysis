@@ -1,7 +1,9 @@
+//const { i } = require("mathjs");
+
 class PlotData {
-    constructor (value, name) {
+    constructor (value, state) {
         this.value = value;
-        this.name = name;
+        this.state = state;
     }
 }
 
@@ -20,6 +22,89 @@ class visuals {
         // this.matrix_data = math.matrix(this.XC);
 
     }
+
+    addArch () {
+
+        let circle_dist = {"nodes":[
+                            {"distance": 30, "names": 1, 
+                            "colors": "orange"}, {"distance": 120,
+                            "names": 2, "colors": "steelblue"},
+                            {"distance": 210, "names": 3,
+                            "colors": "darkgreen"}]};
+
+        let margin = {top: 10, right: 20, bottom: 10, left: 20};
+
+        let w = 500 - margin.right - margin.left;
+        let h = 400 - margin.bottom - margin.top;
+
+        let svg = d3.select("#archs")
+            .append("svg")
+            .classed("plot-svg", true)
+            .attr("width", w + margin.right + margin.left)
+            .attr("height", h + margin.top + margin.bottom);
+
+        let g = svg.selectAll("g")
+            .data(circle_dist.nodes);
+
+        let gEnter = g.enter()
+            .append("g")
+            .attr("transform", (d) => {return "translate(70," +
+                (d.distance) + ")"});
+
+        let circles = gEnter.append('circle')
+            .attr('r', 25)
+            .attr('stroke', 'black')
+            .attr('fill', d => { 
+                return d.colors});
+
+        let textd = gEnter.append("text")
+            .text((d,i) => d.names);
+
+    }
+
+    addOneD () {
+
+        let margin = {top: 10, right: 20, bottom: 10, left: 20};
+
+        let w = 500 - margin.right - margin.left;
+        let h = 400 - margin.bottom - margin.top;
+
+        let oneD = d3.select("#oned")
+                        .append("svg")
+                        .attr("width", w)
+                        .attr("height", h);
+
+        let xScale = d3.scaleLinear()
+                    .domain([0, 1])
+                    .range([10,w-10]);
+        
+        let S1 = [];
+
+        for (let p = 0; p < this.S.length; p++) {
+            let point = new PlotData(this.S[p][0],this.S[p].state);
+            S1.push(point);
+        }
+
+        let S2 = [];
+
+        //for (let p = 0; )
+
+        oneD.selectAll("circle")
+            .data(S1)
+            .enter()
+            .append("circle")
+            .attr("cx", function(d) {
+                return xScale(d.value);
+            })
+            .attr("cy", function(d,i) {
+                return i + 10;
+            })
+            .attr("r", 5)
+            .attr('stroke', 'black')
+            .attr("fill", "orange");
+
+    }
+
 
     addBars() {
 
