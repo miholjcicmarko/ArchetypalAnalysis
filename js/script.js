@@ -17,9 +17,8 @@ Promise.all([data]).then(data => {
 
     //let aa_result = new Algorithms(data, 3);
  
-    //let plots = new visuals(aa_result,data);
-    let aa_analysis = new plots(data);
+    let plots = new visuals(data);
     
-    aa_analysis.addBars();
+    plots.addBars();
 
 })

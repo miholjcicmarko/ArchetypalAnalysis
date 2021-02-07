@@ -5,17 +5,19 @@ class PlotData {
     }
 }
 
-
 class visuals {
 
-    constructor(phca_result, data) {
+    constructor(data) {
 
-        this.XC = phca_result.XC;
-        this.S = phca_result.S;
+        this.XC = data[0].XC;
+        this.S = data[0].S;
 
-        this.data = data;
+        // this.XC = phca_result.XC;
+        // this.S = phca_result.S;
 
-        this.matrix_data = math.matrix(this.XC);
+        // this.data = data;
+
+        // this.matrix_data = math.matrix(this.XC);
 
     }
 
