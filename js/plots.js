@@ -1,0 +1,8 @@
+class plots {
+
+    constructor(data) {
+
+        
+
+    }
+}
