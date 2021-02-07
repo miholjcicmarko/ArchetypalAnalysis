@@ -1,12 +1,10 @@
 .ContainerA {
     display: grid;
-    position: relative;
-    left: 10%;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr;
-    column-gap: 5%;
+    column-gap: 2%;
 
-    grid-template-areas: "bar1", "Scatter";
+    /* grid-template-areas: "bar1", "Scatter"; */
 }
 
 #bar1 {

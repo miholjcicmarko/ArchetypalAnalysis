@@ -27,15 +27,15 @@ class visuals {
 
         let circle_dist = {"nodes":[
                             {"distance": 30, "names": 1, 
-                            "colors": "orange"}, {"distance": 120,
+                            "colors": "orange"}, {"distance": 95,
                             "names": 2, "colors": "steelblue"},
-                            {"distance": 210, "names": 3,
+                            {"distance": 135, "names": 3,
                             "colors": "darkgreen"}]};
 
         let margin = {top: 10, right: 20, bottom: 10, left: 20};
 
-        let w = 500 - margin.right - margin.left;
-        let h = 400 - margin.bottom - margin.top;
+        let w = 200 - margin.right - margin.left;
+        let h = 600 - margin.bottom - margin.top;
 
         let svg = d3.select("#archs")
             .append("svg")
@@ -48,8 +48,8 @@ class visuals {
 
         let gEnter = g.enter()
             .append("g")
-            .attr("transform", (d) => {return "translate(70," +
-                (d.distance) + ")"});
+            .attr("transform", (d,i) => {return "translate(70," +
+                (75+(d.distance*(i+1))) + ")"});
 
         let circles = gEnter.append('circle')
             .attr('r', 25)
@@ -64,10 +64,15 @@ class visuals {
 
     addOneD () {
 
-        let margin = {top: 10, right: 20, bottom: 10, left: 20};
+        let margin = {top: 5, right: 20, bottom: 5, left: 20};
 
         let w = 500 - margin.right - margin.left;
-        let h = 400 - margin.bottom - margin.top;
+        let h = 200 - margin.bottom - margin.top;
+
+        d3.select('#oned')
+            .append('div')
+            .attr("class", "tooltip")
+            .style("opacity", 0);
 
         let oneD = d3.select("#oned")
                         .append("svg")
@@ -77,6 +82,19 @@ class visuals {
         let xScale = d3.scaleLinear()
                     .domain([0, 1])
                     .range([10,w-10]);
+
+        let xaxis = oneD.append("g")
+                    .attr("id", "x-axis");
+        
+        xaxis.append("text")
+            .attr("class", "axis-label")
+            .attr("transform", "translate(-" + 0+ "," + 0)
+            .attr("text-anchor", "middle")
+            .attr("class", "y-label");
+        
+        xaxis.call(d3.axisBottom(xScale).ticks(5))
+            .attr("transform", "translate(" + 0 + "," + "5)")
+            .attr("class", "axis_line");
         
         let S1 = [];
 
@@ -87,7 +105,10 @@ class visuals {
 
         let S2 = [];
 
-        //for (let p = 0; )
+        for (let p = 0; p < this.S.length; p++) {
+            let point = new PlotData(this.S[p][1],this.S[p].state);
+            S2.push(point);
+        }
 
         oneD.selectAll("circle")
             .data(S1)
@@ -97,11 +118,69 @@ class visuals {
                 return xScale(d.value);
             })
             .attr("cy", function(d,i) {
-                return i + 10;
+                return 3 * (i + 10);
             })
-            .attr("r", 5)
+            .attr("r", 3)
             .attr('stroke', 'black')
             .attr("fill", "orange");
+
+        let oneD2 = d3.select("#oned")
+                .append("svg")
+                .attr("width", w)
+                .attr("height", h);
+
+        oneD2.selectAll("circle")
+                .data(S2)
+                .enter()
+                .append("circle")
+                .attr("cx", function(d) {
+                    return xScale(d.value);
+                })
+                .attr("cy", function(d,i) {
+                    return 3 * (i + 10);
+                })
+                .attr("r", 3)
+                .attr('stroke', 'black')
+                .attr("fill", "steelblue");
+
+        let S3 = [];
+
+            for (let p = 0; p < this.S.length; p++) {
+                let point = new PlotData(this.S[p][2],this.S[p].state);
+                S3.push(point);
+            }
+
+        let oneD3 = d3.select("#oned")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
+
+        oneD3.selectAll("circle")
+            .data(S3)
+            .enter()
+            .append("circle")
+            .attr("cx", function(d) {
+                return xScale(d.value);
+            })
+            .attr("cy", function(d,i) {
+                return 3 * (i + 10);
+            })
+            .attr("r", 3)
+            .attr('stroke', 'black')
+            .attr("fill", "darkgreen");
+
+        let that = this;
+
+        let states_circ = d3.selectAll("#oned").selectAll("circle");
+
+        states_circ.on("mouseover", function(d) {
+            d3.select(this).append("title")
+                .attr("class", "div.tooltip")
+                .attr("class", "tooltip h2")
+                .text(that.tooltipRender(d));
+        })
+
+
 
     }
 
@@ -297,7 +376,7 @@ class visuals {
     }
 
     tooltipRender(data) {
-        let text = data.name;
+        let text = data.path[0].__data__.state;
         return text;
     }
 
