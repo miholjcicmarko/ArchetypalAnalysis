@@ -6,7 +6,7 @@ async function loadSandXC() {
 
     return {
         "XC": XC,
-        "S":S dataFrame
+        "S": SdataFrame
     }
 }
 
@@ -18,8 +18,8 @@ Promise.all([data]).then(data => {
     //let aa_result = new Algorithms(data, 3);
  
     //let plots = new visuals(aa_result,data);
-    let plots = new
+    let aa_analysis = new plots(data);
     
-    plots.addBars();
+    aa_analysis.addBars();
 
 })
