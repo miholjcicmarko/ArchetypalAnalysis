@@ -210,7 +210,7 @@ class visuals {
         }
 
         let yScale = d3.scaleLinear()
-            .domain([d3.max(arch1_d), 0])
+            .domain([d3.max(state_data[0]), 0])
             .range([0,h-5]);
 
         let svg = d3.select("#bar1")
