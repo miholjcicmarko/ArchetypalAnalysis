@@ -205,7 +205,7 @@ class visuals {
                 let point = [this.raw[p].positive, this.raw[p].negative,
                             this.raw[p].totalTestResults,
                         this.raw[p].recovered, this.raw[p].death];
-                state_data.pusg=h(point);
+                state_data.push(point);
             }
         }
 
@@ -219,7 +219,7 @@ class visuals {
             .attr("width", w + margin.right + margin.left)
             .attr("height", h + margin.top + margin.bottom);
 
-
+        
 
         // svg.selectAll("rect")
         //     .data(arch1_data)
