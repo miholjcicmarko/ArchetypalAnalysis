@@ -4,7 +4,7 @@ async function loadSandXC() {
     let XC = await d3.csv("./data/XC.csv");
     let SdataFrame = await d3.csv("./data/SdataFrame.csv");
     let raw = await d3.csv("./data/COVID19states.csv");
-    let time_data = await d3.csv("./data/COVIDtime.csv")
+    let time_data = await d3.csv("./data/COVID19time.csv")
 
     return {
         "XC": XC,
