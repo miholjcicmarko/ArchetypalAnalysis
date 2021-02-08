@@ -9,6 +9,13 @@ class PlotData {
     }
 }
 
+class PlotLine {
+    constructor (date, value) {
+        this.date = date;
+        this.value = value;
+    }
+}
+
 class visuals {
 
     constructor(data) {
@@ -17,6 +24,8 @@ class visuals {
         this.S = data[0].S;
 
         this.raw = data[0].raw; 
+
+        this.timeline = data[0].time_data;
 
         // this.XC = phca_result.XC;
         // this.S = phca_result.S;
@@ -276,8 +285,33 @@ class visuals {
                     .attr("transform", "translate(" +3*margin.left+ "," +h+")")
                     .call(d3.axisBottom(x_lab));
         
+        this.addTimeLine(data);
     }
 
+    addTimeLine(data) {
+
+        let state_data = [];
+
+        for (let p = 0; p < this.timeline.length; p++) {
+            if (this.timeline[p].state === data.currentTarget.__data__.state) {
+                let point = new PlotLine(this.timeline[p].date,this.timeline[p].positive);
+                state_data.push(point);
+            }
+        }
+
+        let margin = {top: 10, right: 20, bottom: 10, left: 20};
+        
+        let w = 500 - margin.right - margin.left;
+        let h = 400 - margin.bottom - margin.top;
+
+        let scale_line = d3
+            .scaleLinear()
+            .domain([0, data.length])
+            .range([10, 500]);
+
+
+
+    }
 
     // addBars() {
 

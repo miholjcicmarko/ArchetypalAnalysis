@@ -3,12 +3,14 @@
 async function loadSandXC() {
     let XC = await d3.csv("./data/XC.csv");
     let SdataFrame = await d3.csv("./data/SdataFrame.csv");
-    let raw = await d3.csv("./data/COVID19states.csv")
+    let raw = await d3.csv("./data/COVID19states.csv");
+    let time_data = await d3.csv("./data/COVIDtime.csv")
 
     return {
         "XC": XC,
         "S": SdataFrame,
-        "raw": raw
+        "raw": raw,
+        "time_data": time_data
     }
 }
 
@@ -23,6 +25,5 @@ Promise.all([data]).then(data => {
     
     plots.addArch();
     plots.addOneD();
-    //plots.addBars();
 
 })
