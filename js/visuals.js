@@ -173,6 +173,11 @@ class visuals {
             .attr('stroke', 'black')
             .attr("fill", "darkgreen");
 
+        let svg = d3.select("#bar1")
+            .append("svg")
+            .classed("plot-svg", true)
+            .attr("id", "bars")
+
         let that = this;
 
         let states_circ = d3.selectAll("#oned").selectAll("circle");
@@ -193,6 +198,8 @@ class visuals {
     }
 
     addBars(data) {
+
+        d3.selectAll("#bars").remove();
 
         let margin = {top: 5, right: 20, bottom: 5, left: 20};
         
@@ -222,6 +229,7 @@ class visuals {
         let svg = d3.select("#bar1")
             .append("svg")
             .classed("plot-svg", true)
+            .attr("id", "bars")
             .attr("width", w + margin.right + margin.left)
             .attr("height", h + margin.top + margin.bottom);
 
@@ -239,7 +247,7 @@ class visuals {
             .attr("height", function(d) {
                 return h-yScale(d);
             })
-            .attr("fill","steelblue")
+            .attr("fill","pink")
             .attr("transform", "translate(" + 3*margin.left +
             "," + 0+")");
     
