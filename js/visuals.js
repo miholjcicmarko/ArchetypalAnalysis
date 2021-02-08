@@ -288,7 +288,7 @@ class visuals {
         this.addTimeLine(data);
     }
 
-    addTimeLine(data) {
+    addTimeLine(data) { //redo this
 
         let margin = {top: 10, right: 20, bottom: 10, left: 20};
         
