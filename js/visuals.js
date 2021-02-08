@@ -1,10 +1,9 @@
 //const { i } = require("mathjs");
 
 class PlotData {
-    constructor (value, state, variable) {
+    constructor (value, state) {
         this.value = value;
         this.state = state;
-        this.variable = variable;
 
         this.country = null;
     }
@@ -199,6 +198,17 @@ class visuals {
         let h = 400 - margin.bottom - margin.top;
         let barpadding = 1;
 
+        let state_data = [];
+
+        for (let p = 0; p < this.raw.length; p++) {
+            if (this.raw[p].state === data.currentTarget.__data__.state) {
+                let point = [this.raw[p].positive, this.raw[p].negative,
+                            this.raw[p].totalTestResults,
+                        this.raw[p].recovered, this.raw[p].death];
+                state_data.pusg=h(point);
+            }
+        }
+
         let yScale = d3.scaleLinear()
             .domain([d3.max(arch1_d), 0])
             .range([0,h-5]);
@@ -208,8 +218,6 @@ class visuals {
             .classed("plot-svg", true)
             .attr("width", w + margin.right + margin.left)
             .attr("height", h + margin.top + margin.bottom);
-
-        state_data = [];
 
 
 
