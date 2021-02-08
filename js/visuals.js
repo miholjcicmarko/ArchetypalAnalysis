@@ -38,7 +38,7 @@ class visuals {
 
         let margin = {top: 10, right: 20, bottom: 10, left: 20};
 
-        let w = 200 - margin.right - margin.left;
+        let w = 100 - margin.right - margin.left;
         let h = 600 - margin.bottom - margin.top;
 
         let svg = d3.select("#archs")
@@ -183,9 +183,11 @@ class visuals {
                 .attr("class", "tooltip h2")
                 .text(that.tooltipRender(d));
 
-            that.addBars(d);
         })
 
+        states_circ.on("click", function (d) {
+            that.addBars(d);
+        })
 
 
     }
@@ -214,7 +216,7 @@ class visuals {
         state_data = state_data[0];
 
         let yScale = d3.scaleLinear()
-            .domain([d3.max(state_data), 0])
+            .domain([d3.max(state_data),0])
             .range([0,h-5]);
 
         let svg = d3.select("#bar1")
@@ -223,27 +225,38 @@ class visuals {
             .attr("width", w + margin.right + margin.left)
             .attr("height", h + margin.top + margin.bottom);
 
-
-
-        // svg.selectAll("rect")
-        //     .data(arch1_data)
-        //     .enter()
-        //     .append("rect")
-        //     .attr("x", function (d,i) {
-        //         return i * (w/arch1_d.length)
-        //     })
-        //     .attr("y", function(d,i) {
-        //         return yScale1(d.value);
-        //     })
-        //     .attr("width", w/arch1_d.length - barpadding)
-        //     .attr("height", function(d) {
-        //         return h-yScale1(d.value);
-        //     })
-        //     .attr("fill","steelblue")
-        //     .attr("transform", "translate(" + 3.25*margin.left +
-        //     "," + 0+")");
+        svg.selectAll("rect")
+            .data(state_data)
+            .enter()
+            .append("rect")
+            .attr("x", function (d,i) {
+                return i * (w/state_data.length)
+            })
+            .attr("y", function(d,i) {
+                return yScale(d);
+            })
+            .attr("width", w/state_data.length - barpadding)
+            .attr("height", function(d) {
+                return h-yScale(d);
+            })
+            .attr("fill","steelblue")
+            .attr("transform", "translate(" + 3*margin.left +
+            "," + 0+")");
     
-
+        let yaxis = svg.append("g")
+                    .attr("id", "y-axis");
+        
+            yaxis.append("text")
+                .attr("class", "axis-label")
+                .attr("transform", "translate(-" + 0
+                    + "," + 0)
+                .attr("text-anchor", "middle")
+                .attr("class", "y-label");
+        
+            yaxis.call(d3.axisLeft(yScale).ticks(5))
+                .attr("transform", "translate(" + 3*margin.left + "," + "5)")
+                .attr("class", "axis_line");
+        
     }
 
 
