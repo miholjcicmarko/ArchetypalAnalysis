@@ -202,15 +202,19 @@ class visuals {
 
         for (let p = 0; p < this.raw.length; p++) {
             if (this.raw[p].state === data.currentTarget.__data__.state) {
-                let point = [this.raw[p].positive, this.raw[p].negative,
-                            this.raw[p].totalTestResults,
-                        this.raw[p].recovered, this.raw[p].death];
+                let point = [parseInt(this.raw[p].positive), 
+                    parseInt(this.raw[p].negative),
+                            parseInt(this.raw[p].totalTestResults),
+                        parseInt(this.raw[p].recovered), 
+                        parseInt(this.raw[p].death)];
                 state_data.push(point);
             }
         }
 
+        state_data = state_data[0];
+
         let yScale = d3.scaleLinear()
-            .domain([d3.max(state_data[0]), 0])
+            .domain([d3.max(state_data), 0])
             .range([0,h-5]);
 
         let svg = d3.select("#bar1")
@@ -219,7 +223,7 @@ class visuals {
             .attr("width", w + margin.right + margin.left)
             .attr("height", h + margin.top + margin.bottom);
 
-        
+
 
         // svg.selectAll("rect")
         //     .data(arch1_data)
