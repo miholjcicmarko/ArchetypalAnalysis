@@ -201,7 +201,7 @@ class visuals {
 
         d3.selectAll("#bars").remove();
 
-        let margin = {top: 5, right: 20, bottom: 5, left: 20};
+        let margin = {top: 10, right: 20, bottom: 10, left: 20};
         
         let w = 500 - margin.right - margin.left;
         let h = 400 - margin.bottom - margin.top;
@@ -221,6 +221,12 @@ class visuals {
         }
 
         state_data = state_data[0];
+
+        let x_lab = d3.scaleBand()
+                        .domain(["positive", "negative",
+                        "test results", 
+                        "recovered", "death"])
+                        .range([0,w-5])
 
         let yScale = d3.scaleLinear()
             .domain([d3.max(state_data),0])
@@ -264,6 +270,11 @@ class visuals {
             yaxis.call(d3.axisLeft(yScale).ticks(5))
                 .attr("transform", "translate(" + 3*margin.left + "," + "5)")
                 .attr("class", "axis_line");
+
+        let xaxis = svg.append("g")
+                    .attr("id", "x-axis")
+                    .attr("transform", "translate(" +3*margin.left+ "," +h+")")
+                    .call(d3.axisBottom(x_lab));
         
     }
 
