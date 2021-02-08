@@ -290,6 +290,25 @@ class visuals {
 
     addTimeLine(data) {
 
+        let margin = {top: 10, right: 20, bottom: 10, left: 20};
+        
+        let w = 500 - margin.right - margin.left;
+        let h = 400 - margin.bottom - margin.top;
+
+        let svg = d3.select("#timeL")
+            .append("svg")
+            .classed("plot-svg", true)
+            .attr("id", "svg-time")
+            .attr("width", w + margin.right + margin.left)
+            .attr("height", h + margin.top + margin.bottom);
+
+        let g_svg = svg.append("g")
+                        .attr("id", "line-chart-axis");
+
+        g_svg.append("path")
+            .attr("id", "line-chart")
+            .attr("d", "");
+
         let state_data = [];
 
         for (let p = 0; p < this.timeline.length; p++) {
@@ -299,17 +318,36 @@ class visuals {
             }
         }
 
-        let margin = {top: 10, right: 20, bottom: 10, left: 20};
-        
-        let w = 500 - margin.right - margin.left;
-        let h = 400 - margin.bottom - margin.top;
-
         let scale_line = d3
             .scaleLinear()
-            .domain([0, data.length])
-            .range([10, 500]);
+            .domain([0, this.timeline.length])
+            .range([0, w-5]);
 
+        let yScale = d3.scaleLinear()
+                        .domain([0, d3.max(state_data, d => d.positive)])
+                        .range([0, h-5]);
 
+        let aLineGenerator = d3.line()
+                                .x((d,i) => scale_line(i))
+                                .y((d,i) => yScale(d.positive));
+
+        let aAxis_line = d3.axisLeft(yScale).ticks(5);
+        d3.select("#line-chart-axis")
+            .call(aAxis_line);
+        
+        d3.select("#aLineChart-axis").append("text")
+            .text("Positive Cases")
+            .attr("transform", "translate(50, -3)");
+
+        let aLineC = d3.selectAll("#line-chart")
+                        .datum(data);
+                            
+        aLineC
+            .style("opacity", 0)
+            .transition()
+            .duration(750)
+            .style("opacity", 1)
+            .attr("d", aLineGenerator);
 
     }
 
