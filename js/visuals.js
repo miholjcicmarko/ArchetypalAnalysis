@@ -9,12 +9,13 @@ class PlotData {
     }
 }
 
-// class PlotLine {
-//     constructor (date, value) {
-//         this.date = date;
-//         this.value = value;
-//     }
-// }
+class PlotLine {
+    constructor (date, value) {
+        return {
+            "y": parseInt(value)
+        }
+    }
+}
 
 class visuals {
 
@@ -294,10 +295,8 @@ class visuals {
 
         for (let p = 0; p < this.timeline.length; p++) {
             if (this.timeline[p].state === data.currentTarget.__data__.state) {
-                let point = d3.map(function(d) {return {"y": this.timeline[p].positive}})
+                let point = new PlotLine(this.timeline[p].date,this.timeline[p].positive);
                 state_data.push(point);
-                // let point = new PlotLine(this.timeline[p].date,this.timeline[p].positive);
-                // state_data.push(point);
             }
         }
 
@@ -307,12 +306,12 @@ class visuals {
         let h = 400 - margin.bottom - margin.top;
 
         let xScale = d3.scaleLinear()
-                        .domain([0, this.timeline.length])
-                        .range([0, w-5]);
+                        .domain([0, state_data.length])
+                        .range([0, w]);
 
         let yScale = d3.scaleLinear()
-                        .domain([0, d3.max(state_data, d => d.positive)])
-                        .range([0, h-5]);
+                        .domain([0, d3.max(state_data, d => d.y)])
+                        .range([h, 0]);
 
         let line = d3.line()
                     .x(function(d,i) {
@@ -320,18 +319,20 @@ class visuals {
                     })
                     .y(function(d) {
                         return yScale(d.y);
-                    })
-                    .curve(d3.curveMonotoneX);
+                    });
 
         let svg = d3.select("#timeL")
             .append("svg")
             .classed("plot-svg", true)
             .attr("id", "svg-time")
             .attr("width", w + margin.right + margin.left)
-            .attr("height", h + margin.top + margin.bottom);
+            .attr("height", h + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         svg.append("g")
             .attr("id", "x-axis")
+            .attr("transform", "translate(0," + h + ")")
             .call(d3.axisBottom(xScale));
 
         svg.append("g")
@@ -339,8 +340,9 @@ class visuals {
             .call(d3.axisLeft(yScale));
 
         svg.append("path")
-            .datum(state_data)
+            .data(state_data)
             .attr("id", "line-chart")
+            .attr("class", "line")
             .attr("d", line);
 
         // let scale_line = d3
