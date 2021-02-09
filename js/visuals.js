@@ -9,12 +9,12 @@ class PlotData {
     }
 }
 
-class PlotLine {
-    constructor (date, value) {
-        this.date = date;
-        this.value = value;
-    }
-}
+// class PlotLine {
+//     constructor (date, value) {
+//         this.date = date;
+//         this.value = value;
+//     }
+// }
 
 class visuals {
 
@@ -271,7 +271,7 @@ class visuals {
         
             yaxis.append("text")
                 .attr("class", "axis-label")
-                .attr("transform", "translate(-" + 0
+                .attr("transform", "translate(" + 0
                     + "," + 0)
                 .attr("text-anchor", "middle")
                 .attr("class", "y-label");
@@ -290,10 +290,38 @@ class visuals {
 
     addTimeLine(data) { //redo this
 
+        let state_data = [];
+
+        for (let p = 0; p < this.timeline.length; p++) {
+            if (this.timeline[p].state === data.currentTarget.__data__.state) {
+                let point = d3.map(function(d) {return {"y": this.timeline[p].positive}})
+                state_data.push(point);
+                // let point = new PlotLine(this.timeline[p].date,this.timeline[p].positive);
+                // state_data.push(point);
+            }
+        }
+
         let margin = {top: 10, right: 20, bottom: 10, left: 20};
         
         let w = 500 - margin.right - margin.left;
         let h = 400 - margin.bottom - margin.top;
+
+        let xScale = d3.scaleLinear()
+                        .domain([0, this.timeline.length])
+                        .range([0, w-5]);
+
+        let yScale = d3.scaleLinear()
+                        .domain([0, d3.max(state_data, d => d.positive)])
+                        .range([0, h-5]);
+
+        let line = d3.line()
+                    .x(function(d,i) {
+                        return xScale(i);
+                    })
+                    .y(function(d) {
+                        return yScale(d.y);
+                    })
+                    .curve(d3.curveMonotoneX);
 
         let svg = d3.select("#timeL")
             .append("svg")
@@ -302,52 +330,49 @@ class visuals {
             .attr("width", w + margin.right + margin.left)
             .attr("height", h + margin.top + margin.bottom);
 
-        let g_svg = svg.append("g")
-                        .attr("id", "line-chart-axis");
+        svg.append("g")
+            .attr("id", "x-axis")
+            .call(d3.axisBottom(xScale));
 
-        g_svg.append("path")
+        svg.append("g")
+            .attr("id", "y-axis")
+            .call(d3.axisLeft(yScale));
+
+        svg.append("path")
+            .datum(state_data)
             .attr("id", "line-chart")
-            .attr("d", "");
+            .attr("d", line);
 
-        let state_data = [];
+        // let scale_line = d3
+        //     .scaleLinear()
+        //     .domain([0, this.timeline.length])
+        //     .range([0, w-5]);
 
-        for (let p = 0; p < this.timeline.length; p++) {
-            if (this.timeline[p].state === data.currentTarget.__data__.state) {
-                let point = new PlotLine(this.timeline[p].date,this.timeline[p].positive);
-                state_data.push(point);
-            }
-        }
+        // let yScale = d3.scaleLinear()
+        //                 .domain([0, d3.max(state_data, d => d.positive)])
+        //                 .range([0, h-5]);
 
-        let scale_line = d3
-            .scaleLinear()
-            .domain([0, this.timeline.length])
-            .range([0, w-5]);
+        // let aLineGenerator = d3.line()
+        //                         .x((d,i) => xScale(i))
+        //                         .y((d,i) => yScale(d.positive));
 
-        let yScale = d3.scaleLinear()
-                        .domain([0, d3.max(state_data, d => d.positive)])
-                        .range([0, h-5]);
-
-        let aLineGenerator = d3.line()
-                                .x((d,i) => scale_line(i))
-                                .y((d,i) => yScale(d.positive));
-
-        let aAxis_line = d3.axisLeft(yScale).ticks(5);
-        d3.select("#line-chart-axis")
-            .call(aAxis_line);
+        // let aAxis_line = d3.axisLeft(yScale).ticks(5);
+        // d3.select("#line-chart-axis")
+        //     .call(aAxis_line);
         
-        d3.select("#aLineChart-axis").append("text")
-            .text("Positive Cases")
-            .attr("transform", "translate(50, -3)");
+        // d3.select("#aLineChart-axis").append("text")
+        //     .text("Positive Cases")
+        //     .attr("transform", "translate(50, -3)");
 
-        let aLineC = d3.selectAll("#line-chart")
-                        .datum(data);
+        // let aLineC = d3.selectAll("#line-chart")
+        //                 .datum(data);
                             
-        aLineC
-            .style("opacity", 0)
-            .transition()
-            .duration(750)
-            .style("opacity", 1)
-            .attr("d", aLineGenerator);
+        // aLineC
+        //     .style("opacity", 0)
+        //     .transition()
+        //     .duration(750)
+        //     .style("opacity", 1)
+        //     .attr("d", aLineGenerator);
 
     }
 
