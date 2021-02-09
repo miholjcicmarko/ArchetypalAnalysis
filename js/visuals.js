@@ -289,7 +289,9 @@ class visuals {
         this.addTimeLine(data);
     }
 
-    addTimeLine(data) { //redo this
+    addTimeLine(data) { 
+
+        d3.selectAll("#svg-time").remove();
 
         let state_data = [];
 
@@ -318,8 +320,9 @@ class visuals {
                         return xScale(i);
                     })
                     .y(function(d) {
-                        return yScale(d.y);
-                    });
+                        return yScale(d.y)
+                    })
+                    .curve(d3.curveMonotoneX);
 
         let svg = d3.select("#timeL")
             .append("svg")
@@ -328,7 +331,7 @@ class visuals {
             .attr("width", w + margin.right + margin.left)
             .attr("height", h + margin.top + margin.bottom)
             .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            .attr("transform", "translate(" + 3*margin.left + "," + 0 + ")");
 
         svg.append("g")
             .attr("id", "x-axis")
@@ -340,7 +343,7 @@ class visuals {
             .call(d3.axisLeft(yScale));
 
         svg.append("path")
-            .data(state_data)
+            .datum(state_data)
             .attr("id", "line-chart")
             .attr("class", "line")
             .attr("d", line);

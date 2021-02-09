@@ -44,13 +44,9 @@ div.tooltip {
     font: 14px sans-serif;
 }
 
-.line-chart {
-    stroke: rgb(79,175,211);
-    stroke-width: 2;
+.line {
     fill: none;
-  }
-
-  .line-chart-x {
-    stroke: rgb(241,151,186);
-  }
+    stroke: #ffab00;
+    stroke-width: 3;
+}
 
