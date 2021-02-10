@@ -22,7 +22,7 @@ class Algorithms {
         matrix_data = math.matrix(matrix_data);
 
         let [XC, S, C, SSE, varexpl] = this.phca(matrix_data, noc, I, U, 0, 1 * (math.pow(10, -6)), 500);
-
+        
         this.XC = XC;
         this.S = S;
         this.C = C;
@@ -128,6 +128,7 @@ class Algorithms {
                     XC, SSt, C, delta, muC, mualpha, SST, SSE, 10);
 
                 XCtX = math.multiply(math.transpose(XC), subset_X_U);
+
                 [S, SSE, muS, SSt] = this.S_update(S, XCtX, CtXtXC, muS, SST, SSE, 10);
 
                 dSSE = SSE_old - SSE;
@@ -187,8 +188,6 @@ class Algorithms {
 
         let SSE_old = 0;
 
-        let stop = 0;
-
         let SSt = 0;
 
         let M = S._size;
@@ -224,13 +223,13 @@ class Algorithms {
             g = math.subtract(g, math.multiply(e, g_multiply_S_sum_matrix));
 
             let S_old = S
-            while (stop === 0) {
+            while (true) {
                 S = math.subtract(S_old, math.multiply(g,muS));
 
                 for (let p = 0; p < S._data.length; p++) {
                     for (let n = 0; n < S._data[p].length; n++) {
                         if (S._data[p][n] < 0) {
-                            S._data[p][n] = 0;
+                            S._data[p][n] = 0;   // possible can be improved with numjs
                         }
                     }
                 }
@@ -264,8 +263,6 @@ class Algorithms {
         let XCt = 0;
 
         let SSE_old = 0;
-        
-        let stop = 0;
         
         let alphaC = 0;
         
@@ -311,13 +308,13 @@ class Algorithms {
             g = math.subtract(g, math.multiply(e,g_temp2));
 
             let C_old = C;
-            while (stop === 0) {
+            while (true) {
                 C = math.subtract(C_old, math.dotMultiply(muC,g));
 
                 for (let p = 0; p < C._data.length; p++) {
                     for (let n = 0; n < C._data[p].length; n++) {
                         if (C._data[p][n] < 0) {
-                            C._data[p][n] = 0;
+                            C._data[p][n] = 0;     // possible can be improved with numjs
                         }
                     }
                 }
@@ -412,7 +409,7 @@ class Algorithms {
         return [C, SSE, muC, mualpha, CtXtXC, XC];
     }
 
-    repmat (matrix, repeat_rows, repeat_cols) {     // possible issue
+    repmat (matrix, repeat_rows, repeat_cols) {   
         const concat = math.concat;
 
         if (repeat_cols > 1) {
