@@ -14,16 +14,16 @@ async function loadSandXC() {
     }
 }
 
-//let data = d3.csv("./data/COVID19.csv");
-let data = loadSandXC();
+let data = d3.csv("./data/COVID19.csv");
+//let data = loadSandXC();
 
 Promise.all([data]).then(data => {
 
-    //let aa_result = new Algorithms(data, 3);
+    let aa_result = new Algorithms(data, 3);
  
-    let plots = new visuals(data);
+    //let plots = new visuals(data);
     
-    plots.addArch();
-    plots.addOneD();
+    //plots.addArch();
+    //plots.addOneD();
 
 })
