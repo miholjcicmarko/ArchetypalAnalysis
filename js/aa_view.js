@@ -6,6 +6,7 @@ class aa_view {
         this.S = data[0].S;
     
         this.raw = data[0].raw; 
+        this.variables = Object.keys(this.raw);
     
         this.timeline = data[0].time_data;
 
@@ -48,6 +49,17 @@ class aa_view {
             .attr("width", width + margin.right + margin.left)
             .attr("height", height + margin.right + margin.left);
 
+        this.drawVariables();
+    }
+
+    drawVariables () {
+
+        let margin = {top: 10, right: 20, bottom: 10, left: 20};
+        
+        let w = 350 - margin.right - margin.left;
+        let h = 370 - margin.bottom - margin.top;
+
+        
 
     }
 
