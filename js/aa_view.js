@@ -11,12 +11,6 @@ class aa_view {
 
         this.chartOn = false;
 
-        this.drawCircleChart();
-    
-    }
-
-    drawCircleChart () {
-
         let that = this;
 
         let dropdown = d3.select("#selectNow");
@@ -29,7 +23,14 @@ class aa_view {
                 if (number === '-') {
                     that.resetViz();
                 }
+                else {
+                    that.drawCircleChart(number);
+                }
             });
+    
+    }
+
+    drawCircleChart (numberOfArchetypes) {
 
         let margin = {top: 10, right: 10, bottom: 10, left: 10};
         
