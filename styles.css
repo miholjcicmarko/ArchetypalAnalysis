@@ -1,3 +1,25 @@
+.topnav {
+    overflow: hidden;
+    background-color: #e9e9e9;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 1%;
+    grid-template-areas: "bar", "dropdown";
+}
+
+.topnav input[type=text] {
+    float: left;
+    padding: 2%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    margin-left: 2%;
+    font-size: 17px;
+}
+
+.topnav input[type=text] {
+    border: 1px solid rgb(134, 124, 189);
+}
+
 .ContainerA {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
