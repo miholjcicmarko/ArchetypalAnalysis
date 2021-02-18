@@ -89,7 +89,7 @@
 
 .y-label {
     display: inline-block;
-    float: left;
+    /* float: left; */
     padding-right: 5px;
 }
 
