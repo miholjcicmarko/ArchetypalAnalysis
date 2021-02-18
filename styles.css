@@ -72,8 +72,8 @@
 
 .ContainerA {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 0.5fr 1fr;
+    grid-template-rows: 1fr 1fr;
     column-gap: 2%;
 
     /* grid-template-areas: "bar1", "Scatter"; */
