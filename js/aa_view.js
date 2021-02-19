@@ -6,7 +6,7 @@ class aa_view {
         this.S = data[0].S;
     
         this.raw = data[0].raw; 
-        this.variables = Object.keys(this.raw);
+        this.variables = Object.keys(this.raw[0]);
     
         this.timeline = data[0].time_data;
 
@@ -59,6 +59,14 @@ class aa_view {
         let w = 350 - margin.right - margin.left;
         let h = 370 - margin.bottom - margin.top;
 
+        // for (let i = 0; i < this.variables.length; i++) {
+        //     let button = d3.select('#bar1')
+        //         .append("button")
+        //         .attr("class", "button")
+        //         .attr("id", "var" + i);
+
+        //     document.getElementById("var"+ i).innerHTML = this.variables[i];
+        // }
         
 
     }
