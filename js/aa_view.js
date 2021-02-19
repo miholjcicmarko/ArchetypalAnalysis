@@ -43,33 +43,36 @@ class aa_view {
             .attr("class", "tooltip")
             .style("opacity", 0);
 
-        d3.select('#oned')
-            .append('svg').classed('label', true)
-            .attr("id", "label")
+        for (let i = 0; i < numberOfArchetypes; i++) {
+            let label = d3.select('#oned')
+            .append('svg')
+            .attr("id", "label").classed("labelArch", true)
             .attr("width", width + margin.right + margin.left)
-            .attr("height", height + margin.right + margin.left);
+            .attr("height", ((height + margin.bottom + margin.top) / numberOfArchetypes));
+
+            label.append("text")
+                .text("Percentage of Archetype " + i)
+                .attr("transform", "translate(0,20)");
+        }
 
         this.drawVariables();
+
     }
 
     drawVariables () {
 
-        let margin = {top: 10, right: 20, bottom: 10, left: 20};
+        for (let i = 0; i < this.variables.length; i++) {
+            let button = d3.select('#bar1')
+                .append("button")
+                .attr("class", "button")
+                .attr("id", "var" + i)
+                .style("margin", "5px");
+
+            document.getElementById("var"+ i).innerHTML = this.variables[i];
+        }
         
-        let w = 350 - margin.right - margin.left;
-        let h = 370 - margin.bottom - margin.top;
-
-        // for (let i = 0; i < this.variables.length; i++) {
-        //     let button = d3.select('#bar1')
-        //         .append("button")
-        //         .attr("class", "button")
-        //         .attr("id", "var" + i);
-
-        //     document.getElementById("var"+ i).innerHTML = this.variables[i];
-        // }
-        
-
     }
+
 
 
 }
