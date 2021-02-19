@@ -45,14 +45,17 @@ class aa_view {
 
         for (let i = 0; i < numberOfArchetypes; i++) {
             let label = d3.select('#oned')
-            .append('svg')
-            .attr("id", "label").classed("labelArch", true)
-            .attr("width", width + margin.right + margin.left)
-            .attr("height", ((height + margin.bottom + margin.top) / numberOfArchetypes));
+                .append('svg')
+                .attr("id", "label").classed("labelArch", true)
+                .attr("width", width)
+                .attr("height", (height / numberOfArchetypes));
 
             label.append("text")
                 .text("Percentage of Archetype " + i)
                 .attr("transform", "translate(0,20)");
+
+            let plot = d3.select('#oned')
+                .append()
         }
 
         this.drawVariables();
