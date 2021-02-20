@@ -52,16 +52,13 @@ class aa_view {
                 .append('svg')
                 .attr("id", "label").classed("labelArch", true)
                 .attr("width", width)
-                .attr("height", (height / numberOfArchetypes));
+                .attr("height", (height / numberOfArchetypes) - margin.top - margin.bottom);
 
-            if (numberOfArchetypes > 4) {
-                label.append("text")
-                    .text("Percentage of Archetype " + (i + 1))
-                    .attr("transform", "translate(0,10)")
-                    .style("font-size", "7px")
-                    .style("font-weight", "bold");
-            }
-            
+            label.append("text")
+                .text("Percentage of Archetype " + (i + 1))
+                .attr("transform", "translate(0,10)")
+                .style("font-weight", "bold")   
+
             let xaxis = label.append("g")
                 .attr("id", "x-axis"+i);
 
@@ -72,7 +69,20 @@ class aa_view {
             xaxis.call(d3.axisBottom(xScale).ticks(5))
                 .attr("transform", "translate(0,15)")
                 .attr("class", "axis_line")
-                .style("font-size", "6px");
+
+            if (numberOfArchetypes >= 6) {
+                label.style("font-size", "7px");
+                xaxis.style("font-size", "6px");
+            }
+            else if (numberOfArchetypes < 6 && numberOfArchetypes >= 4) {
+                label.style("font-size", "10px");
+                xaxis.style("font-size", "8px");
+            }
+            else if (numberOfArchetypes <= 3) {
+                label.style("font-size", "13px");
+                xaxis.style("font-size", "10px");
+            }
+            
 
             
         }
