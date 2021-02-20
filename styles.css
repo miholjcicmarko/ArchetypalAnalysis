@@ -89,12 +89,7 @@
 }
 
 .axis-label {
-    font-size: 9px;
-}
-
-.y-label {
     display: inline-block;
-    /* float: left; */
     padding-right: 5px;
 }
 

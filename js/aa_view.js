@@ -36,7 +36,7 @@ class aa_view {
         let margin = {top: 10, right: 10, bottom: 10, left: 10};
         
         let width = 350 - margin.right - margin.left;
-        let height = 370 - margin.bottom - margin.top;
+        let height = 350 - margin.bottom - margin.top;
 
         d3.select('#oned')
             .append('div')
@@ -54,21 +54,25 @@ class aa_view {
                 .attr("width", width)
                 .attr("height", (height / numberOfArchetypes));
 
-            label.append("text")
-                .text("Percentage of Archetype " + i)
-                .attr("transform", "translate(0,20)");
-
-            let xaxis = oneD.append("g")
+            if (numberOfArchetypes > 4) {
+                label.append("text")
+                    .text("Percentage of Archetype " + (i + 1))
+                    .attr("transform", "translate(0,10)")
+                    .style("font-size", "7px")
+                    .style("font-weight", "bold");
+            }
+            
+            let xaxis = label.append("g")
                 .attr("id", "x-axis"+i);
 
             xaxis.append("text")
                 .attr("class", "axis-label")
-                .attr("transform", "translate(-" + 0+ "," + 0)
                 .attr("text-anchor", "middle");
 
             xaxis.call(d3.axisBottom(xScale).ticks(5))
-                .attr("transform", "translate(0,5)")
-                .attr("class", "axis_line");
+                .attr("transform", "translate(0,15)")
+                .attr("class", "axis_line")
+                .style("font-size", "6px");
 
             
         }
