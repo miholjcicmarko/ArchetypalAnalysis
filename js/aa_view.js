@@ -45,7 +45,7 @@ class aa_view {
 
         let xScale = d3.scaleLinear()
             .domain([0, 1])
-            .range([10,w-10]);
+            .range([10,width-10]);
 
         for (let i = 0; i < numberOfArchetypes; i++) {
             let label = d3.select('#oned')
