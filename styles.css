@@ -126,8 +126,10 @@ div.tooltip {
 .hovered{
     fill: rgb(255, 0, 0);
     stroke: rgb(255, 0, 0);
+    stroke-width: 2;
     opacity: 1;
 }
+
 
 .line {
     fill: none;
