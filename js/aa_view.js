@@ -64,8 +64,7 @@ class aa_view {
             xaxis.append("text")
                 .attr("class", "axis-label")
                 .attr("transform", "translate(-" + 0+ "," + 0)
-                .attr("text-anchor", "middle")
-                .attr("class", "x-label");
+                .attr("text-anchor", "middle");
 
             xaxis.call(d3.axisBottom(xScale).ticks(5))
                 .attr("transform", "translate(0,5)")
