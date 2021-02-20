@@ -193,5 +193,22 @@ class aa_view {
         return text;
     }
 
+    onSearch() {
+        let searchBar = d3.select("#search-bar");
+        let searchVal = searchBar.property("value").toLowerCase();
+
+        // Update current filters with searchbar value
+        let searchIdx = this.currentFilters.findIndex(f => f.label == "search");
+        if (searchIdx < 0) {
+            let newFilter = new Filter("search", searchVal);
+            this.currentFilters.push(newFilter)
+        }
+        else {
+            this.currentFilters[searchIdx].value = searchVal;
+        }
+        this.updateCurrentFilters();
+        this.drawTable();
+    }
+
 }
 
