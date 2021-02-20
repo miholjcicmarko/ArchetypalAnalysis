@@ -18,6 +18,7 @@ class aa_view {
         this.timeline = data[0].time_data;
 
         this.chartOn = false;
+        this.filteredData = [];
 
         let that = this;
 
@@ -101,16 +102,16 @@ class aa_view {
                 xaxis.style("font-size", "10px");
             }
 
-        let dataS = new Array(numberOfArchetypes);
+        this.dataS = new Array(numberOfArchetypes);
             
-        dataS[i] = [];
+        this.dataS[i] = [];
         for (let p = 0; p < this.S.length; p++) {
             let point = new PlotData(this.S[p][i],this.S[p].state);
-            dataS[i].push(point);
+            this.dataS[i].push(point);
         }
 
         oneD.selectAll("circle")
-            .data(dataS[i])
+            .data(this.dataS[i])
             .enter()
             .append("circle")
             .attr("cx", function(d) {
@@ -134,13 +135,27 @@ class aa_view {
             })
             .classed("circleData", true);
             
-    }    
+    }  
+    
+    let that = this;
+
+    let searchBar = d3.select("#search-bar");
+        searchBar.on("onkeyup", () => {
+
+            let searchVal = document.getElementById("#search-bar").value;
+
+            //let searchVal = searchBar.property("value").toLowerCase();
+            if (d3.event.keyCode === 13 || searchVal == "") {
+                this.onSearch(searchVal,this.dataS);
+            }
+            
+        });
 
     let states_circ = d3.selectAll("#oned").selectAll("circle");
 
-    this.tooltip(states_circ);
+    that.tooltip(states_circ);
 
-    this.drawVariables();
+    that.drawVariables();
 
     }
 
@@ -193,9 +208,9 @@ class aa_view {
         return text;
     }
 
-    onSearch() {
+    onSearch(searchVal, data) {
         let searchBar = d3.select("#search-bar");
-        let searchVal = searchBar.property("value").toLowerCase();
+        //let searchVal = searchBar.property("value").toLowerCase();
 
         // Update current filters with searchbar value
         let searchIdx = this.currentFilters.findIndex(f => f.label == "search");
