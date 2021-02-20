@@ -52,7 +52,14 @@ class aa_view {
                 .append('svg')
                 .attr("id", "label").classed("labelArch", true)
                 .attr("width", width)
-                .attr("height", (height / numberOfArchetypes) - margin.top - margin.bottom);
+            
+            if (numberOfArchetypes > 5) {
+                label.attr("height", (height / numberOfArchetypes) - margin.top);
+            }
+            else {
+                label.attr("height", (height / numberOfArchetypes) - margin.top
+                            - margin.bottom);
+            }
 
             label.append("text")
                 .text("Percentage of Archetype " + (i + 1))
@@ -72,7 +79,7 @@ class aa_view {
 
             if (numberOfArchetypes >= 6) {
                 label.style("font-size", "7px");
-                xaxis.style("font-size", "6px");
+                xaxis.style("font-size", "5px");
             }
             else if (numberOfArchetypes < 6 && numberOfArchetypes >= 4) {
                 label.style("font-size", "10px");
