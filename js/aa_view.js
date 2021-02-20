@@ -1,3 +1,10 @@
+// class PlotData {
+//     constructor (value, state) {
+//         this.value = value;
+//         this.state = state;
+//     }
+// }
+
 class aa_view {
 
     constructor(data) {
@@ -48,25 +55,29 @@ class aa_view {
             .range([10,width-10]);
 
         for (let i = 0; i < numberOfArchetypes; i++) {
-            let label = d3.select('#oned')
+            let oneD = d3.select('#oned')
                 .append('svg')
                 .attr("id", "label").classed("labelArch", true)
                 .attr("width", width)
             
-            if (numberOfArchetypes > 5) {
-                label.attr("height", (height / numberOfArchetypes) - margin.top);
+            if (numberOfArchetypes >= 5) {
+                oneD.attr("height", (height / numberOfArchetypes));
             }
-            else {
-                label.attr("height", (height / numberOfArchetypes) - margin.top
+            else if (numberOfArchetypes === 4) {
+                oneD.attr("height", (height / numberOfArchetypes) - margin.top
                             - margin.bottom);
             }
+            else {
+                oneD.attr("height", (height / numberOfArchetypes) - margin.top
+                            - margin.bottom - margin.bottom);
+            }
 
-            label.append("text")
+            oneD.append("text")
                 .text("Percentage of Archetype " + (i + 1))
                 .attr("transform", "translate(0,10)")
                 .style("font-weight", "bold")   
 
-            let xaxis = label.append("g")
+            let xaxis = oneD.append("g")
                 .attr("id", "x-axis"+i);
 
             xaxis.append("text")
@@ -78,23 +89,58 @@ class aa_view {
                 .attr("class", "axis_line")
 
             if (numberOfArchetypes >= 6) {
-                label.style("font-size", "7px");
+                oneD.style("font-size", "7px");
                 xaxis.style("font-size", "5px");
             }
-            else if (numberOfArchetypes < 6 && numberOfArchetypes >= 4) {
-                label.style("font-size", "10px");
+            else if (numberOfArchetypes < 6 && numberOfArchetypes >= 5) {
+                oneD.style("font-size", "10px");
                 xaxis.style("font-size", "8px");
             }
-            else if (numberOfArchetypes <= 3) {
-                label.style("font-size", "13px");
+            else if (numberOfArchetypes <= 4) {
+                oneD.style("font-size", "13px");
                 xaxis.style("font-size", "10px");
             }
-            
 
+        let dataS = new Array(numberOfArchetypes);
             
+        dataS[i] = [];
+        for (let p = 0; p < this.S.length; p++) {
+            let point = new PlotData(this.S[p][i],this.S[p].state);
+            dataS[i].push(point);
         }
 
-        this.drawVariables();
+        oneD.selectAll("circle")
+            .data(dataS[i])
+            .enter()
+            .append("circle")
+            .attr("cx", function(d) {
+                return xScale(d.value);
+            })
+            .attr("cy", function() {
+                if (numberOfArchetypes <= 4) {
+                    return 45;
+                }
+                else {
+                    return 45 - margin.top;
+                }
+            })
+            .attr("r", function() {
+                if (numberOfArchetypes >= 5) {
+                    return 3;
+                }
+                else {
+                    return 7;
+                }
+            })
+            .attr('stroke', 'black')
+            .attr("fill", "orange");
+    }    
+
+    let states_circ = d3.selectAll("#oned").selectAll("circle");
+
+    this.tooltip(states_circ);
+
+    this.drawVariables();
 
     }
 
@@ -112,7 +158,40 @@ class aa_view {
         
     }
 
+    tooltip (onscreenData) {
+        let that = this;
+        let tooltip = d3.select('.tooltip')
 
+        onscreenData.on("mouseover", function(d,i) {
+            
+            let pageX = d.clientX;
+            let pageY = d.clientY;
+
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", 0.9);
+        
+            tooltip.html(that.tooltipRender(d))
+                .style("left", (pageX) + "px")
+                .style("top", (pageY) + "px");
+
+            d3.select(this).classed("hovered", true);
+        });
+
+        onscreenData.on("mouseout", function(d,i) {
+            d3.select(this).classed("hovered",false);
+
+            tooltip.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
+
+    }
+
+    tooltipRender(data) {
+        let text = data.currentTarget.__data__.state;
+        return text;
+    }
 
 }
 
