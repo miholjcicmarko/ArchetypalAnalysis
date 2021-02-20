@@ -43,6 +43,10 @@ class aa_view {
             .attr("class", "tooltip")
             .style("opacity", 0);
 
+        let xScale = d3.scaleLinear()
+            .domain([0, 1])
+            .range([10,w-10]);
+
         for (let i = 0; i < numberOfArchetypes; i++) {
             let label = d3.select('#oned')
                 .append('svg')
@@ -54,8 +58,20 @@ class aa_view {
                 .text("Percentage of Archetype " + i)
                 .attr("transform", "translate(0,20)");
 
-            let plot = d3.select('#oned')
-                .append()
+            let xaxis = oneD.append("g")
+                .attr("id", "x-axis"+i);
+
+            xaxis.append("text")
+                .attr("class", "axis-label")
+                .attr("transform", "translate(-" + 0+ "," + 0)
+                .attr("text-anchor", "middle")
+                .attr("class", "x-label");
+
+            xaxis.call(d3.axisBottom(xScale).ticks(5))
+                .attr("transform", "translate(0,5)")
+                .attr("class", "axis_line");
+
+            
         }
 
         this.drawVariables();
