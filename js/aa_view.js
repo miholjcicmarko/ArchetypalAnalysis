@@ -132,8 +132,8 @@ class aa_view {
                     return 7;
                 }
             })
-            .attr('stroke', 'black')
-            .attr("fill", "orange");
+            .classed("circleData", true);
+            
     }    
 
     let states_circ = d3.selectAll("#oned").selectAll("circle");

@@ -105,7 +105,6 @@ div.tooltip {
     min-width: 5%;
     min-height: 5%;
     padding: 2px;
-    background: white;
     stroke: gray;
     border-radius: 6px;
     pointer-events: none;
@@ -117,6 +116,11 @@ div.tooltip {
     margin: auto;
     font: 12px sans-serif;
     font-weight: bold;
+}
+
+.circleData {
+    stroke: rgba(255, 255, 255, 0.753);
+    fill: rgb(197, 184, 255);
 }
 
 .hovered{
