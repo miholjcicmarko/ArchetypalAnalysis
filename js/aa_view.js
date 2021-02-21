@@ -53,6 +53,10 @@ class aa_view {
             .attr("class", "tooltip")
             .style("opacity", 0);
 
+        this.xScale = d3.scaleLinear()
+            .domain([0, 1])
+            .range([10,width-10]);
+
         let xScale = d3.scaleLinear()
             .domain([0, 1])
             .range([10,width-10]);
@@ -60,8 +64,8 @@ class aa_view {
         for (let i = 0; i < numberOfArchetypes; i++) {
             let oneD = d3.select('#oned')
                 .append('svg')
-                .attr("id", "layer" + i).classed("labelArch", true)
-                .attr("width", width)
+                .attr("id", "label" + i)
+                .attr("width", width);
             
             if (numberOfArchetypes >= 5) {
                 oneD.attr("height", (height / numberOfArchetypes));
@@ -78,16 +82,18 @@ class aa_view {
             oneD.append("text")
                 .text("Percentage of Archetype " + (i + 1))
                 .attr("transform", "translate(0,10)")
-                .style("font-weight", "bold")   
+                .style("font-weight", "bold") 
+                .classed("labelArch", true); 
 
             let xaxis = oneD.append("g")
                 .attr("id", "x-axis"+i);
 
             xaxis.append("text")
                 .attr("class", "axis-label")
-                .attr("text-anchor", "middle");
+                .attr("text-anchor", "middle")
+                .classed("labelArch", true);
 
-            xaxis.call(d3.axisBottom(xScale).ticks(5))
+            xaxis.call(d3.axisBottom(this.xScale).ticks(5))
                 .attr("transform", "translate(0,15)")
                 .attr("class", "axis_line")
 
@@ -114,7 +120,10 @@ class aa_view {
             this.dataS[i].push(point);
         }
 
-        oneD.selectAll("circle")
+        let circles = oneD.append("g")
+                .attr("id", "circle"+i);
+
+        circles.selectAll("circle")
             .data(this.dataS[i])
             .enter()
             .append("circle")
@@ -216,17 +225,14 @@ class aa_view {
         for (let i = 0; i < this.numberOfArchetypes; i++) {
             this.filteredData = data[i].filter(d => d.state.toLowerCase().includes(searchVal));
 
-            let oneD = d3.select('#layer' + i);
+            let circles = d3.select('#circle' + i);
 
-            oneD.selectAll("circle")
-                .data(this.filteredData)
-                .enter()
-                .append("circle")
+            circles.append("circle")
                 .attr("cx", function(d) {
-                    return xScale(d.value);
+                    return this.xScale(this.filteredData);
                 })
                 .attr("cy", function() {
-                    if (numberOfArchetypes <= 4) {
+                    if (this.numberOfArchetypes <= 4) {
                         return 45;
                     }
                 else {
@@ -234,7 +240,7 @@ class aa_view {
                     }
                 })
                 .attr("r", function() {
-                    if (numberOfArchetypes >= 5) {
+                    if (this.numberOfArchetypes >= 5) {
                         return 3;
                     }
                     else {
@@ -242,6 +248,31 @@ class aa_view {
                     }
                 })
                 .classed("hovered", true);
+
+            // circles.selectAll("circle")
+            //     .data(this.filteredData)
+            //     .enter()
+            //     .append("circle")
+            //     .attr("cx", function(d) {
+            //         return this.xScale(d.value);
+            //     })
+            //     .attr("cy", function() {
+            //         if (this.numberOfArchetypes <= 4) {
+            //             return 45;
+            //         }
+            //     else {
+            //         return 45 - margin.top;
+            //         }
+            //     })
+            //     .attr("r", function() {
+            //         if (this.numberOfArchetypes >= 5) {
+            //             return 3;
+            //         }
+            //         else {
+            //             return 7;
+            //         }
+            //     })
+            //     .classed("hovered", true);
 
         }
 
