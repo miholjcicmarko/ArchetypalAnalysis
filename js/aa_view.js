@@ -1,7 +1,7 @@
 // class PlotData {
-//     constructor (value, state) {
+//     constructor (value, variable) {
 //         this.value = value;
-//         this.state = state;
+//         this.variable = variable;
 //     }
 // }
 
@@ -112,7 +112,8 @@ class aa_view {
             
         this.dataS[i] = [];
         for (let p = 0; p < this.S.length; p++) {
-            let point = new PlotData(this.S[p][i],this.S[p].state);
+            // need to generalize, can't have state
+            let point = new PlotData(this.S[p][i],this.S[p].state); 
             this.dataS[i].push(point);
         }
 
@@ -131,8 +132,11 @@ class aa_view {
                 return circleScale(d.value);
             })
             .attr("cy", function() {
-                if (numberOfArchetypes <= 4) {
+                if (numberOfArchetypes <= 3) {
                     return 45;
+                }
+                else if (numberOfArchetypes == 4) {
+                    return 42;
                 }
                 else {
                     return 45 - margin_top;
@@ -149,7 +153,10 @@ class aa_view {
                     return 7;
                 }
             })
-            .classed("circleData", true);
+            .classed("circleData", true)
+            .attr("id", function(d) {
+                return d.variable_name + "";
+            });
             
     }  
     
@@ -165,9 +172,9 @@ class aa_view {
             
         });
 
-    let states_circ = d3.selectAll("#oned").selectAll("circle");
+    let data_circ = d3.selectAll("#oned").selectAll("circle");
 
-    that.tooltip(states_circ);
+    that.tooltip(data_circ);
 
     that.drawVariables();
 
@@ -218,7 +225,7 @@ class aa_view {
     }
 
     tooltipRender(data) {
-        let text = data.currentTarget.__data__.state;
+        let text = data.currentTarget.__data__.variable_name;
         return text;
     }
 
@@ -226,53 +233,36 @@ class aa_view {
         let searchBar = d3.select("#search-bar");
         
         for (let i = 0; i < this.numberOfArchetypes; i++) {
-            this.filteredData = data[i].filter(d => d.state.toLowerCase().includes(searchVal));
+            this.filteredData = data[i].filter(d => d.variable_name.toLowerCase().includes(searchVal));
 
-            let circles = d3.select('#circle' + i);
+        for (let k = 0; k < this.filteredData.length; k++) {
+            let circle = d3.select("#"+this.filteredData[k])
+                           .classed("hovered", true);
+        }
 
-            let circleScale = this.xScale;
+            //let circles = d3.select('#circle' + i);
 
-            let margin_top = this.margin.top;
+            // let circleScale = this.xScale;
 
-            let numberOfArch = this.numberOfArchetypes;
+            // let margin_top = this.margin.top;
 
-            circles.append("circle")
-                .attr("cx", circleScale(this.filteredData[0].value))
-                .attr("cy", function() {
-                    if (numberOfArch <= 4) {
-                        return 45;
-                    }
-                    else {
-                        return 45 - (margin_top);
-                    }
-                })
-                .attr("r", function() {
-                    if (numberOfArch >= 5) {
-                        return 3;
-                    }
-                    else {
-                        return 7;
-                    }
-                })
-                .classed("hovered", true);
+            // let numberOfArch = this.numberOfArchetypes;
 
-            // circles.selectAll("circle")
-            //     .data(this.filteredData)
-            //     .enter()
-            //     .append("circle")
-            //     .attr("cx", function(d) {
-            //         return this.xScale(d.value);
-            //     })
+            // circles.append("circle")
+            //     .attr("cx", circleScale(this.filteredData[0].value))
             //     .attr("cy", function() {
-            //         if (this.numberOfArchetypes <= 4) {
+            //         if (numberOfArch <= 3) {
             //             return 45;
             //         }
-            //     else {
-            //         return 45 - margin.top;
+            //         else if (numberOfArch == 4) {
+            //             return 43;
+            //         }
+            //         else {
+            //             return 45 - (margin_top);
             //         }
             //     })
             //     .attr("r", function() {
-            //         if (this.numberOfArchetypes >= 5) {
+            //         if (numberOfArch >= 5) {
             //             return 3;
             //         }
             //         else {
@@ -281,6 +271,8 @@ class aa_view {
             //     })
             //     .classed("hovered", true);
 
+
+            
         }
 
 
