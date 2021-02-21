@@ -187,20 +187,21 @@ class aa_view {
             let button = d3.select('#bar1')
                 .append("button")
                 .attr("class", "button")
-                .attr("id", "var" + i)
+                .attr("id", "" + this.variables[i])
                 .style("margin", "5px");
 
-            document.getElementById("var"+ i).innerHTML = this.variables[i];
-            document.getElementById("var" + i).addEventListener("click", function () {this.addChosenVar(i);});
-        
+            document.getElementById("" + this.variables[i]).innerHTML = this.variables[i];
+            let idVar = document.getElementById(this.variables[i]).addEventListener("click", this.addChosenVar);
+
+            this.chosenVars.push(idVar);
         }
         
     }
 
-    addChosenVar (index) {
-        this.chosenVars.push(this.variables[index]);
+    addChosenVar (event) {
+        let id = event.srcElement.id;
 
-        let button = d3.select("#var" + index)
+        let button = d3.select("#" + id)
                         .classed("pressed", true);
     }
 
