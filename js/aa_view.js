@@ -51,8 +51,7 @@ class aa_view {
         d3.select('#oned')
             .append('div')
             .attr("class", "tooltip")
-            .style("opacity", 0)
-            .style("z-index", 2);
+            .style("opacity", 0);
 
         this.xScale = d3.scaleLinear()
             .domain([0, 1])
@@ -191,8 +190,13 @@ class aa_view {
                 .style("margin", "5px");
 
             document.getElementById("var"+ i).innerHTML = this.variables[i];
+            document.getElementById("var" + i).addEventListener("click",this.addChosenVar(i));
         }
         
+    }
+
+    addChosenVar (index) {
+        this.chosenVars = this.chosenVars.append(this.variables[index]);
     }
 
     tooltip (onscreenData) {
