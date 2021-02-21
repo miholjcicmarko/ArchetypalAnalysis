@@ -19,6 +19,7 @@ class aa_view {
 
         this.chartOn = false;
         this.filteredData = [];
+        this.chosenVars = [];
 
         let that = this;
 
@@ -190,13 +191,14 @@ class aa_view {
                 .style("margin", "5px");
 
             document.getElementById("var"+ i).innerHTML = this.variables[i];
-            document.getElementById("var" + i).addEventListener("click",this.addChosenVar(i));
+            document.getElementById("var" + i).addEventListener("click", function () {this.addChosenVar(i);});
+        
         }
         
     }
 
     addChosenVar (index) {
-        this.chosenVars = this.chosenVars.append(this.variables[index]);
+        this.chosenVars.push(this.variables[index]);
 
         let button = d3.select("#var" + index)
                         .classed("pressed", true);
