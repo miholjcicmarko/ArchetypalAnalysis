@@ -181,15 +181,19 @@ class aa_view {
 
     let submit = d3.select("#submit");
         submit.on("click", function(d,i) {
-            that.makeBarCharts(this.chosenVars, this.raw);
+            that.makeBarCharts(that.chosenVars, that.raw);
         });
 
     }
 
     drawVariables () {
 
+        let buttons = d3.select("#bar1")
+                        .append("g")
+                        .attr("id", "buttonGroup");
+
         for (let i = 0; i < this.variables.length; i++) {
-            let button = d3.select('#bar1')
+            let button = d3.select('#buttonGroup')
                 .append("button")
                 .attr("class", "button")
                 .attr("id", "" + this.variables[i])
@@ -206,9 +210,7 @@ class aa_view {
             })
 
             // document.getElementById(this.variables[i]).addEventListener("click", this.addChosenVar);
-
         }
-        
     }
 
     addChosenVar (event) {
@@ -301,10 +303,32 @@ class aa_view {
         }
     }
 
-    makeBarCharts () {
+    makeBarCharts (chosenVariables, rawData) {
+
+        d3.select("#buttonGroup").remove();
+
+        let margin = {top: 10, right: 20, bottom: 10, left: 20};
+        
+        let w = 500 - margin.right - margin.left;
+        let h = 400 - margin.bottom - margin.top;
+
+        let filteredData = this.filterObjsInArr(rawData, chosenVariables);
 
 
+    }
 
+    filterObjsInArr (arr, selection) {
+        let filteredArray = [];
+        arr.map((obj) => {
+            let filteredObj = {};
+            for (let key in obj) {
+                if (selection.includes(key)) {
+                    filteredObj[key] = obj[key];
+                };
+            };
+            filteredArray.push(filteredObj);
+        })
+        return filteredArray;
     }
 
 }
