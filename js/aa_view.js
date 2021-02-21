@@ -181,7 +181,7 @@ class aa_view {
 
     let submit = d3.select("#submit");
         submit.on("click", function(d,i) {
-            // bar chart making function
+            that.makeBarCharts(this.chosenVars, this.raw);
         });
 
     }
@@ -299,6 +299,10 @@ class aa_view {
 
             
         }
+    }
+
+    makeBarCharts () {
+
 
 
     }
