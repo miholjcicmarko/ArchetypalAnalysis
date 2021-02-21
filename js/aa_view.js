@@ -197,6 +197,9 @@ class aa_view {
 
     addChosenVar (index) {
         this.chosenVars = this.chosenVars.append(this.variables[index]);
+
+        let button = d3.select("#var" + index)
+                        .classed("pressed", true);
     }
 
     tooltip (onscreenData) {

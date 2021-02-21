@@ -124,10 +124,22 @@ div.tooltip {
 }
 
 .hovered{
-    fill: rgb(255, 0, 0);
-    stroke: rgb(255, 0, 0);
+    fill: rgb(255, 55, 55);
+    stroke: rgb(255, 55, 55);
     stroke-width: 2;
     opacity: 1;
+}
+
+.pressed {
+    background-color: rgb(255, 55, 55);
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    padding-right: 1%;
+    font-size: 16px;
+    cursor: pointer; 
+    border: white;
 }
 
 
