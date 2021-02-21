@@ -314,7 +314,35 @@ class aa_view {
 
         let filteredData = this.filterObjsInArr(rawData, chosenVariables);
 
-        
+        for (let i = 0; i < chosenVariables.length; i++) {
+
+            if (parseInt(chosenVariables[i]) !== NaN) {
+                let x_lab = d3.scaleBand()
+                          .domain(["" + chosenVariables[i]])
+                          .range([0,w-5]);
+
+                let ydata = [];
+                for (let k = 0; k < filteredData.length; k++){
+                    ydata.push(parseInt(filteredData[k][""+chosenVariables[i]]))
+                }
+                
+                let yScale = d3.scaleLinear()
+                               .domain([d3.max(ydata), 0])
+                               .range([0, h-5]);
+
+                
+            }
+
+
+
+        }
+
+        let svg = d3.select("#bar1")
+            .append("svg")
+            .classed("plot-svg", true)
+            .attr("id", "bars")
+            .attr("width", w + margin.right + margin.left)
+            .attr("height", h + margin.top + margin.bottom);
 
 
 
