@@ -179,6 +179,11 @@ class aa_view {
 
     that.drawVariables();
 
+    let submit = d3.select("#submit");
+        submit.on("click", function(d,i) {
+            // bar chart making function
+        });
+
     }
 
     drawVariables () {
@@ -191,9 +196,17 @@ class aa_view {
                 .style("margin", "5px");
 
             document.getElementById("" + this.variables[i]).innerHTML = this.variables[i];
-            let idVar = document.getElementById(this.variables[i]).addEventListener("click", this.addChosenVar);
+            let that = this;
 
-            this.chosenVars.push(idVar);
+            let buttons = d3.select('#bar1').selectAll("button");
+
+            buttons.on("click", function (d) {
+                that.addChosenVar (d);
+                that.chosenVars.push(d.srcElement.id);
+            })
+
+            // document.getElementById(this.variables[i]).addEventListener("click", this.addChosenVar);
+
         }
         
     }
