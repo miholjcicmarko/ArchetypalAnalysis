@@ -216,7 +216,7 @@ class aa_view {
         for (let i = 0; i < this.numberOfArchetypes; i++) {
             this.filteredData = data[i].filter(d => d.state.toLowerCase().includes(searchVal));
 
-            let oneD = d3.select('#oned');
+            let oneD = d3.select('#layer' + i);
 
             oneD.selectAll("circle")
                 .data(this.filteredData)
