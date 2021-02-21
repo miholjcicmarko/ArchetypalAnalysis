@@ -43,10 +43,10 @@ class aa_view {
 
         this.numberOfArchetypes = numberOfArchetypes;
 
-        let margin = {top: 10, right: 10, bottom: 10, left: 10};
+        this.margin = {top: 10, right: 10, bottom: 10, left: 10};
         
-        let width = 350 - margin.right - margin.left;
-        let height = 350 - margin.bottom - margin.top;
+        let width = 350 - this.margin.right - this.margin.left;
+        let height = 350 - this.margin.bottom - this.margin.top;
 
         d3.select('#oned')
             .append('div')
@@ -67,12 +67,12 @@ class aa_view {
                 oneD.attr("height", (height / numberOfArchetypes));
             }
             else if (numberOfArchetypes === 4) {
-                oneD.attr("height", (height / numberOfArchetypes) - margin.top
-                            - margin.bottom);
+                oneD.attr("height", (height / numberOfArchetypes) - this.margin.top
+                            - this.margin.bottom);
             }
             else {
-                oneD.attr("height", (height / numberOfArchetypes) - margin.top
-                            - margin.bottom - margin.bottom);
+                oneD.attr("height", (height / numberOfArchetypes) - this.margin.top
+                            - this.margin.bottom - this.margin.bottom);
             }
 
             oneD.append("text")
@@ -121,6 +121,8 @@ class aa_view {
 
         let circleScale = this.xScale;
 
+        let margin_top = this.margin.top;
+
         circles.selectAll("circle")
             .data(this.dataS[i])
             .enter()
@@ -133,12 +135,15 @@ class aa_view {
                     return 45;
                 }
                 else {
-                    return 45 - margin.top;
+                    return 45 - margin_top;
                 }
             })
             .attr("r", function() {
                 if (numberOfArchetypes >= 5) {
                     return 3;
+                }
+                else if (numberOfArchetypes === 4) {
+                    return 5;
                 }
                 else {
                     return 7;
@@ -227,20 +232,22 @@ class aa_view {
 
             let circleScale = this.xScale;
 
+            let margin_top = this.margin.top;
+
+            let numberOfArch = this.numberOfArchetypes;
+
             circles.append("circle")
-                .attr("cx", function(d) {
-                    return circleScale(this.filteredData);
-                })
+                .attr("cx", circleScale(this.filteredData[0].value))
                 .attr("cy", function() {
-                    if (this.numberOfArchetypes <= 4) {
+                    if (numberOfArch <= 4) {
                         return 45;
                     }
-                else {
-                    return 45 - margin.top;
+                    else {
+                        return 45 - (margin_top);
                     }
                 })
                 .attr("r", function() {
-                    if (this.numberOfArchetypes >= 5) {
+                    if (numberOfArch >= 5) {
                         return 3;
                     }
                     else {
