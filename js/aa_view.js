@@ -102,7 +102,9 @@ class aa_view {
                 xaxis.style("font-size", "10px");
             }
 
-        this.dataS = new Array(numberOfArchetypes);
+        if (i === 0) {
+            this.dataS = [];
+        }
             
         this.dataS[i] = [];
         for (let p = 0; p < this.S.length; p++) {
@@ -140,12 +142,10 @@ class aa_view {
     let that = this;
 
     let searchBar = d3.select("#search-bar");
-        searchBar.on("onkeyup", () => {
+        searchBar.on("keyup", (e) => {
 
-            let searchVal = document.getElementById("#search-bar").value;
-
-            //let searchVal = searchBar.property("value").toLowerCase();
-            if (d3.event.keyCode === 13 || searchVal == "") {
+            let searchVal = searchBar.property("value").toLowerCase();
+            if (e.keyCode === 13 || searchVal == "") {
                 this.onSearch(searchVal,this.dataS);
             }
             
@@ -210,19 +210,11 @@ class aa_view {
 
     onSearch(searchVal, data) {
         let searchBar = d3.select("#search-bar");
-        //let searchVal = searchBar.property("value").toLowerCase();
+        
+        this.filteredData = data[0].filter(d => d.state.toLowerCase().includes(searchVal));
 
-        // Update current filters with searchbar value
-        let searchIdx = this.currentFilters.findIndex(f => f.label == "search");
-        if (searchIdx < 0) {
-            let newFilter = new Filter("search", searchVal);
-            this.currentFilters.push(newFilter)
-        }
-        else {
-            this.currentFilters[searchIdx].value = searchVal;
-        }
-        this.updateCurrentFilters();
-        this.drawTable();
+        
+
     }
 
 }
