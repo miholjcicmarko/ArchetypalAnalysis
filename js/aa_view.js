@@ -51,7 +51,8 @@ class aa_view {
         d3.select('#oned')
             .append('div')
             .attr("class", "tooltip")
-            .style("opacity", 0);
+            .style("opacity", 0)
+            .style("z-index", 2);
 
         this.xScale = d3.scaleLinear()
             .domain([0, 1])
@@ -235,41 +236,42 @@ class aa_view {
         for (let i = 0; i < this.numberOfArchetypes; i++) {
             this.filteredData = data[i].filter(d => d.variable_name.toLowerCase().includes(searchVal));
 
-        for (let k = 0; k < this.filteredData.length; k++) {
-            let circle = d3.select("#"+this.filteredData[k])
-                           .classed("hovered", true);
-        }
+        // for (let k = 0; k < this.filteredData.length; k++) {
+        //     let circles = d3.select('#circle' + i);
+        //     let circle = circles.select("#"+this.filteredData[k].variable_name)
+        //                    .classed("hovered", true);
+        // }
 
-            //let circles = d3.select('#circle' + i);
+            let circles = d3.select('#circle' + i);
 
-            // let circleScale = this.xScale;
+            let circleScale = this.xScale;
 
-            // let margin_top = this.margin.top;
+            let margin_top = this.margin.top;
 
-            // let numberOfArch = this.numberOfArchetypes;
+            let numberOfArch = this.numberOfArchetypes;
 
-            // circles.append("circle")
-            //     .attr("cx", circleScale(this.filteredData[0].value))
-            //     .attr("cy", function() {
-            //         if (numberOfArch <= 3) {
-            //             return 45;
-            //         }
-            //         else if (numberOfArch == 4) {
-            //             return 43;
-            //         }
-            //         else {
-            //             return 45 - (margin_top);
-            //         }
-            //     })
-            //     .attr("r", function() {
-            //         if (numberOfArch >= 5) {
-            //             return 3;
-            //         }
-            //         else {
-            //             return 7;
-            //         }
-            //     })
-            //     .classed("hovered", true);
+            circles.append("circle")
+                .attr("cx", circleScale(this.filteredData[0].value))
+                .attr("cy", function() {
+                    if (numberOfArch <= 3) {
+                        return 45;
+                    }
+                    else if (numberOfArch == 4) {
+                        return 43;
+                    }
+                    else {
+                        return 45 - (margin_top);
+                    }
+                })
+                .attr("r", function() {
+                    if (numberOfArch >= 5) {
+                        return 3;
+                    }
+                    else {
+                        return 7;
+                    }
+                })
+                .classed("hovered", true);
 
 
             
