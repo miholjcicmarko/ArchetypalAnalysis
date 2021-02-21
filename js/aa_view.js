@@ -41,6 +41,8 @@ class aa_view {
 
     drawCircleChart (numberOfArchetypes) {
 
+        this.numberOfArchetypes = numberOfArchetypes;
+
         let margin = {top: 10, right: 10, bottom: 10, left: 10};
         
         let width = 350 - margin.right - margin.left;
@@ -58,7 +60,7 @@ class aa_view {
         for (let i = 0; i < numberOfArchetypes; i++) {
             let oneD = d3.select('#oned')
                 .append('svg')
-                .attr("id", "label").classed("labelArch", true)
+                .attr("id", "layer" + i).classed("labelArch", true)
                 .attr("width", width)
             
             if (numberOfArchetypes >= 5) {
@@ -146,7 +148,7 @@ class aa_view {
 
             let searchVal = searchBar.property("value").toLowerCase();
             if (e.keyCode === 13 || searchVal == "") {
-                this.onSearch(searchVal,this.dataS);
+                this.onSearch(searchVal,this.dataS, this.numberOfArchetypes);
             }
             
         });
@@ -211,9 +213,38 @@ class aa_view {
     onSearch(searchVal, data) {
         let searchBar = d3.select("#search-bar");
         
-        this.filteredData = data[0].filter(d => d.state.toLowerCase().includes(searchVal));
+        for (let i = 0; i < this.numberOfArchetypes; i++) {
+            this.filteredData = data[i].filter(d => d.state.toLowerCase().includes(searchVal));
 
-        
+            let oneD = d3.select('#oned');
+
+            oneD.selectAll("circle")
+                .data(this.filteredData)
+                .enter()
+                .append("circle")
+                .attr("cx", function(d) {
+                    return xScale(d.value);
+                })
+                .attr("cy", function() {
+                    if (numberOfArchetypes <= 4) {
+                        return 45;
+                    }
+                else {
+                    return 45 - margin.top;
+                    }
+                })
+                .attr("r", function() {
+                    if (numberOfArchetypes >= 5) {
+                        return 3;
+                    }
+                    else {
+                        return 7;
+                    }
+                })
+                .classed("hovered", true);
+
+        }
+
 
     }
 
