@@ -57,10 +57,6 @@ class aa_view {
             .domain([0, 1])
             .range([10,width-10]);
 
-        let xScale = d3.scaleLinear()
-            .domain([0, 1])
-            .range([10,width-10]);
-
         for (let i = 0; i < numberOfArchetypes; i++) {
             let oneD = d3.select('#oned')
                 .append('svg')
@@ -123,12 +119,14 @@ class aa_view {
         let circles = oneD.append("g")
                 .attr("id", "circle"+i);
 
+        let circleScale = this.xScale;
+
         circles.selectAll("circle")
             .data(this.dataS[i])
             .enter()
             .append("circle")
             .attr("cx", function(d) {
-                return xScale(d.value);
+                return circleScale(d.value);
             })
             .attr("cy", function() {
                 if (numberOfArchetypes <= 4) {
@@ -227,9 +225,11 @@ class aa_view {
 
             let circles = d3.select('#circle' + i);
 
+            let circleScale = this.xScale;
+
             circles.append("circle")
                 .attr("cx", function(d) {
-                    return this.xScale(this.filteredData);
+                    return circleScale(this.filteredData);
                 })
                 .attr("cy", function() {
                     if (this.numberOfArchetypes <= 4) {
