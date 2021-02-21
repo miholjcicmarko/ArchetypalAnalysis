@@ -314,6 +314,10 @@ class aa_view {
 
         let filteredData = this.filterObjsInArr(rawData, chosenVariables);
 
+        
+
+
+
 
     }
 
