@@ -312,6 +312,12 @@ class aa_view {
         let w = 500 - margin.right - margin.left;
         let h = 400 - margin.bottom - margin.top;
 
+        let svg = d3.select("#bar1")
+            .append("svg")
+            .attr("id", "bars")
+            .attr("width", w + margin.right + margin.left)
+            .attr("height", h + margin.top + margin.bottom);
+
         let filteredData = this.filterObjsInArr(rawData, chosenVariables);
 
         for (let i = 0; i < chosenVariables.length; i++) {
@@ -331,21 +337,12 @@ class aa_view {
                                .range([0, h-5]);
 
                 
+
             }
 
 
 
         }
-
-        let svg = d3.select("#bar1")
-            .append("svg")
-            .classed("plot-svg", true)
-            .attr("id", "bars")
-            .attr("width", w + margin.right + margin.left)
-            .attr("height", h + margin.top + margin.bottom);
-
-
-
 
     }
 
