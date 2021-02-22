@@ -364,13 +364,13 @@ class aa_view {
                            
                 yaxis.append("text")
                      .attr("class", "axis-label")
-                     .attr("transform", "translate(" +(3*margin.left)+ w/numberOfArch - barpadding + ",0)")
+                     .attr("transform", "translate(" +(3*margin.left) + w/numberOfArch - barpadding + "," + 0+ ")")
                      .attr("text-anchor", "middle")
                      .attr("class", "axis-label")
                      .text("cases");
                            
                 yaxis.call(d3.axisLeft(yScale).ticks(5))
-                     .attr("transform", "translate(" + (3*margin.left)+ w/numberOfArch - barpadding"," + "5)")
+                     .attr("transform", "translate(" + (3*margin.left)+ w/numberOfArch - barpadding +"," + "5)")
                      .attr("class", "axis_line");
                    
                 let xaxis = svg.append("g")
