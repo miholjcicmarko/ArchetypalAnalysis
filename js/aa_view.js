@@ -312,7 +312,7 @@ class aa_view {
 
         let margin = {top: 10, right: 20, bottom: 10, left: 20};
         
-        let w = (600 - margin.right - margin.left)/numberOfArch;
+        let w = (600 - margin.right - margin.left);
         let h = 370 - margin.bottom - margin.top;
         let barpadding = 1;
 
@@ -321,12 +321,24 @@ class aa_view {
         // make more general
         let specificData = filteredData.filter(d => d.state.toLowerCase().includes(this.variable_name));   
 
+        let ydata = [];
+        let rawDataVarSpecific = [];
+
         for (let i = 0; i < chosenVariables.length; i++) {
 
             if (chosenVariables[i] !== "state") {
 
+                for (let k = 0; k < specificData.length; k++){
+                    ydata.push(parseInt(specificData[k][""+chosenVariables[i]]))
+                }
+
+                for (let k = 0; k < filteredData.length; k++) {
+                    rawDataVarSpecific.push(parseInt(filteredData[k][""+chosenVariables[i]]));
+                }
+            }
+
+        }
                 let svg = d3.select("#bar1")
-                            .append("div")
                             .append("svg")
                             .attr("id", "bars" + i)
                             .attr("width", w + margin.right + margin.left)
@@ -359,28 +371,26 @@ class aa_view {
                         return yScale(ydata);
                     })
                    .attr("fill","steelblue")
-                   .attr("transform", "translate(" + (3*margin.left) + w/numberOfArch - barpadding +"," + 0+")");
+                   .attr("transform", "translate(0,0)");
                        
                 let yaxis = svg.append("g")
                                 .attr("id", "y-axis" + i);
                            
                 yaxis.append("text")
                      .text("cases")
-                     .attr("transform", "translate(0,10)")
+                     .attr("transform", "translate(0,0)")
                      .attr("class", "axis-label")
                      .attr("text-anchor", "middle");
                            
                 yaxis.call(d3.axisLeft(yScale).ticks(5))
-                     .attr("transform", "translate(" + (3*margin.left) + w/numberOfArch -           barpadding +"," + 0+")")
+                     .attr("transform", "translate(0,0)")
                      .attr("class", "axis_line");
                    
                 let xaxis = svg.append("g")
                                .attr("id", "x-axis" + i)
-                               .attr("transform", "translate(" + (3*margin.left) + w/numberOfArch - barpadding +"," + 0+")")
+                               .attr("transform", "translate(0,0)")
                                .call(d3.axisBottom(x_lab));
 
-            }
-        }
     }
 
     filterObjsInArr (arr, selection) {
