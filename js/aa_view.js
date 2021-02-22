@@ -329,7 +329,7 @@ class aa_view {
 
         for (let i = 0; i < chosenVariables.length; i++) {
 
-            if (parseInt(chosenVariables[i]) !== NaN || chosenVariables[i] !== "state") {
+            if (parseInt(chosenVariables[i]) != NaN || chosenVariables[i] != "state") {
                 let x_lab = d3.scaleBand()
                           .domain(["" + chosenVariables[i]])
                           .range([0,(w-5)/numberOfArch]);
@@ -348,7 +348,7 @@ class aa_view {
                     .enter()
                     .append("rect")
                     .attr("x", function (d,i) {
-                            return i * (w/numberOfArch)
+                            return i * (w/numberOfArch) + (i*(w/numberOfArch))
                         })
                     .attr("y", function(d,i) {
                             return yScale(d);
@@ -359,7 +359,7 @@ class aa_view {
                     })
                     .attr("fill","steelblue")
                     .attr("transform", "translate(" + 3*margin.left +
-                               "," + 0+")");
+                               "," + (i*w/numberOfArch - barpadding)+")");
                        
                 let yaxis = svg.append("g")
                                 .attr("id", "y-axis" + i);
@@ -377,7 +377,7 @@ class aa_view {
                    
                 let xaxis = svg.append("g")
                                .attr("id", "x-axis" + i)
-                               .attr("transform", "translate(" +3*margin.left+ "," +h+")")
+                               .attr("transform", "translate(" +(i*(3*margin.left))+ "," +h+")")
                                .call(d3.axisBottom(x_lab));
             
             }
