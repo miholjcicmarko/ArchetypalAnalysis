@@ -120,8 +120,6 @@ class aa_view {
             this.dataS[i].push(point);
         }
 
-        this.variable_name = this.dataS[0].variable_name;
-
         let circles = oneD.append("g")
                 .attr("id", "circle"+i);
 
@@ -173,6 +171,7 @@ class aa_view {
             let searchVal = searchBar.property("value").toLowerCase();
             if (e.keyCode === 13 || searchVal == "") {
                 this.onSearch(searchVal,this.dataS, this.numberOfArchetypes);
+                that.variable_name = searchVal;
             }
             
         });
@@ -277,8 +276,8 @@ class aa_view {
 
             let margin_top = this.margin.top;
 
-            let numberOfArch = this.numberOfArchetypes;
-
+            let numberOfArch = this.numberOfArchetypes; 
+            
             circles.append("circle")
                 .attr("cx", circleScale(this.filteredData[0].value))
                 .attr("cy", function() {
@@ -302,8 +301,6 @@ class aa_view {
                 })
                 .classed("hovered", true);
 
-
-            
         }
     }
 
@@ -326,7 +323,8 @@ class aa_view {
 
         let filteredData = this.filterObjsInArr(rawData, chosenVariables);
 
-        
+        // make more general
+        filteredData = filteredData.filter(d => d.state.toLowerCase().includes(this.variable_name));      
 
         for (let i = 0; i < chosenVariables.length; i++) {
 
@@ -340,7 +338,8 @@ class aa_view {
                     ydata.push(parseInt(filteredData[k][""+chosenVariables[i]]))
                 }
                 
-                let yScale = d3.scaleLinear()
+                if (ydata[0] !== NaN) {
+                    let yScale = d3.scaleLinear()
                                .domain([d3.max(ydata), 0])
                                .range([0, (h-5)/numberOfArch]);
 
@@ -380,13 +379,9 @@ class aa_view {
                                .attr("id", "x-axis" + i)
                                .attr("transform", "translate(" +3*margin.left+ "," +h+")")
                                .call(d3.axisBottom(x_lab));
-
+                }
             }
-
-
-
         }
-
     }
 
     filterObjsInArr (arr, selection) {
