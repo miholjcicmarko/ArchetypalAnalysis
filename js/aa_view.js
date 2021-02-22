@@ -366,8 +366,7 @@ class aa_view {
                            
                 yaxis.append("text")
                      .attr("class", "axis-label")
-                     .attr("transform", "translate(" + 0
-                                       + "," + 0)
+                     .attr("transform", "translate(0,0)")
                      .attr("text-anchor", "middle")
                      .attr("class", "axis-label");
                            
