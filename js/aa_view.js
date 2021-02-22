@@ -325,7 +325,7 @@ class aa_view {
         let filteredData = this.filterObjsInArr(rawData, chosenVariables);
 
         // make more general
-        specificData = filteredData.filter(d => d.state.toLowerCase().includes(this.variable_name));   
+        let specificData = filteredData.filter(d => d.state.toLowerCase().includes(this.variable_name));   
 
         for (let i = 0; i < chosenVariables.length; i++) {
 
@@ -337,6 +337,12 @@ class aa_view {
                 let ydata = [];
                 for (let k = 0; k < specificData.length; k++){
                     ydata.push(parseInt(specificData[k][""+chosenVariables[i]]))
+                }
+
+                let rawDataVarSpecific = [];
+                for (let k = 0; k < filteredData.length; k++) {
+                    rawDataVarSpecific.push(parseInt(filteredData[k][""+chosenVariables[i]]));
+                    
                 }
                 
                 let yScale = d3.scaleLinear()
