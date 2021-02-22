@@ -370,12 +370,12 @@ class aa_view {
                      .attr("text-anchor", "middle");
                            
                 yaxis.call(d3.axisLeft(yScale).ticks(5))
-                     .attr("transform", "translate(0,10)")
+                     .attr("transform", "translate(" + (3*margin.left) + w/numberOfArch -           barpadding +"," + 0+")")
                      .attr("class", "axis_line");
                    
                 let xaxis = svg.append("g")
                                .attr("id", "x-axis" + i)
-                               .attr("transform", "translate(10,0)")
+                               .attr("transform", "translate(" + (3*margin.left) + w/numberOfArch - barpadding +"," + 0+")")
                                .call(d3.axisBottom(x_lab));
 
             }
