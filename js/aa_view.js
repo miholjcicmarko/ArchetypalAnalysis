@@ -353,7 +353,7 @@ class aa_view {
                 for (let i = 1; i < chosenVariables.length; i++) {
                     let x_var = d3.scaleBand()
                           .domain(["" + chosenVariables[i]])
-                          .range([0,(w-5)/numberOfArch]);
+                          .range([0,w/(chosenVariables.length-1) - barpadding]);
                     x_lab.push(x_var);
 
                     let arrayRaw = rawDataVarSpecific[i-1];
@@ -426,10 +426,10 @@ class aa_view {
                      .attr("transform", "translate(" + 3*margin.left + ",5)")
                      .attr("class", "axis_line");
                    
-                // let xaxis = svg.append("g")
-                //                .attr("id", "x-axis" + i)
-                //                .attr("transform", "translate(0,0)")
-                //                .call(d3.axisBottom(x_lab));
+                let xaxis = svg.append("g")
+                               .attr("id", "x-axis")
+                               .attr("transform", "translate(" + 3*margin.left +"," + h + ")")
+                               .call(d3.axisBottom(x_lab[0]));
 
     }
 
