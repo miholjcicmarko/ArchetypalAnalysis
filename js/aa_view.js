@@ -1,9 +1,11 @@
-// class PlotData {
-//     constructor (value, variable) {
-//         this.value = value;
-//         this.variable = variable;
-//     }
-// }
+class PlotData {
+    constructor (value, variable_name) {
+        this.value = value;
+        this.variable_name = variable_name;
+
+        this.country = null;
+    }
+}
 
 class aa_view {
 
@@ -117,6 +119,8 @@ class aa_view {
             let point = new PlotData(this.S[p][i],this.S[p].state); 
             this.dataS[i].push(point);
         }
+
+        this.variable_name = this.dataS[0].variable_name;
 
         let circles = oneD.append("g")
                 .attr("id", "circle"+i);
@@ -322,6 +326,8 @@ class aa_view {
 
         let filteredData = this.filterObjsInArr(rawData, chosenVariables);
 
+        
+
         for (let i = 0; i < chosenVariables.length; i++) {
 
             if (parseInt(chosenVariables[i]) !== NaN) {
@@ -338,7 +344,42 @@ class aa_view {
                                .domain([d3.max(ydata), 0])
                                .range([0, (h-5)/numberOfArch]);
 
-                
+                svg.selectAll("rect")
+                    .data(ydata)
+                    .enter()
+                    .append("rect")
+                    .attr("x", function (d,i) {
+                            return i * (w/numberOfArch)
+                        })
+                    .attr("y", function(d,i) {
+                            return yScale(d);
+                        })
+                    .attr("width", w/numberOfArch - barpadding)
+                    .attr("height", function(d) {
+                        return h-yScale(d);
+                    })
+                    .attr("fill","steelblue")
+                    .attr("transform", "translate(" + 3*margin.left +
+                               "," + 0+")");
+                       
+                let yaxis = svg.append("g")
+                                .attr("id", "y-axis" + i);
+                           
+                yaxis.append("text")
+                     .attr("class", "axis-label")
+                     .attr("transform", "translate(" + 0
+                                       + "," + 0)
+                     .attr("text-anchor", "middle")
+                     .attr("class", "axis-label");
+                           
+                yaxis.call(d3.axisLeft(yScale).ticks(5))
+                     .attr("transform", "translate(" + 3*margin.left + "," + "5)")
+                     .attr("class", "axis_line");
+                   
+                let xaxis = svg.append("g")
+                               .attr("id", "x-axis" + i)
+                               .attr("transform", "translate(" +3*margin.left+ "," +h+")")
+                               .call(d3.axisBottom(x_lab));
 
             }
 

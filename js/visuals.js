@@ -1,14 +1,5 @@
 //const { i } = require("mathjs");
 
-class PlotData {
-    constructor (value, variable_name) {
-        this.value = value;
-        this.variable_name = variable_name;
-
-        this.country = null;
-    }
-}
-
 class PlotLine {
     constructor (date, value) {
         return {
