@@ -336,7 +336,6 @@ class aa_view {
                     rawDataVarSpecific.push(parseInt(filteredData[k][""+chosenVariables[i]]));
                 }
             }
-
         }
                 let svg = d3.select("#bar1")
                             .append("svg")
@@ -348,16 +347,16 @@ class aa_view {
                           .domain(["" + chosenVariables[i]])
                           .range([0,(w-5)/numberOfArch]);
 
-                let ydata = [];
-                for (let k = 0; k < specificData.length; k++){
-                    ydata.push(parseInt(specificData[k][""+chosenVariables[i]]))
-                }
+                // let ydata = [];
+                // for (let k = 0; k < specificData.length; k++){
+                //     ydata.push(parseInt(specificData[k][""+chosenVariables[i]]))
+                // }
 
-                let rawDataVarSpecific = [];
-                for (let k = 0; k < filteredData.length; k++) {
-                    rawDataVarSpecific.push(parseInt(filteredData[k][""+chosenVariables[i]]));
+                // let rawDataVarSpecific = [];
+                // for (let k = 0; k < filteredData.length; k++) {
+                //     rawDataVarSpecific.push(parseInt(filteredData[k][""+chosenVariables[i]]));
 
-                }
+                // }
                 
                 let yScale = d3.scaleLinear()
                                .domain([d3.max(rawDataVarSpecific), 0])
