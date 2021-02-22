@@ -325,7 +325,7 @@ class aa_view {
         let filteredData = this.filterObjsInArr(rawData, chosenVariables);
 
         // make more general
-        filteredData = filteredData.filter(d => d.state.toLowerCase().includes(this.variable_name));   
+        specificData = filteredData.filter(d => d.state.toLowerCase().includes(this.variable_name));   
 
         for (let i = 0; i < chosenVariables.length; i++) {
 
@@ -335,12 +335,12 @@ class aa_view {
                           .range([0,(w-5)/numberOfArch]);
 
                 let ydata = [];
-                for (let k = 0; k < filteredData.length; k++){
-                    ydata.push(parseInt(filteredData[k][""+chosenVariables[i]]))
+                for (let k = 0; k < specificData.length; k++){
+                    ydata.push(parseInt(specificData[k][""+chosenVariables[i]]))
                 }
                 
                 let yScale = d3.scaleLinear()
-                               .domain([d3.max(ydata), 0])
+                               .domain([d3.max(filteredData["" +chosenVariables[i]]), 0])
                                .range([0, (h-5)]);
 
                 svg.selectAll("rect")
@@ -348,7 +348,7 @@ class aa_view {
                     .enter()
                     .append("rect")
                     .attr("x", function (d,i) {
-                            return (i-1) * (w/numberOfArch) + ((i-1)*(w/numberOfArch))
+                            return (i * w/numberOfArch)
                         })
                     .attr("y", function(d,i) {
                             return 5 + yScale(d);
@@ -358,25 +358,25 @@ class aa_view {
                         return yScale(d);
                     })
                     .attr("fill","steelblue")
-                    .attr("transform", "translate(" + 3*margin.left +
-                               "," + ((i-1)*w/numberOfArch - barpadding)+")");
+                    .attr("transform", "translate(" + ((i+1)*3*margin.left) +
+                               "," + (i*w/numberOfArch - barpadding)+")");
                        
                 let yaxis = svg.append("g")
                                 .attr("id", "y-axis" + i);
                            
                 yaxis.append("text")
                      .attr("class", "axis-label")
-                     .attr("transform", "translate(0,0)")
+                     .attr("transform", "translate(" +(i+1)*3*margin.left+",0)")
                      .attr("text-anchor", "middle")
                      .attr("class", "axis-label");
                            
                 yaxis.call(d3.axisLeft(yScale).ticks(5))
-                     .attr("transform", "translate(" + 3*margin.left + "," + "5)")
+                     .attr("transform", "translate(" + (i+1)*3*margin.left + "," + "5)")
                      .attr("class", "axis_line");
                    
                 let xaxis = svg.append("g")
                                .attr("id", "x-axis" + i)
-                               .attr("transform", "translate(" +i*(3*margin.left) + (3*margin.left)+ "," +h+")")
+                               .attr("transform", "translate(" ((i+1)*3*margin.left)+ "," +h+")")
                                .call(d3.axisBottom(x_lab));
             
             }
