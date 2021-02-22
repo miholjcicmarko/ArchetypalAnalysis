@@ -351,7 +351,7 @@ class aa_view {
                             return i * (w/numberOfArch) + (i*(w/numberOfArch))
                         })
                     .attr("y", function(d,i) {
-                            return yScale(d);
+                            return 5 + yScale(d);
                         })
                     .attr("width", w/numberOfArch - barpadding)
                     .attr("height", function(d) {
