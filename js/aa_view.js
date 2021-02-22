@@ -312,15 +312,9 @@ class aa_view {
 
         let margin = {top: 10, right: 20, bottom: 10, left: 20};
         
-        let w = 500 - margin.right - margin.left;
-        let h = 400 - margin.bottom - margin.top;
+        let w = (600 - margin.right - margin.left)/numberOfArch;
+        let h = 370 - margin.bottom - margin.top;
         let barpadding = 1;
-
-        let svg = d3.select("#bar1")
-            .append("svg")
-            .attr("id", "bars")
-            .attr("width", w + margin.right + margin.left)
-            .attr("height", h + margin.top + margin.bottom);
 
         let filteredData = this.filterObjsInArr(rawData, chosenVariables);
 
@@ -328,6 +322,12 @@ class aa_view {
         let specificData = filteredData.filter(d => d.state.toLowerCase().includes(this.variable_name));   
 
         for (let i = 0; i < chosenVariables.length; i++) {
+
+            let svg = d3.select("#bar1")
+                .append("svg")
+                .attr("id", "bars" + i)
+                .attr("width", w + margin.right + margin.left)
+                .attr("height", h + margin.top + margin.bottom);
 
             if (chosenVariables[i] !== "state") {
                 let x_lab = d3.scaleBand()
@@ -350,34 +350,33 @@ class aa_view {
                                .range([0, (h-5)]);
 
                 svg.append("rect")
-                    .attr("x", (i * w/numberOfArch))
-                    .attr("y", yScale(ydata))
-                    .attr("width", w/numberOfArch - barpadding)
-                    .attr("height", function(d) {
+                   .attr("x", (i * w/numberOfArch))
+                   .attr("y", yScale(ydata))
+                   .attr("width", w/numberOfArch - barpadding)
+                   .attr("height", function(d) {
                         return yScale(ydata);
                     })
-                    .attr("fill","steelblue")
-                    .attr("transform", "translate(" + (3*margin.left) + w/numberOfArch - barpadding +"," + 0+")");
+                   .attr("fill","steelblue")
+                   .attr("transform", "translate(" + (3*margin.left) + w/numberOfArch - barpadding +"," + 0+")");
                        
                 let yaxis = svg.append("g")
                                 .attr("id", "y-axis" + i);
                            
                 yaxis.append("text")
+                     .text("cases")
+                     .attr("transform", "translate(0,10)")
                      .attr("class", "axis-label")
-                     .attr("transform", "translate(" +(3*margin.left) + w/numberOfArch - barpadding + "," + 0+ ")")
-                     .attr("text-anchor", "middle")
-                     .attr("class", "axis-label")
-                     .text("cases");
+                     .attr("text-anchor", "middle");
                            
                 yaxis.call(d3.axisLeft(yScale).ticks(5))
-                     .attr("transform", "translate(" + (3*margin.left)+ w/numberOfArch - barpadding +"," + "5)")
+                     .attr("transform", "translate(0,10)")
                      .attr("class", "axis_line");
                    
                 let xaxis = svg.append("g")
                                .attr("id", "x-axis" + i)
-                               .attr("transform", "translate(" + (3*margin.left)+ w/numberOfArch - barpadding + "," +h+")")
+                               .attr("transform", "translate(10,0)")
                                .call(d3.axisBottom(x_lab));
-            
+                               
             }
         }
     }
