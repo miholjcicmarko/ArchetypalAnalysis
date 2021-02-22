@@ -342,11 +342,11 @@ class aa_view {
                 let rawDataVarSpecific = [];
                 for (let k = 0; k < filteredData.length; k++) {
                     rawDataVarSpecific.push(parseInt(filteredData[k][""+chosenVariables[i]]));
-                    
+
                 }
                 
                 let yScale = d3.scaleLinear()
-                               .domain([d3.max(filteredData["" +chosenVariables[i]]), 0])
+                               .domain([d3.max(rawDataVarSpecific), 0])
                                .range([0, (h-5)]);
 
                 svg.selectAll("rect")
