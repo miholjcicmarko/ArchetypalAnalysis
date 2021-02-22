@@ -97,6 +97,7 @@
     fill: none;
     stroke: #000;
     shape-rendering: crispEdges;
+    font-size: 9px;
 }
 
 div.tooltip {

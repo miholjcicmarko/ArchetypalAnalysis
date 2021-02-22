@@ -314,7 +314,7 @@ class aa_view {
         
         let w = 600 - margin.right - margin.left;
         let h = 350 - margin.bottom - margin.top;
-        let barpadding = 1;
+        let barpadding = 45;
 
         let filteredData = this.filterObjsInArr(rawData, chosenVariables);
 
@@ -344,8 +344,8 @@ class aa_view {
                 let svg = d3.select("#bar1")
                             .append("svg")
                             .attr("id", "bars")
-                            .attr("width", w)
-                            .attr("height", h);
+                            .attr("width", w + margin.right + margin.left)
+                            .attr("height", h + margin.top + margin.bottom);
                         
                 let x_lab = [];
                 let yScale = [];
@@ -399,7 +399,8 @@ class aa_view {
                         let scale = yScale[i];
                         return h-scale(d);
                     })
-                    .attr("fill","pink");
+                    .attr("fill","orangered")
+                    .attr("transform", "translate(60,0)");
 
 
                 // svg.append("rect")
@@ -417,18 +418,18 @@ class aa_view {
                            
                 yaxis.append("text")
                      .text("cases")
-                     .attr("transform", "translate(0,0)")
+                     .attr("transform", "translate(15,50)")
                      .attr("class", "axis-label")
                      .attr("text-anchor", "middle");
                            
-                yaxis.call(d3.axisLeft(yScale).ticks(5))
-                     .attr("transform", "translate(0,0)")
+                yaxis.call(d3.axisLeft(yScale[0]).ticks(5))
+                     .attr("transform", "translate(" + 3*margin.left + ",5)")
                      .attr("class", "axis_line");
                    
-                let xaxis = svg.append("g")
-                               .attr("id", "x-axis" + i)
-                               .attr("transform", "translate(0,0)")
-                               .call(d3.axisBottom(x_lab));
+                // let xaxis = svg.append("g")
+                //                .attr("id", "x-axis" + i)
+                //                .attr("transform", "translate(0,0)")
+                //                .call(d3.axisBottom(x_lab));
 
     }
 
