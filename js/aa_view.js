@@ -75,7 +75,7 @@ class aa_view {
             }
             else {
                 oneD.attr("height", (height / numberOfArchetypes) - this.margin.top
-                            - this.margin.bottom - this.margin.bottom);
+                            - this.margin.bottom);
             }
 
             oneD.append("text")
@@ -313,7 +313,7 @@ class aa_view {
         let margin = {top: 10, right: 20, bottom: 10, left: 20};
         
         let w = 600 - margin.right - margin.left;
-        let h = 370 - margin.bottom - margin.top;
+        let h = 350 - margin.bottom - margin.top;
         let barpadding = 1;
 
         let filteredData = this.filterObjsInArr(rawData, chosenVariables);
@@ -332,22 +332,41 @@ class aa_view {
                     let number = parseInt(specificData[k][""+chosenVariables[i]]);
                     ydata.push(number);
                 }
+                let arrayofData = [];
 
                 for (let k = 0; k < filteredData.length; k++) {
                     let number = parseInt(filteredData[k][""+chosenVariables[i]])
-                    rawDataVarSpecific[i].push(number);
+                    arrayofData.push(number);
                 }
+                rawDataVarSpecific.push(arrayofData);
             }
         }
                 let svg = d3.select("#bar1")
                             .append("svg")
-                            .attr("id", "bars" + i)
+                            .attr("id", "bars")
                             .attr("width", w)
                             .attr("height", h);
+                        
+                let x_lab = [];
+                let yScale = [];
 
-                let x_lab = d3.scaleBand()
+                for (let i = 1; i < chosenVariables.length; i++) {
+                    let x_var = d3.scaleBand()
                           .domain(["" + chosenVariables[i]])
                           .range([0,(w-5)/numberOfArch]);
+                    x_lab.push(x_var);
+
+                    let arrayRaw = rawDataVarSpecific[i-1];
+
+                    let yScaleOne = d3.scaleLinear()
+                               .domain([d3.max(arrayRaw), 0])
+                               .range([0, (h-5)]);
+                    yScale.push(yScaleOne);
+                }
+
+                // let x_lab = d3.scaleBand()
+                //           .domain(["" + chosenVariables[i]])
+                //           .range([0,(w-5)/numberOfArch]);
 
                 // let ydata = [];
                 // for (let k = 0; k < specificData.length; k++){
@@ -360,22 +379,41 @@ class aa_view {
 
                 // }
                 
-                let yScale = d3.scaleLinear()
-                               .domain([d3.max(rawDataVarSpecific), 0])
-                               .range([0, (h-5)]);
+                // let yScale = d3.scaleLinear()
+                //                .domain([d3.max(rawDataVarSpecific), 0])
+                //                .range([0, (h-5)]);
 
-                svg.append("rect")
-                   .attr("x", (i * w/numberOfArch))
-                   .attr("y", yScale(ydata))
-                   .attr("width", w/numberOfArch - barpadding)
-                   .attr("height", function(d) {
-                        return yScale(ydata);
+                svg.selectAll("rect")
+                    .data(ydata)
+                    .enter()
+                    .append("rect")
+                    .attr("x", function (d,i) {
+                        return i * (w/(chosenVariables.length-1));
                     })
-                   .attr("fill","steelblue")
-                   .attr("transform", "translate(0,0)");
+                    .attr("y", function(d,i) {
+                        let scale = yScale[i];
+                        return scale(d);
+                    })
+                    .attr("width", w/(chosenVariables.length-1) - barpadding)
+                    .attr("height", function(d,i) {
+                        let scale = yScale[i];
+                        return h-scale(d);
+                    })
+                    .attr("fill","pink");
+
+
+                // svg.append("rect")
+                //    .attr("x", (i * w/numberOfArch))
+                //    .attr("y", yScale(ydata))
+                //    .attr("width", w/numberOfArch - barpadding)
+                //    .attr("height", function(d) {
+                //         return yScale(ydata);
+                //     })
+                //    .attr("fill","steelblue")
+                //    .attr("transform", "translate(0,0)");
                        
                 let yaxis = svg.append("g")
-                                .attr("id", "y-axis" + i);
+                                .attr("id", "y-axis");
                            
                 yaxis.append("text")
                      .text("cases")
