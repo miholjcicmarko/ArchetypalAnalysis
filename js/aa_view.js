@@ -325,8 +325,11 @@ class aa_view {
 
             if (chosenVariables[i] !== "state") {
 
-                let svg = d3.select("#bar1")
-                            .append("svg")
+                let div = d3.select("#bar1")
+                            .append("div")
+                            .classed("bars-container");
+
+                        div.append("svg")
                             .attr("id", "bars" + i)
                             .attr("width", w + margin.right + margin.left)
                             .attr("height", h + margin.top + margin.bottom);

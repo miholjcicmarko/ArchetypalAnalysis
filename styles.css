@@ -148,3 +148,6 @@ div.tooltip {
     stroke-width: 3;
 }
 
+.bars-container {
+    float: left;
+}
