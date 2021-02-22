@@ -325,11 +325,11 @@ class aa_view {
         let filteredData = this.filterObjsInArr(rawData, chosenVariables);
 
         // make more general
-        filteredData = filteredData.filter(d => d.state.toLowerCase().includes(this.variable_name));      
+        filteredData = filteredData.filter(d => d.state.toLowerCase().includes(this.variable_name));   
 
         for (let i = 0; i < chosenVariables.length; i++) {
 
-            if (parseInt(chosenVariables[i]) != NaN || chosenVariables[i] != "state") {
+            if (chosenVariables[i] !== "state") {
                 let x_lab = d3.scaleBand()
                           .domain(["" + chosenVariables[i]])
                           .range([0,(w-5)/numberOfArch]);
@@ -341,25 +341,25 @@ class aa_view {
                 
                 let yScale = d3.scaleLinear()
                                .domain([d3.max(ydata), 0])
-                               .range([0, (h-5)/numberOfArch]);
+                               .range([0, (h-5)]);
 
                 svg.selectAll("rect")
                     .data(ydata)
                     .enter()
                     .append("rect")
                     .attr("x", function (d,i) {
-                            return i * (w/numberOfArch) + (i*(w/numberOfArch))
+                            return (i-1) * (w/numberOfArch) + ((i-1)*(w/numberOfArch))
                         })
                     .attr("y", function(d,i) {
                             return 5 + yScale(d);
                         })
                     .attr("width", w/numberOfArch - barpadding)
                     .attr("height", function(d) {
-                        return h-yScale(d);
+                        return yScale(d);
                     })
                     .attr("fill","steelblue")
                     .attr("transform", "translate(" + 3*margin.left +
-                               "," + (i*w/numberOfArch - barpadding)+")");
+                               "," + ((i-1)*w/numberOfArch - barpadding)+")");
                        
                 let yaxis = svg.append("g")
                                 .attr("id", "y-axis" + i);
@@ -376,7 +376,7 @@ class aa_view {
                    
                 let xaxis = svg.append("g")
                                .attr("id", "x-axis" + i)
-                               .attr("transform", "translate(" +(i*(3*margin.left))+ "," +h+")")
+                               .attr("transform", "translate(" +i*(3*margin.left) + (3*margin.left)+ "," +h+")")
                                .call(d3.axisBottom(x_lab));
             
             }
