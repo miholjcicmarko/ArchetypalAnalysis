@@ -305,6 +305,8 @@ class aa_view {
 
     makeBarCharts (chosenVariables, rawData) {
 
+        let numberOfArch = this.numberOfArchetypes;
+
         d3.select("#buttonGroup").remove();
 
         let margin = {top: 10, right: 20, bottom: 10, left: 20};
@@ -325,7 +327,7 @@ class aa_view {
             if (parseInt(chosenVariables[i]) !== NaN) {
                 let x_lab = d3.scaleBand()
                           .domain(["" + chosenVariables[i]])
-                          .range([0,w-5]);
+                          .range([0,(w-5)/numberOfArch]);
 
                 let ydata = [];
                 for (let k = 0; k < filteredData.length; k++){
@@ -334,7 +336,7 @@ class aa_view {
                 
                 let yScale = d3.scaleLinear()
                                .domain([d3.max(ydata), 0])
-                               .range([0, h-5]);
+                               .range([0, (h-5)/numberOfArch]);
 
                 
 
