@@ -347,7 +347,7 @@ class aa_view {
                 
                 let yScale = d3.scaleLinear()
                                .domain([d3.max(rawDataVarSpecific), 0])
-                               .range([0, (h-5)]);
+                               .range([0, (h)]);
 
                 svg.selectAll("rect")
                     .data(ydata)
@@ -357,7 +357,7 @@ class aa_view {
                             return (i * w/numberOfArch)
                         })
                     .attr("y", function(d,i) {
-                            return 5 + yScale(d);
+                            return yScale(d);
                         })
                     .attr("width", w/numberOfArch - barpadding)
                     .attr("height", function(d) {
@@ -382,7 +382,7 @@ class aa_view {
                    
                 let xaxis = svg.append("g")
                                .attr("id", "x-axis" + i)
-                               .attr("transform", "translate(" ((i+1)*3*margin.left)+ "," +h+")")
+                               .attr("transform", "translate(" + ((i+1)*3*margin.left)+ "," +h+")")
                                .call(d3.axisBottom(x_lab));
             
             }
