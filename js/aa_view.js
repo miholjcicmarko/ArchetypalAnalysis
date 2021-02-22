@@ -323,13 +323,14 @@ class aa_view {
 
         for (let i = 0; i < chosenVariables.length; i++) {
 
-            let svg = d3.select("#bar1")
-                .append("svg")
-                .attr("id", "bars" + i)
-                .attr("width", w + margin.right + margin.left)
-                .attr("height", h + margin.top + margin.bottom);
-
             if (chosenVariables[i] !== "state") {
+
+                let svg = d3.select("#bar1")
+                            .append("svg")
+                            .attr("id", "bars" + i)
+                            .attr("width", w + margin.right + margin.left)
+                            .attr("height", h + margin.top + margin.bottom);
+
                 let x_lab = d3.scaleBand()
                           .domain(["" + chosenVariables[i]])
                           .range([0,(w-5)/numberOfArch]);
@@ -376,7 +377,7 @@ class aa_view {
                                .attr("id", "x-axis" + i)
                                .attr("transform", "translate(10,0)")
                                .call(d3.axisBottom(x_lab));
-                               
+
             }
         }
     }
