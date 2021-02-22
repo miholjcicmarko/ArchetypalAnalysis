@@ -357,26 +357,25 @@ class aa_view {
                         return yScale(ydata);
                     })
                     .attr("fill","steelblue")
-                    .attr("transform", "translate(" + ((i+1)*3*margin.left) +
-                               "," + 0+")");
+                    .attr("transform", "translate(" + (3*margin.left) + w/numberOfArch - barpadding +"," + 0+")");
                        
                 let yaxis = svg.append("g")
                                 .attr("id", "y-axis" + i);
                            
                 yaxis.append("text")
                      .attr("class", "axis-label")
-                     .attr("transform", "translate(" +(i+1)*3*margin.left+",0)")
+                     .attr("transform", "translate(" +(3*margin.left)+ w/numberOfArch - barpadding + ",0)")
                      .attr("text-anchor", "middle")
                      .attr("class", "axis-label")
                      .text("cases");
                            
                 yaxis.call(d3.axisLeft(yScale).ticks(5))
-                     .attr("transform", "translate(" + (i+1)*3*margin.left + "," + "5)")
+                     .attr("transform", "translate(" + (3*margin.left)+ w/numberOfArch - barpadding"," + "5)")
                      .attr("class", "axis_line");
                    
                 let xaxis = svg.append("g")
                                .attr("id", "x-axis" + i)
-                               .attr("transform", "translate(" + ((i+1)*3*margin.left)+ "," +h+")")
+                               .attr("transform", "translate(" + (3*margin.left)+ w/numberOfArch - barpadding + "," +h+")")
                                .call(d3.axisBottom(x_lab));
             
             }
