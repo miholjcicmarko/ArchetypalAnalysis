@@ -347,25 +347,18 @@ class aa_view {
                 
                 let yScale = d3.scaleLinear()
                                .domain([d3.max(rawDataVarSpecific), 0])
-                               .range([0, (h)]);
+                               .range([0, (h-5)]);
 
-                svg.selectAll("rect")
-                    .data(ydata)
-                    .enter()
-                    .append("rect")
-                    .attr("x", function (d,i) {
-                            return (i * w/numberOfArch)
-                        })
-                    .attr("y", function(d,i) {
-                            return yScale(d);
-                        })
+                svg.append("rect")
+                    .attr("x", (i * w/numberOfArch))
+                    .attr("y", yScale(ydata))
                     .attr("width", w/numberOfArch - barpadding)
                     .attr("height", function(d) {
-                        return yScale(d);
+                        return yScale(ydata);
                     })
                     .attr("fill","steelblue")
                     .attr("transform", "translate(" + ((i+1)*3*margin.left) +
-                               "," + (i*w/numberOfArch - barpadding)+")");
+                               "," + 0+")");
                        
                 let yaxis = svg.append("g")
                                 .attr("id", "y-axis" + i);
@@ -374,7 +367,8 @@ class aa_view {
                      .attr("class", "axis-label")
                      .attr("transform", "translate(" +(i+1)*3*margin.left+",0)")
                      .attr("text-anchor", "middle")
-                     .attr("class", "axis-label");
+                     .attr("class", "axis-label")
+                     .text("cases");
                            
                 yaxis.call(d3.axisLeft(yScale).ticks(5))
                      .attr("transform", "translate(" + (i+1)*3*margin.left + "," + "5)")
