@@ -312,7 +312,7 @@ class aa_view {
 
         let margin = {top: 10, right: 20, bottom: 10, left: 20};
         
-        let w = (600 - margin.right - margin.left);
+        let w = 600 - margin.right - margin.left;
         let h = 370 - margin.bottom - margin.top;
         let barpadding = 1;
 
@@ -329,19 +329,21 @@ class aa_view {
             if (chosenVariables[i] !== "state") {
 
                 for (let k = 0; k < specificData.length; k++){
-                    ydata.push(parseInt(specificData[k][""+chosenVariables[i]]))
+                    let number = parseInt(specificData[k][""+chosenVariables[i]]);
+                    ydata.push(number);
                 }
 
                 for (let k = 0; k < filteredData.length; k++) {
-                    rawDataVarSpecific.push(parseInt(filteredData[k][""+chosenVariables[i]]));
+                    let number = parseInt(filteredData[k][""+chosenVariables[i]])
+                    rawDataVarSpecific[i].push(number);
                 }
             }
         }
                 let svg = d3.select("#bar1")
                             .append("svg")
                             .attr("id", "bars" + i)
-                            .attr("width", w + margin.right + margin.left)
-                            .attr("height", h + margin.top + margin.bottom);
+                            .attr("width", w)
+                            .attr("height", h);
 
                 let x_lab = d3.scaleBand()
                           .domain(["" + chosenVariables[i]])
