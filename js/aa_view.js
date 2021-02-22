@@ -314,6 +314,7 @@ class aa_view {
         
         let w = 500 - margin.right - margin.left;
         let h = 400 - margin.bottom - margin.top;
+        let barpadding = 1;
 
         let svg = d3.select("#bar1")
             .append("svg")
@@ -328,7 +329,7 @@ class aa_view {
 
         for (let i = 0; i < chosenVariables.length; i++) {
 
-            if (parseInt(chosenVariables[i]) !== NaN) {
+            if (parseInt(chosenVariables[i]) !== NaN || chosenVariables[i] !== "state") {
                 let x_lab = d3.scaleBand()
                           .domain(["" + chosenVariables[i]])
                           .range([0,(w-5)/numberOfArch]);
@@ -338,8 +339,7 @@ class aa_view {
                     ydata.push(parseInt(filteredData[k][""+chosenVariables[i]]))
                 }
                 
-                if (ydata[0] !== NaN) {
-                    let yScale = d3.scaleLinear()
+                let yScale = d3.scaleLinear()
                                .domain([d3.max(ydata), 0])
                                .range([0, (h-5)/numberOfArch]);
 
@@ -379,7 +379,7 @@ class aa_view {
                                .attr("id", "x-axis" + i)
                                .attr("transform", "translate(" +3*margin.left+ "," +h+")")
                                .call(d3.axisBottom(x_lab));
-                }
+            
             }
         }
     }
