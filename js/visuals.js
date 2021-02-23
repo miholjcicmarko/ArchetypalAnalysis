@@ -317,7 +317,6 @@ class visuals {
 
         let svg = d3.select("#timeL")
             .append("svg")
-            .classed("plot-svg", true)
             .attr("id", "svg-time")
             .attr("width", w + margin.right + margin.left)
             .attr("height", h + margin.top + margin.bottom)
