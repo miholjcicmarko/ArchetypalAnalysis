@@ -516,13 +516,35 @@ class aa_view {
 
         let line = d3.line()
                     .x(function(d) {
-                        return xScale(d.date);
+                        return xScale(d.death);
                     })
                     .y(function(d) {
-                        return yScale(d.y)
+                        return yScale(d.positive)
                     })
                     .curve(d3.curveMonotoneX);
 
+        let svg = d3.select("#timeL")
+            .append("svg")
+            .attr("id", "svg-time")
+            .attr("width", w + margin.right + margin.left)
+            .attr("height", h + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + 3*margin.left + "," + 0 + ")");
+
+        svg.append("g")
+            .attr("id", "x-axis")
+            .attr("transform", "translate(0," + h + ")")
+            .call(d3.axisBottom(xScale));
+
+        svg.append("g")
+            .attr("id", "y-axis")
+            .call(d3.axisLeft(yScale));
+
+        svg.append("path")
+            .datum(data)
+            .attr("id", "line-chart")
+            .attr("class", "line")
+            .attr("d", line);
     }
 
 }
