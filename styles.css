@@ -91,6 +91,7 @@
 .axis-label {
     display: inline-block;
     padding-right: 5px;
+    font-size: 10px;
 }
 
 .axis_line {

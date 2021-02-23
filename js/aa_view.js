@@ -422,9 +422,9 @@ class aa_view {
                            
                         yaxis.append("text")
                              .text("cases")
-                             .attr("transform", "translate(" + (15 + (3*margin.left)) +",50)")
                              .attr("class", "axis-label")
-                             .attr("text-anchor", "middle");
+                             .attr("text-anchor", "middle")
+                             .attr("transform", "translate(40,"+h/2+")rotate(-90)");
                            
                         yaxis.call(d3.axisLeft(yScale[i]).ticks(5))
                              .attr("transform", "translate(" + 3*margin.left + ",5)")
