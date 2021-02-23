@@ -412,24 +412,31 @@ class aa_view {
                 //     })
                 //    .attr("fill","steelblue")
                 //    .attr("transform", "translate(0,0)");
+
+                for (let i = 0; i < chosenVariables.length; i++) {
+
+                    if (chosenVariables[i] !== "state") {
                        
-                let yaxis = svg.append("g")
+                        let yaxis = svg.append("g")
                                 .attr("id", "y-axis");
                            
-                yaxis.append("text")
-                     .text("cases")
-                     .attr("transform", "translate(15,50)")
-                     .attr("class", "axis-label")
-                     .attr("text-anchor", "middle");
+                        yaxis.append("text")
+                             .text("cases")
+                             .attr("transform", "translate(" + (15 + (3*margin.left)) +",50)")
+                             .attr("class", "axis-label")
+                             .attr("text-anchor", "middle");
                            
-                yaxis.call(d3.axisLeft(yScale[0]).ticks(5))
-                     .attr("transform", "translate(" + 3*margin.left + ",5)")
-                     .attr("class", "axis_line");
+                        yaxis.call(d3.axisLeft(yScale[i]).ticks(5))
+                             .attr("transform", "translate(" + 3*margin.left + ",5)")
+                             .attr("class", "axis_line");
                    
-                let xaxis = svg.append("g")
-                               .attr("id", "x-axis")
-                               .attr("transform", "translate(" + 3*margin.left +"," + h + ")")
-                               .call(d3.axisBottom(x_lab[0]));
+                        let xaxis = svg.append("g")
+                                       .attr("id", "x-axis")
+                                       .attr("transform", "translate(" + 3*margin.left +"," + h + "")
+                                       .call(d3.axisBottom(x_lab[i]));
+                    }
+
+                }
 
     }
 
