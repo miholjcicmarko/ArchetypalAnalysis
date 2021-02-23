@@ -187,7 +187,7 @@ class aa_view {
             that.makeBarCharts(that.chosenVars, that.raw);
         });
 
-    //that.drawTimeLine(that.timeline);
+    that.drawTimeLine(that.timeline);
 
     }
 
@@ -513,7 +513,7 @@ class aa_view {
             d.date = parseTime(d.date);
         });
 
-        for (let date of Object.keys(data))
+        // for (let date of Object.keys(data))
 
         // for (let i = 0; i < data.length; i++) {
         //     data[i].date = parseTime(data[i].date);
@@ -568,16 +568,16 @@ class aa_view {
         //       .domain(res)
         //       .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999'])
 
-        svg.selectAll(".line")
-            .data(data)
-            .enter()
-            .append("g");
+        // svg.selectAll(".line")
+        //     .data(data)
+        //     .enter()
+        //     .append("g");
 
-        svg.append("path")
-            .attr("fill", "none")
-            .attr("stroke", "black")
-            .attr("stroke-width", 1.5)
-            .attr("d",line);
+        // svg.append("path")
+        //     .attr("fill", "none")
+        //     .attr("stroke", "black")
+        //     .attr("stroke-width", 1.5)
+        //     .attr("d",line);
 
 
             // .attr("d", function(d){
