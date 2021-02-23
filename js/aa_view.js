@@ -575,7 +575,7 @@ class aa_view {
             .attr("fill", "none")
             .attr("stroke", "black")
             .attr("stroke-width", 1.5)
-            .attr("d", function(d) { return line(d.values); });
+            .attr("d", line);
 
             // .attr("d", function(d){
             //     return d3.line()
