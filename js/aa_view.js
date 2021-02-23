@@ -499,7 +499,8 @@ class aa_view {
         return text;
     }
 
-    drawTimeLine(data) {
+    drawTimeLine(data) { // probably need to create an object in order to access 
+        // the attributes
 
         let margin = {top: 10, right: 20, bottom: 10, left: 20};
         
@@ -512,19 +513,7 @@ class aa_view {
             d.date = parseTime(d.date);
         });
 
-        data.then(function(data) {
-            let point = data.columns.slice(1).map(function(id) {
-                return {
-                    id: id,
-                    values: data.map(function(d) {
-                        return {
-                            data: data.date,
-                            positive: data.positive
-                        };
-                    })
-                };
-            })
-        });
+        for (let date of Object.keys(data))
 
         // for (let i = 0; i < data.length; i++) {
         //     data[i].date = parseTime(data[i].date);
@@ -550,10 +539,10 @@ class aa_view {
 
         let line = d3.line()
                      .x(function(d,i) {
-                         return xScale(d.date);
+                         return xScale(d);
                      })
                      .y(function(d,i) {
-                         return yScale(d.positive)
+                         return yScale(d)
                      });
 
         let svg = d3.select("#timeL")
