@@ -501,74 +501,72 @@ class aa_view {
 
     drawTimeLine(data) {
 
-        let margin = {top: 10, right: 20, bottom: 10, left: 20};
+        // let margin = {top: 10, right: 20, bottom: 10, left: 20};
         
-        let w = 500 - margin.right - margin.left;
-        let h = 400 - margin.bottom - margin.top;
+        // let w = 500 - margin.right - margin.left;
+        // let h = 400 - margin.bottom - margin.top;
 
-        for (let i = 0; i < data.length; i++) {
-            let date = data[i].date.split('-');
-            let date_format = new Date(date[0], date[1] - 1, date[2]);
+        // for (let i = 0; i < data.length; i++) {
+        //     let date = data[i].date.split('-');
+        //     let date_format = new Date(date[0], date[1] - 1, date[2]);
 
-            data[i].date = date_format
-        }
+        //     data[i].date = date_format
+        // }
 
-        let sumstat = d3.nest()
-                        .key(function(d) { d.state})
-                        .entries(data);
+        // let sumstat = d3.group(data, d => d.state);
 
-        let xScale = d3.scaleLinear()
-                        .domain([0, d3.max(data, d=> d.death)])
-                        .range([0, w]);
+        // let xScale = d3.scaleLinear()
+        //                 .domain([0, d3.max(data, d=> d.death)])
+        //                 .range([0, w]);
 
-        let yScale = d3.scaleLinear()
-                        .domain([0, d3.max(data, d => d.positive)])
-                        .range([h, 0]);
+        // let yScale = d3.scaleLinear()
+        //                 .domain([0, d3.max(data, d => d.positive)])
+        //                 .range([h, 0]);
 
-        // let line = d3.line()
-        //             .x(function(d) {
-        //                 return xScale(d.death);
-        //             })
-        //             .y(function(d) {
-        //                 return yScale(d.positive)
-        //             })
-        //             .curve(d3.curveMonotoneX);
+        // // let line = d3.line()
+        // //             .x(function(d) {
+        // //                 return xScale(d.death);
+        // //             })
+        // //             .y(function(d) {
+        // //                 return yScale(d.positive)
+        // //             })
+        // //             .curve(d3.curveMonotoneX);
 
-        let svg = d3.select("#timeL")
-            .append("svg")
-            .attr("id", "svg-time")
-            .attr("width", w + margin.right + margin.left)
-            .attr("height", h + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + 3*margin.left + "," + 0 + ")");
+        // let svg = d3.select("#timeL")
+        //     .append("svg")
+        //     .attr("id", "svg-time")
+        //     .attr("width", w + margin.right + margin.left)
+        //     .attr("height", h + margin.top + margin.bottom)
+        //     .append("g")
+        //     .attr("transform", "translate(" + 3*margin.left + "," + 0 + ")");
 
-        svg.append("g")
-            .attr("id", "x-axis")
-            .attr("transform", "translate(0," + h + ")")
-            .call(d3.axisBottom(xScale));
+        // svg.append("g")
+        //     .attr("id", "x-axis")
+        //     .attr("transform", "translate(0," + h + ")")
+        //     .call(d3.axisBottom(xScale));
 
-        svg.append("g")
-            .attr("id", "y-axis")
-            .call(d3.axisLeft(yScale));
+        // svg.append("g")
+        //     .attr("id", "y-axis")
+        //     .call(d3.axisLeft(yScale));
 
-        let res = sumstat.map(function(d){ return d.key }) // list of group names
-        let color = d3.scaleOrdinal()
-              .domain(res)
-              .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999'])
+        // let res = sumstat.map(function(d){ return d.key }) // list of group names
+        // let color = d3.scaleOrdinal()
+        //       .domain(res)
+        //       .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999'])
 
-        svg.selectAll(".line")
-            .data(sumstat)
-            .enter()
-            .append("path")
-            .attr("fill", "none")
-            .attr("stroke", function(d){ return color(d.key) })
-            .attr("stroke-width", 1.5)
-            .attr("d", function(d){
-                return d3.line()
-                            .x(function(d) { return x(d.year); })
-                            .y(function(d) { return y(+d.n); })
-                            (d.values)
-                });
+        // svg.selectAll(".line")
+        //     .data(sumstat)
+        //     .enter()
+        //     .append("path")
+        //     .attr("fill", "none")
+        //     .attr("stroke", function(d){ return color(d.key) })
+        //     .attr("stroke-width", 1.5)
+        //     .attr("d", function(d){
+        //         return d3.line()
+        //                     .x(function(d) { return x(d.year); })
+        //                     .y(function(d) { return y(+d.n); })
+        //                     (d.values)
+        //         });
 
         // svg.append("path")
         //     .datum(data)
