@@ -534,14 +534,14 @@ class aa_view {
                         .domain([0, d3.max(data, d => d.positive)])
                         .range([h, 0]);
 
-        let line = d3.line()
-                     .x(function(d,i) {
-                         return xScale(d.date);
-                     })
-                     .y(function(d,i) {
-                         return yScale(d.positive)
-                     })
-                     .curve(d3.curveMonotoneX);
+        // let line = d3.line()
+        //              .x(function(d,i) {
+        //                  return xScale(d.date);
+        //              })
+        //              .y(function(d,i) {
+        //                  return yScale(d.positive)
+        //              })
+        //              .curve(d3.curveMonotoneX);
 
         let svg = d3.select("#timeL")
             .append("svg")
@@ -575,7 +575,15 @@ class aa_view {
             .attr("fill", "none")
             .attr("stroke", "black")
             .attr("stroke-width", 1.5)
-            .attr("d", line);
+            .attr("d", function (d) {
+                return d3.line()
+                .x(function(d,i) {
+                    return xScale(d.date);
+                })
+                .y(function(d,i) {
+                    return yScale(d.positive)
+                });
+            });
 
             // .attr("d", function(d){
             //     return d3.line()
