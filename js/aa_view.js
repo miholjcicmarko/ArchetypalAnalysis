@@ -507,7 +507,7 @@ class aa_view {
         let h = 400 - margin.bottom - margin.top;
 
         let xScale = d3.scaleLinear()
-                        .domain([0, data.length])
+                        .domain([0, d3.max(data, d=> d.date)])
                         .range([0, w]);
 
         let yScale = d3.scaleLinear()
@@ -516,7 +516,7 @@ class aa_view {
 
         let line = d3.line()
                     .x(function(d) {
-                        return xScale(d.positive);
+                        return xScale(d.date);
                     })
                     .y(function(d) {
                         return yScale(d.y)
