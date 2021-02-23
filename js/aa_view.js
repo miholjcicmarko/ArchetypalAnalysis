@@ -187,7 +187,7 @@ class aa_view {
             that.makeBarCharts(that.chosenVars, that.raw);
         });
 
-    that.drawTimeLine(that.timeline);
+    //that.drawTimeLine(that.timeline);
 
     }
 
