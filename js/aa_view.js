@@ -418,7 +418,7 @@ class aa_view {
                     if (chosenVariables[i] !== "state") {
                        
                         let yaxis = svg.append("g")
-                                .attr("id", "y-axis");
+                                .attr("id", "y-axis" + i);
                            
                         yaxis.append("text")
                              .text("cases")
