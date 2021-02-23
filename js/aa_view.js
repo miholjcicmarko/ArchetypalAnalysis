@@ -314,7 +314,7 @@ class aa_view {
         
         let w = 600 - margin.right - margin.left;
         let h = 350 - margin.bottom - margin.top;
-        let barpadding = 45;
+        let barpadding = 70;
 
         let filteredData = this.filterObjsInArr(rawData, chosenVariables);
 
@@ -400,7 +400,7 @@ class aa_view {
                         return h-scale(d);
                     })
                     .attr("fill","orangered")
-                    .attr("transform", "translate(60,0)");
+                    .attr("transform", "translate(70,0)");
 
 
                 // svg.append("rect")
@@ -424,15 +424,15 @@ class aa_view {
                              .text("cases")
                              .attr("class", "axis-label")
                              .attr("text-anchor", "middle")
-                             .attr("transform", "translate(-50,"+h/2+")rotate(-90)");
+                             .attr("transform", "translate(" + (-60+((i-1))) +","+h/2+")rotate(-90)");
                            
                         yaxis.call(d3.axisLeft(yScale[i-1]).ticks(5))
-                             .attr("transform", "translate(" + 3*margin.left + ",5)")
+                             .attr("transform", "translate(" + ((i-1)*(w/(chosenVariables.length-1))+3*margin.left+10) + ",5)")
                              .attr("class", "axis_line");
                    
                         let xaxis = svg.append("g")
                                        .attr("id", "x-axis")
-                                       .attr("transform", "translate(0,0)")
+                                       .attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(3*margin.left+10))+","+ h+")")
                                        .call(d3.axisBottom(x_lab[i-1]));
                     }
 
