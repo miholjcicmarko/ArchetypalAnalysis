@@ -39,6 +39,8 @@ class aa_view {
                     that.drawCircleChart(number);
                 }
             });
+
+        this.drawTimeLine(this.timeline);
     
     }
 
@@ -497,7 +499,31 @@ class aa_view {
         return text;
     }
 
-    
+    drawTimeLine(data) {
+
+        let margin = {top: 10, right: 20, bottom: 10, left: 20};
+        
+        let w = 500 - margin.right - margin.left;
+        let h = 400 - margin.bottom - margin.top;
+
+        let xScale = d3.scaleLinear()
+                        .domain([0, data.length])
+                        .range([0, w]);
+
+        let yScale = d3.scaleLinear()
+                        .domain([0, d3.max(data, d => d.positive)])
+                        .range([h, 0]);
+
+        let line = d3.line()
+                    .x(function(d) {
+                        return xScale(d.positive);
+                    })
+                    .y(function(d) {
+                        return yScale(d.y)
+                    })
+                    .curve(d3.curveMonotoneX);
+
+    }
 
 }
 
