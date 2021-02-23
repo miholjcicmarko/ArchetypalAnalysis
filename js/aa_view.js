@@ -445,7 +445,7 @@ class aa_view {
                 }
             let data_rect = d3.selectAll("#bar1").selectAll("rect");
 
-            this.tooltip(data_rect);
+            this.tooltipRect(data_rect);
     }
 
     filterObjsInArr (arr, selection) {
@@ -461,6 +461,43 @@ class aa_view {
         })
         return filteredArray;
     }
+
+    tooltipRect (onscreenData) {
+        let that = this;
+        let tooltip = d3.select('.tooltip')
+
+        onscreenData.on("mouseover", function(d,i) {
+            
+            let pageX = d.clientX;
+            let pageY = d.clientY - 25;
+
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", 0.9);
+        
+            tooltip.html(that.tooltipRectRender(d))
+                .style("left", (pageX) + "px")
+                .style("top", (pageY) + "px");
+
+            d3.select(this).classed("hovered", true);
+        });
+
+        onscreenData.on("mouseout", function(d,i) {
+            d3.select(this).classed("hovered",false);
+
+            tooltip.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
+
+    }
+
+    tooltipRectRender(data) {
+        let text = data.currentTarget.__data__.value;
+        return text;
+    }
+
+    
 
 }
 
