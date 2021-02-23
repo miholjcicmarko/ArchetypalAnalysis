@@ -39,8 +39,6 @@ class aa_view {
                     that.drawCircleChart(number);
                 }
             });
-
-        this.drawTimeLine(this.timeline);
     
     }
 
@@ -188,6 +186,8 @@ class aa_view {
         submit.on("click", function(d,i) {
             that.makeBarCharts(that.chosenVars, that.raw);
         });
+
+    that.drawTimeLine(that.timeline);
 
     }
 
