@@ -508,13 +508,17 @@ class aa_view {
 
         let parseTime = d3.timeParse("%Y-%m-%d");
 
-        for (let i = 0; i < data.length; i++) {
-            data[i].date = parseTime(data[i].date);
-            //let date = data[i].date.split('-');
-            //let date_format = new Date(date[0], date[1] - 1, date[2]);
+        data.forEach(function(d) {
+            d.date = parseTime(d.date);
+        });
 
-            //data[i].date = date_format
-        }
+        // for (let i = 0; i < data.length; i++) {
+        //     data[i].date = parseTime(data[i].date);
+        //     //let date = data[i].date.split('-');
+        //     //let date_format = new Date(date[0], date[1] - 1, date[2]);
+
+        //     //data[i].date = date_format
+        // }
 
         // let sumstat = d3.nest()
         //                 .key(function(d) { d.state})
@@ -524,20 +528,20 @@ class aa_view {
                         .domain(d3.extent(data, function(d) {
                             return d.date;
                         }))
-                        .range([0, w]);
+                        .range([0, w-50]);
 
         let yScale = d3.scaleLinear()
                         .domain([0, d3.max(data, d => d.positive)])
                         .range([h, 0]);
 
-        // let line = d3.line()
-        //             .x(function(d) {
-        //                 return xScale(d.death);
-        //             })
-        //             .y(function(d) {
-        //                 return yScale(d.positive)
-        //             })
-        //             .curve(d3.curveMonotoneX);
+        let line = d3.line()
+                     .x(function(d,i) {
+                         return xScale(d.date);
+                     })
+                     .y(function(d,i) {
+                         return yScale(d.positive)
+                     })
+                     .curve(d3.curveMonotoneX);
 
         let svg = d3.select("#timeL")
             .append("svg")
@@ -550,10 +554,8 @@ class aa_view {
         svg.append("g")
             .attr("id", "x-axis")
             .attr("transform", "translate(0," + h + ")")
-            .call(d3.axisBottom(xScale));
-            //.call(d3.axisBottom(xScale).tickFormat(d3.timeFormat("%Y-%m-%d")).tickValues(data.map(function (d) {
-            //    return new Date(d.date)
-            //})).ticks(10));
+            .call(d3.axisBottom(xScale).ticks(5))
+            .attr("class", "axis_line");
 
         svg.append("g")
             .attr("id", "y-axis")
@@ -567,16 +569,20 @@ class aa_view {
         svg.selectAll(".line")
             .data(data)
             .enter()
-            .append("path")
+            .append("g");
+
+        svg.append("path")
             .attr("fill", "none")
             .attr("stroke", "black")
             .attr("stroke-width", 1.5)
-            .attr("d", function(d){
-                return d3.line()
-                            .x(function(d) { return x(d.year); })
-                            .y(function(d) { return y(+d.n); })
-                            (d.values)
-                });
+            .attr("d", function(d) { return line(d.values); });
+
+            // .attr("d", function(d){
+            //     return d3.line()
+            //                 .x(function(d) { return xScale(d.date); })
+            //                 .y(function(d) { return yScale(d.positive); })
+            //                 .curve(d3.curveMonotoneX)
+            //     });
 
         // svg.append("path")
         //     .datum(data)
