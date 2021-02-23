@@ -512,6 +512,20 @@ class aa_view {
             d.date = parseTime(d.date);
         });
 
+        data.then(function(data) {
+            let point = data.columns.slice(1).map(function(id) {
+                return {
+                    id: id,
+                    values: data.map(function(d) {
+                        return {
+                            data: data.date,
+                            positive: data.positive
+                        };
+                    })
+                };
+            })
+        });
+
         // for (let i = 0; i < data.length; i++) {
         //     data[i].date = parseTime(data[i].date);
         //     //let date = data[i].date.split('-');
@@ -540,8 +554,7 @@ class aa_view {
                      })
                      .y(function(d,i) {
                          return yScale(d.positive)
-                     })
-                     .curve(d3.curveMonotoneX);
+                     });
 
         let svg = d3.select("#timeL")
             .append("svg")
