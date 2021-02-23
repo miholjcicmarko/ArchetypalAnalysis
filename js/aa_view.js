@@ -306,6 +306,11 @@ class aa_view {
 
     makeBarCharts (chosenVariables, rawData) {
 
+        d3.select('#bar1')
+            .append('div')
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
         let numberOfArch = this.numberOfArchetypes;
 
         d3.select("#buttonGroup").remove();
@@ -329,7 +334,8 @@ class aa_view {
             if (chosenVariables[i] !== "state") {
 
                 for (let k = 0; k < specificData.length; k++){
-                    let number = parseInt(specificData[k][""+chosenVariables[i]]);
+                    let number = {value : parseInt(specificData[k][""+chosenVariables[i]])
+                    }
                     ydata.push(number);
                 }
                 let arrayofData = [];
@@ -392,12 +398,12 @@ class aa_view {
                     })
                     .attr("y", function(d,i) {
                         let scale = yScale[i];
-                        return scale(d);
+                        return scale(d.value);
                     })
                     .attr("width", w/(chosenVariables.length-1) - barpadding)
                     .attr("height", function(d,i) {
                         let scale = yScale[i];
-                        return h-scale(d);
+                        return h-scale(d.value);
                     })
                     .attr("fill","orangered")
                     .attr("transform", "translate(70,0)");
@@ -437,7 +443,9 @@ class aa_view {
                     }
 
                 }
+            let data_rect = d3.selectAll("#bar1").selectAll("rect");
 
+            this.tooltip(data_rect);
     }
 
     filterObjsInArr (arr, selection) {
