@@ -424,16 +424,16 @@ class aa_view {
                              .text("cases")
                              .attr("class", "axis-label")
                              .attr("text-anchor", "middle")
-                             .attr("transform", "translate(40,"+h/2+")rotate(-90)");
+                             .attr("transform", "translate(-50,"+h/2+")rotate(-90)");
                            
-                        yaxis.call(d3.axisLeft(yScale[i]).ticks(5))
+                        yaxis.call(d3.axisLeft(yScale[i-1]).ticks(5))
                              .attr("transform", "translate(" + 3*margin.left + ",5)")
                              .attr("class", "axis_line");
                    
                         let xaxis = svg.append("g")
                                        .attr("id", "x-axis")
-                                       .attr("transform", "translate(" + 3*margin.left +"," + h + "")
-                                       .call(d3.axisBottom(x_lab[i]));
+                                       .attr("transform", "translate(0,0)")
+                                       .call(d3.axisBottom(x_lab[i-1]));
                     }
 
                 }
