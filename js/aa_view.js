@@ -402,6 +402,17 @@ class aa_view {
                     .attr("fill","orangered")
                     .attr("transform", "translate(60,0)");
 
+
+                // svg.append("rect")
+                //    .attr("x", (i * w/numberOfArch))
+                //    .attr("y", yScale(ydata))
+                //    .attr("width", w/numberOfArch - barpadding)
+                //    .attr("height", function(d) {
+                //         return yScale(ydata);
+                //     })
+                //    .attr("fill","steelblue")
+                //    .attr("transform", "translate(0,0)");
+
                 for (let i = 0; i < chosenVariables.length; i++) {
 
                     if (chosenVariables[i] !== "state") {
@@ -411,7 +422,7 @@ class aa_view {
                            
                         yaxis.append("text")
                              .text("cases")
-                             .attr("transform", "translate(" + 0 +",50)")
+                             .attr("transform", "translate(" + (15 + (3*margin.left)) +",50)")
                              .attr("class", "axis-label")
                              .attr("text-anchor", "middle");
                            
