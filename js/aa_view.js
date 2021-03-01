@@ -539,10 +539,10 @@ class aa_view {
 
         let line = d3.line()
                      .x(function(d,i) {
-                         return xScale(d);
+                         return xScale(d.date);
                      })
                      .y(function(d,i) {
-                         return yScale(d)
+                         return yScale(d.positive);
                      });
 
         let svg = d3.select("#timeL")
@@ -573,12 +573,11 @@ class aa_view {
         //     .enter()
         //     .append("g");
 
-        // svg.append("path")
-        //     .attr("fill", "none")
-        //     .attr("stroke", "black")
-        //     .attr("stroke-width", 1.5)
-        //     .attr("d",line);
-
+        svg.append("path")
+            .attr("d",line(data))
+            .attr("fill", "none")
+            .attr("stroke", "black")
+            .attr("stroke-width", 1.5);
 
             // .attr("d", function(d){
             //     return d3.line()
