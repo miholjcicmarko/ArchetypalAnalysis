@@ -10,22 +10,15 @@
 <body id = "home-body">
 
 <div id = "home-container">
-    <div id = "home-header">
+    <div class = "home-label" id = "home-header">
         <h1>Archetypal Analysis</h1>
     </div>
     
     <div>
         <h5 class = "home-label">Select a local CSV File:</h5>
 
-        <div class="home-label">
-            <input class = "home-labe" id="csv" type="file">
-
-            <span>
-                <a href = "project.html">
-                <button class = "home-label">Perform Analysis On Data</button>
-                </a>
-            </span>
-
+        <div class = "home-label">
+            <input id="csv" type="file">
         </div>
 
         <h5 class = "home-label">Or Select a preprocessed CSV File:</h5>
@@ -33,13 +26,36 @@
         <div class = "home-label">
             <span>
                 <a href = "project.html">
-                <button>FIFA19 Dataset</button>
+                <button class = "button">FIFA19 Dataset</button>
                 </a>
             </span>
 
             <span>
                 <a href = "project.html">
-                <button>COVID 19 Dataset</button>
+                <button class = "button">COVID 19 Dataset</button>
+                </a>
+            </span>
+        </div>
+
+        <div class="padding-text">
+            <form id = "home-dropdown">Choose Number of Archetypes
+                <select id = "selectNow">
+                    <option> - </option>
+                    <option> 1 </option>
+                    <option> 2 </option>
+                    <option> 3 </option>
+                    <option> 4 </option>
+                    <option> 5 </option>
+                    <option> 6 </option>
+                    <option> 7 </option>
+                </select>
+            </form> 
+        </div>
+
+        <div class = "home-label">
+            <span>
+                <a href = "project.html">
+                <button class = "button">Perform Analysis On Data</button>
                 </a>
             </span>
         </div>
