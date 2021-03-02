@@ -4,6 +4,8 @@
 
 .home-label {
     text-align: center;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 5%;
 }
 
 .topnav {
