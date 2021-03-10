@@ -1,6 +1,6 @@
 class dataSelection {
 
-    constructor(data) {
+    constructor() {
         this.data = null;
         this.numArch = null;
     }

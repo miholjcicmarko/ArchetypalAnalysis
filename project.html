@@ -73,19 +73,19 @@
         <h5 class = "home-label">Select a local CSV File:</h5>
 
         <div class = "home-label">
-            <input id="csv" type="file">
+            <input id="csv" type="file" onchange="loadCustomData()">
         </div>
 
         <h5 class = "home-label">Or Select a preprocessed CSV File:</h5>
 
         <div class = "home-label">
             <span>
-                <button id = "fifaButton" class = "button">
+                <button id = "fifaButton" class = "button" onclick="updatePreData(this.id)">
                     FIFA19 Dataset</button>
             </span>
 
             <span>
-                <button id = "covid19Button" class = "button" onclick="loadPreData(this.id)">COVID 19 Dataset</button>
+                <button id = "covid19Button" class = "button" onclick="updatePreData(this.id)">COVID 19 Dataset</button>
             </span>
         </div>
 

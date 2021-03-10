@@ -1,24 +1,36 @@
 /** The script to run the program on the webpage */
 
+async function loadPreProcesData () {
+    let fifadata = await d3.csv("./data/fifaRatingsSmall.csv");
+    let covid = await d3.csv("./data/COVID19states.csv");
 
+    return {
+        "fifa" : fifadata,
+        "covid" : covid
+    }
+}
 
 function loadPreData(id) {
     if (id === "fifaButton") {
         let data = d3.csv("./data/fifaRatingsSmall.csv");
         let newData = new dataSelection(data);
-        
+        document.getElementById("selectNowInitial").selectedIndex = 0;
     }
     else if (id === "covid19Button") {
         let data = d3.csv("./data/COVID19states.csv"); //fix the dataset
         let newData = new dataSelection(data);
+        document.getElementById("selectNowInitial").selectedIndex = 0;
     }
 }
 
-// function chooseArch (number) {
-//     let e = document.getElementById("ddlViewBy");
-//     let numArch = e.options[e.selectedIndex].text;
+function chooseArch (number) {
+    let e = document.getElementById("ddlViewBy");
+    let numArch = e.options[e.selectedIndex].text;
+}
 
-// }
+function loadCustom () {
+    
+}
 
 
 async function loadSandXC() {
