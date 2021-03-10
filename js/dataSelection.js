@@ -1,25 +1,39 @@
 class dataSelection {
 
-    constructor(updateData, numArch, customData) {
-        if (updateData === null && customData !== null) {
-            this.data = customData;
-        }
-        else if (updateData !== null) {
-            this.data = updateData;
-        }
-        
-        if (numArch !== null) {
-            this.numArch = numArch;
-        }
+    //change all of this
 
+    constructor(data, updateData, chooseArch) {
+        this.data = data;
+        this.updateData = updateData;
+        this.chooseArch = chooseArch;
         
+        // if (updatePreData === null && loadCustom !== null) {
+        //     this.data = loadCustom;
+        // }
+        // else if (updatePreData !== null) {
+        //     this.data = updatePreData;
+        // }
+        
+        // if (chooseArch !== null) {
+        //     this.numArch = chooseArch;
+        // }
+
+        let that = this;
+
+        fifadata = d3.select("#fifaButton");
+        fifadata.on("mouseover", function() {
+            that.updateData("fifaButton");
+        })
+
+
+
     }
 
-    updateData (data) {
+    newData (data) {
         this.data = data;
     }
 
-    updateArch (numArch) {
+    newArch (numArch) {
         this.numArch = numArch;
     }
 }
