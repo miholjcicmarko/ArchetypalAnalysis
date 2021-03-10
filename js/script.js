@@ -41,10 +41,12 @@ Promise.all([preProcessData, customData]).then(data => {
     function chooseArch (number) {
         let e = document.getElementById("ddlViewBy");
         let numArch = e.options[e.selectedIndex].text;
-
+        selectedData.updateArch(numArch);
     }
     
-    function loadCustom () {
-        
+    function loadCustom (data) {
+        that.data = data;
+        selectedData.updateData(data);
     }
+    
 })
