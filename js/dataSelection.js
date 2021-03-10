@@ -1,10 +1,12 @@
 class dataSelection {
 
-    constructor() {
+    constructor(data, numArch) {
         this.data = null;
         this.numArch = null;
     }
 
-    
+    updateData () {
+
+    }
 
 }
