@@ -1,5 +1,26 @@
 /** The script to run the program on the webpage */
 
+
+
+function loadPreData(id) {
+    if (id === "fifaButton") {
+        let data = d3.csv("./data/fifaRatingsSmall.csv");
+        let newData = new dataSelection(data);
+        
+    }
+    else if (id === "covid19Button") {
+        let data = d3.csv("./data/COVID19states.csv"); //fix the dataset
+        let newData = new dataSelection(data);
+    }
+}
+
+// function chooseArch (number) {
+//     let e = document.getElementById("ddlViewBy");
+//     let numArch = e.options[e.selectedIndex].text;
+
+// }
+
+
 async function loadSandXC() {
     let XC = await d3.csv("./data/XC.csv");
     let SdataFrame = await d3.csv("./data/SdataFrame.csv");
@@ -15,11 +36,11 @@ async function loadSandXC() {
 }
 
 //let data = d3.csv("./data/COVID19.csv");
-let data = loadSandXC();
+//let data = loadSandXC();
 
-Promise.all([data]).then(data => {
+//Promise.all([data]).then(data => {
 
-    let plots = new aa_view(data);
+    //let plots = new aa_view(data);
 
     //let aa_result = new Algorithms(data, 3);
  
@@ -28,4 +49,4 @@ Promise.all([data]).then(data => {
     //plots.addArch();
     //plots.addOneD();
 
-})
+//})

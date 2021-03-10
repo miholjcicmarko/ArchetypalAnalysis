@@ -13,6 +13,7 @@
     <script src="js/Algorithms.js"></script>
     <script src="js/visuals.js"></script>
     <script src="js/aa_view.js"></script>
+    <script src="js/dataSelection.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- <script src="js/bundle.js"></script>
     <script src="js/node_modules/mathjs/"></script> -->
@@ -22,7 +23,7 @@
 
     <div id="header-wrap">
         <span>
-            <a href = "index.html">
+            <a href = "project.html">
             <button class = "home-button" id = "header-button">Choose Another Dataset</button>
             </a>
         </span>
@@ -59,6 +60,55 @@
     <!-- <div id = "bar1"></div>
     <div id = "bar2"></div>
     <div id = "bar3"></div> -->
+
+</div>
+
+<div id = "Introduction">
+
+    <div class = "home-label" id = "home-header">
+        <h1>Archetypal Analysis</h1>
+    </div>
+
+    <div>
+        <h5 class = "home-label">Select a local CSV File:</h5>
+
+        <div class = "home-label">
+            <input id="csv" type="file">
+        </div>
+
+        <h5 class = "home-label">Or Select a preprocessed CSV File:</h5>
+
+        <div class = "home-label">
+            <span>
+                <button id = "fifaButton" class = "button">
+                    FIFA19 Dataset</button>
+            </span>
+
+            <span>
+                <button id = "covid19Button" class = "button" onclick="loadPreData(this.id)">COVID 19 Dataset</button>
+            </span>
+        </div>
+
+        <div class="padding-text">
+            <form id = "home-dropdown">Choose Number of Archetypes
+                <select id = "selectNowInitial">
+                    <option> - </option>
+                    <option> 1 </option>
+                    <option> 2 </option>
+                    <option> 3 </option>
+                    <option> 4 </option>
+                    <option> 5 </option>
+                    <option> 6 </option>
+                    <option> 7 </option>
+                </select>
+            </form> 
+        </div>
+
+        <div class = "home-label">
+            <span>
+                <button class = "button">Perform Analysis On Data</button>
+            </span>
+        </div>
 
 </div>
 

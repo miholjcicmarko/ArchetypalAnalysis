@@ -1,3 +1,11 @@
+#Introduction {
+    text-align: center;
+}
+
+#header-wrap {
+    opacity: 0.1;
+}
+
 .home-label {
     text-align: center;
 }
@@ -20,6 +28,7 @@
     grid-template-columns: 2fr 0.25fr 1fr 2fr 1fr;
     column-gap: 1%;
     grid-template-areas: "bar", "dropdown";
+    opacity: 0.1;
 }
 
 .topnav input[type=text] {
