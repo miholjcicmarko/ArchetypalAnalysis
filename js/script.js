@@ -36,12 +36,10 @@ Promise.all([preProcessData, customData]).then(data => {
         }
     }
 
-    function chooseArch (number) {
-        let e = document.getElementById("ddlViewBy");
-        let numArch = e.options[e.selectedIndex].text;
-        selectedData.newArch(numArch);
+    function updateArch (number) {
+        selectedData.newArch(number);
     }
 
-    let selectedData = new dataSelection(this.data, updateData, chooseArch);
+    let selectedData = new dataSelection(this.data, updateData, updateArch);
 
 })
