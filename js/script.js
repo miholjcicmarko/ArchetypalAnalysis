@@ -19,12 +19,26 @@ Promise.all([preProcessData]).then(data => {
     function updateData (id, data) {
         if (id === "fifaButton") {
             selectedData.newData(preData["fifa"]);
+            document.getElementById('csv').value= null;
+            document.getElementById("covidButton").style.color = "white";
+            document.getElementById("covidButton").style.backgroundColor = "rgb(134, 124, 189)";
+            document.getElementById("fifaButton").style.color = "black";
+            document.getElementById("fifaButton").style.backgroundColor = "silver";
         }
         else if (id === "covid19Button") {
             selectedData.newData(preData["covid"]);
+            document.getElementById('csv').value= null;
+            document.getElementById("fifaButton").style.color = "white";
+            document.getElementById("fifaButton").style.backgroundColor = "rgb(134, 124, 189)";
+            document.getElementById("covidButton").style.color = "black";
+            document.getElementById("covidButton").style.backgroundColor = "silver";
         }
         else if (id === "custom") {
             selectedData.newData(data);
+            document.getElementById("fifaButton").style.color = "white";
+            document.getElementById("fifaButton").style.backgroundColor = "rgb(134, 124, 189)";
+            document.getElementById("covidButton").style.color = "white";
+            document.getElementById("covidButton").style.backgroundColor = "rgb(134, 124, 189)";
         }
     }
 
@@ -34,19 +48,14 @@ Promise.all([preProcessData]).then(data => {
 
     function performAnalysis (data, numArch) {
         if (data === null && numArch !== null) {
-
             alert("Error! Select Data Set");
-
         }
-        else if (data !== null && numArch === null || data !== null && numArch === '-') {
-            
+        else if (data !== null && numArch === null || data !== null && numArch === '-') { 
             alert("Error! Select Number of Archetypes");
-            
         }
         else if (data === null && numArch === null || data === null && numArch === '-') {
-            
             alert("Error! Select Data Set and Number of Archetypes");
-            
+
             // let window = d3.select("#Introduction").append("svg")
             //                 .attr("id", "warning")
             //                 .attr("height", 75)

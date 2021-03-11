@@ -2,9 +2,9 @@
 class Algorithms {
 
     constructor(data, noc, I, U) {
-        this.data = data;
+        this.fullData = data;
 
-        delete data.id;
+        this.data = delete this.fullData.id;
 
         let matrix_data = [];
 
