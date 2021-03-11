@@ -20,18 +20,10 @@ Promise.all([preProcessData]).then(data => {
         if (id === "fifaButton") {
             selectedData.newData(preData["fifa"]);
             document.getElementById('csv').value= null;
-            document.getElementById("covidButton").style.color = "white";
-            document.getElementById("covidButton").style.backgroundColor = "rgb(134, 124, 189)";
-            document.getElementById("fifaButton").style.color = "black";
-            document.getElementById("fifaButton").style.backgroundColor = "silver";
         }
-        else if (id === "covid19Button") {
+        else if (id === "covidButton") {
             selectedData.newData(preData["covid"]);
             document.getElementById('csv').value= null;
-            document.getElementById("fifaButton").style.color = "white";
-            document.getElementById("fifaButton").style.backgroundColor = "rgb(134, 124, 189)";
-            document.getElementById("covidButton").style.color = "black";
-            document.getElementById("covidButton").style.backgroundColor = "silver";
         }
         else if (id === "custom") {
             selectedData.newData(data);
