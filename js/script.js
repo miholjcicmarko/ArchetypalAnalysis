@@ -11,29 +11,19 @@ async function loadPreProcessData () {
 }
 
 let preProcessData = loadPreProcessData();
-let customData = null;
 
-Promise.all([preProcessData, customData]).then(data => {
+Promise.all([preProcessData]).then(data => {
 
     let preData = data[0];
-    let custData = data[1];
-
-    this.chosenData = null;
-    this.numArch = null;
-
-    let that = this;
 
     function updateData (id, data) {
         if (id === "fifaButton") {
-            that.chosenData = preData["fifa"]
             selectedData.newData(preData["fifa"]);
         }
         else if (id === "covid19Button") {
-            that.chosenData = preData["fifa"]; //fix the dataset
             selectedData.newData(preData["covid"]);
         }
         else if (id === "custom") {
-            that.chosenData = data;
             selectedData.newData(data);
         }
     }
@@ -43,9 +33,9 @@ Promise.all([preProcessData, customData]).then(data => {
     }
 
     function performAnalysis (data, numArch) {
-        
+
     }
 
-    let selectedData = new dataSelection(this.data, updateData, updateArch, performAnalysis);
+    let selectedData = new dataSelection(preData, updateData, updateArch, performAnalysis);
 
 })
