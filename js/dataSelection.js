@@ -48,11 +48,9 @@ class dataSelection {
         csv_file.on("change", function () {
             let reader = new FileReader();
             reader.onload = function () {
-                document.getElementById('out').innerHTML = reader.result;
+                let customData = reader.result;
+                that.updateData("custom", customData);
             }
-
-            let customData = reader.readAsBinaryString(csv_file._groups[0][0].files[0]);
-            that.updateData("Custom", customData);
         })
 
         let performButton = d3.select("performButton");

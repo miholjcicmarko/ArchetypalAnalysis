@@ -27,17 +27,14 @@ Promise.all([preProcessData, customData]).then(data => {
         if (id === "fifaButton") {
             that.chosenData = preData["fifa"]
             selectedData.newData(preData["fifa"]);
-            document.getElementById("selectNowInitial").selectedIndex = 0;
         }
         else if (id === "covid19Button") {
             that.chosenData = preData["fifa"]; //fix the dataset
             selectedData.newData(preData["covid"]);
-            document.getElementById("selectNowInitial").selectedIndex = 0;
         }
         else if (id === "custom") {
             that.chosenData = data;
             selectedData.newData(data);
-            document.getElementById("selectNowInitial").selectedIndex = 0;
         }
     }
 
@@ -46,7 +43,7 @@ Promise.all([preProcessData, customData]).then(data => {
     }
 
     function performAnalysis (data, numArch) {
-
+        
     }
 
     let selectedData = new dataSelection(this.data, updateData, updateArch, performAnalysis);
