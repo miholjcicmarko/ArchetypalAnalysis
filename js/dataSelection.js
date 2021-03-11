@@ -20,8 +20,8 @@ class dataSelection {
 
         let that = this;
 
-        fifadata = d3.select("#fifaButton");
-        fifadata.on("mouseover", function() {
+        let fifadata = d3.select("#fifaButton");
+        fifadata.on("click", function() {
             that.updateData("fifaButton");
         })
 

@@ -18,20 +18,20 @@ Promise.all([preProcessData, customData]).then(data => {
     let preData = data[0];
     let custData = data[1];
 
-    this.data = null;
+    this.chosenData = null;
     this.numArch = null;
 
     let that = this;
 
     function updateData (id) {
         if (id === "fifaButton") {
-            that.data = d3.csv("./data/fifaRatingsSmall.csv");
-            selectedData.newData(data);
+            that.chosenData = preData["fifa"]
+            selectedData.newData(preData["fifa"]);
             document.getElementById("selectNowInitial").selectedIndex = 0;
         }
         else if (id === "covid19Button") {
-            that.data = d3.csv("./data/COVID19states.csv"); //fix the dataset
-            selectedData.newData(data);
+            that.chosenData = preData["fifa"]; //fix the dataset
+            selectedData.newData(preData["covid"]);
             document.getElementById("selectNowInitial").selectedIndex = 0;
         }
     }
