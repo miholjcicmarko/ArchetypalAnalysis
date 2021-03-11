@@ -34,23 +34,40 @@ Promise.all([preProcessData]).then(data => {
 
     function performAnalysis (data, numArch) {
         if (data === null && numArch !== null) {
-            let window = d3.select("#Introduction").append("svg")
+            d3.select("#Introduction").append("svg")
+                            .attr("id", "warning")
                             .attr("height", 500)
                             .attr("width", 500);
             
-            window.selectAll("text")
+            let window = d3.select("#warning");
+
+            window.append("text")
                 .text("Error! Select Data Set")
+                .attr("transform", "translate(150, 50)")
+                .classed("home-label", true)
                 .attr("fill", "black")
                 .attr("font-size", "24");
 
         }
-        else if (data !== undefined && numArch === undefined) {
+        else if (data !== null && numArch === null || data !== null && numArch === '-') {
             let window = d3.select("#Introduction").append("svg")
                             .attr("height", 500)
                             .attr("width", 500);
             
-            window.selectAll("text")
+            window.append("text")
                 .text("Error! Select Number of Archetypes")
+                .attr("transform", "translate(75, 50)")
+                .attr("fill", "black")
+                .attr("font-size", "24");
+        }
+        else if (data === null && numArch === null || data === null && numArch === '-') {
+            let window = d3.select("#Introduction").append("svg")
+                            .attr("height", 500)
+                            .attr("width", 750);
+            
+            window.append("text")
+                .text("Error! Select Data Set and Number of Archetypes")
+                .attr("transform", "translate(150, 50)")
                 .attr("fill", "black")
                 .attr("font-size", "24");
         }
