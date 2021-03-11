@@ -34,10 +34,25 @@ Promise.all([preProcessData]).then(data => {
 
     function performAnalysis (data, numArch) {
         if (data === null && numArch !== null) {
+            let window = d3.select("#Introduction").append("svg")
+                            .attr("height", 500)
+                            .attr("width", 500);
             
+            window.selectAll("text")
+                .text("Error! Select Data Set")
+                .attr("fill", "black")
+                .attr("font-size", "24");
+
         }
-        else if (updatePreData !== null) {
+        else if (data !== null && numArch === null) {
+            let window = d3.select("#Introduction").append("svg")
+                            .attr("height", 500)
+                            .attr("width", 500);
             
+            window.selectAll("text")
+                .text("Error! Select Number of Archetypes")
+                .attr("fill", "black")
+                .attr("font-size", "24");
         }
         
         if (chooseArch !== null) {

@@ -48,9 +48,9 @@ class dataSelection {
 
         })
 
-        let performButton = d3.select("performButton");
+        let performButton = d3.select(".performButton");
         performButton.on("click", function () {
-            that.performAnalysis(this.data, this.newArch);
+            that.performAnalysis(that.data, that.newArch);
         })
 
     }
