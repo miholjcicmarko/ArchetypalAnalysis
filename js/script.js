@@ -34,80 +34,41 @@ Promise.all([preProcessData]).then(data => {
 
     function performAnalysis (data, numArch) {
         if (data === null && numArch !== null) {
-            d3.select("#Introduction").append("svg")
-                            .attr("id", "warning")
-                            .attr("height", 75)
-                            .attr("width", 500);
-            
-            let window = d3.select("#warning");
 
-            window.append("text")
-                .text("Error! Select Data Set")
-                .attr("transform", "translate(150, 50)")
-                .classed("home-label", true)
-                .attr("fill", "black")
-                .attr("font-size", "24");
-
-            let button = document.createElement("button");
-            button.innerHTML = "Ok";
-            button.id = "OkButton";
-
-            let introDiv = document.getElementById("Introduction");
-            introDiv.append(button);
-
-            button.addEventListener("click", function () {
-                d3.select("#warning").remove();
-                d3.select("#OkButton").remove();
-            })
+            alert("Error! Select Data Set");
 
         }
         else if (data !== null && numArch === null || data !== null && numArch === '-') {
-            let window = d3.select("#Introduction").append("svg")
-                            .attr("id", "warning")
-                            .attr("height", 75)
-                            .attr("width", 500);
             
-            window.append("text")
-                .text("Error! Select Number of Archetypes")
-                .attr("transform", "translate(75, 50)")
-                .attr("fill", "black")
-                .attr("font-size", "24");
-
-            let button = document.createElement("button");
-            button.innerHTML = "Ok";
-            button.id = "OkButton";
-    
-            let introDiv = document.getElementById("Introduction");
-            introDiv.append(button);
-    
-            button.addEventListener("click", function () {
-                d3.select("#warning").remove();
-                d3.select("#OkButton").remove();
-            })
+            alert("Error! Select Number of Archetypes");
+            
         }
         else if (data === null && numArch === null || data === null && numArch === '-') {
-            let window = d3.select("#Introduction").append("svg")
-                            .attr("id", "warning")
-                            .attr("height", 75)
-                            .attr("width", 750);
             
-            window.append("text")
-                .text("Error! Select Data Set and Number of Archetypes")
-                .attr("transform", "translate(150, 50)")
-                .attr("fill", "black")
-                .attr("font-size", "24");
+            alert("Error! Select Data Set and Number of Archetypes");
+            
+            // let window = d3.select("#Introduction").append("svg")
+            //                 .attr("id", "warning")
+            //                 .attr("height", 75)
+            //                 .attr("width", 750);
+            
+            // window.append("text")
+            //     .text("Error! Select Data Set and Number of Archetypes")
+            //     .attr("transform", "translate(150, 50)")
+            //     .attr("fill", "black")
+            //     .attr("font-size", "24");
 
-            let button = document.createElement("button");
-            button.innerHTML = "Ok";
-            button.id = "OkButton";
+            // let button = document.createElement("button");
+            // button.innerHTML = "Ok";
+            // button.id = "OkButton";
 
-            let introDiv = document.getElementById("Introduction");
-            introDiv.append(button);
+            // let introDiv = document.getElementById("Introduction");
+            // introDiv.append(button);
     
-            button.addEventListener("click", function () {
-                d3.select("#warning").remove();
-                d3.select("#OkButton").remove();
-            })
+            // button.addEventListener("click", function () {
+            //     d3.select("#warning").remove();
+            //     d3.select("#OkButton").remove();
+            // })
         }
         else {
             let aa_result = new Algorithms(data, numArch);
