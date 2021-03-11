@@ -39,7 +39,7 @@ class dataSelection {
             that.updateData("covidButton");
         })
 
-        let dropdown = d3.select("#home-dropdown");
+        let dropdown = d3.select("#selectNowInitial");
         dropdown.on("change", function () {
             that.updateArch(this.value);
         })
@@ -53,7 +53,7 @@ class dataSelection {
             reader.onload = function () {
                 let textData = reader.result;
                 textData = textData.split("/\r\n|\n/");
-                let customData = jQuery.csv.toObjects(textData);
+                let customData = jQuery.csv.toObjects(textData[0]);
                 that.updateData("custom", customData);
             }
 
