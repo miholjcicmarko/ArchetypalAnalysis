@@ -4,12 +4,14 @@ class Algorithms {
     constructor(data, noc, I, U) {
         this.fullData = data;
 
-        this.data = delete this.fullData.id;
+        this.data = this.fullData.map(({id, ...item}) => item);  
+
+        this.data = this.data.map(({...item}) => item);
 
         let matrix_data = [];
 
-        for (let m = 0; m < this.data[0].length; m++) {
-            let vals = Object.values(this.data[0][m]);
+        for (let m = 0; m < this.data.length; m++) {
+            let vals = Object.values(this.data[m]);
             matrix_data.push(vals);
         }
 
