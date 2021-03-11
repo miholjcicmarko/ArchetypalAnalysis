@@ -48,10 +48,12 @@ class dataSelection {
         csv_file.on("change", function () {
             let reader = new FileReader();
             
-            reader.readAsArrayBuffer(this.files[0]);
+            reader.readAsText(this.files[0]);
 
             reader.onload = function () {
-                let customData = reader.result;
+                let textData = reader.result;
+                textData = textData.split("/\r\n|\n/");
+                let customData = $.csv.toObjects(textData);
                 that.updateData("custom", customData);
             }
 
