@@ -4,6 +4,8 @@ class Algorithms {
     constructor(data, noc, I, U) {
         this.data = data;
 
+        delete data.id;
+
         let matrix_data = [];
 
         for (let m = 0; m < this.data[0].length; m++) {
