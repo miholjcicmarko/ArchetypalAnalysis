@@ -23,7 +23,7 @@ Promise.all([preProcessData, customData]).then(data => {
 
     let that = this;
 
-    function updateData (id) {
+    function updateData (id, data) {
         if (id === "fifaButton") {
             that.chosenData = preData["fifa"]
             selectedData.newData(preData["fifa"]);
@@ -34,12 +34,21 @@ Promise.all([preProcessData, customData]).then(data => {
             selectedData.newData(preData["covid"]);
             document.getElementById("selectNowInitial").selectedIndex = 0;
         }
+        else if (id === "custom") {
+            that.chosenData = data;
+            selectedData.newData(data);
+            document.getElementById("selectNowInitial").selectedIndex = 0;
+        }
     }
 
     function updateArch (number) {
         selectedData.newArch(number);
     }
 
-    let selectedData = new dataSelection(this.data, updateData, updateArch);
+    function performAnalysis (data, numArch) {
+
+    }
+
+    let selectedData = new dataSelection(this.data, updateData, updateArch, performAnalysis);
 
 })

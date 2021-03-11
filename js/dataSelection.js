@@ -2,10 +2,11 @@ class dataSelection {
 
     //change all of this
 
-    constructor(data, updateData, updateArch) {
+    constructor(data, updateData, updateArch, performAnalysis) {
         this.data = data;
         this.updateData = updateData;
         this.updateArch = updateArch;
+        this.performAnalysis = performAnalysis;
         
         // if (updatePreData === null && loadCustom !== null) {
         //     this.data = loadCustom;
@@ -41,6 +42,22 @@ class dataSelection {
         let dropdown = d3.select("#home-dropdown");
         dropdown.on("change", function () {
             that.updateArch(this.value);
+        })
+
+        let csv_file = d3.select("#csv");
+        csv_file.on("change", function () {
+            let reader = new FileReader();
+            reader.onload = function () {
+                document.getElementById('out').innerHTML = reader.result;
+            }
+
+            let customData = reader.readAsBinaryString(csv_file.files[0]);
+            that.updateData("Custom", customData);
+        })
+
+        let performButton = d3.select("performButton");
+        performButton.on("click", function () {
+            
         })
 
     }
