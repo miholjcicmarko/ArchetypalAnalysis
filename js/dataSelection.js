@@ -22,6 +22,8 @@ class dataSelection {
 
         let fifadata = d3.select("#fifaButton");
         fifadata.on("click", function() {
+            document.getElementById("fifaButton").style.color = "black"
+            document.getElementById("fifaButton").style.backgroundColor = "silver"
             that.updateData("fifaButton");
         })
 
