@@ -53,7 +53,7 @@ class dataSelection {
             reader.onload = function () {
                 let textData = reader.result;
                 textData = textData.split("/\r\n|\n/");
-                let customData = $.csv.toObjects(textData);
+                let customData = jQuery.csv.toObjects(textData);
                 that.updateData("custom", customData);
             }
 
