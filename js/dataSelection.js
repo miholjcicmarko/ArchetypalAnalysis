@@ -1,9 +1,8 @@
 class dataSelection {
 
-    //change all of this
-
     constructor(data, updateData, updateArch, performAnalysis) {
-        this.data = data;
+        this.data = null;
+        this.numArch = null;
         this.updateData = updateData;
         this.updateArch = updateArch;
         this.performAnalysis = performAnalysis;
@@ -50,7 +49,7 @@ class dataSelection {
 
         let performButton = d3.select(".performButton");
         performButton.on("click", function () {
-            that.performAnalysis(that.data, that.newArch);
+            that.performAnalysis(that.data, that.numArch);
         })
 
     }

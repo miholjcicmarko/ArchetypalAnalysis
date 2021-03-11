@@ -44,7 +44,7 @@ Promise.all([preProcessData]).then(data => {
                 .attr("font-size", "24");
 
         }
-        else if (data !== null && numArch === null) {
+        else if (data !== undefined && numArch === undefined) {
             let window = d3.select("#Introduction").append("svg")
                             .attr("height", 500)
                             .attr("width", 500);
@@ -54,10 +54,11 @@ Promise.all([preProcessData]).then(data => {
                 .attr("fill", "black")
                 .attr("font-size", "24");
         }
-        
-        if (chooseArch !== null) {
-            
+        else {
+            let aa_result = new Algorithms(data, numArch);
         }
+        
+        
     }
 
     let selectedData = new dataSelection(preData, updateData, updateArch, performAnalysis);
