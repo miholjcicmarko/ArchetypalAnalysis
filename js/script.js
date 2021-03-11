@@ -33,7 +33,16 @@ Promise.all([preProcessData]).then(data => {
     }
 
     function performAnalysis (data, numArch) {
-
+        if (data === null && numArch !== null) {
+            
+        }
+        else if (updatePreData !== null) {
+            
+        }
+        
+        if (chooseArch !== null) {
+            
+        }
     }
 
     let selectedData = new dataSelection(preData, updateData, updateArch, performAnalysis);

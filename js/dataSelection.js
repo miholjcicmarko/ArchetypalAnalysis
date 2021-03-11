@@ -7,17 +7,6 @@ class dataSelection {
         this.updateData = updateData;
         this.updateArch = updateArch;
         this.performAnalysis = performAnalysis;
-        
-        // if (updatePreData === null && loadCustom !== null) {
-        //     this.data = loadCustom;
-        // }
-        // else if (updatePreData !== null) {
-        //     this.data = updatePreData;
-        // }
-        
-        // if (chooseArch !== null) {
-        //     this.numArch = chooseArch;
-        // }
 
         let that = this;
 
@@ -61,7 +50,7 @@ class dataSelection {
 
         let performButton = d3.select("performButton");
         performButton.on("click", function () {
-            
+            that.performAnalysis(this.data, this.newArch);
         })
 
     }
