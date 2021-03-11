@@ -51,7 +51,7 @@ class dataSelection {
                 document.getElementById('out').innerHTML = reader.result;
             }
 
-            let customData = reader.readAsBinaryString(csv_file.files[0]);
+            let customData = reader.readAsBinaryString(csv_file._groups[0][0].files[0]);
             that.updateData("Custom", customData);
         })
 
