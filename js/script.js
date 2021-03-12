@@ -76,6 +76,13 @@ Promise.all([preProcessData]).then(data => {
         }
     }
 
+    function result_to_Object(data) {
+        return {
+            "XC": data.XC,
+            
+        }
+    }
+
     let selectedData = new dataSelection(preData, updateData, updateArch, performAnalysis);
 
 })
