@@ -11,13 +11,13 @@ class aa_view {
 
     constructor(data) {
 
-        this.XC = data[0].XC;
-        this.S = data[0].S;
+        this.XC = data.XC;
+        this.S = data.S;
     
-        this.raw = data[0].raw; 
+        this.raw = data.raw; 
         this.variables = Object.keys(this.raw[0]);
     
-        this.timeline = data[0].time_data;
+        this.timeline = data.time_data;
 
         this.chartOn = false;
         this.filteredData = [];
