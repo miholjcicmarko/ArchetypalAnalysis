@@ -3,13 +3,16 @@ class PlotData {
         this.value = value;
         this.variable_name = variable_name;
 
-        this.country = null;
     }
 }
 
 class aa_view {
 
     constructor(data, numArch) {
+
+        d3.select("#Introduction").remove();
+        d3.select("#header-wrap").style("opacity", 1);
+        d3.select(".topnav").style("opacity", 1);
 
         this.XC = data.XC;
         this.S = data.S;
@@ -34,6 +37,7 @@ class aa_view {
 
         this.S = newS;
         this.numberOfArchetypes = numArch;
+        this.drawCircleChart(this.numberOfArchetypes);
 
         let that = this;
 
@@ -338,14 +342,14 @@ class aa_view {
         let filteredData = this.filterObjsInArr(rawData, chosenVariables);
 
         // make more general
-        let specificData = filteredData.filter(d => d.state.toLowerCase().includes(this.variable_name));   
+        let specificData = filteredData.filter(d => d.id.toLowerCase().includes(this.variable_name));   
 
         let ydata = [];
         let rawDataVarSpecific = [];
 
         for (let i = 0; i < chosenVariables.length; i++) {
 
-            if (chosenVariables[i] !== "state") {
+            if (chosenVariables[i] !== "id") {
 
                 for (let k = 0; k < specificData.length; k++){
                     let number = {value : parseInt(specificData[k][""+chosenVariables[i]])
@@ -435,7 +439,7 @@ class aa_view {
 
                 for (let i = 0; i < chosenVariables.length; i++) {
 
-                    if (chosenVariables[i] !== "state") {
+                    if (chosenVariables[i] !== "id") {
                        
                         let yaxis = svg.append("g")
                                 .attr("id", "y-axis" + i);
