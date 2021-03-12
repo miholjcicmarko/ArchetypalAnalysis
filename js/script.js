@@ -73,16 +73,19 @@ Promise.all([preProcessData]).then(data => {
         }
         else {
             let aa_result = new Algorithms(data, numArch);
+            let matricies = result_to_Object(aa_result);
+            let plots = new aa_view(matricies);
         }
     }
 
-    function result_to_Object(data) {
+    function result_to_Object(result) {
         // include if statement for timeline
         
         return {
-            "XC": data.XC,
-            "S": data.S,
-            "raw": data.raw;
+            "XC": result.XC,
+            "S": result.S,
+            "raw": result.fullData,
+            "data_id_less": result.data
         }
     }
 
