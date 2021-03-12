@@ -3,6 +3,7 @@ class Algorithms {
 
     constructor(data, noc, I, U) {
         this.fullData = data;
+        noc = parseInt(noc, 10);
 
         this.data = this.fullData.map(({id, ...item}) => item);  
 
@@ -630,10 +631,10 @@ class Algorithms {
                 let Kt_2_arr = [];
 
                 for (let p = 0; p < Kt_2._data.length; p++) {
-                    Kt_2_arr.push([Kt_2._data[p]]);
+                    Kt_2_arr.push(Kt_2._data[p]);
                 }
 
-                let sum_dist_temp1 = math.subtract(Kt_2_arr, K_ind_t_arr);
+                let sum_dist_temp1 = math.subtract(Kt_2_arr, K_ind_t_row2._data[0]);
 
                 let Kt2_ind_t_arr = [];
 
@@ -651,7 +652,7 @@ class Algorithms {
                     sum_dist_temp4 = math.concat(sum_dist_temp4, [sum_dist_temp3[p]]);
                 }
                 
-                let sum_dist_temp5 = math.matrix(sum_dist_temp4);
+                let sum_dist_temp5 = math.matrix([sum_dist_temp4]);
 
                 sum_dist = math.add(sum_dist, sum_dist_temp5); 
 
