@@ -77,9 +77,12 @@ Promise.all([preProcessData]).then(data => {
     }
 
     function result_to_Object(data) {
+        // include if statement for timeline
+        
         return {
             "XC": data.XC,
-            
+            "S": data.S,
+            "raw": data.raw;
         }
     }
 
