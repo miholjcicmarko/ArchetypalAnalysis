@@ -25,6 +25,7 @@ class Algorithms {
         }
 
         matrix_data = math.matrix(matrix_data);
+        matrix_data = math.transpose(matrix_data);
 
         let [XC, S, C, SSE, varexpl] = this.phca(matrix_data, noc, I, U, 0, 1 * (math.pow(10, -6)), 500);
         

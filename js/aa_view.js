@@ -13,15 +13,26 @@ class aa_view {
 
         this.XC = data.XC;
         this.S = data.S;
-    
         this.raw = data.raw; 
         this.variables = Object.keys(this.raw[0]);
-    
         this.timeline = data.time_data;
 
         this.chartOn = false;
         this.filteredData = [];
         this.chosenVars = [];
+
+        let newS = [];
+
+        for (let i = 0; i < this.S._data[0].length; i++) {
+            let newObj = {};
+            for (let k = 0; k < this.S._data.length; k++) {
+                newObj[""+k] = this.S._data[k][i];
+            }
+            newObj["id"] = this.raw[i].id;
+            newS.push(newObj);
+        }
+
+        this.S = newS;
 
         let that = this;
 
