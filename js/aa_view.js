@@ -9,7 +9,7 @@ class PlotData {
 
 class aa_view {
 
-    constructor(data) {
+    constructor(data, numArch) {
 
         this.XC = data.XC;
         this.S = data.S;
@@ -33,6 +33,7 @@ class aa_view {
         }
 
         this.S = newS;
+        this.numberOfArchetypes = numArch;
 
         let that = this;
 
@@ -127,7 +128,7 @@ class aa_view {
         this.dataS[i] = [];
         for (let p = 0; p < this.S.length; p++) {
             // need to generalize, can't have state
-            let point = new PlotData(this.S[p][i],this.S[p].state); 
+            let point = new PlotData(this.S[p][i],this.S[p].id); 
             this.dataS[i].push(point);
         }
 
@@ -198,7 +199,7 @@ class aa_view {
             that.makeBarCharts(that.chosenVars, that.raw);
         });
 
-    that.drawTimeLine(that.timeline);
+    //that.drawTimeLine(that.timeline);
 
     }
 
