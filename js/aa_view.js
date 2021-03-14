@@ -282,6 +282,7 @@ class aa_view {
 
         onscreenData.on("click", function(d,i) {
             that.onSearch(this,that.dataS, that.numberOfArchetypes, true);
+            that.variable_name = this.id.toLowerCase();
         })
 
     }
@@ -291,27 +292,24 @@ class aa_view {
         return text;
     }
 
-    onSearch(searchVal, data, isTooltip) {
-        if (isTooltip === false) {
-            let searchBar = d3.select("#search-bar");
+    onSearch(searchVal, data, numberOfArch, isTooltip) {
         
-            for (let i = 0; i < this.numberOfArchetypes; i++) {
+        for (let i = 0; i < numberOfArch; i++) {
+
+            if (isTooltip === false) {
                 this.filteredData = data[i].filter(d => d.variable_name.toLowerCase().includes(searchVal));
             }
-        }
-        else if (isTooltip === true) {
-            let toolData = searchVal.id;
-            for (let i = 0; i < this.numberOfArchetypes; i++) {
+            else if (isTooltip === true) {
+                let toolData = searchVal.id;
+                toolData = toolData.toLowerCase();
                 this.filteredData = data[i].filter(d => d.variable_name.toLowerCase().includes(toolData));
-        }
+            }
 
             let circles = d3.select('#circle' + i);
 
             let circleScale = this.xScale;
 
             let margin_top = this.margin.top;
-
-            let numberOfArch = this.numberOfArchetypes; 
             
             circles.append("circle")
                 .attr("cx", circleScale(this.filteredData[0].value))
@@ -335,6 +333,7 @@ class aa_view {
                     }
                 })
                 .classed("hovered", true);
+
         }
     }
 
@@ -460,11 +459,11 @@ class aa_view {
                         let yaxis = svg.append("g")
                                 .attr("id", "y-axis" + i);
                            
-                        yaxis.append("text")
-                             .text("cases")
-                             .attr("class", "axis-label")
-                             .attr("text-anchor", "middle")
-                             .attr("transform", "translate(" + (-60+((i-1))) +","+h/2+")rotate(-90)");
+                        // yaxis.append("text")
+                        //      .text("cases")
+                        //      .attr("class", "axis-label")
+                        //      .attr("text-anchor", "middle")
+                        //      .attr("transform", "translate(" + (-60+((i-1))) +","+h/2+")rotate(-90)");
                            
                         yaxis.call(d3.axisLeft(yScale[i-1]).ticks(5))
                              .attr("transform", "translate(" + ((i-1)*(w/(chosenVariables.length-1))+3*margin.left+10) + ",5)")
