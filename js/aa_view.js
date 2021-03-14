@@ -8,7 +8,7 @@ class PlotData {
 
 class aa_view {
 
-    constructor(data, numArch) {
+    constructor(data, numArch, updateArch) {
 
         d3.select("#Introduction").remove();
         d3.select("#header-wrap").style("opacity", 1);
@@ -18,6 +18,7 @@ class aa_view {
         this.S = data.S;
         this.raw = data.raw; 
         this.variables = Object.keys(this.raw[0]);
+        this.updateArch = updateArch;
         this.timeline = data.time_data;
 
         this.chartOn = false;
@@ -36,8 +37,9 @@ class aa_view {
         }
 
         this.S = newS;
-        this.numberOfArchetypes = numArch;
+        this.numberOfArchetypes = parseInt(numArch, 10);
         this.drawCircleChart(this.numberOfArchetypes);
+        document.getElementById('selectNow').selectedIndex=this.numberOfArchetypes - 1;
 
         let that = this;
 
@@ -47,13 +49,10 @@ class aa_view {
                 let number = this.value;
 
                 that.chartON = true;
-
-                if (number === '-') {
-                    that.resetViz();
-                }
-                else {
-                    that.drawCircleChart(number);
-                }
+                
+                that.updateArch(number, "same");
+                //that.drawCircleChart(number);
+                
             });
     
     }

@@ -34,8 +34,12 @@ Promise.all([preProcessData]).then(data => {
         }
     }
 
-    function updateArch (number) {
+    function updateArch (number, sameData) {
         selectedData.newArch(number);
+
+        if (sameData === "same") {
+            performAnalysis(selectedData.data, number);
+        }
     }
 
     function performAnalysis (data, numArch) {
@@ -74,7 +78,7 @@ Promise.all([preProcessData]).then(data => {
         else {
             let aa_result = new Algorithms(data, numArch);
             let matricies = result_to_Object(aa_result);
-            let plots = new aa_view(matricies, numArch);
+            let plots = new aa_view(matricies, numArch, updateArch);
         }
     }
 
