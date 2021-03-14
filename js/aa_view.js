@@ -10,7 +10,8 @@ class aa_view {
 
     constructor(data, numArch, updateArch) {
 
-        d3.select("#Introduction").remove();
+        d3.select("#Introduction").style("opacity", 0);
+        document.getElementById("Introduction").style.zIndex = "-1";
         d3.select("#header-wrap").style("opacity", 1);
         d3.select(".topnav").style("opacity", 1);
 
@@ -49,8 +50,19 @@ class aa_view {
                 let number = this.value;
 
                 that.chartON = true;
+
+                let div = document.getElementById("oned")
+                while (div.firstChild) {
+                    div.removeChild(div.firstChild);
+                }
+
+                let divBar = document.getElementById("bar1")
+                while (divBar.firstChild) {
+                    divBar.removeChild(divBar.firstChild);
+                }
                 
                 that.updateArch(number, "same");
+                
                 //that.drawCircleChart(number);
                 
             });
@@ -185,7 +197,7 @@ class aa_view {
 
             let searchVal = searchBar.property("value").toLowerCase();
             if (e.keyCode === 13 || searchVal == "") {
-                this.onSearch(searchVal,this.dataS, this.numberOfArchetypes);
+                this.onSearch(searchVal,this.dataS, this.numberOfArchetypes, false);
                 that.variable_name = searchVal;
             }
             
@@ -268,6 +280,10 @@ class aa_view {
                 .style("opacity", 0);
         });
 
+        onscreenData.on("click", function(d,i) {
+            that.onSearch(this,that.dataS, that.numberOfArchetypes, true);
+        })
+
     }
 
     tooltipRender(data) {
@@ -275,17 +291,19 @@ class aa_view {
         return text;
     }
 
-    onSearch(searchVal, data) {
-        let searchBar = d3.select("#search-bar");
+    onSearch(searchVal, data, isTooltip) {
+        if (isTooltip === false) {
+            let searchBar = d3.select("#search-bar");
         
-        for (let i = 0; i < this.numberOfArchetypes; i++) {
-            this.filteredData = data[i].filter(d => d.variable_name.toLowerCase().includes(searchVal));
-
-        // for (let k = 0; k < this.filteredData.length; k++) {
-        //     let circles = d3.select('#circle' + i);
-        //     let circle = circles.select("#"+this.filteredData[k].variable_name)
-        //                    .classed("hovered", true);
-        // }
+            for (let i = 0; i < this.numberOfArchetypes; i++) {
+                this.filteredData = data[i].filter(d => d.variable_name.toLowerCase().includes(searchVal));
+            }
+        }
+        else if (isTooltip === true) {
+            let toolData = searchVal.id;
+            for (let i = 0; i < this.numberOfArchetypes; i++) {
+                this.filteredData = data[i].filter(d => d.variable_name.toLowerCase().includes(toolData));
+        }
 
             let circles = d3.select('#circle' + i);
 
@@ -317,7 +335,6 @@ class aa_view {
                     }
                 })
                 .classed("hovered", true);
-
         }
     }
 
