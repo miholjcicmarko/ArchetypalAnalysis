@@ -25,6 +25,7 @@ class aa_view {
         this.chartOn = false;
         this.filteredData = [];
         this.chosenVars = [];
+        this.chosenIDs = [];
 
         let newS = [];
 
