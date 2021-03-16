@@ -447,7 +447,14 @@ class aa_view {
             ydata.push(specificData);
         }
 
+        let barData = [];
+
         for (let i = 1; i < chosenVariables.length; i++) {
+            for (let m = 0; m < this.chosenIDs.length; m++) {
+                let number = ydata[m][0][""+chosenVariables[i]];
+                barData.push(number);
+            }
+            
             let arrayofData = [];
             for (let k = 0; k < filteredData.length; k++) {
                 let number = parseInt(filteredData[k][""+chosenVariables[i]])
@@ -503,27 +510,31 @@ class aa_view {
         //         }
         // }
 
-        let that = this;
+        // let that = this;
 
-            svg.selectAll()
-                .data(ydata)
-                .enter()
-                .append("g")
-                .append("rect")
-                .attr("x", function (d,i) {
-                    return i * (w/(that.chosenIDs.length));
-                })
-                .attr("y", function(d,i) {
-                    let scale = yScale[i];
-                    return scale(d.value);
-                })
-                .attr("width", w/(that.chosenIDs.length) - barpadding)
-                .attr("height", function(d,i) {
-                    let scale = yScale[i];
-                    return h-scale(d.value);
-                })
-                .attr("fill","orangered")
-                .attr("transform", "translate(70,0)");
+        // for (let i = 0; i < yScales.length; i++) {
+        //     let data = ydata[i];
+
+        //     svg.selectAll()
+        //         .data(data)
+        //         .enter()
+        //         .append("g")
+        //         .append("rect")
+        //         .attr("x", function (d,i) {
+        //             return i * (w/(that.chosenIDs.length));
+        //         })
+        //         .attr("y", function(d,i) {
+        //             let scale = yScales[i];
+        //             return scale(d.value);
+        //         })
+        //         .attr("width", w/(that.chosenIDs.length) - barpadding)
+        //         .attr("height", function(d,i) {
+        //             let scale = yScale[i];
+        //             return h-scale(d.value);
+        //         })
+        //         .attr("fill","orangered")
+        //         .attr("transform", "translate(70,0)");
+        // }
 
             for (let i = 0; i < chosenVariables.length; i++) {
 
@@ -538,14 +549,14 @@ class aa_view {
                             .attr("text-anchor", "middle")
                             .attr("transform", "translate(" + (-50+((i-1))) +","+h/2+")rotate(-90)");
                            
-                    yaxis.call(d3.axisLeft(yScale[i-1]).ticks(5))
+                    yaxis.call(d3.axisLeft(yScales[i-1]).ticks(5))
                             .attr("transform", "translate(" + ((i-1)*(w/(chosenVariables.length-1))+3*margin.left+10) + ",5)")
                             .attr("class", "axis_line");
                    
                     let xaxis = svg.append("g")
                                     .attr("id", "x-axis")
                                     .attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(3*margin.left+10))+","+ h+")")
-                                    .call(d3.axisBottom(x_lab[i-1]));
+                                    .call(d3.axisBottom(xScales[i-1]));
                     
                 }
 
