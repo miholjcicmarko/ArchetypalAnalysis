@@ -354,150 +354,153 @@ class aa_view {
                             .attr("height", h + margin.top + margin.bottom);
 
         let filteredData = this.filterObjsInArr(rawData, chosenVariables);
-        let specificData = [];
 
-        for (let k = 0; k < this.chosenIDs.length; k++) {
-            let filter = filteredData.filter(d => d.id.toLowerCase().includes(this.chosenIDs[k])); 
-            specificData.push({filter});
-        }
+        let specificData = filteredData.filter(d => d.id.toLowerCase().includes(this.variable_name)); 
 
-        let specificData_arr = [];
 
-        for (let k = 0; k < this.chosenIDs.length; k++) {
-            let object = specificData[k]["filter"][0];
-            specificData_arr.push(object);
-        }
+        // let specificData = [];
 
-        let color = d3.scaleOrdinal()
-                .range(["red", "steelblue", "darkgreen", "redorange", "black"]);
+        // for (let k = 0; k < this.chosenIDs.length; k++) {
+        //     let filter = filteredData.filter(d => d.id.toLowerCase().includes(this.chosenIDs[k])); 
+        //     specificData.push({filter});
+        // }
+
+        // let specificData_arr = [];
+
+        // for (let k = 0; k < this.chosenIDs.length; k++) {
+        //     let object = specificData[k]["filter"][0];
+        //     specificData_arr.push(object);
+        // }
+
+        // let color = d3.scaleOrdinal()
+        //         .range(["red", "steelblue", "darkgreen", "redorange", "black"]);
+
+        // let rawDataVarSpecific = [];
+        // let yScales = [];
+        // let xScales = [];
+        // let ydata = [];
+        // let ydataChosenVar = [];
+
+        // for (let i = 1; i < chosenVariables.length; i++) {
+        //     let arrayofData = [];
+
+        //     for (let k = 0; k < filteredData.length; k++) {
+        //         let number = parseInt(filteredData[k][""+chosenVariables[i]])
+        //         arrayofData.push(number);
+        //     }
+        //     rawDataVarSpecific.push(arrayofData);
+
+        //     let arrayRaw = rawDataVarSpecific[i-1];
+            
+        //     let yScaleOne = d3.scaleLinear()
+        //                         .domain([d3.max(arrayRaw), 0])
+        //                         .range([0, h-5]);
+        //     yScales.push(yScaleOne);
+
+        //     let xScaleOne = d3.scaleBand()
+        //                   .domain(["" + this.chosenIDs])
+        //                   .range([0,w/(chosenVariables.length-1) - barpadding]);
+        //     xScales.push(xScaleOne);
+
+        //     let one_chart_ydata = [];
+
+        //     for (let k = 0; k < specificData_arr.length; k++) {
+        //         let object = {id: specificData_arr[k].id,
+        //             chosenVariables[i]: parseInt(specificData_arr[k][""+chosenVariables[i]])
+        //         }
+        //         one_chart_ydata.push(object);
+        //     }
+
+        //     ydata.push(one_chart_ydata);
+
+        //     let yaxis = svg.append("g")
+        //                         .attr("id", "y-axis" + i);
+                           
+        //     yaxis.append("text")
+        //         .text(""+chosenVariables[i])
+        //         .attr("class", "axis-label")
+        //         .attr("text-anchor", "middle")
+        //         .attr("transform", "translate(" + (-60+((i-1))) +","+h/2+")rotate(-90)");
+                           
+        //     yaxis.call(d3.axisLeft(yScales[i-1]).ticks(5))
+        //          .attr("transform", "translate(" + ((i-1)*(w/(chosenVariables.length-1))+3*margin.left+10) + ",5)")
+        //          .attr("class", "axis_line");
+                   
+        //     let xaxis = svg.append("g")
+        //                     .attr("id", "x-axis")
+        //                     .attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(3*margin.left+10))+","+ h+")")
+        //                     .call(d3.axisBottom(xScales[i-1]));
+
+        //     for (let k = 1; k < chosenVariables.length; k++) {
+        //         let value = {value: parseInt(ydata[0][i][""+chosenVariables[k]])}
+        //         ydataChosenVar.push(value);
+        //     }
+        // }
 
         let rawDataVarSpecific = [];
-        let yScales = [];
-        let xScales = [];
         let ydata = [];
-        let ydataChosenVar = [];
 
-        for (let i = 1; i < chosenVariables.length; i++) {
-            let arrayofData = [];
-
-            for (let k = 0; k < filteredData.length; k++) {
-                let number = parseInt(filteredData[k][""+chosenVariables[i]])
-                arrayofData.push(number);
-            }
-            rawDataVarSpecific.push(arrayofData);
-
-            let arrayRaw = rawDataVarSpecific[i-1];
-            
-            let yScaleOne = d3.scaleLinear()
-                                .domain([d3.max(arrayRaw), 0])
-                                .range([0, h-5]);
-            yScales.push(yScaleOne);
-
-            let xScaleOne = d3.scaleBand()
-                          .domain(["" + this.chosenIDs])
-                          .range([0,w/(chosenVariables.length-1) - barpadding]);
-            xScales.push(xScaleOne);
-
-            let one_chart_ydata = [];
-
-            for (let k = 0; k < specificData_arr.length; k++) {
-                let object = {id: specificData_arr[k].id,
-                    chosenVariables[i]: parseInt(specificData_arr[k][""+chosenVariables[i]])
-                }
-                one_chart_ydata.push(object);
-            }
-
-            ydata.push(one_chart_ydata);
-
-            let yaxis = svg.append("g")
-                                .attr("id", "y-axis" + i);
-                           
-            yaxis.append("text")
-                .text(""+chosenVariables[i])
-                .attr("class", "axis-label")
-                .attr("text-anchor", "middle")
-                .attr("transform", "translate(" + (-60+((i-1))) +","+h/2+")rotate(-90)");
-                           
-            yaxis.call(d3.axisLeft(yScales[i-1]).ticks(5))
-                 .attr("transform", "translate(" + ((i-1)*(w/(chosenVariables.length-1))+3*margin.left+10) + ",5)")
-                 .attr("class", "axis_line");
-                   
-            let xaxis = svg.append("g")
-                            .attr("id", "x-axis")
-                            .attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(3*margin.left+10))+","+ h+")")
-                            .call(d3.axisBottom(xScales[i-1]));
-
-            for (let k = 1; k < chosenVariables.length; k++) {
-                let value = {value: parseInt(ydata[0][i][""+chosenVariables[k]])}
-                ydataChosenVar.push(value);
-            }
-        }
-    
         
-
-        //let rawDataVarSpecific = [];
-        // let ydata = [];
-
         // for (let k = 0; k < this.chosenIDs.length; k++) {
         //     let specificData = filteredData.filter(d => d.id.toLowerCase().includes(this.chosenIDs[k])); 
 
-        //     for (let i = 0; i < chosenVariables.length; i++) {
+            for (let i = 0; i < chosenVariables.length; i++) {
 
-        //         if (chosenVariables[i] !== "id") {
+                if (chosenVariables[i] !== "id") {
 
-        //             for (let k = 0; k < specificData.length; k++){
-        //                 let number = {value : parseInt(specificData[k][""+chosenVariables[i]])
-        //                 }   
-        //                 ydata.push(number);
-        //             }
-        //             let arrayofData = [];
+                    for (let k = 0; k < specificData.length; k++){
+                        let number = {value : parseInt(specificData[k][""+chosenVariables[i]])
+                        }   
+                        ydata.push(number);
+                    }
+                    let arrayofData = [];
 
-        //             for (let k = 0; k < filteredData.length; k++) {
-        //                 let number = parseInt(filteredData[k][""+chosenVariables[i]])
-        //                 arrayofData.push(number);
-        //             }
-        //             rawDataVarSpecific.push(arrayofData);
-        //         }
-        //     }
-        // }
+                    for (let k = 0; k < filteredData.length; k++) {
+                        let number = parseInt(filteredData[k][""+chosenVariables[i]])
+                        arrayofData.push(number);
+                    }
+                    rawDataVarSpecific.push(arrayofData);
+                }
+            }
                         
-        //         let x_lab = [];
-        //         let yScale = [];
+                let x_lab = [];
+                let yScale = [];
 
-        //         for (let i = 1; i < chosenVariables.length; i++) {
-        //             let x_var = d3.scaleBand()
-        //                   .domain(["" + this.chosenIDs])
-        //                   .range([0,w/(chosenVariables.length-1) - barpadding]);
-        //             x_lab.push(x_var);
+                for (let i = 1; i < chosenVariables.length; i++) {
+                    let x_var = d3.scaleBand()
+                          .domain(["" + this.variable_name])
+                          .range([0,w/(chosenVariables.length-1) - barpadding]);
+                    x_lab.push(x_var);
 
-        //             let arrayRaw = rawDataVarSpecific[i-1];
+                    let arrayRaw = rawDataVarSpecific[i-1];
 
-        //             let yScaleOne = d3.scaleLinear()
-        //                        .domain([d3.max(arrayRaw), 0])
-        //                        .range([0, (h-5)]);
-        //             yScale.push(yScaleOne);
-        //         }
+                    let yScaleOne = d3.scaleLinear()
+                               .domain([d3.max(arrayRaw), 0])
+                               .range([0, (h-5)]);
+                    yScale.push(yScaleOne);
+                }
 
-        // let that = this;
+        let that = this;
 
-        //     svg.selectAll("rect")
-        //         .data(ydata)
-        //         .enter()
-        //         .append("rect")
-        //         .attr("x", function (d,i) {
-        //             return i * (w/(that.chosenIDs.length-1));
-        //         })
-        //         .attr("y", function(d,i) {
-        //             let scale = yScales[i];
-        //             return scale(d.value);
-        //         })
-        //         .attr("width", w/(that.chosenIDs.length-1) - barpadding)
-        //         .attr("height", function(d,i) {
-        //             let scale = yScales[i];
-        //             return h-scale(d.value);
-        //         })
-        //         .attr("fill","orangered")
-        //         .attr("transform", "translate(70,0)");
+            svg.selectAll()
+                .data(ydata)
+                .enter()
+                .append("g")
+                .append("rect")
+                .attr("x", function (d,i) {
+                    return i * (w/(that.chosenIDs.length));
+                })
+                .attr("y", function(d,i) {
+                    let scale = yScale[i];
+                    return scale(d.value);
+                })
+                .attr("width", w/(that.chosenIDs.length) - barpadding)
+                .attr("height", function(d,i) {
+                    let scale = yScale[i];
+                    return h-scale(d.value);
+                })
+                .attr("fill","orangered")
+                .attr("transform", "translate(70,0)");
 
             for (let i = 0; i < chosenVariables.length; i++) {
 
@@ -510,17 +513,16 @@ class aa_view {
                             .text(""+chosenVariables[i])
                             .attr("class", "axis-label")
                             .attr("text-anchor", "middle")
-                            .attr("transform", "translate(" + (-60+((i-1))) +","+h/2+")rotate(-90)");
+                            .attr("transform", "translate(" + (-50+((i-1))) +","+h/2+")rotate(-90)");
                            
-                    yaxis.call(d3.axisLeft(yScales[i-1]).ticks(5))
+                    yaxis.call(d3.axisLeft(yScale[i-1]).ticks(5))
                             .attr("transform", "translate(" + ((i-1)*(w/(chosenVariables.length-1))+3*margin.left+10) + ",5)")
                             .attr("class", "axis_line");
                    
                     let xaxis = svg.append("g")
                                     .attr("id", "x-axis")
                                     .attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(3*margin.left+10))+","+ h+")")
-                                    .call(d3.axisBottom(xScales[i-1]));
-
+                                    .call(d3.axisBottom(x_lab[i-1]));
                     
                 }
 
