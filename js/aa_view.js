@@ -200,6 +200,7 @@ class aa_view {
             if (e.keyCode === 13 || searchVal == "") {
                 this.onSearch(searchVal,this.dataS, this.numberOfArchetypes, false);
                 that.variable_name = searchVal;
+                that.chosenIDs.push(searchVal);
             }
             
         });
@@ -284,6 +285,7 @@ class aa_view {
         onscreenData.on("click", function(d,i) {
             that.onSearch(this,that.dataS, that.numberOfArchetypes, true);
             that.variable_name = this.id.toLowerCase();
+            that.chosenIDs.push(this.id.toLowerCase());
         })
 
     }
