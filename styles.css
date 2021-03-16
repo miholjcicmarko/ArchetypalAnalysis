@@ -105,7 +105,7 @@
 }
 
 .labelArch {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: sans-serif;
 }
 
 #bar1 {
@@ -115,14 +115,17 @@
 .axis-label {
     display: inline-block;
     padding-right: 5px;
-    font-size: 10px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    font-family: sans-serif;
+    font-weight: lighter;
 }
 
 .axis_line {
     fill: none;
     stroke: #000;
     shape-rendering: crispEdges;
-    font-size: 9px;
+    font-size: 10px;
 }
 
 div.tooltip {

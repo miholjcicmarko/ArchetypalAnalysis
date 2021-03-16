@@ -2,7 +2,6 @@ class PlotData {
     constructor (value, variable_name) {
         this.value = value;
         this.variable_name = variable_name;
-
     }
 }
 
@@ -24,7 +23,7 @@ class aa_view {
 
         this.chartOn = false;
         this.filteredData = [];
-        this.chosenVars = [];
+        this.chosenVars = ["id"];
         this.chosenIDs = [];
 
         let newS = [];
@@ -63,11 +62,7 @@ class aa_view {
                 }
                 
                 that.updateArch(number, "same");
-                
-                //that.drawCircleChart(number);
-                
             });
-    
     }
 
     drawCircleChart (numberOfArchetypes) {
@@ -187,8 +182,7 @@ class aa_view {
             .classed("circleData", true)
             .attr("id", function(d) {
                 return d.variable_name + "";
-            });
-            
+            });  
     }  
     
     let that = this;
@@ -215,9 +209,6 @@ class aa_view {
         submit.on("click", function(d,i) {
             that.makeBarCharts(that.chosenVars, that.raw);
         });
-
-    //that.drawTimeLine(that.timeline);
-
     }
 
     drawVariables () {
@@ -226,7 +217,7 @@ class aa_view {
                         .append("g")
                         .attr("id", "buttonGroup");
 
-        for (let i = 0; i < this.variables.length; i++) {
+        for (let i = 1; i < this.variables.length; i++) {
             let button = d3.select('#buttonGroup')
                 .append("button")
                 .attr("class", "button")
@@ -242,8 +233,6 @@ class aa_view {
                 that.addChosenVar (d);
                 that.chosenVars.push(d.srcElement.id);
             })
-
-            // document.getElementById(this.variables[i]).addEventListener("click", this.addChosenVar);
         }
     }
 
@@ -336,11 +325,12 @@ class aa_view {
                     }
                 })
                 .classed("hovered", true);
-
         }
     }
 
     makeBarCharts (chosenVariables, rawData) {
+
+        chosenVariables = [...new Set(chosenVariables)];
 
         d3.select('#bar1')
             .append('div')
@@ -357,128 +347,177 @@ class aa_view {
         let h = 350 - margin.bottom - margin.top;
         let barpadding = 70;
 
-        let filteredData = this.filterObjsInArr(rawData, chosenVariables);
-
-        // make more general
-        let specificData = filteredData.filter(d => d.id.toLowerCase().includes(this.variable_name));   
-
-        let ydata = [];
-        let rawDataVarSpecific = [];
-
-        for (let i = 0; i < chosenVariables.length; i++) {
-
-            if (chosenVariables[i] !== "id") {
-
-                for (let k = 0; k < specificData.length; k++){
-                    let number = {value : parseInt(specificData[k][""+chosenVariables[i]])
-                    }
-                    ydata.push(number);
-                }
-                let arrayofData = [];
-
-                for (let k = 0; k < filteredData.length; k++) {
-                    let number = parseInt(filteredData[k][""+chosenVariables[i]])
-                    arrayofData.push(number);
-                }
-                rawDataVarSpecific.push(arrayofData);
-            }
-        }
-                let svg = d3.select("#bar1")
+        let svg = d3.select("#bar1")
                             .append("svg")
                             .attr("id", "bars")
                             .attr("width", w + margin.right + margin.left)
                             .attr("height", h + margin.top + margin.bottom);
-                        
-                let x_lab = [];
-                let yScale = [];
 
-                for (let i = 1; i < chosenVariables.length; i++) {
-                    let x_var = d3.scaleBand()
-                          .domain(["" + chosenVariables[i]])
+        let filteredData = this.filterObjsInArr(rawData, chosenVariables);
+        let specificData = [];
+
+        for (let k = 0; k < this.chosenIDs.length; k++) {
+            let filter = filteredData.filter(d => d.id.toLowerCase().includes(this.chosenIDs[k])); 
+            specificData.push({filter});
+        }
+
+        let specificData_arr = [];
+
+        for (let k = 0; k < this.chosenIDs.length; k++) {
+            let object = specificData[k]["filter"][0];
+            specificData_arr.push(object);
+        }
+
+        let color = d3.scaleOrdinal()
+                .range(["red", "steelblue", "darkgreen", "redorange", "black"]);
+
+        let rawDataVarSpecific = [];
+        let yScales = [];
+        let xScales = [];
+        let ydata = [];
+
+        for (let i = 1; i < chosenVariables.length; i++) {
+            let arrayofData = [];
+
+            for (let k = 0; k < filteredData.length; k++) {
+                let number = parseInt(filteredData[k][""+chosenVariables[i]])
+                arrayofData.push(number);
+            }
+            rawDataVarSpecific.push(arrayofData);
+
+            let arrayRaw = rawDataVarSpecific[i-1];
+            
+            let yScaleOne = d3.scaleLinear()
+                                .domain([d3.max(arrayRaw), 0])
+                                .range([0, h-5]);
+            yScales.push(yScaleOne);
+
+            let xScaleOne = d3.scaleBand()
+                          .domain(["" + this.chosenIDs])
                           .range([0,w/(chosenVariables.length-1) - barpadding]);
-                    x_lab.push(x_var);
+            xScales.push(xScaleOne);
 
-                    let arrayRaw = rawDataVarSpecific[i-1];
+            let one_chart_ydata = [];
 
-                    let yScaleOne = d3.scaleLinear()
-                               .domain([d3.max(arrayRaw), 0])
-                               .range([0, (h-5)]);
-                    yScale.push(yScaleOne);
+            for (let k = 0; k < specificData_arr.length; k++) {
+                let object = {id: specificData_arr[k].id,
+                    value: parseInt(specificData_arr[k][""+chosenVariables[i]])
                 }
+                one_chart_ydata.push(object);
+            }
 
-                // let x_lab = d3.scaleBand()
-                //           .domain(["" + chosenVariables[i]])
-                //           .range([0,(w-5)/numberOfArch]);
+            ydata.push(one_chart_ydata);
 
-                // let ydata = [];
-                // for (let k = 0; k < specificData.length; k++){
-                //     ydata.push(parseInt(specificData[k][""+chosenVariables[i]]))
-                // }
-
-                // let rawDataVarSpecific = [];
-                // for (let k = 0; k < filteredData.length; k++) {
-                //     rawDataVarSpecific.push(parseInt(filteredData[k][""+chosenVariables[i]]));
-
-                // }
-                
-                // let yScale = d3.scaleLinear()
-                //                .domain([d3.max(rawDataVarSpecific), 0])
-                //                .range([0, (h-5)]);
-
-                svg.selectAll("rect")
-                    .data(ydata)
-                    .enter()
-                    .append("rect")
-                    .attr("x", function (d,i) {
-                        return i * (w/(chosenVariables.length-1));
-                    })
-                    .attr("y", function(d,i) {
-                        let scale = yScale[i];
-                        return scale(d.value);
-                    })
-                    .attr("width", w/(chosenVariables.length-1) - barpadding)
-                    .attr("height", function(d,i) {
-                        let scale = yScale[i];
-                        return h-scale(d.value);
-                    })
-                    .attr("fill","orangered")
-                    .attr("transform", "translate(70,0)");
-
-
-                // svg.append("rect")
-                //    .attr("x", (i * w/numberOfArch))
-                //    .attr("y", yScale(ydata))
-                //    .attr("width", w/numberOfArch - barpadding)
-                //    .attr("height", function(d) {
-                //         return yScale(ydata);
-                //     })
-                //    .attr("fill","steelblue")
-                //    .attr("transform", "translate(0,0)");
-
-                for (let i = 0; i < chosenVariables.length; i++) {
-
-                    if (chosenVariables[i] !== "id") {
-                       
-                        let yaxis = svg.append("g")
+            let yaxis = svg.append("g")
                                 .attr("id", "y-axis" + i);
                            
-                        yaxis.append("text")
-                             //.text("cases")
-                             .attr("class", "axis-label")
-                             .attr("text-anchor", "middle")
-                             .attr("transform", "translate(" + (-60+((i-1))) +","+h/2+")rotate(-90)");
+            yaxis.append("text")
+                .text(""+chosenVariables[i])
+                .attr("class", "axis-label")
+                .attr("text-anchor", "middle")
+                .attr("transform", "translate(" + (-60+((i-1))) +","+h/2+")rotate(-90)");
                            
-                        yaxis.call(d3.axisLeft(yScale[i-1]).ticks(5))
-                             .attr("transform", "translate(" + ((i-1)*(w/(chosenVariables.length-1))+3*margin.left+10) + ",5)")
-                             .attr("class", "axis_line");
+            yaxis.call(d3.axisLeft(yScales[i-1]).ticks(5))
+                 .attr("transform", "translate(" + ((i-1)*(w/(chosenVariables.length-1))+3*margin.left+10) + ",5)")
+                 .attr("class", "axis_line");
                    
-                        let xaxis = svg.append("g")
-                                       .attr("id", "x-axis")
-                                       .attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(3*margin.left+10))+","+ h+")")
-                                       .call(d3.axisBottom(x_lab[i-1]));
-                    }
+            let xaxis = svg.append("g")
+                            .attr("id", "x-axis")
+                            .attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(3*margin.left+10))+","+ h+")")
+                            .call(d3.axisBottom(xScales[i-1]));
 
+        }
+    
+        //let rawDataVarSpecific = [];
+        // let ydata = [];
+
+        // for (let k = 0; k < this.chosenIDs.length; k++) {
+        //     let specificData = filteredData.filter(d => d.id.toLowerCase().includes(this.chosenIDs[k])); 
+
+        //     for (let i = 0; i < chosenVariables.length; i++) {
+
+        //         if (chosenVariables[i] !== "id") {
+
+        //             for (let k = 0; k < specificData.length; k++){
+        //                 let number = {value : parseInt(specificData[k][""+chosenVariables[i]])
+        //                 }   
+        //                 ydata.push(number);
+        //             }
+        //             let arrayofData = [];
+
+        //             for (let k = 0; k < filteredData.length; k++) {
+        //                 let number = parseInt(filteredData[k][""+chosenVariables[i]])
+        //                 arrayofData.push(number);
+        //             }
+        //             rawDataVarSpecific.push(arrayofData);
+        //         }
+        //     }
+        // }
+                        
+        //         let x_lab = [];
+        //         let yScale = [];
+
+        //         for (let i = 1; i < chosenVariables.length; i++) {
+        //             let x_var = d3.scaleBand()
+        //                   .domain(["" + this.chosenIDs])
+        //                   .range([0,w/(chosenVariables.length-1) - barpadding]);
+        //             x_lab.push(x_var);
+
+        //             let arrayRaw = rawDataVarSpecific[i-1];
+
+        //             let yScaleOne = d3.scaleLinear()
+        //                        .domain([d3.max(arrayRaw), 0])
+        //                        .range([0, (h-5)]);
+        //             yScale.push(yScaleOne);
+        //         }
+
+        // let that = this;
+
+        //     svg.selectAll("rect")
+        //         .data(ydata)
+        //         .enter()
+        //         .append("rect")
+        //         .attr("x", function (d,i) {
+        //             return i * (w/(that.chosenIDs.length-1));
+        //         })
+        //         .attr("y", function(d,i) {
+        //             let scale = yScales[i];
+        //             return scale(d.value);
+        //         })
+        //         .attr("width", w/(that.chosenIDs.length-1) - barpadding)
+        //         .attr("height", function(d,i) {
+        //             let scale = yScales[i];
+        //             return h-scale(d.value);
+        //         })
+        //         .attr("fill","orangered")
+        //         .attr("transform", "translate(70,0)");
+
+            for (let i = 0; i < chosenVariables.length; i++) {
+
+                if (chosenVariables[i] !== "id") {
+                       
+                    let yaxis = svg.append("g")
+                                .attr("id", "y-axis" + i);
+                           
+                    yaxis.append("text")
+                            .text(""+chosenVariables[i])
+                            .attr("class", "axis-label")
+                            .attr("text-anchor", "middle")
+                            .attr("transform", "translate(" + (-60+((i-1))) +","+h/2+")rotate(-90)");
+                           
+                    yaxis.call(d3.axisLeft(yScales[i-1]).ticks(5))
+                            .attr("transform", "translate(" + ((i-1)*(w/(chosenVariables.length-1))+3*margin.left+10) + ",5)")
+                            .attr("class", "axis_line");
+                   
+                    let xaxis = svg.append("g")
+                                    .attr("id", "x-axis")
+                                    .attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(3*margin.left+10))+","+ h+")")
+                                    .call(d3.axisBottom(xScales[i-1]));
+
+                    
                 }
+
+            }
             let data_rect = d3.selectAll("#bar1").selectAll("rect");
 
             this.tooltipRect(data_rect);
