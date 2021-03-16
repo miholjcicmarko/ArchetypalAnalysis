@@ -402,7 +402,7 @@ class aa_view {
 
             for (let k = 0; k < specificData_arr.length; k++) {
                 let object = {id: specificData_arr[k].id,
-                    value: parseInt(specificData_arr[k][""+chosenVariables[i]])
+                    chosenVariables[i]: parseInt(specificData_arr[k][""+chosenVariables[i]])
                 }
                 one_chart_ydata.push(object);
             }
@@ -427,8 +427,8 @@ class aa_view {
                             .attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(3*margin.left+10))+","+ h+")")
                             .call(d3.axisBottom(xScales[i-1]));
 
-            for (let k = 0; k < chosenVariables.length; k++) {
-                let value = {value: parseInt(ydata[i][""+chosenVariables[k]])}
+            for (let k = 1; k < chosenVariables.length; k++) {
+                let value = {value: parseInt(ydata[0][i][""+chosenVariables[k]])}
                 ydataChosenVar.push(value);
             }
         }
