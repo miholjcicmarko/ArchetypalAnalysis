@@ -375,6 +375,7 @@ class aa_view {
         let yScales = [];
         let xScales = [];
         let ydata = [];
+        let ydataChosenVar = [];
 
         for (let i = 1; i < chosenVariables.length; i++) {
             let arrayofData = [];
@@ -426,8 +427,14 @@ class aa_view {
                             .attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(3*margin.left+10))+","+ h+")")
                             .call(d3.axisBottom(xScales[i-1]));
 
+            for (let k = 0; k < chosenVariables.length; k++) {
+                let value = {value: parseInt(ydata[i][""+chosenVariables[k]])}
+                ydataChosenVar.push(value);
+            }
         }
     
+        
+
         //let rawDataVarSpecific = [];
         // let ydata = [];
 
