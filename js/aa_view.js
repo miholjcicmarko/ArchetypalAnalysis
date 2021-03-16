@@ -355,7 +355,7 @@ class aa_view {
 
         let filteredData = this.filterObjsInArr(rawData, chosenVariables);
 
-        let specificData = filteredData.filter(d => d.id.toLowerCase().includes(this.variable_name)); 
+        //let specificData = filteredData.filter(d => d.id.toLowerCase().includes(this.variable_name)); 
 
 
         // let specificData = [];
@@ -439,46 +439,69 @@ class aa_view {
 
         let rawDataVarSpecific = [];
         let ydata = [];
-
+        let yScales = [];
+        let xScales = [];
         
-        // for (let k = 0; k < this.chosenIDs.length; k++) {
-        //     let specificData = filteredData.filter(d => d.id.toLowerCase().includes(this.chosenIDs[k])); 
+        for (let p = 0; p < this.chosenIDs.length; p++) {
+            let specificData = filteredData.filter(d => d.id.toLowerCase().includes(this.chosenIDs[p])); 
+            ydata.push(specificData);
+        }
 
-            for (let i = 0; i < chosenVariables.length; i++) {
-
-                if (chosenVariables[i] !== "id") {
-
-                    for (let k = 0; k < specificData.length; k++){
-                        let number = {value : parseInt(specificData[k][""+chosenVariables[i]])
-                        }   
-                        ydata.push(number);
-                    }
-                    let arrayofData = [];
-
-                    for (let k = 0; k < filteredData.length; k++) {
-                        let number = parseInt(filteredData[k][""+chosenVariables[i]])
-                        arrayofData.push(number);
-                    }
-                    rawDataVarSpecific.push(arrayofData);
-                }
+        for (let i = 1; i < chosenVariables.length; i++) {
+            let arrayofData = [];
+            for (let k = 0; k < filteredData.length; k++) {
+                let number = parseInt(filteredData[k][""+chosenVariables[i]])
+                arrayofData.push(number);
             }
-                        
-                let x_lab = [];
-                let yScale = [];
+            rawDataVarSpecific.push(arrayofData);
 
-                for (let i = 1; i < chosenVariables.length; i++) {
-                    let x_var = d3.scaleBand()
-                          .domain(["" + this.variable_name])
-                          .range([0,w/(chosenVariables.length-1) - barpadding]);
-                    x_lab.push(x_var);
+            let x_var = d3.scaleBand()
+                          .domain(this.chosenIDs.map((s) => s[""+chosenVariables[i]]))
+                          .range([0,w/(chosenVariables.length-1) - barpadding])
+                          .padding(0.1);
+            xScales.push(x_var);
 
-                    let arrayRaw = rawDataVarSpecific[i-1];
-
-                    let yScaleOne = d3.scaleLinear()
-                               .domain([d3.max(arrayRaw), 0])
+            let yScaleOne = d3.scaleLinear()
+                               .domain([d3.max(arrayofData), 0])
                                .range([0, (h-5)]);
-                    yScale.push(yScaleOne);
-                }
+            yScales.push(yScaleOne);
+        }
+
+            // object = {id: specificData[p].id}
+
+            // for (let i = 0; i < chosenVariables.length; i++) {
+
+            //     if (chosenVariables[i] !== "id") {
+            //         object[""+chosenVariables[i]] = parseInt(specificData[p][""+chosenVariables[i]]);   
+        
+            //         let arrayofData = [];
+
+            //         for (let k = 0; k < filteredData.length; k++) {
+            //             let number = parseInt(filteredData[k][""+chosenVariables[i]])
+            //             arrayofData.push(number);
+            //         }
+            //         rawDataVarSpecific.push(arrayofData);
+            //     }
+            // }
+            // ydata.push(object); 
+            
+        //         let x_lab = [];
+        //         let yScale = [];
+
+        //         for (let i = 1; i < chosenVariables.length; i++) {
+        //             let x_var = d3.scaleBand()
+        //                   .domain(["" + this.variable_name])
+        //                   .range([0,w/(chosenVariables.length-1) - barpadding]);
+        //             x_lab.push(x_var);
+
+        //             let arrayRaw = rawDataVarSpecific[i-1];
+
+        //             let yScaleOne = d3.scaleLinear()
+        //                        .domain([d3.max(arrayRaw), 0])
+        //                        .range([0, (h-5)]);
+        //             yScale.push(yScaleOne);
+        //         }
+        // }
 
         let that = this;
 

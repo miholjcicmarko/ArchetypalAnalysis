@@ -1,4 +1,4 @@
-state,positive,negative,totalTestResults,recovered,death
+id,positive,negative,totalTestResults,recovered,death
 AK,35720.0,1042056.0,1077776.0,7165.0,143.0
 AL,269877.0,1421126.0,1645041.0,168387.0,3889.0
 AR,170924.0,1614979.0,1763150.0,149490.0,2660.0
