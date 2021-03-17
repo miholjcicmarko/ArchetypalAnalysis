@@ -290,8 +290,16 @@ class aa_view {
     }
 
     onSearch(searchVal, data, numberOfArch, isTooltip) {
-        
-        for (let i = 0; i < numberOfArch; i++) {
+        if (this.chosenIDs.length > 4 && (this.chosenIDs.includes(searchVal) === true)) {
+            alert("Too many IDs chosen! Please Deselect One or more IDs");
+        }
+        else if ((this.chosenIDs.includes(searchVal) === true)){
+            // is tooltip
+            //then remove the highlight from chosenID list and visually
+        }
+        else {
+
+            for (let i = 0; i < numberOfArch; i++) {
 
             if (isTooltip === false) {
                 this.filteredData = data[i].filter(d => d.variable_name.toLowerCase().includes(searchVal));
@@ -340,6 +348,7 @@ class aa_view {
                     let index = that.chosenIDs.length;
                     return that.color(index-1);
                 })
+            }
         }
     }
 
