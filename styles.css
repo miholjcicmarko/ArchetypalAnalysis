@@ -155,7 +155,7 @@ div.tooltip {
 .hovered{
     fill: rgb(255, 55, 55);
     stroke: rgb(255, 55, 55);
-    stroke-width: 2;
+    stroke-width: 2.5;
     opacity: 1;
 }
 
@@ -169,6 +169,10 @@ div.tooltip {
     font-size: 16px;
     cursor: pointer; 
     border: white;
+}
+
+.selectedCircle {
+    stroke-width: 2.5;
 }
 
 .line {

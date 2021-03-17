@@ -21,10 +21,12 @@ class aa_view {
         this.updateArch = updateArch;
         this.timeline = data.time_data;
 
-        this.chartOn = false;
         this.filteredData = [];
         this.chosenVars = ["id"];
         this.chosenIDs = [];
+
+        this.color = d3.scaleOrdinal()
+                .range(["#e41a1c","#984ea3","#ff7f00","#999999","#f781bf"]);
 
         let newS = [];
 
@@ -49,8 +51,6 @@ class aa_view {
             dropdown.on("change", function () {
                 let number = this.value;
 
-                that.chartON = true;
-
                 let div = document.getElementById("oned")
                 while (div.firstChild) {
                     div.removeChild(div.firstChild);
@@ -62,6 +62,12 @@ class aa_view {
                 }
                 
                 that.updateArch(number, "same");
+            });
+
+        let resetButton = d3.select("#reset");
+
+            resetButton.on("click", function () {
+                that.resetViz();
             });
     }
 
@@ -301,6 +307,8 @@ class aa_view {
             let circleScale = this.xScale;
 
             let margin_top = this.margin.top;
+
+            let that = this;
             
             circles.append("circle")
                 .attr("cx", circleScale(this.filteredData[0].value))
@@ -323,7 +331,15 @@ class aa_view {
                         return 7;
                     }
                 })
-                .classed("hovered", true);
+                .classed("selectedCircle", true)
+                .attr("fill", function () {
+                    let index = that.chosenIDs.length;
+                    return that.color(index-1);
+                })
+                .attr("stroke", function () {
+                    let index = that.chosenIDs.length;
+                    return that.color(index-1);
+                })
         }
     }
 
@@ -333,6 +349,7 @@ class aa_view {
 
         d3.select('#bar1')
             .append('div')
+            .attr("id", "bartip")
             .attr("class", "tooltip")
             .style("opacity", 0);
 
@@ -340,7 +357,7 @@ class aa_view {
 
         d3.select("#buttonGroup").remove();
 
-        let margin = {top: 10, right: 20, bottom: 10, left: 20};
+        let margin = {top: 10, right: 10, bottom: 10, left: 10};
         
         let w = 600 - margin.right - margin.left;
         let h = 350 - margin.bottom - margin.top;
@@ -446,40 +463,41 @@ class aa_view {
             ydata.push(specificData[0]);
         }
 
-        let groupKey = "id";
-        let keys = chosenVariables.slice(1);
+        let id = "id";
+        let variables = chosenVariables.slice(1);
 
-        let x0 = d3.scaleBand()
-                .domain(ydata.map(d => d[groupKey]))
+        let xlargeScale = d3.scaleBand()
+                .domain(ydata.map(d => d[id]))
                 .range([margin.left, w - margin.right])
-                .paddingInner(0.1);
+                .paddingInner(0.25);
 
-        let x1 = d3.scaleBand()
-                .domain(keys)
-                .range([0, x0.bandwidth()])
+        let xcatsScale = d3.scaleBand()
+                .domain(variables)
+                .range([0, xlargeScale.bandwidth()])
                 .padding(0.05);
 
-        let y = d3.scaleLinear()
-                .domain([0, d3.max(ydata, d => d3.max(keys, key => d[key]))]).nice()
+        let yScale = d3.scaleLinear()
+                .domain([0, d3.max(ydata, d => d3.max(variables, key => d[key]))]).nice()
                 .range([h - margin.bottom, margin.top]);
 
-        let color = d3.scaleOrdinal()
-                .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+        let that = this;
 
         svg.append("g")
             .selectAll("g")
             .data(ydata)
             .join("g")
-            .attr("transform", d => `translate(${x0(d[groupKey])},0)`)
+            .attr("transform", d => `translate(${xlargeScale(d[id])},0)`)
             .selectAll("rect")
-            .data(d => keys.map(key => ({key, value: d[key]})))
+            .data(d => variables.map(key => ({key, value: d[key]})))
             .join("rect")
-            .attr("x", d => x1(d.key))
-            .attr("y", d => y(d.value))
-            .attr("width", x1.bandwidth())
-            .attr("height", d => y(0) - y(d.value))
-            .attr("fill", d => color(d.key));
-            
+            .attr("x", d => xcatsScale(d.key))
+            .attr("y", d => yScale(d.value))
+            .attr("width", xcatsScale.bandwidth())
+            .attr("height", d => yScale(0) - yScale(d.value))
+            .attr("fill", d => that.color(d.key));
+         
+        
+
 
         //Kinda
         // for (let p = 0; p < this.chosenIDs.length; p++) {
@@ -598,7 +616,7 @@ class aa_view {
                             .attr("text-anchor", "middle")
                             .attr("transform", "translate(" + (-50+((i-1))) +","+h/2+")rotate(-90)");
                            
-                    yaxis.call(d3.axisLeft(yScales[i-1]).ticks(5))
+                    yaxis.call(d3.axisLeft(yScale[i-1]).ticks(5))
                             .attr("transform", "translate(" + ((i-1)*(w/(chosenVariables.length-1))+3*margin.left+10) + ",5)")
                             .attr("class", "axis_line");
                    
@@ -631,7 +649,8 @@ class aa_view {
 
     tooltipRect (onscreenData) {
         let that = this;
-        let tooltip = d3.select('.tooltip')
+        //more specific id
+        let tooltip = d3.select('#bartip')
 
         onscreenData.on("mouseover", function(d,i) {
             
@@ -756,6 +775,24 @@ class aa_view {
         //     .attr("id", "line-chart")
         //     .attr("class", "line")
         //     .attr("d", line);
+    }
+
+    resetViz () {
+        this.filteredData = [];
+        this.chosenVars = ["id"];
+        this.chosenIDs = [];
+
+        let div = document.getElementById("oned")
+                while (div.firstChild) {
+                    div.removeChild(div.firstChild);
+                }
+
+        let divBar = document.getElementById("bar1")
+                while (divBar.firstChild) {
+                    divBar.removeChild(divBar.firstChild);
+                }
+        
+        this.drawCircleChart(this.numberOfArchetypes);
     }
 
 }
