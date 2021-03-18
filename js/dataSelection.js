@@ -16,7 +16,7 @@ class dataSelection {
             document.getElementById("fifaButton").style.color = "black"
             document.getElementById("fifaButton").style.backgroundColor = "silver"
             that.updateData("fifaButton");
-        })
+        });
 
         let covid = d3.select("#covidButton");
         covid.on("click", function () {
@@ -25,12 +25,12 @@ class dataSelection {
             document.getElementById("covidButton").style.color = "black"
             document.getElementById("covidButton").style.backgroundColor = "silver";
             that.updateData("covidButton");
-        })
+        });
 
         let dropdown = d3.select("#selectNowInitial");
         dropdown.on("change", function () {
             that.updateArch(this.value);
-        })
+        });
 
         let csv_file = d3.select("#csv");
         csv_file.on("change", function () {
@@ -45,12 +45,17 @@ class dataSelection {
                 that.updateData("custom", customData);
             }
 
-        })
+        });
 
-        let performButton = d3.select(".performButton");
+        let performButton = d3.select("#performButton");
         performButton.on("click", function () {
             that.performAnalysis(that.data, that.numArch);
-        })
+        });
+
+        let uploadImplementation = d3.select("#uploadImplementButton");
+        uploadImplementation.on("click", function () {
+            that.uploadScreen();
+        });
 
     }
 
