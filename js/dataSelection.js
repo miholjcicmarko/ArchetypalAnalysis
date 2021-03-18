@@ -6,6 +6,9 @@ class dataSelection {
         this.updateData = updateData;
         this.updateArch = updateArch;
         this.performAnalysis = performAnalysis;
+        this.customXC = null;
+        this.customS = null;
+        this.customDataImplement = null;
 
         let that = this;
 
@@ -89,6 +92,34 @@ class dataSelection {
                 that.customXC = customData;
             }
 
+        });
+
+        let S_file = d3.select("#upS");
+        S_file.on("change", function () {
+            let reader = new FileReader();
+            
+            reader.readAsText(this.files[0]);
+
+            reader.onload = function () {
+                let textData = reader.result;
+                textData = textData.split("/\r\n|\n/");
+                let customData = jQuery.csv.toObjects(textData[0]);
+                that.customS = customData;
+            }
+        });
+
+        let data_file = d3.select("#upData");
+        data_file.on("change", function () {
+            let reader = new FileReader();
+            
+            reader.readAsText(this.files[0]);
+
+            reader.onload = function () {
+                let textData = reader.result;
+                textData = textData.split("/\r\n|\n/");
+                let customData = jQuery.csv.toObjects(textData[0]);
+                that.customDataImplement = customData;
+            }
         });
 
     }
