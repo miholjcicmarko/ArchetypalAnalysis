@@ -57,27 +57,23 @@ class dataSelection {
             d3.select("#Introduction").style("opacity", 0);
             document.getElementById("Introduction").style.zIndex = "-2";
             
-            let XC = document.createElement("input");
-            XC.setAttribute("type", "file");
-            XC.setAttribute("id", "XC");
+            d3.select("#customImplement").style("opacity", 1);
 
-            let S = document.createElement("input");
-            S.setAttribute("type", "file");
-            S.setAttribute("id", "S");
+            // let XC = document.createElement("input");
+            // XC.setAttribute("type", "file");
+            // XC.setAttribute("id", "XC");
 
-            let customDiv = document.getElementById("customImplement");
+            // let S = document.createElement("input");
+            // S.setAttribute("type", "file");
+            // S.setAttribute("id", "S");
 
-            customDiv.appendChild(XC);
-            customDiv.appendChild(S);
+            // let XCspan = document.createElement("span");
+            // let XClabel = document.createTextNode("")
 
+            // let customDiv = document.getElementById("customImplement");
 
-            // uploadScreen.append("input")
-            //             .attr("id", "XC")
-            //             .attr("type", "file");
-
-            uploadScreen.append("input")
-                        .attr("id", "S")   
-                        .attr("type", "file");
+            //customDiv.appendChild(XC);
+            //customDiv.appendChild(S);
             
         });
 
