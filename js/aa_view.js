@@ -277,6 +277,7 @@ class aa_view {
         });
 
         onscreenData.on("click", function(d,i) {
+            this.id = this.id.toLowerCase();
             that.onSearch(this,that.dataS, that.numberOfArchetypes, true);
             that.variable_name = this.id.toLowerCase();
             that.chosenIDs.push(this.id.toLowerCase());
@@ -285,15 +286,21 @@ class aa_view {
     }
 
     tooltipRender(data) {
-        let text = data.currentTarget.__data__.variable_name;
+        let text = data.currentTarget.id;
+        //let text = data.currentTarget.__data__.variable_name;
         return text;
     }
 
     onSearch(searchVal, data, numberOfArch, isTooltip) {
-        if (this.chosenIDs.length > 4 && (this.chosenIDs.includes(searchVal) === true)) {
+        if (this.chosenIDs.length > 4 && ((this.chosenIDs.includes(searchVal) !== true) ||
+        !this.chosenIDs.includes(searchVal.id))) {
             alert("Too many IDs chosen! Please Deselect One or more IDs");
         }
-        else if ((this.chosenIDs.includes(searchVal) === true)){
+        else if ((this.chosenIDs.includes(searchVal) === true) || this.chosenIDs.includes(searchVal.id) === true){
+            let index = this.chosenIDs.indexOf(searchVal.id);
+            this.chosenIDs.splice(index,1);
+
+            d3.selectAll(".tooltipCircle").remove();
             // is tooltip
             //then remove the highlight from chosenID list and visually
         }
@@ -352,7 +359,8 @@ class aa_view {
                 })
                 .attr("id", function(d) {
                     return point.variable_name + "";
-                }); 
+                })
+                .classed("tooltipCircle", true);
             }
         }
         let data_circ = d3.selectAll("#oned").selectAll("circle");
