@@ -309,6 +309,8 @@ class aa_view {
                 toolData = toolData.toLowerCase();
                 this.filteredData = data[i].filter(d => d.variable_name.toLowerCase().includes(toolData));
             }
+            
+            let point = new PlotData(this.filteredData[0].value,this.filteredData[0].variable_name); 
 
             let circles = d3.select('#circle' + i);
 
@@ -319,7 +321,7 @@ class aa_view {
             let that = this;
             
             circles.append("circle")
-                .attr("cx", circleScale(this.filteredData[0].value))
+                .attr("cx", circleScale(point.value))
                 .attr("cy", function() {
                     if (numberOfArch <= 3) {
                         return 45;
@@ -348,8 +350,14 @@ class aa_view {
                     let index = that.chosenIDs.length;
                     return that.color(index-1);
                 })
+                .attr("id", function(d) {
+                    return point.variable_name + "";
+                }); 
             }
         }
+        let data_circ = d3.selectAll("#oned").selectAll("circle");
+
+        this.tooltip(data_circ);
     }
 
     makeBarCharts (chosenVariables, rawData) {
