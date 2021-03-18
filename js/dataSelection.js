@@ -44,7 +44,6 @@ class dataSelection {
                 let customData = jQuery.csv.toObjects(textData[0]);
                 that.updateData("custom", customData);
             }
-
         });
 
         let performButton = d3.select("#performButton");
@@ -75,6 +74,21 @@ class dataSelection {
             //customDiv.appendChild(XC);
             //customDiv.appendChild(S);
             
+        });
+
+        let csv_file = d3.select("#csv");
+        csv_file.on("change", function () {
+            let reader = new FileReader();
+            
+            reader.readAsText(this.files[0]);
+
+            reader.onload = function () {
+                let textData = reader.result;
+                textData = textData.split("/\r\n|\n/");
+                let customData = jQuery.csv.toObjects(textData[0]);
+                that.updateData("custom", customData);
+            }
+
         });
 
     }
