@@ -122,6 +122,11 @@ class dataSelection {
             }
         });
 
+        let vizualizeButton = d3.select("#vizualizeButton");
+        vizualizeButton.on("click", function () {
+            //that.performAnalysis(that.data, that.numArch);
+        });
+
     }
 
     newData (data) {
