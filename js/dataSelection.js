@@ -56,18 +56,20 @@ class dataSelection {
         uploadImplementation.on("click", function () {
             d3.select("#Introduction").style("opacity", 0);
             document.getElementById("Introduction").style.zIndex = "-2";
-
-            let uploadScreen = d3.select("#CustomImplement");
             
-            let XC = document.createElement("INPUT");
+            let XC = document.createElement("input");
             XC.setAttribute("type", "file");
             XC.setAttribute("id", "XC");
+
+            let S = document.createElement("input");
+            S.setAttribute("type", "file");
+            S.setAttribute("id", "S");
 
             let customDiv = document.getElementById("customImplement");
 
             customDiv.appendChild(XC);
+            customDiv.appendChild(S);
 
-            d3.select("#XC").style("text-align", "center");
 
             // uploadScreen.append("input")
             //             .attr("id", "XC")
