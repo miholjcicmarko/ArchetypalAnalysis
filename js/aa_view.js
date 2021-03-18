@@ -218,9 +218,6 @@ class aa_view {
     }
 
     drawVariables () {
-        if (this.variables.length > 5) {
-            alert("Too many variables Selected! Deselect one or more variables.")
-        }
 
         let buttons = d3.select("#bar1")
                         .append("g")
@@ -239,7 +236,7 @@ class aa_view {
             let buttons = d3.select('#bar1').selectAll("button");
 
             buttons.on("click", function (d) {
-                that.addChosenVar (d);
+                that.addChosenVar(d);
                 that.chosenVars.push(d.srcElement.id);
             })
         }
