@@ -20,6 +20,7 @@ class aa_view {
         this.variables = Object.keys(this.raw[0]);
         this.updateArch = updateArch;
         this.timeline = data.time_data;
+        this.count = 0;
 
         this.filteredData = [];
         this.chosenVars = ["id"];
@@ -217,6 +218,9 @@ class aa_view {
     }
 
     drawVariables () {
+        if (this.variables.length > 5) {
+            alert("Too many variables Selected! Deselect one or more variables.")
+        }
 
         let buttons = d3.select("#bar1")
                         .append("g")
@@ -292,19 +296,24 @@ class aa_view {
     }
 
     onSearch(searchVal, data, numberOfArch, isTooltip) {
-        if (this.chosenIDs.length > 4 && ((this.chosenIDs.includes(searchVal) !== true) ||
+        let value = searchVal;
+        if (isTooltip === true) {
+            value = value.id
+        }
+        if (this.chosenIDs.length > 4 && ((this.chosenIDs.includes(value) !== true) ||
         !this.chosenIDs.includes(searchVal.id))) {
             alert("Too many IDs chosen! Please Deselect One or more IDs");
         }
-        else if ((this.chosenIDs.includes(searchVal) === true) || this.chosenIDs.includes(searchVal.id) === true){
-            let index = this.chosenIDs.indexOf(searchVal.id);
-            this.chosenIDs.splice(index,1);
+        else if ((this.chosenIDs.includes(value) === true)){
+            let index = this.chosenIDs.indexOf(value);
+            this.chosenIDs = this.chosenIDs.splice(index,1);
 
-            d3.selectAll(".tooltipCircle").remove();
+            d3.selectAll(".tooltipCircle"+this.count).remove();
             // is tooltip
             //then remove the highlight from chosenID list and visually
         }
         else {
+            this.count = this.count + 1;
 
             for (let i = 0; i < numberOfArch; i++) {
 
@@ -360,7 +369,7 @@ class aa_view {
                 .attr("id", function(d) {
                     return point.variable_name + "";
                 })
-                .classed("tooltipCircle", true);
+                .classed("tooltipCircle"+that.count, true);
             }
         }
         let data_circ = d3.selectAll("#oned").selectAll("circle");
