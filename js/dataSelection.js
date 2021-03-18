@@ -54,7 +54,29 @@ class dataSelection {
 
         let uploadImplementation = d3.select("#uploadImplementButton");
         uploadImplementation.on("click", function () {
-            that.uploadScreen();
+            d3.select("#Introduction").style("opacity", 0);
+            document.getElementById("Introduction").style.zIndex = "-2";
+
+            let uploadScreen = d3.select("#CustomImplement");
+            
+            let XC = document.createElement("INPUT");
+            XC.setAttribute("type", "file");
+            XC.setAttribute("id", "XC");
+
+            let customDiv = document.getElementById("customImplement");
+
+            customDiv.appendChild(XC);
+
+            d3.select("#XC").style("text-align", "center");
+
+            // uploadScreen.append("input")
+            //             .attr("id", "XC")
+            //             .attr("type", "file");
+
+            uploadScreen.append("input")
+                        .attr("id", "S")   
+                        .attr("type", "file");
+            
         });
 
     }
