@@ -22,6 +22,15 @@
     padding-bottom: 3%;
 }
 
+.padding-box {
+    text-align: center;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    padding-left: 3%;
+    font-weight: bold;
+    font-size: 12px;
+}
+
 #home-dropdown {
     font-size: 14px;
     font-weight: bold;
