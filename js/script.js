@@ -83,13 +83,12 @@ Promise.all([preProcessData]).then(data => {
     }
 
     function result_to_Object(result) {
-        // include if statement for timeline
-        
         return {
             "XC": result.XC,
             "S": result.S,
-            "raw": result.fullData,
-            "data_id_less": result.data
+            "raw": result.origData,
+            "data_id_less": result.data,
+            "timeData": result.timeSeries
         }
     }
 

@@ -2,7 +2,7 @@
 class Algorithms {
 
     constructor(data, noc, I, U) {
-        this.fullData = data;
+        this.origData = data;
         this.timeSeries = false;
 
         let variables = Object.keys(data[0]);
