@@ -737,11 +737,13 @@ class Algorithms {
         }
 
         for (let i = 0; i < data.length; i++) {
-            if (Object.keys(data[i]).length < maxlength ) {
-
+            if (Object.keys(data[i]).length < maxlength) {
+                let difference = maxlength - Object.keys(data[i]).length;
+                for (let k = 0; k < difference; k++) {
+                    data[i]["extra"+k] = 0
+                }
             }
         }
-
-
+        return data;
     }
 }
