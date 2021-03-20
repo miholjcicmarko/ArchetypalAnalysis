@@ -2,7 +2,7 @@
 class Algorithms {
 
     constructor(data, noc, I, U) {
-        this.origData = data;
+        const origData = data;
         this.fullData = data;
         this.timeSeries = false;
 
@@ -48,6 +48,7 @@ class Algorithms {
         this.C = C;
         this.SSE = SSE;
         this.varexpl = varexpl;
+        this.origData = origData;
     }
 
     phca(X, noc, I, U, delta, conv_crit, maxiter) {
