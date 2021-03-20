@@ -693,9 +693,29 @@ class Algorithms {
             id_arr.push(id);
         }
 
+        id_arr = [...new Set(id_arr)];
 
+        variables.splice(0,2);
 
+        let data_flat_arr = [];
 
+        for (let i = 0; i < id_arr.length; i++) {
+            let current_id = id_arr[i];
+
+            let filteredData = data.filter(d => d.id.includes(current_id));
+
+            let initial = filteredData[0];
+
+            for (let j = 0; j < variables.length; j++) {
+                let variable_name = variables[j];
+
+                for (let k = 1; k < id_arr.length; k++) {
+                    let var_index = k;
+                    let value = filteredData[k][""+variable_name];
+                    initial[var_index+variable_name] = value;
+                }
+            }            
+            data_flat_arr.push(initial);
+        }
     }
-
 }
