@@ -2,7 +2,6 @@
 class Algorithms {
 
     constructor(data, noc, I, U) {
-        const origData = data;
         this.fullData = data;
         this.timeSeries = false;
 
@@ -10,7 +9,7 @@ class Algorithms {
         
         if (variables.includes("date")) {
             this.timeSeries = true;
-            this.fullData = this.convertDateData(data, variables);
+            this.convertDateData(data, variables);
         };
 
         noc = parseInt(noc, 10);
@@ -48,7 +47,6 @@ class Algorithms {
         this.C = C;
         this.SSE = SSE;
         this.varexpl = varexpl;
-        this.origData = origData;
     }
 
     phca(X, noc, I, U, delta, conv_crit, maxiter) {
