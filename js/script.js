@@ -86,7 +86,7 @@ Promise.all([preProcessData]).then(data => {
         return {
             "XC": result.XC,
             "S": result.S,
-            "raw": data,
+            "raw": result.origData,
             "data_id_less": result.data,
             "timeData": result.timeSeries
 

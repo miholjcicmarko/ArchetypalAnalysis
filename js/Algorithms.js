@@ -2,6 +2,7 @@
 class Algorithms {
 
     constructor(data, noc, I, U) {
+        this.origData = data;
         this.fullData = data;
         this.timeSeries = false;
 
@@ -9,7 +10,7 @@ class Algorithms {
         
         if (variables.includes("date")) {
             this.timeSeries = true;
-            this.convertDateData(data, variables);
+            this.fullData = this.convertDateData(this.fullData, variables);
         };
 
         noc = parseInt(noc, 10);
@@ -691,11 +692,11 @@ class Algorithms {
         return ini_obs;
     }
 
-    convertDateData (data, variables) {
+    convertDateData (inputdata, variables) {
         let id_arr = [];
 
-        for (let i = 0; i < data.length; i++) {
-            let id = data[i].id;
+        for (let i = 0; i < inputdata.length; i++) {
+            let id = inputdata[i].id;
             id_arr.push(id);
         }
 
@@ -708,7 +709,7 @@ class Algorithms {
         for (let i = 0; i < id_arr.length; i++) {
             let current_id = id_arr[i];
 
-            let filteredData = data.filter(d => d.id.includes(current_id));
+            let filteredData = inputdata.filter(d => d.id.includes(current_id));
 
             let initial = filteredData[0];
 
