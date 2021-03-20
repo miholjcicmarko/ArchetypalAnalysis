@@ -77,19 +77,18 @@ Promise.all([preProcessData]).then(data => {
         }
         else {
             let aa_result = new Algorithms(data, numArch);
-            let matricies = result_to_Object(aa_result, data);
+            let matricies = result_to_Object(aa_result);
             let plots = new aa_view(matricies, numArch, updateArch);
         }
     }
 
-    function result_to_Object(result, data) {
+    function result_to_Object(result) {
         return {
             "XC": result.XC,
             "S": result.S,
             "raw": result.origData,
             "data_id_less": result.data,
             "timeData": result.timeSeries
-
         }
     }
 
