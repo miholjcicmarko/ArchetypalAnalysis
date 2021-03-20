@@ -9,6 +9,8 @@ class aa_view {
 
     constructor(data, numArch, updateArch) {
 
+        //write time series part
+
         d3.select("#Introduction").style("opacity", 0);
         document.getElementById("Introduction").style.zIndex = "-1";
         d3.select("#header-wrap").style("opacity", 1);
