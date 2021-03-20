@@ -2,20 +2,25 @@
 class Algorithms {
 
     constructor(data, noc, I, U) {
-        this.origData = data;
-        this.fullData = data;
+        let origData = data;
+        let fullData = [];
+        for (let i = 0; i < origData.length; i++) {
+            let obj = {...origData[i]};
+            fullData.push(obj);
+        }
+
         this.timeSeries = false;
 
         let variables = Object.keys(data[0]);
         
         if (variables.includes("date")) {
             this.timeSeries = true;
-            this.fullData = this.convertDateData(this.fullData, variables);
+            fullData = this.convertDateData(fullData, variables);
         };
 
         noc = parseInt(noc, 10);
 
-        this.data = this.fullData.map(({id, ...item}) => item);  
+        this.data = fullData.map(({id, ...item}) => item);  
 
         this.data = this.data.map(({...item}) => item);
 
@@ -48,6 +53,7 @@ class Algorithms {
         this.C = C;
         this.SSE = SSE;
         this.varexpl = varexpl;
+        this.origData = origData;
     }
 
     phca(X, noc, I, U, delta, conv_crit, maxiter) {
