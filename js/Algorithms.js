@@ -20,14 +20,13 @@ class Algorithms {
 
         let matrix_data = [];
 
-        if (this.timeSeries === false) {
-            for (let m = 0; m < this.data.length; m++) {
-                let vals = Object.values(this.data[m]);
-                matrix_data.push(vals);
-            }
-        }
-        else if (this.timeSeries === true) {
+        if (this.timeSeries === true) {
             this.evenOutMatrix(this.data);
+        }
+        
+        for (let m = 0; m < this.data.length; m++) {
+            let vals = Object.values(this.data[m]);
+            matrix_data.push(vals);
         }
 
         if (I === undefined) {
@@ -730,5 +729,8 @@ class Algorithms {
 
     evenOutMatrix (data) {
         
+
+
+
     }
 }
