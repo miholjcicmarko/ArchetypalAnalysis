@@ -3,11 +3,13 @@ class Algorithms {
 
     constructor(data, noc, I, U) {
         this.fullData = data;
+        this.timeSeries = false;
 
         let variables = Object.keys(data[0]);
         
         if (variables.includes("date")) {
-            this.convertDateData(data, variables);
+            this.timeSeries = true;
+            this.fullData = this.convertDateData(data, variables);
         };
 
         noc = parseInt(noc, 10);
@@ -18,9 +20,14 @@ class Algorithms {
 
         let matrix_data = [];
 
-        for (let m = 0; m < this.data.length; m++) {
-            let vals = Object.values(this.data[m]);
-            matrix_data.push(vals);
+        if (this.timeSeries === false) {
+            for (let m = 0; m < this.data.length; m++) {
+                let vals = Object.values(this.data[m]);
+                matrix_data.push(vals);
+            }
+        }
+        else if (this.timeSeries === true) {
+            this.evenOutMatrix(this.data);
         }
 
         if (I === undefined) {
@@ -709,13 +716,19 @@ class Algorithms {
             for (let j = 0; j < variables.length; j++) {
                 let variable_name = variables[j];
 
-                for (let k = 1; k < id_arr.length; k++) {
+                for (let k = 1; k < filteredData.length; k++) {
                     let var_index = k;
                     let value = filteredData[k][""+variable_name];
                     initial[var_index+variable_name] = value;
                 }
-            }            
+            }
+            delete initial.date;       
             data_flat_arr.push(initial);
         }
+        return data_flat_arr;
+    }
+
+    evenOutMatrix (data) {
+        
     }
 }
