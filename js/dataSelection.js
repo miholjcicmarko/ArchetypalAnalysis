@@ -124,6 +124,15 @@ class dataSelection {
 
         let vizualizeButton = d3.select("#vizualizeButton");
         vizualizeButton.on("click", function () {
+            if (that.customS === null) {
+                alert("Upload your S matirx");
+            }
+            if (that.customXC === null) {
+                alert("Upload your XC matrix");
+            }
+            if (that.customDataImplement === null) {
+                alert("Upload your data");
+            }
             //that.performAnalysis(that.data, that.numArch);
         });
 
