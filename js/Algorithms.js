@@ -3,6 +3,13 @@ class Algorithms {
 
     constructor(data, noc, I, U) {
         this.fullData = data;
+
+        let variables = Object.keys(data[0]);
+        
+        if (variables.includes("date")) {
+            this.convertDateData(data, variables);
+        };
+
         noc = parseInt(noc, 10);
 
         this.data = this.fullData.map(({id, ...item}) => item);  
@@ -677,4 +684,18 @@ class Algorithms {
         }
         return ini_obs;
     }
+
+    convertDateData (data, variables) {
+        let id_arr = [];
+
+        for (let i = 0; i < data.length; i++) {
+            let id = data[i].id;
+            id_arr.push(id);
+        }
+
+
+
+
+    }
+
 }
