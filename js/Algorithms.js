@@ -728,8 +728,19 @@ class Algorithms {
     }
 
     evenOutMatrix (data) {
-        
+        let maxlength = Object.keys(data[0]).length;
 
+        for (let i = 1; i < data.length; i++) {
+            if (Object.keys(data[i]).length > maxlength) {
+                maxlength = Object.keys(data[i]).length;
+            }
+        }
+
+        for (let i = 0; i < data.length; i++) {
+            if (Object.keys(data[i]).length < maxlength ) {
+
+            }
+        }
 
 
     }
