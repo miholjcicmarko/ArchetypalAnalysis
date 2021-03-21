@@ -1,6 +1,6 @@
 class dataSelection {
 
-    constructor(data, updateData, updateArch, performAnalysis) {
+    constructor(data, updateData, updateArch, performAnalysis, customAnalysis) {
         this.data = null;
         this.numArch = null;
         this.updateData = updateData;
@@ -9,6 +9,8 @@ class dataSelection {
         this.customXC = null;
         this.customS = null;
         this.customDataImplement = null;
+        this.customArch = null;
+        this.customAnalysis = customAnalysis;
 
         let that = this;
 
@@ -60,22 +62,6 @@ class dataSelection {
             document.getElementById("Introduction").style.zIndex = "-2";
             
             d3.select("#customImplement").style("opacity", 1);
-
-            // let XC = document.createElement("input");
-            // XC.setAttribute("type", "file");
-            // XC.setAttribute("id", "XC");
-
-            // let S = document.createElement("input");
-            // S.setAttribute("type", "file");
-            // S.setAttribute("id", "S");
-
-            // let XCspan = document.createElement("span");
-            // let XClabel = document.createTextNode("")
-
-            // let customDiv = document.getElementById("customImplement");
-
-            //customDiv.appendChild(XC);
-            //customDiv.appendChild(S);
             
         });
 
@@ -141,10 +127,10 @@ class dataSelection {
             if (that.customDataImplement === null) {
                 alert("Upload your data");
             }
-            if (that.customArch === null) {
+            if (that.customArch === null || that.customArch = "") {
                 alert("Enter number of Archetypes");
             }
-            //that.performAnalysis(that.data, that.numArch);
+            that.customAnalysis(that.data, that.numArch);
         });
 
     }
