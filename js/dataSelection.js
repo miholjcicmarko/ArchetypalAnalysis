@@ -127,7 +127,7 @@ class dataSelection {
             if (that.customDataImplement === null) {
                 alert("Upload your data");
             }
-            if (that.customArch === null || that.customArch = "") {
+            if (that.customArch === null || that.customArch === "") {
                 alert("Enter number of Archetypes");
             }
             that.customAnalysis(that.data, that.numArch);

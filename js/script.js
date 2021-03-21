@@ -51,35 +51,16 @@ Promise.all([preProcessData]).then(data => {
         }
         else if (data === null && numArch === null || data === null && numArch === '-') {
             alert("Error! Select Data Set and Number of Archetypes");
-
-            // let window = d3.select("#Introduction").append("svg")
-            //                 .attr("id", "warning")
-            //                 .attr("height", 75)
-            //                 .attr("width", 750);
-            
-            // window.append("text")
-            //     .text("Error! Select Data Set and Number of Archetypes")
-            //     .attr("transform", "translate(150, 50)")
-            //     .attr("fill", "black")
-            //     .attr("font-size", "24");
-
-            // let button = document.createElement("button");
-            // button.innerHTML = "Ok";
-            // button.id = "OkButton";
-
-            // let introDiv = document.getElementById("Introduction");
-            // introDiv.append(button);
-    
-            // button.addEventListener("click", function () {
-            //     d3.select("#warning").remove();
-            //     d3.select("#OkButton").remove();
-            // })
         }
         else {
             let aa_result = new Algorithms(data, numArch);
             let matricies = result_to_Object(aa_result);
             let plots = new aa_view(matricies, numArch, updateArch);
         }
+    }
+
+    function customAnalysis () {
+        
     }
 
     function result_to_Object(result) {
@@ -92,6 +73,7 @@ Promise.all([preProcessData]).then(data => {
         }
     }
 
-    let selectedData = new dataSelection(preData, updateData, updateArch, performAnalysis);
+    let selectedData = new dataSelection(preData, updateData, 
+                        updateArch, performAnalysis, customAnalysis);
 
 }) // get the custom import working, work on the bar charts and the line graphs
