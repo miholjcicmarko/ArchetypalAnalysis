@@ -65,7 +65,7 @@
     display: inline-block;
     top: 20%;
     left: 5%;
-    width: 35px;
+    width: 32px;
     height: 20px;
     grid-area: "checkBox";
 }
@@ -109,9 +109,9 @@ input:focus + .slider {
 }
   
 input:checked + .slider:before {
-    -webkit-transform: translateX(13px);
-    -ms-transform: translateX(13px);
-    transform: translateX(13px);
+    -webkit-transform: translateX(10px);
+    -ms-transform: translateX(10px);
+    transform: translateX(10px);
 }
 
 .topnav {
