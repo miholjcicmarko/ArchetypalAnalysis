@@ -94,4 +94,4 @@ Promise.all([preProcessData]).then(data => {
 
     let selectedData = new dataSelection(preData, updateData, updateArch, performAnalysis);
 
-})
+}) // get the custom import working, work on the bar charts and the line graphs
