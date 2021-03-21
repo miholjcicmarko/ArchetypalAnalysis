@@ -122,6 +122,14 @@ class dataSelection {
             }
         });
 
+        let numberinput = d3.select("#upArch");
+        numberinput.on("keyup", (e) => {
+            let inputVal = numberinput.property("value").toLowerCase();
+            
+            that.customArch = inputVal;
+            
+        });
+
         let vizualizeButton = d3.select("#vizualizeButton");
         vizualizeButton.on("click", function () {
             if (that.customS === null) {
@@ -132,6 +140,9 @@ class dataSelection {
             }
             if (that.customDataImplement === null) {
                 alert("Upload your data");
+            }
+            if (that.customArch === null) {
+                alert("Enter number of Archetypes");
             }
             //that.performAnalysis(that.data, that.numArch);
         });
