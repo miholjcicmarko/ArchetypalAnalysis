@@ -59,8 +59,15 @@ Promise.all([preProcessData]).then(data => {
         }
     }
 
-    function customAnalysis () {
-        
+    function customAnalysis (customS, customXC, customData, numArch, timeSeries) {
+        let matricies = {
+            "XC": customXC,
+            "S": customS,
+            "raw": customData,
+            "timeData": timeSeries
+        }
+
+        let plots = new aa_view(matricies, numArch, updateArch);
     }
 
     function result_to_Object(result) {
@@ -68,8 +75,8 @@ Promise.all([preProcessData]).then(data => {
             "XC": result.XC,
             "S": result.S,
             "raw": result.origData,
-            "data_id_less": result.data,
-            "timeData": result.timeSeries
+            //"data_id_less": result.data,
+            "time_data": result.timeSeries
         }
     }
 

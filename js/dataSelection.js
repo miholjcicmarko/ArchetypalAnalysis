@@ -130,7 +130,7 @@ class dataSelection {
             if (that.customArch === null || that.customArch === "") {
                 alert("Enter number of Archetypes");
             }
-            that.customAnalysis(that.data, that.numArch);
+            that.customAnalysis(that.customS, that.customXC, that.customDataImplement, that.numArch);
         });
 
     }
