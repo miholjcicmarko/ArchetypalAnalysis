@@ -496,32 +496,45 @@ class aa_view {
             ydata.push(specificData[0]);
         }
 
-        let id = "id";
         let variables = chosenVariables.slice(1);
+        let array_of_variable_objects = [];
+
+        for (let i = 0; i < variables.length; i++) {
+            let var_group_key = variables[i];
+            let obj = {"var": var_group_key}
+            for (let j = 0; j < this.chosenIDs.length; j++) {
+                let name = this.chosenIDs[j];
+                let value = ydata[j][""+var_group_key];
+                obj[""+name] = value;
+            }
+            array_of_variable_objects.push(obj);
+        }
+
+        let var_id = "var";
+        let that = this;
 
         let xlargeScale = d3.scaleBand()
-                .domain(ydata.map(d => d[id]))
+                .domain(array_of_variable_objects.map(d => d[var_id]))
                 .range([margin.left, w - margin.right])
                 .paddingInner(0.25);
 
         let xcatsScale = d3.scaleBand()
-                .domain(variables)
+                .domain(that.chosenIDs)
                 .range([0, xlargeScale.bandwidth()])
                 .padding(0.05);
 
+        // possibly build multiple y axes
         let yScale = d3.scaleLinear()
-                .domain([0, d3.max(ydata, d => d3.max(variables, key => d[key]))]).nice()
+                .domain([0, d3.max(array_of_variable_objects, d => d3.max(that.chosenIDs, key => d[key]))]).nice()
                 .range([h - margin.bottom, margin.top]);
-
-        let that = this;
 
         svg.append("g")
             .selectAll("g")
-            .data(ydata)
+            .data(array_of_variable_objects)
             .join("g")
-            .attr("transform", d => `translate(${xlargeScale(d[id])},0)`)
+            .attr("transform", d => `translate(${xlargeScale(d[var_id])},0)`)
             .selectAll("rect")
-            .data(d => variables.map(key => ({key, value: d[key]})))
+            .data(d => that.chosenIDs.map(key => ({key, value: d[key]})))
             .join("rect")
             .attr("x", d => xcatsScale(d.key))
             .attr("y", d => yScale(d.value))
@@ -529,7 +542,6 @@ class aa_view {
             .attr("height", d => yScale(0) - yScale(d.value))
             .attr("fill", d => that.color(d.key));
          
-        
 
 
         //Kinda
