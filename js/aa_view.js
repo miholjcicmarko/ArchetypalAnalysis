@@ -28,6 +28,7 @@ class aa_view {
         this.chosenVars = ["id"];
         this.chosenIDs = [];
         this.chosenLineVar = ["id"];
+        this.timelineActive = false;
 
         this.color = d3.scaleOrdinal()
                 .range(["#e41a1c","#984ea3","#ff7f00","#999999","#f781bf"]);
@@ -245,8 +246,10 @@ class aa_view {
                 buttonsLine.on("click", function (d) {
                     let elem_id = d.srcElement.id;
                     let chosenLineId = elem_id.slice(0, elem_id.length - 4);
-                    that.chosenLineVar[0] = chosenLineId;
-                    that.drawTimeLine(that.raw, that.chosenLineVar);
+                    if (that.chosenLineVar[0] !== chosenLineId) {
+                        that.chosenLineVar[0] = chosenLineId;
+                        that.drawTimeLine(that.raw, that.chosenLineVar);
+                    }
                 })
             }
         }
@@ -775,19 +778,51 @@ class aa_view {
             d.date = parseTime(d.date);
         });
 
-        // for (let date of Object.keys(data))
+        let uniqueID_arr = [];
 
-        // for (let i = 0; i < data.length; i++) {
-        //     data[i].date = parseTime(data[i].date);
-        //     //let date = data[i].date.split('-');
-        //     //let date_format = new Date(date[0], date[1] - 1, date[2]);
+        for (let i = 0; i < data.length; i++) {
+            uniqueID_arr.push(data[i].id);
+        }
 
-        //     //data[i].date = date_format
-        // }
+        uniqueID_arr = [...new Set(uniqueID_arr)];
 
-        // let sumstat = d3.nest()
-        //                 .key(function(d) { d.state})
-        //                 .entries(data);
+        let newObjArray = [];
+
+        for (let k = 0; k < uniqueID_arr.length; k++) {
+            let newObj = {};
+            for (let i = 0; i < data.length; i++) {
+                if (uniqueID_arr[k] === data[i].id) {
+                    let id = data[i].id;
+                    newObj["id"] = id;
+
+                    let newValuesArray = [];
+
+                    for (let p = 0; p < data.length; p++) {
+                        if (uniqueID_arr[k] === data[p].id) {
+                            let values = {};
+                            let date = data[p].date;
+                            let number = data[p][""+variable];
+                            number = parseInt(number);
+                            values["date"] = date;
+                            values["number"] = number;
+                            newValuesArray.push(values);
+                        }
+                    }
+                newObj["values"] = newValuesArray;
+                }
+            }
+            newObjArray.push(newObj);
+        }
+
+        let yScaleData = [];
+
+        for (let i = 0; i < newObjArray.length; i++) {
+            for (let j = 0; j < newObjArray[i]["values"].length; j++) {
+                let num = newObjArray[i]["values"][j]["number"];
+                num = parseInt(num);
+                yScaleData.push(num);
+            }
+        }
 
         let xScale = d3.scaleTime()
                         .domain(d3.extent(data, function(d) {
@@ -796,15 +831,15 @@ class aa_view {
                         .range([0, w-50]);
 
         let yScale = d3.scaleLinear()
-                        .domain([0, d3.max(data, d => d.positive)])
-                        .range([h, 0]);
+                        .domain([(0), d3.max(yScaleData)])
+                        .range([h-5, 0]);
 
         let line = d3.line()
-                     .x(function(d,i) {
+                     .x(function(d) {
                          return xScale(d.date);
                      })
                      .y(function(d,i) {
-                         return yScale(d.positive);
+                         return yScale(d.number);
                      });
 
         let svg = d3.select("#timeL")
@@ -823,36 +858,19 @@ class aa_view {
 
         svg.append("g")
             .attr("id", "y-axis")
+            .attr("class", "axis_line")
             .call(d3.axisLeft(yScale));
 
-        // let res = sumstat.map(function(d){ return d.key }) // list of group names
-        // let color = d3.scaleOrdinal()
-        //       .domain(res)
-        //       .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999'])
+        let lines = svg.selectAll("lines")
+                    .data(newObjArray)
+                    .enter()
+                    .append("g");
 
-        // svg.selectAll(".line")
-        //     .data(data)
-        //     .enter()
-        //     .append("g");
+        lines.append("path")
+             .attr("d", function(d) { return line(d.values)})
+             .classed("line", true);
 
-        svg.append("path")
-            .attr("d",line(data))
-            .attr("fill", "none")
-            .attr("stroke", "black")
-            .attr("stroke-width", 1.5);
-
-            // .attr("d", function(d){
-            //     return d3.line()
-            //                 .x(function(d) { return xScale(d.date); })
-            //                 .y(function(d) { return yScale(d.positive); })
-            //                 .curve(d3.curveMonotoneX)
-            //     });
-
-        // svg.append("path")
-        //     .datum(data)
-        //     .attr("id", "line-chart")
-        //     .attr("class", "line")
-        //     .attr("d", line);
+        this.timelineActive = true;
     }
 
     resetViz () {
