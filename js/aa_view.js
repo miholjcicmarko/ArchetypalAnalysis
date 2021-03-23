@@ -880,7 +880,7 @@ class aa_view {
              .attr("d", function(d) { return line(d.values)})
              .classed("timeLine", true)
              .attr("id", function(d) {
-                return d.id + "_line";
+                return d.id + "";
             }); 
 
         this.timelineActive = true;
