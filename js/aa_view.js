@@ -229,6 +229,10 @@ class aa_view {
                         .append("g")
                         .attr("id", "buttonGroup");
 
+        // let buttons2 = d3.select("#ar1")
+        //                  .append("g")
+        //                  .attr("id", "buttonGroupLine");
+
         for (let i = 1; i < this.variables.length; i++) {
             let button = d3.select('#buttonGroup')
                 .append("button")
