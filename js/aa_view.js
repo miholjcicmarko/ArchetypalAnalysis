@@ -761,7 +761,7 @@ class aa_view {
         return text;
     }
 
-    drawTimeLine(data) { // probably need to create an object in order to access 
+    drawTimeLine(data, variable) { // probably need to create an object in order to access 
         // the attributes
 
         let margin = {top: 10, right: 20, bottom: 10, left: 20};
