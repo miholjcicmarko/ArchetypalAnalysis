@@ -773,7 +773,7 @@ class aa_view {
         let margin = {top: 10, right: 20, bottom: 10, left: 20};
         
         let w = 500 - margin.right - margin.left;
-        let h = 400 - margin.bottom - margin.top;
+        let h = 300 - margin.bottom - margin.top;
 
         let parseTime = d3.timeParse("%Y-%m-%d");
 
@@ -783,7 +783,7 @@ class aa_view {
             });
             d3.select('#timeL')
                 .append('div')
-                .attr("class", "tooltipLine")
+                .attr("class", "tooltip")
                 .style("opacity", 0);
         }
 
@@ -878,7 +878,10 @@ class aa_view {
 
         lines.append("path")
              .attr("d", function(d) { return line(d.values)})
-             .classed("timeLine", true);
+             .classed("timeLine", true)
+             .attr("id", function(d) {
+                return d.id + "_line";
+            }); 
 
         this.timelineActive = true;
 
