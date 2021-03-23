@@ -27,6 +27,7 @@ class aa_view {
         this.filteredData = [];
         this.chosenVars = ["id"];
         this.chosenIDs = [];
+        this.chosenLineVar = ["id"];
 
         this.color = d3.scaleOrdinal()
                 .range(["#e41a1c","#984ea3","#ff7f00","#999999","#f781bf"]);
@@ -46,10 +47,6 @@ class aa_view {
         this.numberOfArchetypes = parseInt(numArch, 10);
         this.drawCircleChart(this.numberOfArchetypes);
         document.getElementById('selectNow').selectedIndex=this.numberOfArchetypes - 1;
-
-        if (this.timeline === true) {
-            this.drawTimeLine(this.raw);
-        }
 
         let that = this;
 
@@ -225,22 +222,50 @@ class aa_view {
 
     drawVariables () {
 
+        if (this.timeline === true) {
+            let buttons2 = d3.select("#timeLButtons")
+                         .append("g")
+                         .attr("id", "buttonGroupLine");
+
+            for (let i = 1; i < this.variables.length; i++) {
+                if (this.variables[i] !== "date") {
+
+                    let button = d3.select('#buttonGroupLine')
+                                .append("button")
+                                .attr("class", "button")
+                                .attr("id", "" + this.variables[i] + "line")
+                                .style("margin", "5px");
+
+                    document.getElementById("" + this.variables[i] + "line").innerHTML = this.variables[i];
+                }
+                let that = this;
+
+                let buttonsLine = d3.select('#timeLButtons').selectAll("button");
+
+                buttonsLine.on("click", function (d) {
+                    let elem_id = d.srcElement.id;
+                    let chosenLineId = elem_id.slice(0, elem_id.length - 4);
+                    that.chosenLineVar[0] = chosenLineId;
+                    that.drawTimeLine(that.raw, that.chosenLineVar);
+                })
+            }
+        }
+
         let buttons = d3.select("#bar1")
                         .append("g")
                         .attr("id", "buttonGroup");
 
-        // let buttons2 = d3.select("#ar1")
-        //                  .append("g")
-        //                  .attr("id", "buttonGroupLine");
-
         for (let i = 1; i < this.variables.length; i++) {
-            let button = d3.select('#buttonGroup')
-                .append("button")
-                .attr("class", "button")
-                .attr("id", "" + this.variables[i])
-                .style("margin", "5px");
+            if (this.variables[i] !== "date") {
 
-            document.getElementById("" + this.variables[i]).innerHTML = this.variables[i];
+                let button = d3.select('#buttonGroup')
+                    .append("button")
+                    .attr("class", "button")
+                    .attr("id", "" + this.variables[i])
+                    .style("margin", "5px");       
+
+                document.getElementById("" + this.variables[i]).innerHTML = this.variables[i];
+            }
             let that = this;
 
             let buttons = d3.select('#bar1').selectAll("button");
