@@ -764,8 +764,11 @@ class aa_view {
         return text;
     }
 
-    drawTimeLine(data, variable) { // probably need to create an object in order to access 
-        // the attributes
+    drawTimeLine(data, variable) { 
+
+        if (this.timelineActive === true) {
+            d3.select("#svg-time").remove();
+        }
 
         let margin = {top: 10, right: 20, bottom: 10, left: 20};
         
@@ -774,9 +777,11 @@ class aa_view {
 
         let parseTime = d3.timeParse("%Y-%m-%d");
 
-        data.forEach(function(d) {
-            d.date = parseTime(d.date);
-        });
+        if (this.timelineActive === false) {
+            data.forEach(function(d) {
+                d.date = parseTime(d.date);
+            });
+        }
 
         let uniqueID_arr = [];
 
@@ -858,6 +863,7 @@ class aa_view {
 
         svg.append("g")
             .attr("id", "y-axis")
+            .attr("transform", "translate(0,5)")
             .attr("class", "axis_line")
             .call(d3.axisLeft(yScale));
 
