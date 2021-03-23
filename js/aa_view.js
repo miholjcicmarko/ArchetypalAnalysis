@@ -48,7 +48,7 @@ class aa_view {
         document.getElementById('selectNow').selectedIndex=this.numberOfArchetypes - 1;
 
         if (this.timeline === true) {
-            this.drawTimeLine(data);
+            this.drawTimeLine(this.raw);
         }
 
         let that = this;
