@@ -47,6 +47,10 @@ class aa_view {
         this.drawCircleChart(this.numberOfArchetypes);
         document.getElementById('selectNow').selectedIndex=this.numberOfArchetypes - 1;
 
+        if (this.timeline === true) {
+            this.drawTimeLine(data);
+        }
+
         let that = this;
 
         let dropdown = d3.select("#selectNow");

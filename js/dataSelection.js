@@ -12,6 +12,8 @@ class dataSelection {
         this.customArch = null;
         this.customAnalysis = customAnalysis;
 
+        this.timeSeries = null;
+
         let that = this;
 
         let fifadata = d3.select("#fifaButton");
