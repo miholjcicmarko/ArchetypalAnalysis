@@ -268,9 +268,27 @@ div.tooltip {
     stroke-width: 2.5;
 }
 
-.line {
+.timeLine {
     fill: none;
     stroke: rgb(197, 197, 197);
     stroke-width: 3;
 }
 
+div.tooltipLine {
+    position: absolute;
+    text-align: center;
+    min-width: 5%;
+    min-height: 5%;
+    padding: 2px;
+    stroke: gray;
+    border-radius: 6px;
+    pointer-events: none;
+    margin: auto;
+    font-weight: bold;
+}
+
+.tooltipLine h5 {
+    margin: auto;
+    font: 12px sans-serif;
+    font-weight: bold;
+}

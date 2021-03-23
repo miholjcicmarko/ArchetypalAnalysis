@@ -783,7 +783,7 @@ class aa_view {
             });
             d3.select('#timeL')
                 .append('div')
-                .attr("class", "tooltip")
+                .attr("class", "tooltipLine")
                 .style("opacity", 0);
         }
 
@@ -878,11 +878,11 @@ class aa_view {
 
         lines.append("path")
              .attr("d", function(d) { return line(d.values)})
-             .classed("line", true);
+             .classed("timeLine", true);
 
         this.timelineActive = true;
 
-        let data_line = d3.selectAll("#timeL").selectAll(".line");
+        let data_line = d3.selectAll("#timeL").selectAll(".timeLine");
 
         this.tooltip(data_line);
     }
