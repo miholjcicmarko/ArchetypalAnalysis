@@ -270,7 +270,7 @@ div.tooltip {
 
 .line {
     fill: none;
-    stroke: grey;
+    stroke: rgb(197, 197, 197);
     stroke-width: 3;
 }
 

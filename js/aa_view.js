@@ -781,6 +781,10 @@ class aa_view {
             data.forEach(function(d) {
                 d.date = parseTime(d.date);
             });
+            d3.select('#timeL')
+                .append('div')
+                .attr("class", "tooltip")
+                .style("opacity", 0);
         }
 
         let uniqueID_arr = [];
@@ -877,6 +881,10 @@ class aa_view {
              .classed("line", true);
 
         this.timelineActive = true;
+
+        let data_line = d3.selectAll("#timeL").selectAll(".line");
+
+        this.tooltip(data_line);
     }
 
     resetViz () {
