@@ -304,11 +304,23 @@ class aa_view {
                 .style("left", (pageX) + "px")
                 .style("top", (pageY) + "px");
 
-            d3.select(this).classed("hovered", true);
+            if (this.localName !== "path") {
+                d3.select(this).classed("hovered", true);
+            }
+            else if (this.localName === "path") {
+                d3.select(this).classed("timeLine", false);
+                d3.select(this).classed("hoveredLine", true);
+            }
         });
 
         onscreenData.on("mouseout", function(d,i) {
-            d3.select(this).classed("hovered",false);
+            if (this.localName !== "path") {
+                d3.select(this).classed("hovered",false);
+            }
+            else if (this.localName === "path") {
+                d3.select(this).classed("timeLine", true);
+                d3.select(this).classed("hoveredLine", false);
+            }
 
             tooltip.transition()
                 .duration(500)
