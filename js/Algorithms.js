@@ -30,7 +30,7 @@ class Algorithms {
             this.evenOutMatrix(this.data);
         }
         
-        for (let m = 0; m < this.data.length; m++) {
+        for (let m = 0; m < data.length; m++) {
             let vals = Object.values(this.data[m]);
             matrix_data.push(vals);
         }
