@@ -64,7 +64,7 @@ Promise.all([preProcessData]).then(data => {
             "XC": customXC,
             "S": customS,
             "raw": customData,
-            "timeData": timeSeries
+            "time_data": timeSeries
         }
 
         let plots = new aa_view(matricies, numArch, updateArch);
