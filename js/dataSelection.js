@@ -2,14 +2,14 @@ class dataSelection {
 
     constructor(data, updateData, updateArch, performAnalysis, customAnalysis) {
         this.data = null;
-        this.numArch = null;
+        this.numArch = 0;
         this.updateData = updateData;
         this.updateArch = updateArch;
         this.performAnalysis = performAnalysis;
         this.customXC = null;
         this.customS = null;
         this.customDataImplement = null;
-        this.customArch = null;
+        this.customArch = 0;
         this.customAnalysis = customAnalysis;
 
         this.timeSeries = false;
@@ -76,7 +76,7 @@ class dataSelection {
             reader.onload = function () {
                 let textData = reader.result;
                 textData = textData.split("/\r\n|\n/");
-                let customData = jQuery.csv.toObjects(textData[0]);
+                let customData = jQuery.csv.toArrays(textData[0]);
                 that.customXC = customData;
             }
 
@@ -91,7 +91,7 @@ class dataSelection {
             reader.onload = function () {
                 let textData = reader.result;
                 textData = textData.split("/\r\n|\n/");
-                let customData = jQuery.csv.toObjects(textData[0]);
+                let customData = jQuery.csv.toArrays(textData[0]);
                 that.customS = customData;
             }
         });
@@ -114,7 +114,7 @@ class dataSelection {
         numberinput.on("keyup", (e) => {
             let inputVal = numberinput.property("value").toLowerCase();
             
-            that.customArch = inputVal;
+            that.customArch = parseInt(inputVal);
             
         });
 
@@ -138,7 +138,7 @@ class dataSelection {
                 alert("Enter number of Archetypes");
             }
             that.customAnalysis(that.customS, that.customXC, 
-                that.customDataImplement, that.numArch, that.timeSeries);
+                that.customDataImplement, that.customArch, that.timeSeries);
         });
 
     }
