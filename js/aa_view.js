@@ -7,10 +7,12 @@ class PlotData {
 
 class aa_view {
 
-    constructor(data, numArch, updateArch) {
+    constructor(data, numArch, updateArch, customImplement) {
 
         //write time series part
 
+        d3.select("#customImplement").style("opacity", 0);
+        document.getElementById("customImplement").style.zIndex = "-2";
         d3.select("#Introduction").style("opacity", 0);
         document.getElementById("Introduction").style.zIndex = "-1";
         d3.select("#header-wrap").style("opacity", 1);
@@ -22,6 +24,7 @@ class aa_view {
         this.variables = Object.keys(this.raw[0]);
         this.updateArch = updateArch;
         this.timeline = data.time_data;
+        this.customImplement = customImplement;
         this.count = 0;
 
         this.filteredData = [];
@@ -29,6 +32,11 @@ class aa_view {
         this.chosenIDs = [];
         this.chosenLineVar = ["id"];
         this.timelineActive = false;
+
+        if (this.customImplement === true) {
+            this.S = math.matrix(this.S);
+            this.XC = math.matrix(this.XC);
+        }
 
         this.color = d3.scaleOrdinal()
                 .range(["#e41a1c","#984ea3","#ff7f00","#999999","#f781bf"]);
@@ -54,19 +62,26 @@ class aa_view {
         let dropdown = d3.select("#selectNow");
 
             dropdown.on("change", function () {
-                let number = this.value;
+                if (that.customImplement === false) {
 
-                let div = document.getElementById("oned")
-                while (div.firstChild) {
-                    div.removeChild(div.firstChild);
-                }
+                    let number = this.value;
 
-                let divBar = document.getElementById("bar1")
-                while (divBar.firstChild) {
-                    divBar.removeChild(divBar.firstChild);
-                }
+                    let div = document.getElementById("oned")
+                    while (div.firstChild) {
+                        div.removeChild(div.firstChild);
+                    }
+
+                    let divBar = document.getElementById("bar1")
+                    while (divBar.firstChild) {
+                        divBar.removeChild(divBar.firstChild);
+                    }
                 
-                that.updateArch(number, "same");
+                    that.updateArch(number, "same");
+                }
+                else if (that.customImplement === true) {
+                    alert("This feature is not available for Custom Implementations");
+                    document.getElementById('selectNow').selectedIndex = that.numberOfArchetypes - 1;
+                }
             });
 
         let resetButton = d3.select("#reset");

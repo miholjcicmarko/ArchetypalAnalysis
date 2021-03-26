@@ -55,7 +55,7 @@ Promise.all([preProcessData]).then(data => {
         else {
             let aa_result = new Algorithms(data, numArch);
             let matricies = result_to_Object(aa_result);
-            let plots = new aa_view(matricies, numArch, updateArch);
+            let plots = new aa_view(matricies, numArch, updateArch, false);
         }
     }
 
@@ -67,7 +67,7 @@ Promise.all([preProcessData]).then(data => {
             "time_data": timeSeries
         }
 
-        let plots = new aa_view(matricies, numArch, updateArch);
+        let plots = new aa_view(matricies, numArch, updateArch, true);
     }
 
     function result_to_Object(result) {
