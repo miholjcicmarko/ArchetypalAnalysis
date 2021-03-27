@@ -43,15 +43,16 @@ class aa_view {
             let date2D = parseTime(date2);
 
             if (date2D <= date1D) {
-                // let stringD2 = date2.toString();
-                // let stringD1 = date1.toString();
-
-                // stringD2 = stringD2.slice(4, 16);
-                // stringD1 = stringD1.slice(4,16);
                 d3.select("#dateInput").style("opacity", 1);
                 document.getElementById("dateInput").value = date2;
                 document.getElementById("dateInput").min = date2;
                 document.getElementById("dateInput").max = date1;
+            }
+            else if (date2D > date1D) {
+                d3.select("dateInput").style("opacity", 0);
+                document.getElementById("dateInput").value = date1;
+                document.getElementById("dateInput").min = date1;
+                document.getElementById("dateInput").max = date2;
             }
 
         }
