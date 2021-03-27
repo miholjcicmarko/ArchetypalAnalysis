@@ -639,6 +639,10 @@ class Algorithms {
                     return value !== -1;
                 });
                 
+                if (K._data.length === ind_t) {
+                    ind_t = ind_t - 1;
+                }
+
                 let K_ind_t_row = math.row(K, ind_t);
 
                 let K_ind_t_row2 = math.multiply(2,K_ind_t_row);

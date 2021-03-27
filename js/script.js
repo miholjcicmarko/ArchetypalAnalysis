@@ -2,7 +2,7 @@
 
 async function loadPreProcessData () {
     let fifadata = await d3.csv("./data/fifaRatingsSmall.csv");
-    let covid = await d3.csv("./data/COVID19states.csv");
+    let covid = await d3.csv("./data/COVID19time.csv");
 
     return {
         "fifa" : fifadata,

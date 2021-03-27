@@ -33,6 +33,29 @@ class aa_view {
         this.chosenLineVar = ["id"];
         this.timelineActive = false;
 
+        let parseTime = d3.timeParse("%Y-%m-%d");
+
+        if (this.timeline === true) {
+            let date1 = this.raw[0]["date"];
+            let date2 = this.raw[this.raw.length - 1]["date"];
+
+            let date1D = parseTime(date1);
+            let date2D = parseTime(date2);
+
+            if (date2D <= date1D) {
+                // let stringD2 = date2.toString();
+                // let stringD1 = date1.toString();
+
+                // stringD2 = stringD2.slice(4, 16);
+                // stringD1 = stringD1.slice(4,16);
+                d3.select("#dateInput").style("opacity", 1);
+                document.getElementById("dateInput").value = date2;
+                document.getElementById("dateInput").min = date2;
+                document.getElementById("dateInput").max = date1;
+            }
+
+        }
+
         if (this.customImplement === true) {
             this.S = math.matrix(this.S);
             this.XC = math.matrix(this.XC);
@@ -74,6 +97,16 @@ class aa_view {
                     let divBar = document.getElementById("bar1")
                     while (divBar.firstChild) {
                         divBar.removeChild(divBar.firstChild);
+                    }
+
+                    let divTimeLine = document.getElementById("timeL");
+                    while (divTimeLine.firstChild) {
+                        divTimeLine.removeChild(divTimeLine.firstChild);
+                    }
+
+                    let divTimeButtons = document.getElementById("timeLButtons");
+                    while (divTimeButtons.firstChild) {
+                        divTimeButtons.removeChild(divTimeButtons.firstChild);
                     }
                 
                     that.updateArch(number, "same");
@@ -262,6 +295,9 @@ class aa_view {
                     let elem_id = d.srcElement.id;
                     let chosenLineId = elem_id.slice(0, elem_id.length - 4);
                     if (that.chosenLineVar[0] !== chosenLineId) {
+                        let buttonsColor = d3.select("#timeLButtons").selectAll("button");
+                        buttonsColor.classed("pressedLineVar", false);
+                        that.changeTimeLineVarColor(d);
                         that.chosenLineVar[0] = chosenLineId;
                         that.drawTimeLine(that.raw, that.chosenLineVar);
                     }
@@ -296,10 +332,19 @@ class aa_view {
     }
 
     addChosenVar (event) {
+        
+
         let id = event.srcElement.id;
 
         let button = d3.select("#" + id)
                         .classed("pressed", true);
+    }
+
+    changeTimeLineVarColor (event) {
+        let id = event.srcElement.id;
+
+        let timeVar = d3.select("#" + id)
+                        .classed("pressedLineVar", true);
     }
 
     tooltip (onscreenData) {
@@ -325,6 +370,8 @@ class aa_view {
             else if (this.localName === "path") {
                 d3.select(this).classed("timeLine", false);
                 d3.select(this).classed("hoveredLine", true);
+
+
             }
         });
 
@@ -805,9 +852,12 @@ class aa_view {
         let parseTime = d3.timeParse("%Y-%m-%d");
 
         if (this.timelineActive === false) {
-            data.forEach(function(d) {
-                d.date = parseTime(d.date);
-            });
+            if ((typeof data[0]["date"]) !== "object") {
+                data.forEach(function(d) {
+                    d.date = parseTime(d.date);
+                });
+            }
+
             d3.select('#timeL')
                 .append('div')
                 .attr("class", "tooltip")

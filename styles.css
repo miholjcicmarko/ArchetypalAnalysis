@@ -205,6 +205,11 @@ input:checked + .slider:before {
     width: fit-content;
 }
 
+#dateInput {
+    opacity: 0;
+    margin: .4rem 0;
+}
+
 .axis-label {
     display: inline-block;
     padding-right: 5px;
@@ -260,6 +265,18 @@ div.tooltip {
 
 .pressed {
     background-color: rgb(255, 55, 55);
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    padding-right: 1%;
+    font-size: 16px;
+    cursor: pointer; 
+    border: white;
+}
+
+.pressedLineVar {
+    background-color: rgb(0, 121, 121);
     color: white;
     text-align: center;
     text-decoration: none;
