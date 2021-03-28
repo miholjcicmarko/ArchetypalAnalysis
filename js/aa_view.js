@@ -85,7 +85,7 @@ class aa_view {
 
         let that = this;
 
-        let dInput = d3.select("dateInput");
+        let dInput = d3.select("#dateInput");
             dInput.on("change", function () {
                 that.dateSelected = true;
                 that.date = this;
@@ -274,7 +274,7 @@ class aa_view {
 
     let submit = d3.select("#submit");
         submit.on("click", function(d,i) {
-            that.makeBarCharts(that.chosenVars, that.raw, that.timeline, that.date);
+            that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
         });
     }
 

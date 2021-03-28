@@ -612,6 +612,11 @@ class Algorithms {
             for (let k = 1; k < noc + 11; k++) {
                 if (k > noc - 1) {
                     ini_obs_num = ini_obs[0];
+
+                    if (K._data.length === ini_obs_num) {
+                        ini_obs_num = ini_obs_num - 1;
+                    }
+
                     let K_i_0_row = math.row(K, ini_obs_num); 
 
                     let Kt_2_arr = math.matrix([Kt_2]);
