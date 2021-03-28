@@ -691,7 +691,12 @@ class Algorithms {
 
                 for (let p = 0; p < t.length; p++) {
                     let ind = t[p];
-                    
+
+                    if (ind === sum_dist._data[0].length) {
+                        ind = ind - 1;
+                        t[p] = t[p] - 1;
+                    }
+
                     let val_2 = math.column(sum_dist,t[p]).re;
 
                     if (val_2 > val) {

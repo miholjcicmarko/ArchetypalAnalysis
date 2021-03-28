@@ -210,6 +210,10 @@ input:checked + .slider:before {
     margin: .4rem 0;
 }
 
+#dateSelect {
+    text-align: center;
+}
+
 #dateSubmit {
     opacity: 0;
 }
