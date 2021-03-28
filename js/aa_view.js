@@ -32,6 +32,8 @@ class aa_view {
         this.chosenIDs = [];
         this.chosenLineVar = ["id"];
         this.timelineActive = false;
+        this.dateSelected = false;
+        this.date = null;
 
         let parseTime = d3.timeParse("%Y-%m-%d");
 
@@ -82,6 +84,12 @@ class aa_view {
         document.getElementById('selectNow').selectedIndex=this.numberOfArchetypes - 1;
 
         let that = this;
+
+        let dInput = d3.select("dateInput");
+            dInput.on("change", function () {
+                that.dateSelected = true;
+                that.date = this;
+            });
 
         let dropdown = d3.select("#selectNow");
 
@@ -266,7 +274,7 @@ class aa_view {
 
     let submit = d3.select("#submit");
         submit.on("click", function(d,i) {
-            that.makeBarCharts(that.chosenVars, that.raw);
+            that.makeBarCharts(that.chosenVars, that.raw, that.timeline, that.date);
         });
     }
 
@@ -333,8 +341,6 @@ class aa_view {
     }
 
     addChosenVar (event) {
-        
-
         let id = event.srcElement.id;
 
         let button = d3.select("#" + id)
@@ -487,7 +493,14 @@ class aa_view {
         this.tooltip(data_circ);
     }
 
-    makeBarCharts (chosenVariables, rawData) {
+    makeBarCharts (chosenVariables, rawData, timeSeries) {
+        if (timeSeries === true) {
+            if (this.dateSelected === false) {
+                alert("Select a Date");
+            }
+
+
+        }
 
         chosenVariables = [...new Set(chosenVariables)];
 
