@@ -49,12 +49,14 @@ class aa_view {
                 document.getElementById("dateInput").value = date2;
                 document.getElementById("dateInput").min = date2;
                 document.getElementById("dateInput").max = date1;
+                this.date = date2D;
             }
             else if (date2D > date1D) {
                 d3.select("dateInput").style("opacity", 0);
                 document.getElementById("dateInput").value = date1;
                 document.getElementById("dateInput").min = date1;
                 document.getElementById("dateInput").max = date2;
+                this.date = date1D;
             }
 
         }
@@ -86,10 +88,15 @@ class aa_view {
         let that = this;
 
         let dInput = d3.select("#dateInput");
-            dInput.on("change", function () {
+            dInput.on("keyup", function () {
                 that.dateSelected = true;
-                that.date = this;
+                that.date = this.value;
             });
+
+        let dateSubmit = d3.select("#dateSubmit");
+            dateSubmit.on("click", function () {
+                that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
+            })
 
         let dropdown = d3.select("#selectNow");
 
@@ -494,12 +501,22 @@ class aa_view {
     }
 
     makeBarCharts (chosenVariables, rawData, timeSeries) {
+        let data = [...rawData];
+        
         if (timeSeries === true) {
-            if (this.dateSelected === false) {
-                alert("Select a Date");
+            // if (this.dateSelected === false) {
+            //     //let date = document.getElementById("dateInput").value;
+            //     data = data.filter(d => d.date.includes(this.date));
+            // }
+            // else if (this.dateSelected === true) {
+            let filteredDateData = [];
+
+            for (let i = 0; i < data.length; i++) {
+                if (data[i].date === this.date) {
+                    filteredData.push(data[i]);
+                }
             }
-
-
+            data = filteredData;
         }
 
         chosenVariables = [...new Set(chosenVariables)];
@@ -526,7 +543,7 @@ class aa_view {
                             .attr("width", w + margin.right + margin.left)
                             .attr("height", h + margin.top + margin.bottom);
 
-        let filteredData = this.filterObjsInArr(rawData, chosenVariables);
+        let filteredData = this.filterObjsInArr(data, chosenVariables);
 
         //let specificData = filteredData.filter(d => d.id.toLowerCase().includes(this.variable_name)); 
 
@@ -798,8 +815,10 @@ class aa_view {
 
             }
             let data_rect = d3.selectAll("#bar1").selectAll("rect");
+            d3.select("#dateSubmit").style("opacity", 1);
 
             this.tooltipRect(data_rect);
+
     }
 
     filterObjsInArr (arr, selection) {

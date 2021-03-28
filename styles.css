@@ -210,6 +210,10 @@ input:checked + .slider:before {
     margin: .4rem 0;
 }
 
+#dateSubmit {
+    opacity: 0;
+}
+
 .axis-label {
     display: inline-block;
     padding-right: 5px;

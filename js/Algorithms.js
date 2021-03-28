@@ -691,6 +691,7 @@ class Algorithms {
 
                 for (let p = 0; p < t.length; p++) {
                     let ind = t[p];
+                    
                     let val_2 = math.column(sum_dist,t[p]).re;
 
                     if (val_2 > val) {
