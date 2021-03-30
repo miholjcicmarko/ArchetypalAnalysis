@@ -540,7 +540,7 @@ class aa_view {
 
         let margin = {top: 10, right: 10, bottom: 10, left: 10};
         
-        let w = 700 - margin.right - margin.left;
+        let w = 500 - margin.right - margin.left;
         let h = 350 - margin.bottom - margin.top;
         let barpadding = 70;
 
