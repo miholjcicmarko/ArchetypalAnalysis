@@ -381,10 +381,20 @@ class aa_view {
 
             if (this.localName !== "path") {
                 d3.select(this).classed("hovered", true);
+
+                // for (let i = 0; i < that.numberOfArchetypes; i++) {
+                //     let circle = d3.select("#circle" + i);
+                //     circle.select("#"+this.id).classed("hovered")
+                // }
+
             }
             else if (this.localName === "path") {
                 d3.select(this).classed("timeLine", false);
                 d3.select(this).classed("hoveredLine", true);
+                for (let i = 0; i < that.numberOfArchetypes; i++) {
+                    let circle = d3.select("#circle" + i);
+                    circle.select("#"+this.id).classed("hovered", true);
+                }
             }
         });
 
@@ -395,6 +405,10 @@ class aa_view {
             else if (this.localName === "path") {
                 d3.select(this).classed("timeLine", true);
                 d3.select(this).classed("hoveredLine", false);
+                for (let i = 0; i < that.numberOfArchetypes; i++) {
+                    let circle = d3.select("#circle" + i);
+                    circle.select("#"+this.id).classed("hovered", false);
+                }
             }
 
             tooltip.transition()
@@ -834,7 +848,7 @@ class aa_view {
                     yaxis.append("text")
                             .text(""+chosenVariables[i])
                             .attr("class", "axis-label")
-                            .attr("text-anchor", "middle")
+                            //.attr("text-anchor", "middle")
                             .attr("transform", "translate(" + (displace-35) + "," + h/2+")rotate(-90)");
                             //.attr("transform", "translate(" + (-50+((i-1))) +","+h/2+")rotate(-90)");
                     
