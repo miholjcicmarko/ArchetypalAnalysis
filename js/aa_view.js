@@ -540,7 +540,7 @@ class aa_view {
 
         let margin = {top: 10, right: 10, bottom: 10, left: 10};
         
-        let w = 600 - margin.right - margin.left;
+        let w = 700 - margin.right - margin.left;
         let h = 350 - margin.bottom - margin.top;
         let barpadding = 70;
 
@@ -668,8 +668,8 @@ class aa_view {
 
         let xcatsScale = d3.scaleBand()
                 .domain(that.chosenIDs)
-                .range([0, xlargeScale.bandwidth()])
-                .padding(0.05);
+                .range([0, xlargeScale.bandwidth()]);
+                //.padding(0.05);
 
         // possibly build multiple y axes
         let yScale = d3.scaleLinear()
@@ -682,7 +682,7 @@ class aa_view {
             .selectAll("g")
             .data(array_of_variable_objects)
             .join("g")
-            .attr("transform", d => `translate(${xlargeScale(d[var_id])},0)`)
+            .attr("transform", d => `translate(${xlargeScale(d[var_id])+20},0)`)
             .selectAll("rect")
             .data(d => that.chosenIDs.map(key => ({key, value: d[key]})))
             .join("rect")
@@ -809,24 +809,34 @@ class aa_view {
             for (let i = 0; i < chosenVariables.length; i++) {
 
                 if (chosenVariables[i] !== "id") {
+                    let var_id = chosenVariables[i];
+                    let displace = xlargeScale(var_id);
                        
                     let yaxis = svg.append("g")
                                 .attr("id", "y-axis" + i);
-                           
+
+                    yaxis.call(d3.axisLeft(yScale).ticks(5))
+                        .attr("transform", "translate(" + (displace+20) + ",0)")
+                        //.attr("transform", "translate(" + ((i-1)*(w/(chosenVariables.length-1))+4*margin.left+10) + ",0)")
+                        .attr("class", "axis_line");
+                    
+                    let xaxis = svg.append("g")
+                        .attr("id", "x-axis")
+                        .attr("transform", "translate("+ (displace+20) +","+ (h - margin.bottom)+")")
+                        //.attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(4*margin.left+10))+","+ (h-5)+")")
+                        .call(d3.axisBottom(xcatsScale));
+
+
+                    if (i >= 2) {
+                        displace = xcatsScale.bandwidth() * (i-1) - (xcatsScale.bandwidth()/2) - 20;
+                    }        
+                
                     yaxis.append("text")
                             .text(""+chosenVariables[i])
                             .attr("class", "axis-label")
                             .attr("text-anchor", "middle")
-                            .attr("transform", "translate(" + (-50+((i-1))) +","+h/2+")rotate(-90)");
-                           
-                    yaxis.call(d3.axisLeft(yScales[i-1]).ticks(5))
-                            .attr("transform", "translate(" + ((i-1)*(w/(chosenVariables.length-1))+4*margin.left+10) + ",0)")
-                            .attr("class", "axis_line");
-                   
-                    let xaxis = svg.append("g")
-                                    .attr("id", "x-axis")
-                                    .attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(4*margin.left+10))+","+ (h-5)+")")
-                                    .call(d3.axisBottom(xScales[i-1]));
+                            .attr("transform", "translate(" + (displace-35) + "," + h/2+")rotate(-90)");
+                            //.attr("transform", "translate(" + (-50+((i-1))) +","+h/2+")rotate(-90)");
                     
                 }
 

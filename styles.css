@@ -190,7 +190,7 @@ input:checked + .slider:before {
 
 .ContainerA {
     display: grid;
-    grid-template-columns: 1fr 0.5fr 1fr;
+    grid-template-columns: 1fr 0.2fr 1fr;
     grid-template-rows: 1fr 1fr;
     column-gap: 1%;
 
