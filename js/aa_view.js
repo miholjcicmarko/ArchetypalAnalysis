@@ -510,6 +510,14 @@ class aa_view {
         if (timeSeries === true) {
             let filteredDateData = [];
 
+            if ((typeof data[0]["date"]) !== "object") {
+                let parseTime = d3.timeParse("%Y-%m-%d");
+    
+                data.forEach(function(d) {
+                    d.date = parseTime(d.date);
+                });
+            }
+
             for (let i = 0; i < data.length; i++) {
                 if (+data[i].date == +this.date) {
                     filteredDateData.push(data[i]);
@@ -564,32 +572,32 @@ class aa_view {
         // let color = d3.scaleOrdinal()
         //         .range(["red", "steelblue", "darkgreen", "redorange", "black"]);
 
-        // let rawDataVarSpecific = [];
-        // let yScales = [];
-        // let xScales = [];
+        let rawDataVarSpecific = [];
+        let yScales = [];
+        let xScales = [];
         // let ydata = [];
         // let ydataChosenVar = [];
 
-        // for (let i = 1; i < chosenVariables.length; i++) {
-        //     let arrayofData = [];
+        for (let i = 1; i < chosenVariables.length; i++) {
+            let arrayofData = [];
 
-        //     for (let k = 0; k < filteredData.length; k++) {
-        //         let number = parseInt(filteredData[k][""+chosenVariables[i]])
-        //         arrayofData.push(number);
-        //     }
-        //     rawDataVarSpecific.push(arrayofData);
+            for (let k = 0; k < filteredData.length; k++) {
+                let number = parseInt(filteredData[k][""+chosenVariables[i]])
+                arrayofData.push(number);
+            }
+            rawDataVarSpecific.push(arrayofData);
 
-        //     let arrayRaw = rawDataVarSpecific[i-1];
+            let arrayRaw = rawDataVarSpecific[i-1];
             
-        //     let yScaleOne = d3.scaleLinear()
-        //                         .domain([d3.max(arrayRaw), 0])
-        //                         .range([0, h-5]);
-        //     yScales.push(yScaleOne);
+            let yScaleOne = d3.scaleLinear()
+                                .domain([0, d3.max(arrayRaw)])
+                                .range([h - margin.bottom, margin.top]);
+            yScales.push(yScaleOne);
 
-        //     let xScaleOne = d3.scaleBand()
-        //                   .domain(["" + this.chosenIDs])
-        //                   .range([0,w/(chosenVariables.length-1) - barpadding]);
-        //     xScales.push(xScaleOne);
+            let xScaleOne = d3.scaleBand()
+                          .domain(["" + this.chosenIDs])
+                          .range([0,w/(chosenVariables.length-1) - barpadding]);
+            xScales.push(xScaleOne);
 
         //     let one_chart_ydata = [];
 
@@ -624,12 +632,12 @@ class aa_view {
         //         let value = {value: parseInt(ydata[0][i][""+chosenVariables[k]])}
         //         ydataChosenVar.push(value);
         //     }
-        // }
+        }
 
-        let rawDataVarSpecific = [];
+        //let rawDataVarSpecific = [];
         let ydata = [];
-        let yScales = [];
-        let xScales = [];
+        //let yScales = [];
+        //let xScales = [];
         
         for (let p = 0; p < this.chosenIDs.length; p++) {
             let specificData = filteredData.filter(d => d.id.toLowerCase().includes(this.chosenIDs[p])); 
@@ -665,8 +673,10 @@ class aa_view {
 
         // possibly build multiple y axes
         let yScale = d3.scaleLinear()
-                .domain([0, d3.max(array_of_variable_objects, d => d3.max(that.chosenIDs, key => d[key]))]).nice()
-                .range([h - margin.bottom, margin.top]);
+               .domain([0, d3.max(array_of_variable_objects, d => d3.max(that.chosenIDs, key => d[key]))]).nice()
+               .range([h - margin.bottom, margin.top]);
+
+        // Possibly try a for loop
 
         svg.append("g")
             .selectAll("g")
@@ -677,8 +687,16 @@ class aa_view {
             .data(d => that.chosenIDs.map(key => ({key, value: d[key]})))
             .join("rect")
             .attr("x", d => xcatsScale(d.key))
+            //.attr("y", function(d,i) {
+            //    let scale = yScales[i];
+            //    return scale(d.value);
+            //})
             .attr("y", d => yScale(d.value))
             .attr("width", xcatsScale.bandwidth())
+            //.attr("height", function(d,i) {
+             //   let scale = yScales[i];
+             //   return scale(0) - scale(d.value);
+            //})
             .attr("height", d => yScale(0) - yScale(d.value))
             .attr("fill", d => that.color(d.key));
          
@@ -788,33 +806,36 @@ class aa_view {
 
         
 //GOOOD AREA
-            // for (let i = 0; i < chosenVariables.length; i++) {
+            for (let i = 0; i < chosenVariables.length; i++) {
 
-            //     if (chosenVariables[i] !== "id") {
+                if (chosenVariables[i] !== "id") {
                        
-            //         let yaxis = svg.append("g")
-            //                     .attr("id", "y-axis" + i);
+                    let yaxis = svg.append("g")
+                                .attr("id", "y-axis" + i);
                            
-            //         yaxis.append("text")
-            //                 .text(""+chosenVariables[i])
-            //                 .attr("class", "axis-label")
-            //                 .attr("text-anchor", "middle")
-            //                 .attr("transform", "translate(" + (-50+((i-1))) +","+h/2+")rotate(-90)");
+                    yaxis.append("text")
+                            .text(""+chosenVariables[i])
+                            .attr("class", "axis-label")
+                            .attr("text-anchor", "middle")
+                            .attr("transform", "translate(" + (-50+((i-1))) +","+h/2+")rotate(-90)");
                            
-            //         yaxis.call(d3.axisLeft(yScale[i-1]).ticks(5))
-            //                 .attr("transform", "translate(" + ((i-1)*(w/(chosenVariables.length-1))+3*margin.left+10) + ",5)")
-            //                 .attr("class", "axis_line");
+                    yaxis.call(d3.axisLeft(yScales[i-1]).ticks(5))
+                            .attr("transform", "translate(" + ((i-1)*(w/(chosenVariables.length-1))+4*margin.left+10) + ",0)")
+                            .attr("class", "axis_line");
                    
-            //         let xaxis = svg.append("g")
-            //                         .attr("id", "x-axis")
-            //                         .attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(3*margin.left+10))+","+ h+")")
-            //                         .call(d3.axisBottom(xScales[i-1]));
+                    let xaxis = svg.append("g")
+                                    .attr("id", "x-axis")
+                                    .attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(4*margin.left+10))+","+ (h-5)+")")
+                                    .call(d3.axisBottom(xScales[i-1]));
                     
-            //     }
+                }
 
-            // }
+            }
             let data_rect = d3.selectAll("#bar1").selectAll("rect");
-            d3.select("#dateSubmit").style("opacity", 1);
+
+            if (this.timeline === true) {
+                d3.select("#dateSubmit").style("opacity", 1);
+            }
 
             this.tooltipRect(data_rect);
 

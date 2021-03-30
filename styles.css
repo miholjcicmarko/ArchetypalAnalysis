@@ -259,7 +259,7 @@ div.tooltip {
 }
 
 .hovered {
-    fill: rgb(49, 48, 48);
+    fill: rgb(0, 211, 211);
     stroke: white;
     stroke-width: 2.5;
     opacity: 1;
