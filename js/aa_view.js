@@ -402,7 +402,6 @@ class aa_view {
                 for (let i = 0; i < that.numberOfArchetypes; i++) {
                     let circle = d3.select("#circle" + i);
                     d3.selectAll(".tempCircle").remove();
-                    //circle.select("#"+this.id).classed("hovered", false);
                 }
             }
 
