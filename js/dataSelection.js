@@ -2,7 +2,7 @@ class dataSelection {
 
     constructor(data, updateData, updateArch, performAnalysis, customAnalysis) {
         this.data = null;
-        this.numArch = 0;
+        this.numArch = null;
         this.updateData = updateData;
         this.updateArch = updateArch;
         this.performAnalysis = performAnalysis;

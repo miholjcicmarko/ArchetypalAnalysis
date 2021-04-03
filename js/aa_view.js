@@ -392,10 +392,103 @@ class aa_view {
                 d3.select(this).classed("timeLine", false);
                 d3.select(this).classed("hoveredLine", true);
                 for (let i = 0; i < that.numberOfArchetypes; i++) {
+                    let numberOfArch = that.numberOfArchetypes;
+                    let name = this.id.toLowerCase();
+                    let filteredData = that.dataS[i].filter(d => d.variable_name.toLowerCase().includes(name));
+                    
+                    let point = new PlotData(filteredData[0].value,filteredData[0].variable_name);
+
                     let circle = d3.select("#circle" + i);
-                    circle.select("#"+this.id).classed("hovered", true);
+
+                    let circleScale = that.xScale;
+
+                    let margin_top = that.margin.top;   
+                    
+                    circle.append("circle")
+                    .attr("cx", circleScale(point.value))
+                    .attr("cy", function() {
+                        if (numberOfArch <= 3) {
+                            return 45;
+                        }
+                        else if (numberOfArch == 4) {
+                            return 43;
+                        }
+                        else {
+                            return 45 - (margin_top);
+                        }
+                    })
+                    .attr("r", function() {
+                        if (numberOfArch >= 5) {
+                            return 3;
+                        }
+                        else {
+                            return 7;
+                        }
+                    })
+                    .classed("hovered", true)
+                    .classed("tempCircle", true);
+                    
+                    //circle.select("#"+this.id).classed("hovered", true);
                 }
             }
+
+            // for (let i = 0; i < numberOfArch; i++) {
+
+            //     if (isTooltip === false) {
+            //         this.filteredData = data[i].filter(d => d.variable_name.toLowerCase().includes(searchVal));
+            //     }
+            //     else if (isTooltip === true) {
+            //         let toolData = searchVal.id;
+            //         toolData = toolData.toLowerCase();
+            //         this.filteredData = data[i].filter(d => d.variable_name.toLowerCase().includes(toolData));
+            //     }
+            
+            //     let point = new PlotData(this.filteredData[0].value,this.filteredData[0].variable_name);
+
+            // let circles = d3.select('#circle' + i);
+
+            // let circleScale = this.xScale;
+
+            // let margin_top = this.margin.top;
+
+            // let that = this;
+            
+            // circles.append("circle")
+            //     .attr("cx", circleScale(point.value))
+            //     .attr("cy", function() {
+            //         if (numberOfArch <= 3) {
+            //             return 45;
+            //         }
+            //         else if (numberOfArch == 4) {
+            //             return 43;
+            //         }
+            //         else {
+            //             return 45 - (margin_top);
+            //         }
+            //     })
+            //     .attr("r", function() {
+            //         if (numberOfArch >= 5) {
+            //             return 3;
+            //         }
+            //         else {
+            //             return 7;
+            //         }
+            //     })
+            //     .classed("selectedCircle", true)
+            //     .attr("fill", function () {
+            //         let index = that.chosenIDs.length;
+            //         return that.color(index-1);
+            //     })
+            //     .attr("stroke", function () {
+            //         let index = that.chosenIDs.length;
+            //         return that.color(index-1);
+            //     })
+            //     .attr("id", function(d) {
+            //         return point.variable_name + "";
+            //     })
+            //     .classed("tooltipCircle"+that.count, true);
+            // }
+
         });
 
         onscreenData.on("mouseout", function(d,i) {
@@ -407,7 +500,8 @@ class aa_view {
                 d3.select(this).classed("hoveredLine", false);
                 for (let i = 0; i < that.numberOfArchetypes; i++) {
                     let circle = d3.select("#circle" + i);
-                    circle.select("#"+this.id).classed("hovered", false);
+                    d3.selectAll(".tempCircle").remove();
+                    //circle.select("#"+this.id).classed("hovered", false);
                 }
             }
 
@@ -453,26 +547,26 @@ class aa_view {
 
             for (let i = 0; i < numberOfArch; i++) {
 
-            if (isTooltip === false) {
-                this.filteredData = data[i].filter(d => d.variable_name.toLowerCase().includes(searchVal));
-            }
-            else if (isTooltip === true) {
-                let toolData = searchVal.id;
-                toolData = toolData.toLowerCase();
-                this.filteredData = data[i].filter(d => d.variable_name.toLowerCase().includes(toolData));
-            }
+                if (isTooltip === false) {
+                    this.filteredData = data[i].filter(d => d.variable_name.toLowerCase().includes(searchVal));
+                }
+                else if (isTooltip === true) {
+                    let toolData = searchVal.id;
+                    toolData = toolData.toLowerCase();
+                    this.filteredData = data[i].filter(d => d.variable_name.toLowerCase().includes(toolData));
+                }
             
-            let point = new PlotData(this.filteredData[0].value,this.filteredData[0].variable_name); 
+                let point = new PlotData(this.filteredData[0].value,this.filteredData[0].variable_name); 
 
-            let circles = d3.select('#circle' + i);
+                let circles = d3.select('#circle' + i);
 
-            let circleScale = this.xScale;
+                let circleScale = this.xScale;
 
-            let margin_top = this.margin.top;
+                let margin_top = this.margin.top;
 
-            let that = this;
+                let that = this;
             
-            circles.append("circle")
+                circles.append("circle")
                 .attr("cx", circleScale(point.value))
                 .attr("cy", function() {
                     if (numberOfArch <= 3) {
