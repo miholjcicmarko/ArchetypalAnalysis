@@ -380,79 +380,14 @@ class aa_view {
                 .style("top", (pageY) + "px");
 
             if (this.localName !== "path") {
-                that.createTempCircle(this);
                 d3.select(this).classed("hovered", true);
-                //let data_circ = d3.selectAll("#oned").selectAll("circle");
-
-                //that.tooltip(data_circ);
-                // for (let i = 0; i < that.numberOfArchetypes; i++) {
-                //     let circle = d3.select("#circle" + i);
-                //     circle.select("#"+this.id).classed("hovered")
-                // }
-
+                that.createTempCircle(this);
             }
             else if (this.localName === "path") {
                 d3.select(this).classed("timeLine", false);
                 d3.select(this).classed("hoveredLine", true);
                 that.createTempCircle(this);
             }
-
-            // for (let i = 0; i < numberOfArch; i++) {
-
-            //     if (isTooltip === false) {
-            //         this.filteredData = data[i].filter(d => d.variable_name.toLowerCase().includes(searchVal));
-            //     }
-            //     else if (isTooltip === true) {
-            //         let toolData = searchVal.id;
-            //         toolData = toolData.toLowerCase();
-            //         this.filteredData = data[i].filter(d => d.variable_name.toLowerCase().includes(toolData));
-            //     }
-            
-            //     let point = new PlotData(this.filteredData[0].value,this.filteredData[0].variable_name);
-
-            // let circles = d3.select('#circle' + i);
-
-            // let circleScale = this.xScale;
-
-            // let margin_top = this.margin.top;
-
-            // let that = this;
-            
-            // circles.append("circle")
-            //     .attr("cx", circleScale(point.value))
-            //     .attr("cy", function() {
-            //         if (numberOfArch <= 3) {
-            //             return 45;
-            //         }
-            //         else if (numberOfArch == 4) {
-            //             return 43;
-            //         }
-            //         else {
-            //             return 45 - (margin_top);
-            //         }
-            //     })
-            //     .attr("r", function() {
-            //         if (numberOfArch >= 5) {
-            //             return 3;
-            //         }
-            //         else {
-            //             return 7;
-            //         }
-            //     })
-            //     .classed("selectedCircle", true)
-            //     .attr("fill", function () {
-            //         let index = that.chosenIDs.length;
-            //         return that.color(index-1);
-            //     })
-            //     .attr("stroke", function () {
-            //         let index = that.chosenIDs.length;
-            //         return that.color(index-1);
-            //     })
-            //     .attr("id", function(d) {
-            //         return point.variable_name + "";
-            //     })
-            //     .classed("tooltipCircle"+that.count, true);
-            // }
 
         });
 
@@ -498,6 +433,12 @@ class aa_view {
             let circleScale = this.xScale;
 
             let margin_top = this.margin.top;   
+
+            let layer = item.viewportElement.id;
+            let layerlen = layer.length;
+            layer = Number(layer[layerlen-1]);
+
+            if (layer !== i) {
             
             circle.append("circle")
             .attr("cx", circleScale(point.value))
@@ -522,7 +463,7 @@ class aa_view {
             })
             .classed("hovered", true)
             .classed("tempCircle", true);
-            
+            }
         }
     }
 
