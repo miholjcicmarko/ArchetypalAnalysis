@@ -380,8 +380,11 @@ class aa_view {
                 .style("top", (pageY) + "px");
 
             if (this.localName !== "path") {
+                that.createTempCircle(this);
                 d3.select(this).classed("hovered", true);
+                //let data_circ = d3.selectAll("#oned").selectAll("circle");
 
+                //that.tooltip(data_circ);
                 // for (let i = 0; i < that.numberOfArchetypes; i++) {
                 //     let circle = d3.select("#circle" + i);
                 //     circle.select("#"+this.id).classed("hovered")
@@ -391,45 +394,7 @@ class aa_view {
             else if (this.localName === "path") {
                 d3.select(this).classed("timeLine", false);
                 d3.select(this).classed("hoveredLine", true);
-                for (let i = 0; i < that.numberOfArchetypes; i++) {
-                    let numberOfArch = that.numberOfArchetypes;
-                    let name = this.id.toLowerCase();
-                    let filteredData = that.dataS[i].filter(d => d.variable_name.toLowerCase().includes(name));
-                    
-                    let point = new PlotData(filteredData[0].value,filteredData[0].variable_name);
-
-                    let circle = d3.select("#circle" + i);
-
-                    let circleScale = that.xScale;
-
-                    let margin_top = that.margin.top;   
-                    
-                    circle.append("circle")
-                    .attr("cx", circleScale(point.value))
-                    .attr("cy", function() {
-                        if (numberOfArch <= 3) {
-                            return 45;
-                        }
-                        else if (numberOfArch == 4) {
-                            return 43;
-                        }
-                        else {
-                            return 45 - (margin_top);
-                        }
-                    })
-                    .attr("r", function() {
-                        if (numberOfArch >= 5) {
-                            return 3;
-                        }
-                        else {
-                            return 7;
-                        }
-                    })
-                    .classed("hovered", true)
-                    .classed("tempCircle", true);
-                    
-                    //circle.select("#"+this.id).classed("hovered", true);
-                }
+                that.createTempCircle(this);
             }
 
             // for (let i = 0; i < numberOfArch; i++) {
@@ -494,6 +459,7 @@ class aa_view {
         onscreenData.on("mouseout", function(d,i) {
             if (this.localName !== "path") {
                 d3.select(this).classed("hovered",false);
+                d3.selectAll(".tempCircle").remove();
             }
             else if (this.localName === "path") {
                 d3.select(this).classed("timeLine", true);
@@ -517,6 +483,47 @@ class aa_view {
             that.chosenIDs.push(this.id.toLowerCase());
         })
 
+    }
+
+    createTempCircle (item) {
+        for (let i = 0; i < this.numberOfArchetypes; i++) {
+            let numberOfArch = this.numberOfArchetypes;
+            let name = item.id.toLowerCase();
+            let filteredData = this.dataS[i].filter(d => d.variable_name.toLowerCase().includes(name));
+            
+            let point = new PlotData(filteredData[0].value,filteredData[0].variable_name);
+
+            let circle = d3.select("#circle" + i);
+
+            let circleScale = this.xScale;
+
+            let margin_top = this.margin.top;   
+            
+            circle.append("circle")
+            .attr("cx", circleScale(point.value))
+            .attr("cy", function() {
+                if (numberOfArch <= 3) {
+                    return 45;
+                }
+                else if (numberOfArch == 4) {
+                    return 43;
+                }
+                else {
+                    return 45 - (margin_top);
+                }
+            })
+            .attr("r", function() {
+                if (numberOfArch >= 5) {
+                    return 3;
+                }
+                else {
+                    return 7;
+                }
+            })
+            .classed("hovered", true)
+            .classed("tempCircle", true);
+            
+        }
     }
 
     tooltipRender(data) {
