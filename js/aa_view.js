@@ -26,6 +26,7 @@ class aa_view {
         this.timeline = data.time_data;
         this.customImplement = customImplement;
         this.count = 0;
+        this.brushOn = false;
 
         this.filteredData = [];
         this.chosenVars = ["id"];
@@ -326,6 +327,7 @@ class aa_view {
     }
 
     brush(svg, brush_chart, brush_width, brush_height) {
+        this.brushOn = true;
         let that = this;
         let activeBrush = null;
         let activeBrushNode = null;
