@@ -17,7 +17,7 @@ class aa_view {
         document.getElementById("Introduction").style.zIndex = "-1";
         d3.select("#header-wrap").style("opacity", 1);
         d3.select(".topnav").style("opacity", 1);
-        d3.select("#brushButton").style("opacity, 0");
+        d3.select("#brushButton").style("opacity", "1");
 
         this.XC = data.XC;
         this.S = data.S;
@@ -149,8 +149,13 @@ class aa_view {
 
         if (this.timeline === true) {
             this.drawTimeLine(this.raw, this.variables[2]);
-
         }
+
+        let selectRegion = d3.select("#brushButton");
+
+        selectRegion.on("click", function () {
+            that.drawBrush();
+        });
     }
 
     drawCircleChart (numberOfArchetypes) {
@@ -293,50 +298,61 @@ class aa_view {
             that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
         });
 
-    // creates the brushes
-    if (this.timeline === true) {
-
-    this.max_brush_width = width;
-    let height_1d = 0;
-    for (let i = 0; i < numberOfArchetypes; i++) {
-        let g = d3.select('#oned').select("#label"+i)
-                    .append('g').classed('brushes', true)
-                    .attr("id", "g"+i);
-                
-        if (numberOfArchetypes >= 5) {
-            g.attr("height", (height / numberOfArchetypes));
-            height_1d = (height / numberOfArchetypes)
-        }
-        else if (numberOfArchetypes === 4) {
-            g.attr("height", (height / numberOfArchetypes) - this.margin.top
-                            - this.margin.bottom);
-            height_1d = (height / numberOfArchetypes) - this.margin.top 
-            - this.margin.bottom;
-        }
-        else {
-            g.attr("height", (height / numberOfArchetypes) - this.margin.top
-                            - this.margin.bottom);
-            height_1d = (height / numberOfArchetypes) - this.margin.top
-            - this.margin.bottom
-        }
-
-        g.attr("transform", 'translate(0,'+(25)+')');
-    }
-
-    let svg = d3.select('#oned');
-
-    let brush_chart = d3.selectAll('.brushes');
-
-    let brush_width = this.xScale(this.max_brush_width);
-    let brush_height = height_1d;
-    
-    this.brush(svg, brush_chart, brush_width, brush_height);
-    }
-
     let data_circ = d3.selectAll("#oned").selectAll("circle");
 
     this.tooltip(data_circ);
 
+    }
+
+    drawBrush() {
+        // creates the brushes
+    if (this.timeline === true) {
+
+        let selectedRegion = d3.select("#brushButton").classed("brushPressed", true);
+
+        let numberOfArchetypes = this.numberOfArchetypes;
+
+        this.margin = {top: 10, right: 10, bottom: 10, left: 10};
+        
+        let width = 450 - this.margin.right - this.margin.left;
+        let height = 350 - this.margin.bottom - this.margin.top;
+
+        this.max_brush_width = width;
+        let height_1d = 0;
+        for (let i = 0; i < this.numberOfArchetypes; i++) {
+            let g = d3.select('#oned').select("#label"+i)
+                        .append('g').classed('brushes', true)
+                        .attr("id", "g"+i);
+                    
+            if (numberOfArchetypes >= 5) {
+                g.attr("height", (height / numberOfArchetypes));
+                height_1d = (height / numberOfArchetypes)
+            }
+            else if (numberOfArchetypes === 4) {
+                g.attr("height", (height / numberOfArchetypes) - this.margin.top
+                                - this.margin.bottom);
+                height_1d = (height / numberOfArchetypes) - this.margin.top 
+                - this.margin.bottom;
+            }
+            else {
+                g.attr("height", (height / numberOfArchetypes) - this.margin.top
+                                - this.margin.bottom);
+                height_1d = (height / numberOfArchetypes) - this.margin.top
+                - this.margin.bottom
+            }
+    
+            g.attr("transform", 'translate(0,'+(25)+')');
+        }
+    
+        let svg = d3.select('#oned');
+    
+        let brush_chart = d3.selectAll('.brushes');
+    
+        let brush_width = this.xScale(this.max_brush_width);
+        let brush_height = height_1d;
+        
+        this.brush(svg, brush_chart, brush_width, brush_height);
+        }
     }
 
     brush(svg, brush_chart, brush_width, brush_height) {
