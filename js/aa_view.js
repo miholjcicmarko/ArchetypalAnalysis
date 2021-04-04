@@ -292,44 +292,44 @@ class aa_view {
         });
 
     // creates the brushes
-    // if (this.timeline === true) {
+    if (this.timeline === true) {
 
-    // this.max_brush_width = width;
-    // let height_1d = 0;
-    // for (let i = 0; i < numberOfArchetypes; i++) {
-    //     let g = d3.select('#oned').select("#label"+i)
-    //                 .append('g').classed('brushes', true)
-    //                 .attr("id", "g"+i);
+    this.max_brush_width = width;
+    let height_1d = 0;
+    for (let i = 0; i < numberOfArchetypes; i++) {
+        let g = d3.select('#oned').select("#label"+i)
+                    .append('g').classed('brushes', true)
+                    .attr("id", "g"+i);
                 
-    //     if (numberOfArchetypes >= 5) {
-    //         g.attr("height", (height / numberOfArchetypes));
-    //         height_1d = (height / numberOfArchetypes)
-    //     }
-    //     else if (numberOfArchetypes === 4) {
-    //         g.attr("height", (height / numberOfArchetypes) - this.margin.top
-    //                         - this.margin.bottom);
-    //         height_1d = (height / numberOfArchetypes) - this.margin.top 
-    //         - this.margin.bottom;
-    //     }
-    //     else {
-    //         g.attr("height", (height / numberOfArchetypes) - this.margin.top
-    //                         - this.margin.bottom);
-    //         height_1d = (height / numberOfArchetypes) - this.margin.top
-    //         - this.margin.bottom
-    //     }
+        if (numberOfArchetypes >= 5) {
+            g.attr("height", (height / numberOfArchetypes));
+            height_1d = (height / numberOfArchetypes)
+        }
+        else if (numberOfArchetypes === 4) {
+            g.attr("height", (height / numberOfArchetypes) - this.margin.top
+                            - this.margin.bottom);
+            height_1d = (height / numberOfArchetypes) - this.margin.top 
+            - this.margin.bottom;
+        }
+        else {
+            g.attr("height", (height / numberOfArchetypes) - this.margin.top
+                            - this.margin.bottom);
+            height_1d = (height / numberOfArchetypes) - this.margin.top
+            - this.margin.bottom
+        }
 
-    //     g.attr("transform", 'translate(0,'+(25)+')');
-    // }
+        g.attr("transform", 'translate(0,'+(25)+')');
+    }
 
-    // let svg = d3.select('#oned');
+    let svg = d3.select('#oned');
 
-    // let brush_chart = d3.selectAll('.brushes');
+    let brush_chart = d3.selectAll('.brushes');
 
-    // let brush_width = this.xScale(this.max_brush_width);
-    // let brush_height = height_1d;
+    let brush_width = this.xScale(this.max_brush_width);
+    let brush_height = height_1d;
     
-    // this.brush(svg, brush_chart, brush_width, brush_height);
-    //}
+    this.brush(svg, brush_chart, brush_width, brush_height);
+    }
 
     let data_circ = d3.selectAll("#oned").selectAll("circle");
 
@@ -342,6 +342,8 @@ class aa_view {
         let that = this;
         let activeBrush = null;
         let activeBrushNode = null;
+
+        let brushData = [...this.dataS];
 
         brush_chart.each(function() {
             let selectionThis = this;
@@ -363,40 +365,21 @@ class aa_view {
                 .on('brush', function () {
                     
                     let brushSelection = d3.brushSelection(selectionThis);
+
+                    let selectedData = [];
                     if (brushSelection) {
 
                         let [x1,x2] = brushSelection;
                         
-                        let selectionData = that.circles_arr.filter(d => d.xVal >= that.xScale.invert(x1) &&
-                                                    d.xVal <= that.xScale.invert(x2));
-
-                        if (that.isExpanded) {
-                            // gets the group selected
-                            let group_select = d3.select(this).attr("id");    
+                        let selectionData = brushData.filter(d => d.x >= that.xScale.invert(x1) &&
+                                                    d.x <= that.xScale.invert(x2));   
                             
-                            let groups = ['g1', 'g2', 'g3', 'g4', 'g5', 'g6'];
+                        svg.selectAll("circle").classed("notbrushed", true);
 
-                            let index = 0;
-                                
-                            for (let i = 0; i < groups.length; i++) {
-                                if (group_select === groups[i]) {
-                                    index = i;
-                                }
-                            }
-                                
-                            let id = that.unique_categories[index];
-                            
-                            // gets the data for the sole group selected   
-                            selectionData = selectionData.filter(d => d.id === id);
-
-                            svg.selectAll("circle").classed("notbrushed", true);
-
-                            activeBrushNode.selectAll("circle")
-                                .filter(d=>d.xVal>=that.xScale.invert(x1) && d.xVal<=that.xScale.invert(x2))
-                                .classed("notbrushed",false);
-                                
+                        activeBrushNode.selectAll("circle")
+                                .filter(d=>d.x>=that.xScale.invert(x1) && d.x<=that.xScale.invert(x2))
+                                .classed("notbrushed",false);       
                         }
-                    }  
                 });
             brush   
                 .on('end', function() {
@@ -410,37 +393,17 @@ class aa_view {
                     if (brushSelection !== null) {
                         let [x1,x2] = brushSelection;
                         
-                        let selectionData = that.circles_arr.filter(d => d.xVal >= that.xScale.invert(x1) &&
-                                                d.xVal <= that.xScale.invert(x2));
-                   
-                        if (that.isExpanded) {
-                            let group_select = d3.select(this).attr("id");
-
-                            let groups = ['g1', 'g2', 'g3', 'g4', 'g5', 'g6'];
-
-                            let index = 0;
-
-                        for (let i = 0; i < groups.length; i++) {
-                            if (group_select === groups[i]) {
-                                index = i;
-                            }
-                        }
-
-                        let category = that.unique_categories[index];
-
-                        selectionData = selectionData.filter(d => d.category === category);
+                        let selectionData = that.circles_arr.filter(d => d.x >= that.xScale.invert(x1) &&
+                                                d.x <= that.xScale.invert(x2));
 
                         svg.selectAll("circle").classed("notbrushed", true);
 
                         activeBrushNode.selectAll("circle")
-                            .filter(d=>d.xVal>=that.xScale.invert(x1) && d.xVal<=that.xScale.invert(x2))
+                            .filter(d=>d.x>=that.xScale.invert(x1) && d.x<=that.xScale.invert(x2))
                             .classed("notbrushed",false);
-        
                     }
-                }
                 });
             selection.call(brush);
-            
         });
     }
 
