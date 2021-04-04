@@ -39,8 +39,9 @@ class aa_view {
         let parseTime = d3.timeParse("%Y-%m-%d");
 
         if (this.timeline === true) {
-            let date1 = this.raw[0]["date"];
-            let date2 = this.raw[this.raw.length - 1]["date"];
+            let dates = [...this.raw];
+            let date1 = dates[0]["date"];
+            let date2 = dates[this.raw.length - 1]["date"];
             let date1D = 0;
             let date2D = 0;
 
@@ -1179,6 +1180,7 @@ class aa_view {
     }
 
     drawTimeLine(data, variable) { 
+        let dataTime = [...data];
 
         if (this.timelineActive === true) {
             d3.select("#svg-time").remove();
@@ -1192,8 +1194,8 @@ class aa_view {
         let parseTime = d3.timeParse("%Y-%m-%d");
 
         if (this.timelineActive === false) {
-            if ((typeof data[0]["date"]) !== "object") {
-                data.forEach(function(d) {
+            if ((typeof dataTime[0]["date"]) !== "object") {
+                dataTime.forEach(function(d) {
                     d.date = parseTime(d.date);
                 });
             }
@@ -1206,8 +1208,8 @@ class aa_view {
 
         let uniqueID_arr = [];
 
-        for (let i = 0; i < data.length; i++) {
-            uniqueID_arr.push(data[i].id);
+        for (let i = 0; i < dataTime.length; i++) {
+            uniqueID_arr.push(dataTime[i].id);
         }
 
         uniqueID_arr = [...new Set(uniqueID_arr)];
@@ -1216,7 +1218,7 @@ class aa_view {
 
         for (let k = 0; k < uniqueID_arr.length; k++) {
             let newObj = {};
-            for (let i = 0; i < data.length; i++) {
+            for (let i = 0; i < dataTime.length; i++) {
                 if (uniqueID_arr[k] === data[i].id) {
                     let id = data[i].id;
                     newObj["id"] = id;
