@@ -395,7 +395,7 @@ class aa_view {
                     if (brushSelection !== null) {
                         let [x1,x2] = brushSelection;
                         
-                        let selectionData = that.circles_arr.filter(d => d.value >= that.xScale.invert(x1) &&
+                        let selectionData = brushData.filter(d => d.value >= that.xScale.invert(x1) &&
                                                 d.value <= that.xScale.invert(x2));
 
                         svg.selectAll("circle").classed("notbrushed", true);
@@ -530,7 +530,7 @@ class aa_view {
                 }
             }
             else if (this.localName === "path") {
-                if (that.timeline === false) {
+                if (that.timeline === true) {
                     d3.select(this).classed("timeLine", true);
                     d3.select(this).classed("hoveredLine", false);
                 }
