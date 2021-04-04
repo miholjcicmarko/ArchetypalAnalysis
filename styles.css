@@ -323,3 +323,8 @@ div.tooltipLine {
     font: 12px sans-serif;
     font-weight: bold;
 }
+
+.notbrushed {
+    fill: gray;
+    opacity: 0.1;
+}
