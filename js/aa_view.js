@@ -313,7 +313,7 @@ class aa_view {
             - this.margin.bottom
         }
 
-        g.attr("transform", 'translate(0,'+(i * height_1d + 25)+')');
+        g.attr("transform", 'translate(0,'+(25)+')');
     }
 
     let svg = d3.select('#oned');
@@ -328,7 +328,7 @@ class aa_view {
 
     let data_circ = d3.selectAll("#oned").selectAll("circle");
 
-    that.tooltip(data_circ);
+    this.tooltip(data_circ);
 
     }
 
