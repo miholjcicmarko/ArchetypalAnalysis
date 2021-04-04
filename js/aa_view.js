@@ -308,7 +308,8 @@ class aa_view {
         // creates the brushes
     if (this.timeline === true) {
 
-        let selectedRegion = d3.select("#brushButton").classed("brushPressed", true);
+        let selectedRegion = d3.select("#brushButton");
+            selectedRegion.classed("brushPressed", true);
 
         let numberOfArchetypes = this.numberOfArchetypes;
 

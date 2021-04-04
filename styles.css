@@ -164,10 +164,7 @@ input:checked + .slider:before {
 }
 
 .brushPressed {
-    position: relative;
-    margin-top: 2%;
     background-color: rgb(66, 60, 66);
-    opacity: 0;
 }
 
 #dropdown {
