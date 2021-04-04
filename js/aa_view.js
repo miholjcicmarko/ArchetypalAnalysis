@@ -368,7 +368,8 @@ class aa_view {
 
         brush_chart.each(function() {
             let selectionThis = this;
-            let layer = selectionThis.id[1];
+            let layer = selectionThis.id;
+            layer = layer.substr(layer.length-1);
             let brushData = [...that.dataS];
             brushData = brushData[layer];
 
@@ -382,6 +383,8 @@ class aa_view {
                         activeBrushNode.call(activeBrush.move, null);
                     }
                     activeBrush = brush;
+
+                    activeBrushNode = selection;
                    
                 });
             brush
@@ -399,6 +402,7 @@ class aa_view {
                             
                         svg.selectAll("circle").classed("notbrushed", true);
 
+                        that.createTempCircleBrush(selectionData);
                               
                         }
                 });
@@ -583,7 +587,8 @@ class aa_view {
 
     }
 
-    createTempCircle (item) {
+    createTempCircle (item, brush) {
+        
         for (let i = 0; i < this.numberOfArchetypes; i++) {
             let numberOfArch = this.numberOfArchetypes;
             let name = item.id.toLowerCase();
@@ -650,6 +655,70 @@ class aa_view {
              .attr("id", function(d) {
                 return "tempLine";
              }); 
+
+    }
+
+    createTempCircleBrush (brushed) {
+        let numberOfArchetypes = this.numberOfArchetypes;
+
+        for (let i = 0; i < this.numberOfArchetypes; i++) {
+            let numberOfArch = this.numberOfArchetypes;
+            let names = [];
+            for (let j = 0; j < brushed.length; j++) {
+                let name = brushed[j].variable_name.toLowerCase();
+                names.push(name);
+            }
+            let filteredData = [];
+
+            for (let k = 0; k < this.dataS[i].length; k++) {
+                let name = this.dataS[i][k].variable_name.toLowerCase();
+                if (names.includes(name)) {
+                    filteredData.push(this.dataS[i][k]);
+                }
+            }
+
+            //let filteredData = this.dataS[i].filter(d => names.indexOf(d.variable_name.toLowerCase() !== 1));
+
+            let circle = d3.select("#circle" + i);
+
+            let circleScale = this.xScale;
+
+            let margin_top = this.margin.top;   
+
+            for (let i = 0; i < filteredData.length; i++) {
+
+            circle.append("circle")
+            .attr("cx", function(d) {
+                return circleScale(filteredData[i].value);
+            })
+            .attr("cy", function() {
+                if (numberOfArchetypes <= 3) {
+                    return 45;
+                }
+                else if (numberOfArchetypes == 4) {
+                    return 42;
+                }
+                else {
+                    return 45 - margin_top;
+                }
+            })
+            .attr("r", function() {
+                if (numberOfArchetypes >= 5) {
+                    return 3;
+                }
+                else if (numberOfArchetypes === 4) {
+                    return 5;
+                }
+                else {
+                    return 7;
+                }
+            })
+            .classed("brushDataTemp", true)
+            .attr("id", function(d) {
+                return filteredData[i].variable_name + "tempBrush";
+            }); 
+        }
+        }
 
     }
 
