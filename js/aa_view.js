@@ -327,7 +327,7 @@ class aa_view {
         for (let i = 0; i < this.numberOfArchetypes; i++) {
             let g = d3.select('#oned').select("#label"+i)
                         .append('g').classed('brushes', true)
-                        .attr("id", "g"+i);
+                        .attr("id", "brush"+i);
                     
             if (numberOfArchetypes >= 5) {
                 g.attr("height", (height / numberOfArchetypes));
@@ -382,8 +382,6 @@ class aa_view {
                         activeBrushNode.call(activeBrush.move, null);
                     }
                     activeBrush = brush;
-
-                    activeBrushNode = selection;
                    
                 });
             brush
@@ -401,9 +399,7 @@ class aa_view {
                             
                         svg.selectAll("circle").classed("notbrushed", true);
 
-                        activeBrushNode.selectAll("circle")
-                                .filter(d=>d.value>=that.xScale.invert(x1) && d.value<=that.xScale.invert(x2))
-                                .classed("notbrushed",false);       
+                              
                         }
                 });
             brush   
@@ -423,9 +419,7 @@ class aa_view {
 
                         svg.selectAll("circle").classed("notbrushed", true);
 
-                        activeBrushNode.selectAll("circle")
-                            .filter(d=>d.value>=that.xScale.invert(x1) && d.value<=that.xScale.invert(x2))
-                            .classed("notbrushed",false);
+                        
                     }
                 });
             selection.call(brush);
