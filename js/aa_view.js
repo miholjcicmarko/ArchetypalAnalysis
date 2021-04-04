@@ -343,10 +343,12 @@ class aa_view {
         let activeBrush = null;
         let activeBrushNode = null;
 
-        let brushData = [...this.dataS];
-
         brush_chart.each(function() {
             let selectionThis = this;
+            let layer = selectionThis.id[1];
+            let brushData = [...that.dataS];
+            brushData = brushData[layer];
+
             let selection = d3.select(selectionThis);
 
             let brush = d3.brushX().extent([[0,0], [brush_width, brush_height]]);
@@ -371,13 +373,13 @@ class aa_view {
 
                         let [x1,x2] = brushSelection;
                         
-                        let selectionData = brushData.filter(d => d.x >= that.xScale.invert(x1) &&
-                                                    d.x <= that.xScale.invert(x2));   
+                        let selectionData = brushData.filter((d,i) => d[i].value >= that.xScale.invert(x1) &&
+                                                    d[i].value <= that.xScale.invert(x2));   
                             
                         svg.selectAll("circle").classed("notbrushed", true);
 
                         activeBrushNode.selectAll("circle")
-                                .filter(d=>d.x>=that.xScale.invert(x1) && d.x<=that.xScale.invert(x2))
+                                .filter((d,i)=>d[i].value>=that.xScale.invert(x1) && d[i].value<=that.xScale.invert(x2))
                                 .classed("notbrushed",false);       
                         }
                 });
@@ -393,13 +395,13 @@ class aa_view {
                     if (brushSelection !== null) {
                         let [x1,x2] = brushSelection;
                         
-                        let selectionData = that.circles_arr.filter(d => d.x >= that.xScale.invert(x1) &&
-                                                d.x <= that.xScale.invert(x2));
+                        let selectionData = that.circles_arr.filter((d,i) => d[i].value >= that.xScale.invert(x1) &&
+                                                d[i].value <= that.xScale.invert(x2));
 
                         svg.selectAll("circle").classed("notbrushed", true);
 
                         activeBrushNode.selectAll("circle")
-                            .filter(d=>d.x>=that.xScale.invert(x1) && d.x<=that.xScale.invert(x2))
+                            .filter((d,i)=>d[i].value>=that.xScale.invert(x1) && d[i].value<=that.xScale.invert(x2))
                             .classed("notbrushed",false);
                     }
                 });
