@@ -382,6 +382,7 @@ class aa_view {
             if (this.localName !== "path") {
                 d3.select(this).classed("hovered", true);
                 that.createTempCircle(this);
+                that.createTempLine(this);
             }
             else if (this.localName === "path") {
                 d3.select(this).classed("timeLine", false);
@@ -395,6 +396,7 @@ class aa_view {
             if (this.localName !== "path") {
                 d3.select(this).classed("hovered",false);
                 d3.selectAll(".tempCircle").remove();
+                d3.select("#tempLine").remove();
             }
             else if (this.localName === "path") {
                 d3.select(this).classed("timeLine", true);
@@ -466,6 +468,29 @@ class aa_view {
         }
     }
 
+    createTempLine (item) {
+        let objarray = this.lineData;
+        let line = this.line;
+
+        let itemArray = objarray.filter(key => key.id.toLowerCase() === item.id.toLowerCase());
+
+        let svg = d3.select("#svg-time");
+
+        let lines = svg.selectAll("lines")
+                    .data(itemArray)
+                    .enter()
+                    .append("g")
+                    .attr("transform", "translate(" + 60 + "," + 0 + ")");;
+
+        lines.append("path")
+             .attr("d", function(d) { return line(d.values)})
+             .classed("hoveredLine", true)
+             .attr("id", function(d) {
+                return "tempLine";
+             }); 
+
+    }
+
     tooltipRender(data) {
         let text = data.currentTarget.id;
         //let text = data.currentTarget.__data__.variable_name;
@@ -479,16 +504,16 @@ class aa_view {
         }
         if (this.chosenIDs.length > 4 && ((this.chosenIDs.includes(value) !== true) ||
         !this.chosenIDs.includes(searchVal.id))) {
-            alert("Too many IDs chosen! Please Deselect One or more IDs");
+            alert("Too many IDs chosen!");
         }
-        else if ((this.chosenIDs.includes(value) === true)){
-            let index = this.chosenIDs.indexOf(value);
-            this.chosenIDs = this.chosenIDs.splice(index,1);
+        //else if ((this.chosenIDs.includes(value) === true)){
+        //    let index = this.chosenIDs.indexOf(value);
+        //    this.chosenIDs = this.chosenIDs.splice(index,1);
 
-            d3.selectAll(".tooltipCircle"+this.count).remove();
+        //    d3.selectAll(".tooltipCircle"+this.count).remove();
             // is tooltip
             //then remove the highlight from chosenID list and visually
-        }
+        //}
         else {
             this.count = this.count + 1;
 
@@ -548,6 +573,37 @@ class aa_view {
                 })
                 .classed("tooltipCircle"+that.count, true);
             }
+
+                let objarray = this.lineData;
+                let line = this.line;
+        
+                let itemArray = objarray.filter(key => key.id.toLowerCase() === value);
+        
+                let svg = d3.select("#svg-time");
+        
+                let lines = svg.selectAll("lines")
+                            .data(itemArray)
+                            .enter()
+                            .append("g")
+                            .attr("transform", "translate(" + 60 + "," + 0 + ")");
+
+                let that = this;
+        
+                lines.append("path")
+                     .attr("d", function(d) { return line(d.values)})
+                     .attr("fill", function () {
+                        let index = that.chosenIDs.length;
+                        return that.color(index-1);
+                     })
+                     .attr("stroke", function () {
+                        let index = that.chosenIDs.length;
+                        return that.color(index-1);
+                     })
+                     .attr("id", function(d) {
+                        return "selectedLine"+value;
+                     })
+                     .classed("selectedCircle", true);
+
         }
         let data_circ = d3.selectAll("#oned").selectAll("circle");
 
@@ -1028,6 +1084,8 @@ class aa_view {
             }
         }
 
+        this.lineData = newObjArray;
+
         let xScale = d3.scaleTime()
                         .domain(d3.extent(data, function(d) {
                             return d.date;
@@ -1045,6 +1103,8 @@ class aa_view {
                      .y(function(d,i) {
                          return yScale(d.number);
                      });
+
+        this.line = line;
 
         let svg = d3.select("#timeL")
             .append("svg")
@@ -1069,7 +1129,10 @@ class aa_view {
         let lines = svg.selectAll("lines")
                     .data(newObjArray)
                     .enter()
-                    .append("g");
+                    .append("g")
+                    .attr("id", function (d) {
+                        return "line"+ d.id;
+                    });
 
         lines.append("path")
              .attr("d", function(d) { return line(d.values)})
