@@ -156,6 +156,13 @@ input:checked + .slider:before {
     padding: 10px;
 }
 
+#brushButton {
+    position: relative;
+    margin-top: 2%;
+    background-color: thistle;
+    opacity: 0;
+}
+
 #dropdown {
     padding-left: 1%;
     padding-top: 4%;
@@ -190,7 +197,7 @@ input:checked + .slider:before {
 
 .ContainerA {
     display: grid;
-    grid-template-columns: 1fr 0.2fr 1fr;
+    grid-template-columns: 0.5fr 0.5fr 1fr;
     grid-template-rows: 1fr 1fr;
     column-gap: 1%;
 

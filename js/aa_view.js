@@ -17,6 +17,7 @@ class aa_view {
         document.getElementById("Introduction").style.zIndex = "-1";
         d3.select("#header-wrap").style("opacity", 1);
         d3.select(".topnav").style("opacity", 1);
+        d3.select("#brushButton").style("opacity, 0");
 
         this.XC = data.XC;
         this.S = data.S;
@@ -148,6 +149,7 @@ class aa_view {
 
         if (this.timeline === true) {
             this.drawTimeLine(this.raw, this.variables[2]);
+
         }
     }
 
@@ -157,7 +159,7 @@ class aa_view {
 
         this.margin = {top: 10, right: 10, bottom: 10, left: 10};
         
-        let width = 350 - this.margin.right - this.margin.left;
+        let width = 450 - this.margin.right - this.margin.left;
         let height = 350 - this.margin.bottom - this.margin.top;
 
         d3.select('#oned')
