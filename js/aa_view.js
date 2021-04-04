@@ -139,6 +139,8 @@ class aa_view {
             resetButton.on("click", function () {
                 that.resetViz();
             });
+
+        this.drawTimeLine(this.raw, this.variables[2]);
     }
 
     drawCircleChart (numberOfArchetypes) {
@@ -284,6 +286,46 @@ class aa_view {
         submit.on("click", function(d,i) {
             that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
         });
+
+    // creates the brushes
+    this.max_brush_width = this.width
+    for (let i = 0; i < numberOfArchetypes; i++) {
+        let g = d3.select('#oned').select("#label"+i)
+                    .append('g').classed('brushes', true)
+                    .attr("id", "brush"+i);
+
+        let height_1d = 0;
+                
+        if (numberOfArchetypes >= 5) {
+            g.attr("height", (height / numberOfArchetypes));
+            height_1d = (height / numberOfArchetypes)
+        }
+        else if (numberOfArchetypes === 4) {
+            g.attr("height", (height / numberOfArchetypes) - this.margin.top
+                            - this.margin.bottom);
+            height_1d = (height / numberOfArchetypes) - this.margin.top 
+            - this.margin.bottom;
+        }
+        else {
+            g.attr("height", (height / numberOfArchetypes) - this.margin.top
+                            - this.margin.bottom);
+            height_1d = (height / numberOfArchetypes) - this.margin.top
+            - this.margin.bottom
+        }
+
+        g.attr("transform", 'translate(0,'+i * height_1d+')');
+    }
+
+    let brush_chart = d3.selectAll('.brushes');
+
+        let brush_width = this.xScale(this.max_brush_width);
+        let brush_height = height-margin.top;
+    
+        this.brush(svg, brush_chart, brush_width, brush_height);
+    }
+
+    brush(svg, brush_chart, brush_width, brush_height) {
+        
     }
 
     drawVariables () {
@@ -316,7 +358,9 @@ class aa_view {
                         buttonsColor.classed("pressedLineVar", false);
                         that.changeTimeLineVarColor(d);
                         that.chosenLineVar[0] = chosenLineId;
+                        that.timelineActive = true;
                         that.drawTimeLine(that.raw, that.chosenLineVar);
+                        d3.select("#timeL").style("opacity", 1);
                     }
                 })
             }
@@ -591,18 +635,15 @@ class aa_view {
         
                 lines.append("path")
                      .attr("d", function(d) { return line(d.values)})
-                     .attr("fill", function () {
-                        let index = that.chosenIDs.length;
-                        return that.color(index-1);
-                     })
+                     .classed("timeLine", false)
                      .attr("stroke", function () {
                         let index = that.chosenIDs.length;
                         return that.color(index-1);
                      })
+                     .attr("stroke-width", 3)
                      .attr("id", function(d) {
                         return "selectedLine"+value;
-                     })
-                     .classed("selectedCircle", true);
+                     });
 
         }
         let data_circ = d3.selectAll("#oned").selectAll("circle");
@@ -1141,11 +1182,13 @@ class aa_view {
                 return d.id + "";
             }); 
 
-        this.timelineActive = true;
-
         let data_line = d3.selectAll("#timeL").selectAll(".timeLine");
 
         this.tooltip(data_line);
+
+        if (this.timelineActive === false) {
+            d3.select("#timeL").style("opacity", 0);
+        }
     }
 
     resetViz () {
