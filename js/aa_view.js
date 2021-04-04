@@ -373,13 +373,13 @@ class aa_view {
 
                         let [x1,x2] = brushSelection;
                         
-                        let selectionData = brushData.filter((d,i) => d[i].value >= that.xScale.invert(x1) &&
-                                                    d[i].value <= that.xScale.invert(x2));   
+                        let selectionData = brushData.filter(d => d.value >= that.xScale.invert(x1) &&
+                                                    d.value <= that.xScale.invert(x2));   
                             
                         svg.selectAll("circle").classed("notbrushed", true);
 
                         activeBrushNode.selectAll("circle")
-                                .filter((d,i)=>d[i].value>=that.xScale.invert(x1) && d[i].value<=that.xScale.invert(x2))
+                                .filter(d=>d.value>=that.xScale.invert(x1) && d.value<=that.xScale.invert(x2))
                                 .classed("notbrushed",false);       
                         }
                 });
@@ -395,13 +395,13 @@ class aa_view {
                     if (brushSelection !== null) {
                         let [x1,x2] = brushSelection;
                         
-                        let selectionData = that.circles_arr.filter((d,i) => d[i].value >= that.xScale.invert(x1) &&
-                                                d[i].value <= that.xScale.invert(x2));
+                        let selectionData = that.circles_arr.filter(d => d.value >= that.xScale.invert(x1) &&
+                                                d.value <= that.xScale.invert(x2));
 
                         svg.selectAll("circle").classed("notbrushed", true);
 
                         activeBrushNode.selectAll("circle")
-                            .filter((d,i)=>d[i].value>=that.xScale.invert(x1) && d[i].value<=that.xScale.invert(x2))
+                            .filter(d=>d.value>=that.xScale.invert(x1) && d.value<=that.xScale.invert(x2))
                             .classed("notbrushed",false);
                     }
                 });
