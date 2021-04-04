@@ -141,7 +141,9 @@ class aa_view {
                 that.resetViz();
             });
 
-        this.drawTimeLine(this.raw, this.variables[2]);
+        if (this.timeline === true) {
+            this.drawTimeLine(this.raw, this.variables[2]);
+        }
     }
 
     drawCircleChart (numberOfArchetypes) {
@@ -277,10 +279,6 @@ class aa_view {
             
         });
 
-    let data_circ = d3.selectAll("#oned").selectAll("circle");
-
-    that.tooltip(data_circ);
-
     that.drawVariables();
 
     let submit = d3.select("#submit");
@@ -289,7 +287,9 @@ class aa_view {
         });
 
     // creates the brushes
-    this.max_brush_width = this.width
+    if (this.timeline === true) {
+
+    this.max_brush_width = width;
     let height_1d = 0;
     for (let i = 0; i < numberOfArchetypes; i++) {
         let g = d3.select('#oned').select("#label"+i)
@@ -324,6 +324,12 @@ class aa_view {
     let brush_height = height_1d;
     
     this.brush(svg, brush_chart, brush_width, brush_height);
+    }
+
+    let data_circ = d3.selectAll("#oned").selectAll("circle");
+
+    that.tooltip(data_circ);
+
     }
 
     brush(svg, brush_chart, brush_width, brush_height) {
