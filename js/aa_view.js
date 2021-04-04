@@ -157,7 +157,7 @@ class aa_view {
             if (that.brushOn === false) {
                 that.drawBrush();
             }
-            if (that.brushOn === true) {
+            else if (that.brushOn === true) {
                 that.removeBrush();   
             }
         });
@@ -433,6 +433,11 @@ class aa_view {
     }
 
     removeBrush () {
+        let svg = d3.select('#oned');
+
+        svg.selectAll("circle").classed("notbrushed", false);
+
+        this.brushOn = false;
         let selectedRegion = d3.select("#brushButton");
             selectedRegion.style("background-color", "thistle");
 
