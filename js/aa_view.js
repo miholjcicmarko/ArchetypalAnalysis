@@ -41,13 +41,13 @@ class aa_view {
         if (this.timeline === true) {
             let dates = [...this.raw];
             let date1 = dates[0]["date"];
-            let date2 = dates[this.raw.length - 1]["date"];
+            let date2 = dates[dates.length - 1]["date"];
             let date1D = 0;
             let date2D = 0;
 
             if (typeof date1 !== "object" && typeof date2 !== 'object') {
-                let date1D = parseTime(date1);
-                let date2D = parseTime(date2);
+                date1D = parseTime(date1);
+                date2D = parseTime(date2);
             }
 
             if (date2D <= date1D || date2 <= date1) {
