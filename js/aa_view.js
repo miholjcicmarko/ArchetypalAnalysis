@@ -309,7 +309,7 @@ class aa_view {
     if (this.timeline === true) {
 
         let selectedRegion = d3.select("#brushButton");
-            selectedRegion.classed("brushPressed", true);
+            selectedRegion.style("background-color", "rgb(66, 60, 66)");
 
         let numberOfArchetypes = this.numberOfArchetypes;
 
