@@ -313,19 +313,21 @@ class aa_view {
             - this.margin.bottom
         }
 
-        g.attr("transform", 'translate(0,'+i * height_1d+')');
+        g.attr("transform", 'translate(0,'+(i * height_1d) + 25+')');
     }
+
+    let svg = d3.select('#oned');
 
     let brush_chart = d3.selectAll('.brushes');
 
-        let brush_width = this.xScale(this.max_brush_width);
-        let brush_height = height-margin.top;
+    let brush_width = this.xScale(this.max_brush_width);
+    let brush_height = height-margin.top;
     
-        this.brush(svg, brush_chart, brush_width, brush_height);
+    this.brush(svg, brush_chart, brush_width, brush_height);
     }
 
     brush(svg, brush_chart, brush_width, brush_height) {
-        
+
     }
 
     drawVariables () {
