@@ -154,7 +154,12 @@ class aa_view {
         let selectRegion = d3.select("#brushButton");
 
         selectRegion.on("click", function () {
-            that.drawBrush();
+            if (that.brushOn === false) {
+                that.drawBrush();
+            }
+            if (that.brushOn === true) {
+                that.removeBrush();   
+            }
         });
     }
 
@@ -305,11 +310,10 @@ class aa_view {
     }
 
     drawBrush() {
-        // creates the brushes
-    if (this.timeline === true) {
-
         let selectedRegion = d3.select("#brushButton");
             selectedRegion.style("background-color", "rgb(66, 60, 66)");
+        // creates the brushes
+    if (this.timeline === true) {
 
         let numberOfArchetypes = this.numberOfArchetypes;
 
@@ -426,6 +430,13 @@ class aa_view {
                 });
             selection.call(brush);
         });
+    }
+
+    removeBrush () {
+        let selectedRegion = d3.select("#brushButton");
+            selectedRegion.style("background-color", "thistle");
+
+        d3.selectAll('.brushes').remove();
     }
 
     drawVariables () {
