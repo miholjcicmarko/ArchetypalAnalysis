@@ -41,18 +41,22 @@ class aa_view {
         if (this.timeline === true) {
             let date1 = this.raw[0]["date"];
             let date2 = this.raw[this.raw.length - 1]["date"];
+            let date1D = 0;
+            let date2D = 0;
 
-            let date1D = parseTime(date1);
-            let date2D = parseTime(date2);
+            if (typeof date1 !== "object" && typeof date2 !== 'object') {
+                let date1D = parseTime(date1);
+                let date2D = parseTime(date2);
+            }
 
-            if (date2D <= date1D) {
+            if (date2D <= date1D || date2 <= date1) {
                 d3.select("#dateInput").style("opacity", 1);
                 document.getElementById("dateInput").value = date2;
                 document.getElementById("dateInput").min = date2;
                 document.getElementById("dateInput").max = date1;
                 this.date = date2D;
             }
-            else if (date2D > date1D) {
+            else if (date2D > date1D || date2 > date1) {
                 d3.select("dateInput").style("opacity", 0);
                 document.getElementById("dateInput").value = date1;
                 document.getElementById("dateInput").min = date1;
@@ -287,44 +291,44 @@ class aa_view {
         });
 
     // creates the brushes
-    if (this.timeline === true) {
+    // if (this.timeline === true) {
 
-    this.max_brush_width = width;
-    let height_1d = 0;
-    for (let i = 0; i < numberOfArchetypes; i++) {
-        let g = d3.select('#oned').select("#label"+i)
-                    .append('g').classed('brushes', true)
-                    .attr("id", "g"+i);
+    // this.max_brush_width = width;
+    // let height_1d = 0;
+    // for (let i = 0; i < numberOfArchetypes; i++) {
+    //     let g = d3.select('#oned').select("#label"+i)
+    //                 .append('g').classed('brushes', true)
+    //                 .attr("id", "g"+i);
                 
-        if (numberOfArchetypes >= 5) {
-            g.attr("height", (height / numberOfArchetypes));
-            height_1d = (height / numberOfArchetypes)
-        }
-        else if (numberOfArchetypes === 4) {
-            g.attr("height", (height / numberOfArchetypes) - this.margin.top
-                            - this.margin.bottom);
-            height_1d = (height / numberOfArchetypes) - this.margin.top 
-            - this.margin.bottom;
-        }
-        else {
-            g.attr("height", (height / numberOfArchetypes) - this.margin.top
-                            - this.margin.bottom);
-            height_1d = (height / numberOfArchetypes) - this.margin.top
-            - this.margin.bottom
-        }
+    //     if (numberOfArchetypes >= 5) {
+    //         g.attr("height", (height / numberOfArchetypes));
+    //         height_1d = (height / numberOfArchetypes)
+    //     }
+    //     else if (numberOfArchetypes === 4) {
+    //         g.attr("height", (height / numberOfArchetypes) - this.margin.top
+    //                         - this.margin.bottom);
+    //         height_1d = (height / numberOfArchetypes) - this.margin.top 
+    //         - this.margin.bottom;
+    //     }
+    //     else {
+    //         g.attr("height", (height / numberOfArchetypes) - this.margin.top
+    //                         - this.margin.bottom);
+    //         height_1d = (height / numberOfArchetypes) - this.margin.top
+    //         - this.margin.bottom
+    //     }
 
-        g.attr("transform", 'translate(0,'+(25)+')');
-    }
+    //     g.attr("transform", 'translate(0,'+(25)+')');
+    // }
 
-    let svg = d3.select('#oned');
+    // let svg = d3.select('#oned');
 
-    let brush_chart = d3.selectAll('.brushes');
+    // let brush_chart = d3.selectAll('.brushes');
 
-    let brush_width = this.xScale(this.max_brush_width);
-    let brush_height = height_1d;
+    // let brush_width = this.xScale(this.max_brush_width);
+    // let brush_height = height_1d;
     
-    this.brush(svg, brush_chart, brush_width, brush_height);
-    }
+    // this.brush(svg, brush_chart, brush_width, brush_height);
+    //}
 
     let data_circ = d3.selectAll("#oned").selectAll("circle");
 
@@ -537,11 +541,15 @@ class aa_view {
             if (this.localName !== "path") {
                 d3.select(this).classed("hovered", true);
                 that.createTempCircle(this);
-                that.createTempLine(this);
+                if (that.timeline === true) {
+                    that.createTempLine(this);
+                }
             }
             else if (this.localName === "path") {
-                d3.select(this).classed("timeLine", false);
-                d3.select(this).classed("hoveredLine", true);
+                if (that.timeline === true) {
+                    d3.select(this).classed("timeLine", false);
+                    d3.select(this).classed("hoveredLine", true);
+                }
                 that.createTempCircle(this);
             }
 
@@ -551,11 +559,15 @@ class aa_view {
             if (this.localName !== "path") {
                 d3.select(this).classed("hovered",false);
                 d3.selectAll(".tempCircle").remove();
-                d3.select("#tempLine").remove();
+                if (that.timeline === true) {
+                    d3.select("#tempLine").remove();
+                }
             }
             else if (this.localName === "path") {
-                d3.select(this).classed("timeLine", true);
-                d3.select(this).classed("hoveredLine", false);
+                if (that.timeline === false) {
+                    d3.select(this).classed("timeLine", true);
+                    d3.select(this).classed("hoveredLine", false);
+                }
                 for (let i = 0; i < that.numberOfArchetypes; i++) {
                     let circle = d3.select("#circle" + i);
                     d3.selectAll(".tempCircle").remove();
@@ -729,6 +741,8 @@ class aa_view {
                 .classed("tooltipCircle"+that.count, true);
             }
 
+            if (this.timeline === true) {
+
                 let objarray = this.lineData;
                 let line = this.line;
         
@@ -755,7 +769,7 @@ class aa_view {
                      .attr("id", function(d) {
                         return "selectedLine"+value;
                      });
-
+            }
         }
         let data_circ = d3.selectAll("#oned").selectAll("circle");
 
