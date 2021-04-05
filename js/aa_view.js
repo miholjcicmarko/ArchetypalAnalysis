@@ -421,10 +421,11 @@ class aa_view {
                         
                         that.brushedData = selectionData;
 
-                        for (let i = 0; i < that.brushData.length; i++) {
+                        for (let i = 0; i < that.brushedData.length; i++) {
                             let id = that.brushedData[i].variable_name;
                             that.chosenIDs.push(id);
                         }
+                        that.chosenIDs = [... new Set(that.chosenIDs)];
                     }
                 });
             brush   
@@ -452,10 +453,11 @@ class aa_view {
 
                         that.brushedData = selectionData;
 
-                        for (let i = 0; i < that.brushData.length; i++) {
+                        for (let i = 0; i < that.brushedData.length; i++) {
                             let id = that.brushedData[i].variable_name;
                             that.chosenIDs.push(id);
                         }
+                        that.chosenIDs = [... new Set(that.chosenIDs)];
                     }
                     
                 });
@@ -1325,29 +1327,30 @@ class aa_view {
         let ydata = [];
 
         for (let p = 0; p < this.chosenIDs.length; p++) {
-            let specificData = filteredData.filter(d => d.id.toLowerCase().includes(this.chosenIDs[p])); 
-            ydata.push(specificData[0]);
+            for (let m = 0; m < filteredData.length; m++) {
+                if (filteredData[m].id.toLowerCase() === this.chosenIDs[p].toLowerCase()){
+                    ydata.push(filteredData[m]);
+                }
+            }
         }
 
         let barData = [];
 
         for (let i = 1; i < chosenVariables.length; i++) {
-            let barDataAvg = [];
+            let barDataAvg = 0;
             for (let m = 0; m < this.chosenIDs.length; m++) {
-                let number = ydata[m][0][""+chosenVariables[i]];
-                barDataAvg.push(number);
+                barDataAvg = barDataAvg + Number(ydata[m][""+chosenVariables[i]]);
             }
-            barData.push(barDataOneID);
+            barDataAvg = barDataAvg/this.chosenIDs.length;
             
             let arrayofData = [];
             for (let k = 0; k < filteredData.length; k++) {
                 let number = parseInt(filteredData[k][""+chosenVariables[i]])
                 arrayofData.push(number);
             }
-            rawDataVarSpecific.push(arrayofData);
 
-            x_var = [];
-            yScales = [];
+            let xScales = [];
+            let yScales = [];
 
             let x_var = d3.scaleBand()
                           .domain(this.chosenIDs.map((d) => d[""+chosenVariables[i]]))
@@ -1359,6 +1362,36 @@ class aa_view {
                                .range([0, (h-5)]);
             yScales.push(yScaleOne);
         }
+
+        let that = this;
+
+        for (let i = 0; i < yScales.length; i++) {
+            let that = this;
+
+            let data = barData[i];
+
+            svg.selectAll()
+                .data(data)
+                .enter()
+                .append("g")
+                .append("rect")
+                .attr("x", function (d,i) {
+                    return d => xScales(d.id);
+                    //i * (w/(chosenVariables.length));
+                })
+                .attr("y", function(d,i) {
+                    let scale = yScales[i];
+                    return scale(d);
+                })
+                .attr("width", w/(that.chosenIDs.length) - barpadding)
+                .attr("height", function(d,i) {
+                    let scale = yScales[i];
+                    return h-scale(d);
+                })
+                .attr("fill","orangered")
+                .attr("transform", "translate(70,0)");
+        }
+
 
     }
 
