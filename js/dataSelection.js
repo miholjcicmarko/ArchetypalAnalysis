@@ -11,6 +11,7 @@ class dataSelection {
         this.customDataImplement = null;
         this.customArch = 0;
         this.customAnalysis = customAnalysis;
+        this.image = false;
 
         this.timeSeries = false;
 
@@ -123,6 +124,11 @@ class dataSelection {
             that.timeSeries = true;
         });
 
+        let imageCheckBox = d3.select("#imageCheckBox");
+        imageCheckBox.on("click", function () {
+            that.image = true;
+        });
+
         let vizualizeButton = d3.select("#vizualizeButton");
         vizualizeButton.on("click", function () {
             if (that.customS === null) {
@@ -137,6 +143,7 @@ class dataSelection {
             if (that.customArch === null || that.customArch === "") {
                 alert("Enter number of Archetypes");
             }
+            
             that.customAnalysis(that.customS, that.customXC, 
                 that.customDataImplement, that.customArch, that.timeSeries);
         });
