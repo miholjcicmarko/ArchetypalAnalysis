@@ -426,6 +426,8 @@ class aa_view {
                         
                         that.brushedData = selectionData;
 
+                        that.chosenIDs = [];
+
                         for (let i = 0; i < that.brushedData.length; i++) {
                             let id = that.brushedData[i].variable_name;
                             that.chosenIDs.push(id);
@@ -459,6 +461,8 @@ class aa_view {
 
                         that.brushedData = selectionData;
 
+                        that.chosenIDs = [];
+
                         for (let i = 0; i < that.brushedData.length; i++) {
                             let id = that.brushedData[i].variable_name;
                             that.chosenIDs.push(id);
@@ -482,7 +486,7 @@ class aa_view {
             selectedRegion.style("background-color", "thistle");
 
         d3.selectAll('.brushes').remove();
-        that.drawIds();
+        this.drawIds();
     }
 
     drawVariables () {
@@ -557,7 +561,10 @@ class aa_view {
     }
 
     drawIds () {
-        d3.select("#iDs").selectAll(".idButton").remove();
+        let diviDs = document.getElementById("iDs")
+                while (diviDs.firstChild) {
+                    diviDs.removeChild(diviDs.firstChild);
+                }
 
         let buttons = d3.select("#iDs")
                         .append("g")
@@ -567,7 +574,7 @@ class aa_view {
 
         for (let i = 0; i < this.chosenIDs.length; i++) {
 
-                let button = d3.select('#buttonGroup')
+                let button = d3.select('#iDs')
                     .append("button")
                     .attr("class", "idbutton")
                     .classed("idButton", true)
@@ -576,14 +583,6 @@ class aa_view {
 
                 document.getElementById("" + this.chosenIDs[i]+ "button").innerHTML = this.chosenIDs[i];
             
-            // let that = this;
-
-            // let buttons = d3.select('#bar1').selectAll("button");
-
-            // buttons.on("click", function (d) {
-            //     that.addChosenVar(d);
-            //     that.chosenVars.push(d.srcElement.id);
-            // })
         }
     }
 
