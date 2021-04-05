@@ -1342,6 +1342,7 @@ class aa_view {
                 barDataAvg = barDataAvg + Number(ydata[m][""+chosenVariables[i]]);
             }
             barDataAvg = barDataAvg/this.chosenIDs.length;
+            barData.push(barDataAvg);
             
             let arrayofData = [];
             for (let k = 0; k < filteredData.length; k++) {
