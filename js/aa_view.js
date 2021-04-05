@@ -405,7 +405,7 @@ class aa_view {
 
                         that.createTempCircleBrush(selectionData);
                         if (that.timeline === true) {
-                            that.createTempLine(selectionData);
+                            that.createTempLine(selectionData, true);
                         }
                               
                         }
@@ -430,7 +430,7 @@ class aa_view {
                         that.createTempCircleBrush(selectionData);
 
                         if (that.timeline === true) {
-                            that.createTempLine(selectionData);
+                            that.createTempLine(selectionData, true);
                         }
                     }
                 });
@@ -578,6 +578,7 @@ class aa_view {
                 for (let i = 0; i < that.numberOfArchetypes; i++) {
                     let circle = d3.select("#circle" + i);
                     d3.selectAll(".tempCircle").remove();
+                    d3.select("#tempLine").remove();
                 }
             }
 
@@ -643,7 +644,7 @@ class aa_view {
         }
     }
 
-    createTempLine (item) {
+    createTempLine (item, brushed) {
         let objarray = this.lineData;
         let line = this.line;
 
@@ -660,6 +661,14 @@ class aa_view {
         lines.append("path")
              .attr("d", function(d) { return line(d.values)})
              .classed("hoveredLine", true)
+             .classed("tempLineBrush", function(d) {
+                 if (brushed === true) {
+                     return true;
+                 }
+                 else if (brushed === false) {
+                     return false;
+                 }
+             })
              .attr("id", function(d) {
                 return "tempLine";
              }); 
