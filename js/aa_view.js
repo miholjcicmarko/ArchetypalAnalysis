@@ -638,13 +638,14 @@ class aa_view {
                     return 7;
                 }
             })
-            .classed("hovered", true)
+            .attr("stroke", "steelblue")
             .classed("tempCircle", true);
             }
         }
     }
 
     createTempLine (item, brushed) {
+        d3.selectAll("#timeL").selectAll(".tempLineBrush").remove();
         let objarray = this.lineData;
         let line = this.line;
         let itemArray = null;
@@ -684,23 +685,23 @@ class aa_view {
         }
         else if (brushed === true) {
 
-            for (let i = 0; i < itemArray.length; i++) {
-                let item = itemArray[i];
-
                 let lines = svg.selectAll("lines")
-                    .data(item)
+                    .data(itemArray)
                     .enter()
                     .append("g")
                     .attr("transform", "translate(" + 60 + "," + 0 + ")");
 
                 lines.append("path")
-                     .attr("d", function (d) { return line(item.value)})
-                     .classed("hoveredLine", true)
+                     .attr("d", function (d) { return line(d.values)})
+                     .attr("stroke", "steelblue")
                      .classed("tempLineBrush", true)
                      .attr("id", function(d) {
-                        return "tempLine";
+                        return "tempLineBrush";
                      });  
-            }                
+              
+                let data_line = d3.selectAll("#timeL").selectAll(".tempLineBrush");
+
+                this.tooltip(data_line);
         }
 
     }
