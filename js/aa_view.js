@@ -647,19 +647,31 @@ class aa_view {
     createTempLine (item, brushed) {
         let objarray = this.lineData;
         let line = this.line;
+        let itemArray = null;
 
-        let itemArray = objarray.filter(key => key.id.toLowerCase() === item.id.toLowerCase());
+        if (brushed === undefined) {
+            itemArray = objarray.filter(key => key.id.toLowerCase() === item.id.toLowerCase());
+        }
+        else if (brushed === true) {
+            let array = []
+            for (let i = 0; i < item.length; i++) {
+                array.push(item[i]);
+            }
+            itemArray = array;
+        }
 
         let svg = d3.select("#svg-time");
+
+        if (brushed === undefined) {
 
         let lines = svg.selectAll("lines")
                     .data(itemArray)
                     .enter()
                     .append("g")
-                    .attr("transform", "translate(" + 60 + "," + 0 + ")");;
+                    .attr("transform", "translate(" + 60 + "," + 0 + ")");
 
         lines.append("path")
-             .attr("d", function(d) { return line(d.values)})
+             .attr("d", function (d) { return line(d.values)})
              .classed("hoveredLine", true)
              .classed("tempLineBrush", function(d) {
                  if (brushed === true) {
@@ -672,6 +684,35 @@ class aa_view {
              .attr("id", function(d) {
                 return "tempLine";
              }); 
+
+        }
+        else if (brushed === true) {
+
+            for (let i = 0; i < itemArray.length; i++) {
+                let item = itemArray[i];
+
+                let lines = svg.selectAll("lines")
+                    .data(item)
+                    .enter()
+                    .append("g")
+                    .attr("transform", "translate(" + 60 + "," + 0 + ")");
+
+                lines.append("path")
+                     .attr("d", function (d) { return line(d.value)})
+                     .classed("hoveredLine", true)
+                     .classed("tempLineBrush", function(d) {
+                        if (brushed === true) {
+                            return true;
+                        }
+                        else if (brushed === false) {
+                            return false;
+                        }
+                     })
+                     .attr("id", function(d) {
+                        return "tempLine";
+                     });  
+            }                
+        }
 
     }
 
