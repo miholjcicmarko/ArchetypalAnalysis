@@ -159,6 +159,7 @@ class aa_view {
             }
             else if (that.brushOn === true) {
                 that.removeBrush();   
+                d3.selectAll(".brushDataTemp").remove();
             }
         });
     }
@@ -403,6 +404,9 @@ class aa_view {
                         svg.selectAll("circle").classed("notbrushed", true);
 
                         that.createTempCircleBrush(selectionData);
+                        if (that.timeline === true) {
+                            that.createTempLine(selectionData);
+                        }
                               
                         }
                 });
@@ -423,7 +427,11 @@ class aa_view {
 
                         svg.selectAll("circle").classed("notbrushed", true);
 
-                        
+                        that.createTempCircleBrush(selectionData);
+
+                        if (that.timeline === true) {
+                            that.createTempLine(selectionData);
+                        }
                     }
                 });
             selection.call(brush);
@@ -659,6 +667,8 @@ class aa_view {
     }
 
     createTempCircleBrush (brushed) {
+        d3.selectAll(".brushDataTemp").remove();
+
         let numberOfArchetypes = this.numberOfArchetypes;
 
         for (let i = 0; i < this.numberOfArchetypes; i++) {
