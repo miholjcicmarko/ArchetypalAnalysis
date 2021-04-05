@@ -420,6 +420,11 @@ class aa_view {
                         }
                         
                         that.brushedData = selectionData;
+
+                        for (let i = 0; i < that.brushData.length; i++) {
+                            let id = that.brushedData[i].variable_name;
+                            that.chosenIDs.push(id);
+                        }
                     }
                 });
             brush   
@@ -446,6 +451,11 @@ class aa_view {
                         }
 
                         that.brushedData = selectionData;
+
+                        for (let i = 0; i < that.brushData.length; i++) {
+                            let id = that.brushedData[i].variable_name;
+                            that.chosenIDs.push(id);
+                        }
                     }
                     
                 });
@@ -1312,7 +1322,7 @@ class aa_view {
 
         let filteredData = this.filterObjsInArr(data, chosenVariables);
 
-        ydata = [];
+        let ydata = [];
 
         for (let p = 0; p < this.chosenIDs.length; p++) {
             let specificData = filteredData.filter(d => d.id.toLowerCase().includes(this.chosenIDs[p])); 
@@ -1322,10 +1332,10 @@ class aa_view {
         let barData = [];
 
         for (let i = 1; i < chosenVariables.length; i++) {
-            let barDataOneID = [];
+            let barDataAvg = [];
             for (let m = 0; m < this.chosenIDs.length; m++) {
                 let number = ydata[m][0][""+chosenVariables[i]];
-                barDataOneID.push(number);
+                barDataAvg.push(number);
             }
             barData.push(barDataOneID);
             
