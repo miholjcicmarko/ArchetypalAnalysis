@@ -774,9 +774,6 @@ class aa_view {
             }); 
         }
         }
-        let data_circ = d3.selectAll("#oned").selectAll("circle");
-
-        this.tooltip(data_circ);
     }
 
     tooltipRender(data) {
