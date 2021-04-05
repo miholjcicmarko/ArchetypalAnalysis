@@ -162,10 +162,12 @@ class aa_view {
         selectRegion.on("click", function () {
             if (that.brushOn === false) {
                 that.drawBrush();
+                that.drawIds();
             }
             else if (that.brushOn === true) {
                 that.removeBrush();   
                 d3.selectAll(".brushDataTemp").remove();
+                that.drawIds();
             }
         });
     }
@@ -299,6 +301,7 @@ class aa_view {
                 this.onSearch(searchVal,this.dataS, this.numberOfArchetypes, false);
                 that.variable_name = searchVal;
                 that.chosenIDs.push(searchVal);
+                that.drawIds();
             }
             
         });
@@ -309,9 +312,11 @@ class aa_view {
         submit.on("click", function(d,i) {
             if (that.brushOn === false) {
                 that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
+                that.drawIds();
             }
             else if (that.brushOn === true) {
                 that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
+                that.drawIds();
             }
         });
 
@@ -426,6 +431,7 @@ class aa_view {
                             that.chosenIDs.push(id);
                         }
                         that.chosenIDs = [... new Set(that.chosenIDs)];
+                        that.drawIds();
                     }
                 });
             brush   
@@ -458,6 +464,7 @@ class aa_view {
                             that.chosenIDs.push(id);
                         }
                         that.chosenIDs = [... new Set(that.chosenIDs)];
+                        that.drawIds();
                     }
                     
                 });
@@ -475,6 +482,7 @@ class aa_view {
             selectedRegion.style("background-color", "thistle");
 
         d3.selectAll('.brushes').remove();
+        that.drawIds();
     }
 
     drawVariables () {
@@ -546,6 +554,37 @@ class aa_view {
 
         let button = d3.select("#" + id)
                         .classed("pressed", true);
+    }
+
+    drawIds () {
+        d3.select("#iDs").selectAll(".idButton").remove();
+
+        let buttons = d3.select("#iDs")
+                        .append("g")
+                        .attr("id", "buttoniDs");
+
+        this.chosenIDs = [... new Set(this.chosenIDs)];
+
+        for (let i = 0; i < this.chosenIDs.length; i++) {
+
+                let button = d3.select('#buttonGroup')
+                    .append("button")
+                    .attr("class", "idbutton")
+                    .classed("idButton", true)
+                    .attr("id", "" + this.chosenIDs[i] + "button")
+                    .style("margin", "5px");       
+
+                document.getElementById("" + this.chosenIDs[i]+ "button").innerHTML = this.chosenIDs[i];
+            
+            // let that = this;
+
+            // let buttons = d3.select('#bar1').selectAll("button");
+
+            // buttons.on("click", function (d) {
+            //     that.addChosenVar(d);
+            //     that.chosenVars.push(d.srcElement.id);
+            // })
+        }
     }
 
     changeTimeLineVarColor (event) {
@@ -622,6 +661,7 @@ class aa_view {
             that.onSearch(this,that.dataS, that.numberOfArchetypes, true);
             that.variable_name = this.id.toLowerCase();
             that.chosenIDs.push(this.id.toLowerCase());
+            that.drawIds();
         })
 
     }
@@ -1335,6 +1375,8 @@ class aa_view {
         }
 
         let barData = [];
+        let xScales = [];
+        let yScales = [];
 
         for (let i = 1; i < chosenVariables.length; i++) {
             let barDataAvg = 0;
@@ -1350,9 +1392,6 @@ class aa_view {
                 arrayofData.push(number);
             }
 
-            let xScales = [];
-            let yScales = [];
-
             let x_var = d3.scaleBand()
                           .domain(this.chosenIDs.map((d) => d[""+chosenVariables[i]]))
                           .range([0,w/(chosenVariables.length-1) - barpadding]);
@@ -1360,7 +1399,7 @@ class aa_view {
 
             let yScaleOne = d3.scaleLinear()
                                .domain([d3.max(arrayofData), 0])
-                               .range([0, (h-5)]);
+                               .range([0, (h)]);
             yScales.push(yScaleOne);
         }
 
@@ -1369,30 +1408,67 @@ class aa_view {
         for (let i = 0; i < yScales.length; i++) {
             let that = this;
 
-            let data = barData[i];
+            let currData = [{id: "average",
+                            value: barData[i]}];
+
+            let yscales = yScales;
 
             svg.selectAll()
-                .data(data)
+                .data(currData)
                 .enter()
-                .append("g")
-                .append("rect")
+                .append('rect')
                 .attr("x", function (d,i) {
-                    return d => xScales(d.id);
-                    //i * (w/(chosenVariables.length));
+                    //return d => xScales(d.id);
+                    return i * (w/(chosenVars.length));
                 })
                 .attr("y", function(d,i) {
-                    let scale = yScales[i];
-                    return scale(d);
+                    let scale = yscales[i];
+                    return scale(d.value);
                 })
                 .attr("width", w/(that.chosenIDs.length) - barpadding)
                 .attr("height", function(d,i) {
-                    let scale = yScales[i];
-                    return h-scale(d);
+                    let scale = yscales[i];
+                    return h-scale(d.value);
                 })
                 .attr("fill","orangered")
-                .attr("transform", "translate(70,0)");
+                .attr("transform", "translate(" +(70*i)+",5)");
         }
 
+        for (let i = 0; i < chosenVariables.length; i++) {
+
+            if (chosenVariables[i] !== "id") {
+                   
+                let yaxis = svg.append("g")
+                            .attr("id", "y-axis" + i);
+
+                yaxis.call(d3.axisLeft(yScales[i-1]).ticks(5))
+                    //.attr("transform", "translate(" + (displace+20) + ",0)")
+                    .attr("transform", "translate(" + ((i-1)*(w/(chosenVariables.length-1))+3*margin.left+10) + ",0)")
+                    .attr("class", "axis_line");
+                
+                let xaxis = svg.append("g")
+                    .attr("id", "x-axis")
+                    //.attr("transform", "translate("+ (displace+20) +","+ (h - margin.bottom)+")")
+                    .attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(3*margin.left+10))+","+ (h-5)+")")
+                    .call(d3.axisBottom(xScales[i-1])); 
+            
+                yaxis.append("text")
+                        .text(""+chosenVariables[i])
+                        .attr("class", "axis-label")
+                        //.attr("text-anchor", "middle")
+                        //.attr("transform", "translate(" + (displace-35) + "," + h/2+")rotate(-90)");
+                        .attr("transform", "translate(" + (-50+((i-1))) +","+h/2+")rotate(-90)");
+                
+            }
+        }
+
+        let data_rect = d3.selectAll("#bar1").selectAll("rect");
+
+            if (this.timeline === true) {
+                d3.select("#dateSubmit").style("opacity", 1);
+            }
+
+        this.tooltipRect(data_rect);
 
     }
 

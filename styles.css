@@ -182,6 +182,10 @@ input:checked + .slider:before {
     font-size: 10px;
 }
 
+.idbutton {
+    background-color: violet;
+}
+
 .button {
     background-color: rgb(134, 124, 189);
     color: white;
