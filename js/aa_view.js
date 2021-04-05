@@ -103,7 +103,12 @@ class aa_view {
 
         let dateSubmit = d3.select("#dateSubmit");
             dateSubmit.on("click", function () {
-                that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
+                if (that.brushOn === true) {
+
+                }
+                else if (that.brushOn = false) {
+                    that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
+                }
             })
 
         let dropdown = d3.select("#selectNow");
@@ -596,7 +601,7 @@ class aa_view {
 
     }
 
-    createTempCircle (item, brush) {
+    createTempCircle (item) {
         
         for (let i = 0; i < this.numberOfArchetypes; i++) {
             let numberOfArch = this.numberOfArchetypes;
@@ -728,8 +733,6 @@ class aa_view {
                 }
             }
 
-            //let filteredData = this.dataS[i].filter(d => names.indexOf(d.variable_name.toLowerCase() !== 1));
-
             let circle = d3.select("#circle" + i);
 
             let circleScale = this.xScale;
@@ -771,7 +774,9 @@ class aa_view {
             }); 
         }
         }
+        let data_circ = d3.selectAll("#oned").selectAll("circle");
 
+        this.tooltip(data_circ);
     }
 
     tooltipRender(data) {
