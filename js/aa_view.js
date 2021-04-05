@@ -654,8 +654,12 @@ class aa_view {
         }
         else if (brushed === true) {
             let array = []
-            for (let i = 0; i < item.length; i++) {
-                array.push(item[i]);
+            for (let i = 0; i < objarray.length; i++) {
+                for (let j = 0; j < item.length; j++) {
+                    if (objarray[i].id.toLowerCase() === item[j].variable_name.toLowerCase()) {
+                        array.push(objarray[i]);
+                    }
+                }
             }
             itemArray = array;
         }
@@ -673,14 +677,6 @@ class aa_view {
         lines.append("path")
              .attr("d", function (d) { return line(d.values)})
              .classed("hoveredLine", true)
-             .classed("tempLineBrush", function(d) {
-                 if (brushed === true) {
-                     return true;
-                 }
-                 else if (brushed === false) {
-                     return false;
-                 }
-             })
              .attr("id", function(d) {
                 return "tempLine";
              }); 
@@ -698,16 +694,9 @@ class aa_view {
                     .attr("transform", "translate(" + 60 + "," + 0 + ")");
 
                 lines.append("path")
-                     .attr("d", function (d) { return line(d.value)})
+                     .attr("d", function (d) { return line(item.value)})
                      .classed("hoveredLine", true)
-                     .classed("tempLineBrush", function(d) {
-                        if (brushed === true) {
-                            return true;
-                        }
-                        else if (brushed === false) {
-                            return false;
-                        }
-                     })
+                     .classed("tempLineBrush", true)
                      .attr("id", function(d) {
                         return "tempLine";
                      });  
