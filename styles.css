@@ -164,7 +164,7 @@ input:checked + .slider:before {
 }
 
 .brushPressed {
-    background-color: rgb(66, 60, 66);
+    background-color: steelblue;
 }
 
 #dropdown {

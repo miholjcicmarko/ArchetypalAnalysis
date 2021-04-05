@@ -312,7 +312,7 @@ class aa_view {
 
     drawBrush() {
         let selectedRegion = d3.select("#brushButton");
-            selectedRegion.style("background-color", "rgb(66, 60, 66)");
+            selectedRegion.style("background-color", "steelblue");
         // creates the brushes
     if (this.timeline === true) {
 
@@ -638,7 +638,7 @@ class aa_view {
                     return 7;
                 }
             })
-            .attr("stroke", "steelblue")
+            .classed("hovered", true)
             .classed("tempCircle", true);
             }
         }
@@ -694,6 +694,7 @@ class aa_view {
                 lines.append("path")
                      .attr("d", function (d) { return line(d.values)})
                      .attr("stroke", "steelblue")
+                     .attr("stroke-width", 2.5)
                      .classed("tempLineBrush", true)
                      .attr("id", function(d) {
                         return "tempLineBrush";
@@ -763,6 +764,7 @@ class aa_view {
                     return 7;
                 }
             })
+            .attr("fill", "steelblue")
             .classed("brushDataTemp", true)
             .attr("id", function(d) {
                 return filteredData[i].variable_name + "tempBrush";
