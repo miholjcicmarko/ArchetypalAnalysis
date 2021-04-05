@@ -339,3 +339,8 @@ div.tooltipLine {
     fill: gray;
     opacity: 0.1;
 }
+
+.brushedLine {
+    stroke: steelblue;
+    stroke-width: 2.5;
+}

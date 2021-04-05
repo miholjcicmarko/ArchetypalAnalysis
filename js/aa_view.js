@@ -28,6 +28,7 @@ class aa_view {
         this.customImplement = customImplement;
         this.count = 0;
         this.brushOn = false;
+        this.brushedData = [];
 
         this.filteredData = [];
         this.chosenVars = ["id"];
@@ -306,7 +307,12 @@ class aa_view {
 
     let submit = d3.select("#submit");
         submit.on("click", function(d,i) {
-            that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
+            if (that.brushOn === false) {
+                that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
+            }
+            else if (that.brushOn === true) {
+                that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
+            }
         });
 
     let data_circ = d3.selectAll("#oned").selectAll("circle");
@@ -412,8 +418,9 @@ class aa_view {
                         if (that.timeline === true) {
                             that.createTempLine(selectionData, true);
                         }
-                              
-                        }
+                        
+                        that.brushedData = selectionData;
+                    }
                 });
             brush   
                 .on('end', function() {
@@ -437,7 +444,10 @@ class aa_view {
                         if (that.timeline === true) {
                             that.createTempLine(selectionData, true);
                         }
+
+                        that.brushedData = selectionData;
                     }
+                    
                 });
             selection.call(brush);
         });
@@ -572,18 +582,21 @@ class aa_view {
                 d3.select(this).classed("hovered",false);
                 d3.selectAll(".tempCircle").remove();
                 if (that.timeline === true) {
-                    d3.select("#tempLine").remove();
+                    d3.select(".tempLine").remove();
                 }
             }
             else if (this.localName === "path") {
                 if (that.timeline === true) {
+                    
                     d3.select(this).classed("timeLine", true);
+                    // if (that.brushOn === true) {
+                    //     d3.select(this).classed("brushedLine", true);
+                    // }
                     d3.select(this).classed("hoveredLine", false);
                 }
                 for (let i = 0; i < that.numberOfArchetypes; i++) {
                     let circle = d3.select("#circle" + i);
                     d3.selectAll(".tempCircle").remove();
-                    d3.select("#tempLine").remove();
                 }
             }
 
@@ -683,8 +696,9 @@ class aa_view {
         lines.append("path")
              .attr("d", function (d) { return line(d.values)})
              .classed("hoveredLine", true)
+             .classed("tempLine", true)
              .attr("id", function(d) {
-                return "tempLine";
+                return d.id;
              }); 
 
         }
@@ -702,7 +716,7 @@ class aa_view {
                      .attr("stroke-width", 2.5)
                      .classed("tempLineBrush", true)
                      .attr("id", function(d) {
-                        return "tempLineBrush";
+                        return d.id;
                      });  
               
                 let data_line = d3.selectAll("#timeL").selectAll(".tempLineBrush");
@@ -770,7 +784,7 @@ class aa_view {
             .attr("fill", "steelblue")
             .classed("brushDataTemp", true)
             .attr("id", function(d) {
-                return filteredData[i].variable_name + "tempBrush";
+                return filteredData[i].variable_name;
             }); 
         }
         }
@@ -778,7 +792,6 @@ class aa_view {
 
     tooltipRender(data) {
         let text = data.currentTarget.id;
-        //let text = data.currentTarget.__data__.variable_name;
         return text;
     }
 
@@ -1244,6 +1257,60 @@ class aa_view {
 
             this.tooltipRect(data_rect);
 
+    }
+
+    makeBrushedBarCharts(chosenVars, raw, brushedData, timeSeries) {
+        let divBar = document.getElementById("bar1")
+                while (divBar.firstChild) {
+                    divBar.removeChild(divBar.firstChild);
+                }
+        
+        let data = [...raw];
+        
+        if (timeSeries === true) {
+            let filteredDateData = [];
+
+            if ((typeof data[0]["date"]) !== "object") {
+                let parseTime = d3.timeParse("%Y-%m-%d");
+    
+                data.forEach(function(d) {
+                    d.date = parseTime(d.date);
+                });
+            }
+
+            for (let i = 0; i < data.length; i++) {
+                if (+data[i].date == +this.date) {
+                    filteredDateData.push(data[i]);
+                }
+            }
+            data = filteredDateData;
+        }
+
+        let chosenVariables = [...new Set(chosenVars)];
+
+        d3.select('#bar1')
+            .append('div')
+            .attr("id", "bartip")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        let numberOfArch = this.numberOfArchetypes;
+
+        d3.select("#buttonGroup").remove();
+
+        let margin = {top: 10, right: 10, bottom: 10, left: 10};
+        
+        let w = 500 - margin.right - margin.left;
+        let h = 350 - margin.bottom - margin.top;
+        let barpadding = 70;
+
+        let svg = d3.select("#bar1")
+                            .append("svg")
+                            .attr("id", "bars")
+                            .attr("width", w + margin.right + margin.left)
+                            .attr("height", h + margin.top + margin.bottom);
+
+        let filteredData = this.filterObjsInArr(data, chosenVariables);
     }
 
     filterObjsInArr (arr, selection) {
