@@ -325,7 +325,7 @@ class aa_view {
         let selectedRegion = d3.select("#brushButton");
             selectedRegion.style("background-color", "steelblue");
         // creates the brushes
-    if (this.timeline === true) {
+    //if (this.timeline === true) {
 
         let numberOfArchetypes = this.numberOfArchetypes;
 
@@ -369,7 +369,7 @@ class aa_view {
         let brush_height = height_1d;
         
         this.brush(svg, brush_chart, brush_width, brush_height);
-        }
+    //    }
     }
 
     brush(svg, brush_chart, brush_width, brush_height) {
@@ -1311,6 +1311,45 @@ class aa_view {
                             .attr("height", h + margin.top + margin.bottom);
 
         let filteredData = this.filterObjsInArr(data, chosenVariables);
+
+        ydata = [];
+
+        for (let p = 0; p < this.chosenIDs.length; p++) {
+            let specificData = filteredData.filter(d => d.id.toLowerCase().includes(this.chosenIDs[p])); 
+            ydata.push(specificData[0]);
+        }
+
+        let barData = [];
+
+        for (let i = 1; i < chosenVariables.length; i++) {
+            let barDataOneID = [];
+            for (let m = 0; m < this.chosenIDs.length; m++) {
+                let number = ydata[m][0][""+chosenVariables[i]];
+                barDataOneID.push(number);
+            }
+            barData.push(barDataOneID);
+            
+            let arrayofData = [];
+            for (let k = 0; k < filteredData.length; k++) {
+                let number = parseInt(filteredData[k][""+chosenVariables[i]])
+                arrayofData.push(number);
+            }
+            rawDataVarSpecific.push(arrayofData);
+
+            x_var = [];
+            yScales = [];
+
+            let x_var = d3.scaleBand()
+                          .domain(this.chosenIDs.map((d) => d[""+chosenVariables[i]]))
+                          .range([0,w/(chosenVariables.length-1) - barpadding]);
+            xScales.push(x_var);
+
+            let yScaleOne = d3.scaleLinear()
+                               .domain([d3.max(arrayofData), 0])
+                               .range([0, (h-5)]);
+            yScales.push(yScaleOne);
+        }
+
     }
 
     filterObjsInArr (arr, selection) {
