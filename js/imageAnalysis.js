@@ -212,7 +212,7 @@ class imageAnalysis {
                 .attr("id", "label" + i)
                 .attr("width", width);
             
-            if (numberOfArchetypes >= 5) {
+            if (numberOfArchetypes >= 50) {
                 oneD.attr("height", (height / numberOfArchetypes));
             }
             else if (numberOfArchetypes === 4) {
