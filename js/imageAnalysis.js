@@ -83,9 +83,13 @@ class imageAnalysis {
 
         this.S = newS;
         this.numberOfArchetypes = parseInt(numArch, 10);
-        this.drawCircleChart(this.numberOfArchetypes);
-        document.getElementById('selectNow').selectAll('option').remove();
-        let dropdownMenu = document.getElementById('selectNow');
+        //?this.drawCircleChart(this.numberOfArchetypes);
+        let selectNowButton = document.getElementById('selectNow')
+                        while (selectNowButton.firstChild) {
+                            selectNowButton.removeChild(selectNowButton.firstChild);
+                        }
+
+        let dropdownMenu = d3.select('#selectNow');
 
         let numberOfArchetypes_array = [];
 
@@ -98,6 +102,11 @@ class imageAnalysis {
                     .data(numberOfArchetypes_array)
                     .enter().append("option")
                     .attr("value", function (d) { return d; })
+                    .text(function (d) {
+                        return d; 
+                    });
+
+        document.getElementById('selectNow').selectedIndex=this.numberOfArchetypes - 1;
 
         let that = this;
 
