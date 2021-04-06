@@ -1,3 +1,10 @@
+class PlotData {
+    constructor (value, variable_name) {
+        this.value = value;
+        this.variable_name = variable_name;
+    }
+}
+
 class imageAnalysis {
 
     constructor(data, numArch, updateArch, customImplement, imageData) {
@@ -187,4 +194,157 @@ class imageAnalysis {
         //     }
         // });
     }
+
+    drawCircleChart () {
+        this.numberOfArchetypes = numberOfArchetypes;
+
+        this.margin = {top: 10, right: 10, bottom: 10, left: 10};
+        
+        let width = 450 - this.margin.right - this.margin.left;
+        let height = 350 - this.margin.bottom - this.margin.top;
+
+        d3.select('#oned')
+            .append('div')
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        this.xScale = d3.scaleLinear()
+            .domain([0, 1])
+            .range([10,width-10]);
+
+        for (let i = 0; i < numberOfArchetypes; i++) {
+            let oneD = d3.select('#oned')
+                .append('svg')
+                .attr("id", "label" + i)
+                .attr("width", width);
+            
+            if (numberOfArchetypes >= 50) {
+                oneD.attr("height", (height / numberOfArchetypes));
+            }
+            else if (numberOfArchetypes === 4) {
+                oneD.attr("height", (height / numberOfArchetypes) - this.margin.top
+                            - this.margin.bottom);
+            }
+            else {
+                oneD.attr("height", (height / numberOfArchetypes) - this.margin.top
+                            - this.margin.bottom);
+            }
+
+            oneD.append("text")
+                .text("Percentage of Archetype " + (i + 1))
+                .attr("transform", "translate(0,10)")
+                .style("font-weight", "bold") 
+                .classed("labelArch", true); 
+
+            let xaxis = oneD.append("g")
+                .attr("id", "x-axis"+i);
+
+            xaxis.append("text")
+                .attr("class", "axis-label")
+                .attr("text-anchor", "middle")
+                .classed("labelArch", true);
+
+            xaxis.call(d3.axisBottom(this.xScale).ticks(5))
+                .attr("transform", "translate(0,15)")
+                .attr("class", "axis_line")
+
+            if (numberOfArchetypes >= 6) {
+                oneD.style("font-size", "7px");
+                xaxis.style("font-size", "5px");
+            }
+            else if (numberOfArchetypes < 6 && numberOfArchetypes >= 5) {
+                oneD.style("font-size", "10px");
+                xaxis.style("font-size", "8px");
+            }
+            else if (numberOfArchetypes <= 4) {
+                oneD.style("font-size", "13px");
+                xaxis.style("font-size", "10px");
+            }
+
+        if (i === 0) {
+            this.dataS = [];
+        }
+            
+        this.dataS[i] = [];
+        for (let p = 0; p < this.S.length; p++) {
+            let point = new PlotData(this.S[p][i],this.S[p].id); 
+            this.dataS[i].push(point);
+        }
+
+        let circles = oneD.append("g")
+                .attr("id", "circle"+i);
+
+        let circleScale = this.xScale;
+
+        let margin_top = this.margin.top;
+
+        circles.selectAll("circle")
+            .data(this.dataS[i])
+            .enter()
+            .append("circle")
+            .attr("cx", function(d) {
+                return circleScale(d.value);
+            })
+            .attr("cy", function() {
+                if (numberOfArchetypes <= 3) {
+                    return 45;
+                }
+                else if (numberOfArchetypes == 4) {
+                    return 42;
+                }
+                else {
+                    return 45 - margin_top;
+                }
+            })
+            .attr("r", function() {
+                if (numberOfArchetypes >= 5) {
+                    return 3;
+                }
+                else if (numberOfArchetypes === 4) {
+                    return 5;
+                }
+                else {
+                    return 7;
+                }
+            })
+            .classed("circleData", true)
+            .attr("id", function(d) {
+                return d.variable_name + "";
+            });  
+    }  
+    
+    let that = this;
+
+    let searchBar = d3.select("#search-bar");
+        searchBar.on("keyup", (e) => {
+
+            let searchVal = searchBar.property("value").toLowerCase();
+            if (e.keyCode === 13 || searchVal == "") {
+                this.onSearch(searchVal,this.dataS, this.numberOfArchetypes, false);
+                that.variable_name = searchVal;
+                that.chosenIDs.push(searchVal);
+                that.drawIds();
+            }
+            
+        });
+
+    //that.drawVariables();
+
+    // let submit = d3.select("#submit");
+    //     submit.on("click", function(d,i) {
+    //         if (that.brushOn === false) {
+    //             that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
+    //             that.drawIds();
+    //         }
+    //         else if (that.brushOn === true) {
+    //             that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
+    //             that.drawIds();
+    //         }
+    //     });
+
+    let data_circ = d3.selectAll("#oned").selectAll("circle");
+
+    this.tooltip(data_circ);
+    }
+
 }
