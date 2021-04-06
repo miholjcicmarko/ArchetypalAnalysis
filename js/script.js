@@ -60,7 +60,7 @@ Promise.all([preProcessData]).then(data => {
     }
 
     function customAnalysis (customS, customXC, customData, numArch, timeSeries, 
-        imageData) {
+        imageBoolean, imageData) {
         let matricies = {
             "XC": customXC,
             "S": customS,
@@ -68,10 +68,10 @@ Promise.all([preProcessData]).then(data => {
             "time_data": timeSeries
         }
 
-        if (imageData === true) {
-            let plots = new imageAnalysis(matricies, numArch, updateArch, true);
+        if (imageBoolean === true) {
+            let plots = new imageAnalysis(matricies, numArch, updateArch, true, imageData);
         }
-        else if (imageData !== true) {
+        else if (imageBoolean !== true) {
             let plots = new aa_view(matricies, numArch, updateArch, true);
         }
         

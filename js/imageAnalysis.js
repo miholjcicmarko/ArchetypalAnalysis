@@ -1,6 +1,6 @@
 class imageAnalysis {
 
-    constructor(data, numArch, updateArch, customImplement) {
+    constructor(data, numArch, updateArch, customImplement, imageData) {
 
         //write time series part
 
@@ -22,6 +22,7 @@ class imageAnalysis {
         this.count = 0;
         this.brushOn = false;
         this.brushedData = [];
+        this.imageData = imageData;
 
         this.filteredData = [];
         //this.chosenVars = ["id"];

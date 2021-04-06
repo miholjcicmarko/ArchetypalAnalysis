@@ -141,7 +141,10 @@ class dataSelection {
         });
 
         let imageFiles = d3.select("#upImages");
-        
+
+        imageFiles.on("change", function () {
+            that.imageData = this.files;
+        });
 
         let vizualizeButton = d3.select("#vizualizeButton");
         vizualizeButton.on("click", function () {
@@ -170,7 +173,7 @@ class dataSelection {
             if (that.image === true && that.timeSeries === false && that.imageData !== null) {
                 that.customAnalysis(that.customS, that.customXC, 
                     that.customDataImplement, that.customArch, that.timeSeries,
-                    that.image);
+                    that.image, that.imageData);
             }
         });
 
