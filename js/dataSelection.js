@@ -12,6 +12,7 @@ class dataSelection {
         this.customArch = 0;
         this.customAnalysis = customAnalysis;
         this.image = false;
+        this.imageData = null;
 
         this.timeSeries = false;
 
@@ -139,6 +140,9 @@ class dataSelection {
             }
         });
 
+        let imageFiles = d3.select("#upImages");
+        
+
         let vizualizeButton = d3.select("#vizualizeButton");
         vizualizeButton.on("click", function () {
             if (that.customS === null) {
@@ -160,7 +164,10 @@ class dataSelection {
             if (that.image === true && that.timeSeries === true) {
                 alert("Choose between Time Series and Image Data")
             }
-            if (that.image === true && that.timeSeries === false) {
+            if (that.image === true && that.timeSeries === false && that.imageData === null) {
+                alert("Select Image Files");
+            }
+            if (that.image === true && that.timeSeries === false && that.imageData !== null) {
                 that.customAnalysis(that.customS, that.customXC, 
                     that.customDataImplement, that.customArch, that.timeSeries,
                     that.image);

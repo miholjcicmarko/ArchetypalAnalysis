@@ -47,14 +47,14 @@
 
 .timeChoice {
     display: grid;
-    grid-template-columns: 0.55fr 0.25fr;
+    grid-template-columns: 0.50fr 0.25fr;
     grid-template-rows: 1fr;
     grid-template-areas: "timeLabel", "checkBox";
 }
 
 .imageChoice {
     display: grid;
-    grid-template-columns: 0.55fr 0.25fr 0.25fr;
+    grid-template-columns: 0.6fr 0.25fr 0.25fr;
     grid-template-rows: 1fr;
     grid-template-areas: "timeLabel", "checkBox", "input-Image";
 }
