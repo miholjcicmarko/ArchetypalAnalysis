@@ -84,7 +84,7 @@ class imageAnalysis {
 
         this.S = newS;
         this.numberOfArchetypes = parseInt(numArch, 10);
-        //?this.drawCircleChart(this.numberOfArchetypes);
+        this.drawCircleChart(this.numberOfArchetypes);
         let selectNowButton = document.getElementById('selectNow')
                         while (selectNowButton.firstChild) {
                             selectNowButton.removeChild(selectNowButton.firstChild);
