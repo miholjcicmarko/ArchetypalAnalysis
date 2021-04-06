@@ -121,12 +121,22 @@ class dataSelection {
 
         let timeSeriesCheckBox = d3.select("#TimeSeriesCheckBox");
         timeSeriesCheckBox.on("click", function () {
-            that.timeSeries = true;
+            if (that.timeSeries === false) {
+                that.timeSeries = true;
+            }
+            else if (that.timeSeries === true) {
+                that.timeSeries = false;
+            }
         });
 
         let imageCheckBox = d3.select("#imageCheckBox");
         imageCheckBox.on("click", function () {
-            that.image = true;
+            if (that.image === false) {
+                that.image = true;
+            }
+            else if (that.image === true) {
+                that.image = false;
+            }
         });
 
         let vizualizeButton = d3.select("#vizualizeButton");
@@ -143,9 +153,18 @@ class dataSelection {
             if (that.customArch === null || that.customArch === "") {
                 alert("Enter number of Archetypes");
             }
-            
-            that.customAnalysis(that.customS, that.customXC, 
-                that.customDataImplement, that.customArch, that.timeSeries);
+            if (that.image === false) {
+                that.customAnalysis(that.customS, that.customXC, 
+                    that.customDataImplement, that.customArch, that.timeSeries);
+            }
+            if (that.image === true && that.timeSeries === true) {
+                alert("Choose between Time Series and Image Data")
+            }
+            if (that.image === true && that.timeSeries === false) {
+                that.customAnalysis(that.customS, that.customXC, 
+                    that.customDataImplement, that.customArch, that.timeSeries,
+                    that.image);
+            }
         });
 
     }
