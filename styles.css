@@ -52,6 +52,19 @@
     grid-template-areas: "timeLabel", "checkBox";
 }
 
+.imageChoice {
+    display: grid;
+    grid-template-columns: 0.55fr 0.25fr 0.25fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "timeLabel", "checkBox", "input-Image";
+}
+
+.input-Image {
+    position: relative;
+    padding-top: 3%;
+    grid-area: "input-Image";
+}
+
 .timeLabel {
     text-align: right;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
