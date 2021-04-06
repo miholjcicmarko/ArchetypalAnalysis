@@ -1,10 +1,3 @@
-class PlotData {
-    constructor (value, variable_name) {
-        this.value = value;
-        this.variable_name = variable_name;
-    }
-}
-
 class imageAnalysis {
 
     constructor(data, numArch, updateArch, customImplement, imageData) {
@@ -195,13 +188,13 @@ class imageAnalysis {
         // });
     }
 
-    drawCircleChart () {
+    drawCircleChart (numberOfArchetypes) {
         this.numberOfArchetypes = numberOfArchetypes;
 
         this.margin = {top: 10, right: 10, bottom: 10, left: 10};
         
         let width = 450 - this.margin.right - this.margin.left;
-        let height = 350 - this.margin.bottom - this.margin.top;
+        let height = 5000 - this.margin.bottom - this.margin.top;
 
         d3.select('#oned')
             .append('div')
@@ -218,16 +211,51 @@ class imageAnalysis {
                 .attr("id", "label" + i)
                 .attr("width", width);
             
-            if (numberOfArchetypes >= 50) {
-                oneD.attr("height", (height / numberOfArchetypes));
+            if (numberOfArchetypes >= 95) {
+            oneD.attr("height", (height / numberOfArchetypes));
             }
-            else if (numberOfArchetypes === 4) {
+            else if (numberOfArchetypes >= 85) {
+                 oneD.attr("height", (height / numberOfArchetypes) - this.margin.top);
+            }
+            else if (numberOfArchetypes >= 75) {
                 oneD.attr("height", (height / numberOfArchetypes) - this.margin.top
-                            - this.margin.bottom);
+                        - this.margin.bottom);
             }
+            else if (numberOfArchetypes >= 65) {
+                oneD.attr("height", (height / numberOfArchetypes) - 2*this.margin.top
+                        - this.margin.bottom);
+            }
+            else if (numberOfArchetypes >= 55) {
+                oneD.attr("height", (height / numberOfArchetypes) - 2*this.margin.top
+                        - 2*this.margin.bottom);
+            }
+            else if (numberOfArchetypes >= 45) {
+                oneD.attr("height", (height / numberOfArchetypes) - 3*this.margin.top
+                        - 3*this.margin.bottom);
+            }
+            else if (numberOfArchetypes >= 35) {
+                oneD.attr("height", (height / numberOfArchetypes) - 5*this.margin.top
+                        - 4*this.margin.bottom);
+            }
+            else if (numberOfArchetypes >= 25) {
+                oneD.attr("height", (height / numberOfArchetypes) - 10*this.margin.top
+                        - 5*this.margin.bottom);
+            }
+            else if (numberOfArchetypes >= 15) {
+                oneD.attr("height", (height / numberOfArchetypes) - 14*this.margin.top
+                        - 14*this.margin.bottom);
+            }
+            else if (numberOfArchetypes >= 10) {
+                oneD.attr("height", (height / numberOfArchetypes) - 24*this.margin.top
+                        - 20*this.margin.bottom);
+            }
+            else if (numberOfArchetypes >= 5) {
+                oneD.attr("height", (height / numberOfArchetypes) - 48*this.margin.top
+                        - 42*this.margin.bottom);
+            } 
             else {
-                oneD.attr("height", (height / numberOfArchetypes) - this.margin.top
-                            - this.margin.bottom);
+                oneD.attr("height", (height / numberOfArchetypes) - 150*this.margin.top
+                        - 6*this.margin.bottom);
             }
 
             oneD.append("text")
@@ -248,18 +276,18 @@ class imageAnalysis {
                 .attr("transform", "translate(0,15)")
                 .attr("class", "axis_line")
 
-            if (numberOfArchetypes >= 6) {
+            //if (numberOfArchetypes >= 6) {
                 oneD.style("font-size", "7px");
                 xaxis.style("font-size", "5px");
-            }
-            else if (numberOfArchetypes < 6 && numberOfArchetypes >= 5) {
-                oneD.style("font-size", "10px");
-                xaxis.style("font-size", "8px");
-            }
-            else if (numberOfArchetypes <= 4) {
-                oneD.style("font-size", "13px");
-                xaxis.style("font-size", "10px");
-            }
+            //}
+            // else if (numberOfArchetypes < 6 && numberOfArchetypes >= 5) {
+            //     oneD.style("font-size", "10px");
+            //     xaxis.style("font-size", "8px");
+            // }
+            // else if (numberOfArchetypes <= 4) {
+            //     oneD.style("font-size", "13px");
+            //     xaxis.style("font-size", "10px");
+            //}
 
         if (i === 0) {
             this.dataS = [];
@@ -286,26 +314,26 @@ class imageAnalysis {
                 return circleScale(d.value);
             })
             .attr("cy", function() {
-                if (numberOfArchetypes <= 3) {
+                //if (numberOfArchetypes <= 3) {
                     return 45;
-                }
-                else if (numberOfArchetypes == 4) {
-                    return 42;
-                }
-                else {
-                    return 45 - margin_top;
-                }
+                //}
+                // else if (numberOfArchetypes == 4) {
+                //     return 42;
+                // }
+                // else {
+                //     return 45 - margin_top;
+                // }
             })
             .attr("r", function() {
-                if (numberOfArchetypes >= 5) {
-                    return 3;
-                }
-                else if (numberOfArchetypes === 4) {
-                    return 5;
-                }
-                else {
+                // if (numberOfArchetypes >= 5) {
+                //     return 3;
+                // }
+                // else if (numberOfArchetypes === 4) {
+                //     return 5;
+                // }
+                //else {
                     return 7;
-                }
+                //}
             })
             .classed("circleData", true)
             .attr("id", function(d) {
@@ -323,7 +351,7 @@ class imageAnalysis {
                 this.onSearch(searchVal,this.dataS, this.numberOfArchetypes, false);
                 that.variable_name = searchVal;
                 that.chosenIDs.push(searchVal);
-                that.drawIds();
+                //that.drawIds();
             }
             
         });
@@ -344,7 +372,7 @@ class imageAnalysis {
 
     let data_circ = d3.selectAll("#oned").selectAll("circle");
 
-    this.tooltip(data_circ);
+    //this.tooltip(data_circ);
     }
 
 }
