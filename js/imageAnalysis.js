@@ -392,6 +392,7 @@ class imageAnalysis {
                 .style("left", (pageX) + "px")
                 .style("top", (pageY) + "px");
 
+            d3.select(this).classed("hovered", true);
             that.createTempCircle(this);
         });
     }
@@ -399,6 +400,54 @@ class imageAnalysis {
     tooltipRender(data) {
         let text = data.currentTarget.id;
         return text;
+    }
+
+    createTempCircle (item) {
+        
+        for (let i = 0; i < this.numberOfArchetypes; i++) {
+            let numberOfArch = this.numberOfArchetypes;
+            let name = item.id.toLowerCase();
+            let filteredData = this.dataS[i].filter(d => d.variable_name.toLowerCase().includes(name));
+            
+            let point = new PlotData(filteredData[0].value,filteredData[0].variable_name);
+
+            let circle = d3.select("#circle" + i);
+
+            let circleScale = this.xScale;
+
+            let margin_top = this.margin.top;   
+
+            let layer = item.viewportElement.id;
+            let layerlen = layer.length;
+            layer = Number(layer[layerlen-1]);
+
+            if (layer !== i) {
+            
+            circle.append("circle")
+            .attr("cx", circleScale(point.value))
+            .attr("cy", function() {
+                if (numberOfArch <= 3) {
+                    return 45;
+                }
+                else if (numberOfArch == 4) {
+                    return 43;
+                }
+                else {
+                    return 45 - (margin_top);
+                }
+            })
+            .attr("r", function() {
+                if (numberOfArch >= 5) {
+                    return 3;
+                }
+                else {
+                    return 7;
+                }
+            })
+            .classed("hovered", true)
+            .classed("tempCircle", true);
+            }
+        }
     }
 
 }
