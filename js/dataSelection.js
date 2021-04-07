@@ -9,7 +9,7 @@ class dataSelection {
         this.customXC = null;
         this.customS = null;
         this.customDataImplement = null;
-        this.customArch = 0;
+        this.customArch = null;
         this.customAnalysis = customAnalysis;
         this.image = false;
         this.imageData = null;
@@ -161,8 +161,11 @@ class dataSelection {
                 alert("Enter number of Archetypes");
             }
             if (that.image === false) {
-                that.customAnalysis(that.customS, that.customXC, 
-                    that.customDataImplement, that.customArch, that.timeSeries);
+                if (that.customS !== null && that.customXC !== null && 
+                    that.customDataImplement !== null && that.customArch !== null) {
+                        that.customAnalysis(that.customS, that.customXC, 
+                            that.customDataImplement, that.customArch, that.timeSeries);
+                    }
             }
             if (that.image === true && that.timeSeries === true) {
                 alert("Choose between Time Series and Image Data")
@@ -171,9 +174,12 @@ class dataSelection {
                 alert("Select Image Files");
             }
             if (that.image === true && that.timeSeries === false && that.imageData !== null) {
-                that.customAnalysis(that.customS, that.customXC, 
-                    that.customDataImplement, that.customArch, that.timeSeries,
-                    that.image, that.imageData);
+                if (that.customS !== null && that.customXC !== null && 
+                    that.customDataImplement !== null && that.customArch !== null) {
+                        that.customAnalysis(that.customS, that.customXC, 
+                            that.customDataImplement, that.customArch, that.timeSeries,
+                            that.image, that.imageData);
+                    }
             }
         });
 

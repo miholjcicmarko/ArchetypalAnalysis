@@ -394,11 +394,52 @@ class imageAnalysis {
 
             d3.select(this).classed("hovered", true);
             that.createTempCircle(this);
+            that.displayImages(this);
         });
+
+        onscreenData.on("mouseout", function(d,i) {
+            d3.select(this).classed("hovered",false);
+            d3.selectAll(".tempCircle").remove();
+        })
+
+        tooltip.transition()
+        .duration(500)
+        .style("opacity", 0);
+    }
+
+    displayImages (circleData) {
+        let selectedFile = circleData.id;
+
+        let target = "0";
+
+        for (let i = 0; i < this.raw.length; i++) {
+            if (selectedFile === this.raw[i].id) {
+                target = this.raw[i];
+            }
+        }
+
+        let targetName = target.id.split("/");
+
+        targetName = targetName[targetName.length - 1];
+
+        let fileName; 
+
+        for (let i = 0; i < this.imageData.length; i++) {
+            if (targetName === this.imageData[i].name) {
+                fileName = this.imageData[i];
+            }
+        }
+
+        let image = document.getElementById("bar1");
+        
+        image.src = URL.createObjectURL(fileName);
+
     }
 
     tooltipRender(data) {
         let text = data.currentTarget.id;
+        let text_arr = text.split("/");
+        text = text_arr[text_arr.length -1];
         return text;
     }
 
@@ -426,23 +467,23 @@ class imageAnalysis {
             circle.append("circle")
             .attr("cx", circleScale(point.value))
             .attr("cy", function() {
-                if (numberOfArch <= 3) {
+                // if (numberOfArch <= 3) {
                     return 45;
-                }
-                else if (numberOfArch == 4) {
-                    return 43;
-                }
-                else {
-                    return 45 - (margin_top);
-                }
+                // }
+                // else if (numberOfArch == 4) {
+                //     return 43;
+                // }
+                // else {
+                //     return 45 - (margin_top);
+                // }
             })
             .attr("r", function() {
-                if (numberOfArch >= 5) {
-                    return 3;
-                }
-                else {
+                // if (numberOfArch >= 5) {
+                //     return 3;
+                // }
+                // else {
                     return 7;
-                }
+                //}
             })
             .classed("hovered", true)
             .classed("tempCircle", true);
