@@ -392,6 +392,7 @@ class imageAnalysis {
                 .style("left", (pageX) + "px")
                 .style("top", (pageY) + "px");
 
+            that.createTempCircle(this);
         });
     }
 
