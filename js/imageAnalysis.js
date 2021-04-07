@@ -372,7 +372,32 @@ class imageAnalysis {
 
     let data_circ = d3.selectAll("#oned").selectAll("circle");
 
-    //this.tooltip(data_circ);
+    this.tooltip(data_circ);
+    }
+
+    tooltip (onscreenData) {
+        let that = this;
+        let tooltip = d3.select('.tooltip')
+
+        onscreenData.on("mouseover", function(d,i) {
+            
+            let pageX = d.clientX;
+            let pageY = d.clientY;
+
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", 0.9);
+        
+            tooltip.html(that.tooltipRender(d))
+                .style("left", (pageX) + "px")
+                .style("top", (pageY) + "px");
+
+        });
+    }
+
+    tooltipRender(data) {
+        let text = data.currentTarget.id;
+        return text;
     }
 
 }
