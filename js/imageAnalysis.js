@@ -400,6 +400,7 @@ class imageAnalysis {
         onscreenData.on("mouseout", function(d,i) {
             d3.select(this).classed("hovered",false);
             d3.selectAll(".tempCircle").remove();
+            d3.selectAll("img").remove();
         })
 
         tooltip.transition()
@@ -408,7 +409,6 @@ class imageAnalysis {
     }
 
     displayImages (circleData) {
-        d3.selectAll("img").remove();
 
         let selectedFile = circleData.id;
 
