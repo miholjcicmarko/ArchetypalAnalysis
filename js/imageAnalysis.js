@@ -430,9 +430,16 @@ class imageAnalysis {
             }
         }
 
-        let image = document.getElementById("bar1");
+        if (fileName) {
+            let reader = new FileReader();
+            let image = document.getElementById("bar1");
         
-        image.src = URL.createObjectURL(fileName);
+            image.src = URL.createObjectURL(fileName);
+
+            reader.onload = image;
+            reader.readAsDataURL(fileName);
+        }
+
 
     }
 
