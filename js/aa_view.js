@@ -107,7 +107,7 @@ class aa_view {
                 if (that.brushOn === true) {
 
                 }
-                else if (that.brushOn = false) {
+                else if (that.brushOn === false) {
                     that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
                 }
             })
