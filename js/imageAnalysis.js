@@ -408,7 +408,12 @@ class imageAnalysis {
     }
 
     displayImages (circleData) {
+        d3.selectAll("img").remove();
+
         let selectedFile = circleData.id;
+
+        let width = 250 - this.margin.right - this.margin.left;
+        let height = 250 - this.margin_top - this.margin.bottom;
 
         let target = "0";
 
@@ -431,13 +436,35 @@ class imageAnalysis {
         }
 
         if (fileName) {
-            let reader = new FileReader();
-            let image = document.getElementById("bar1");
-        
-            image.src = URL.createObjectURL(fileName);
 
-            reader.onload = image;
+            d3.select("#bar1").append("img")
+                .attr("id", "selectedImg")
+                .attr("src", "#")
+                .attr("width", width)
+                .attr("height", height);
+
+            let reader = new FileReader();
+
+            reader.onload = function (e) {
+                d3.select("#selectedImg")
+                    .attr("src", e.target.result);
+            }
+
             reader.readAsDataURL(fileName);
+
+            // reader.load = function (e) {
+            //     $('#bar1')
+            //         .attr('src', e.target.result)
+            //         .width(150)
+            //         .height(200);
+            // };
+
+            // let image = document.getElementById("bar1");
+        
+            // image.src = URL.createObjectURL(fileName);
+
+            // reader.onload = image;
+            // reader.readAsDataURL(fileName);
         }
 
 
