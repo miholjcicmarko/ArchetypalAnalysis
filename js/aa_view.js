@@ -1051,7 +1051,10 @@ class aa_view {
             let yScaleOne = d3.scaleLinear()
                                 .domain([0, d3.max(arrayRaw)])
                                 .range([h - margin.bottom, margin.top]);
-            yScales.push(yScaleOne);
+
+            for (let k = 0; k < this.chosenIDs.length; k++) {
+                yScales.push(yScaleOne);
+            };
 
             let xScaleOne = d3.scaleBand()
                           .domain(["" + this.chosenIDs])
@@ -1148,17 +1151,17 @@ class aa_view {
             .data(d => that.chosenIDs.map(key => ({key, value: d[key]})))
             .join("rect")
             .attr("x", d => xcatsScale(d.key))
-            //.attr("y", function(d,i) {
-            //    let scale = yScales[i];
-            //    return scale(d.value);
-            //})
-            .attr("y", d => yScale(d.value))
+            .attr("y", function(d,i) {
+               let scale = yScales[i];
+               return scale(d.value);
+            })
+            //.attr("y", d => yScale(d.value))
             .attr("width", xcatsScale.bandwidth())
-            //.attr("height", function(d,i) {
-             //   let scale = yScales[i];
-             //   return scale(0) - scale(d.value);
-            //})
-            .attr("height", d => yScale(0) - yScale(d.value))
+            .attr("height", function(d,i) {
+               let scale = yScales[i];
+               return scale(0) - scale(d.value);
+            })
+            //.attr("height", d => yScale(0) - yScale(d.value))
             .attr("fill", d => that.color(d.key));
          
 
@@ -1276,7 +1279,7 @@ class aa_view {
                     let yaxis = svg.append("g")
                                 .attr("id", "y-axis" + i);
 
-                    yaxis.call(d3.axisLeft(yScale).ticks(5))
+                    yaxis.call(d3.axisLeft(yScales[i-1]).ticks(5))
                         .attr("transform", "translate(" + (displace+20) + ",0)")
                         //.attr("transform", "translate(" + ((i-1)*(w/(chosenVariables.length-1))+4*margin.left+10) + ",0)")
                         .attr("class", "axis_line");
