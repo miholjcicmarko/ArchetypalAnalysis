@@ -96,7 +96,7 @@ class aa_view {
         let that = this;
 
         let dInput = d3.select("#dateInput");
-            dInput.on("keyup", function () {
+            dInput.on("change", function () {
                 that.dateSelected = true;
                 let parseTime = d3.timeParse("%Y-%m-%d");
                 that.date = parseTime(this.value);
@@ -1110,9 +1110,11 @@ class aa_view {
             let var_group_key = variables[i];
             let obj = {"var": var_group_key}
             for (let j = 0; j < this.chosenIDs.length; j++) {
-                let name = this.chosenIDs[j];
-                let value = ydata[j][""+var_group_key];
-                obj[""+name] = value;
+                if (ydata[j] !== undefined) {
+                    let name = this.chosenIDs[j];
+                    let value = ydata[j][""+var_group_key];
+                    obj[""+name] = value;
+                }
             }
             array_of_variable_objects.push(obj);
         }
