@@ -1041,7 +1041,7 @@ class aa_view {
             let arrayofData = [];
 
             for (let k = 0; k < filteredData.length; k++) {
-                let number = parseInt(filteredData[k][""+chosenVariables[i]])
+                let number = parseInt(rawData[k][""+chosenVariables[i]])
                 arrayofData.push(number);
             }
             rawDataVarSpecific.push(arrayofData);
