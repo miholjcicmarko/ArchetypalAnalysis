@@ -421,9 +421,6 @@ class aa_view {
                         svg.selectAll("circle").classed("notbrushed", true);
 
                         that.createTempCircleBrush(selectionData);
-                        if (that.timeline === true) {
-                            that.createTempLine(selectionData, true);
-                        }
                         
                         that.brushedData = selectionData;
 
@@ -435,6 +432,12 @@ class aa_view {
                         }
                         that.chosenIDs = [... new Set(that.chosenIDs)];
                         that.drawIds();
+
+                        if (that.timeline === true) {
+                            that.createTempLine(selectionData, true);
+                        }
+
+                        that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
                     }
                 });
             brush   
@@ -470,6 +473,8 @@ class aa_view {
                         }
                         that.chosenIDs = [... new Set(that.chosenIDs)];
                         that.drawIds();
+
+                        that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
                     }
                     
                 });
@@ -1440,7 +1445,7 @@ class aa_view {
                     let scale = yscales[i];
                     return scale(d.value);
                 })
-                .attr("width", w/(that.chosenIDs.length) - barpadding)
+                .attr("width", w/(that.chosenVars.length) - barpadding)
                 .attr("height", function(d,i) {
                     let scale = yscales[i];
                     return h-scale(d.value);
