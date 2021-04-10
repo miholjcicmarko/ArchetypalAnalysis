@@ -1142,6 +1142,9 @@ class aa_view {
 
         // Possibly try a for loop
 
+        that.barcounter = 0;
+        that.barcounter2 = 0;
+
         svg.append("g")
             .selectAll("g")
             .data(array_of_variable_objects)
@@ -1152,13 +1155,17 @@ class aa_view {
             .join("rect")
             .attr("x", d => xcatsScale(d.key) + 5)
             .attr("y", function(d,i) {
-               let scale = yScales[i];
+               that.barcounter = that.barcounter + 1;
+               //console.log(that.barcounter);
+               let scale = yScales[that.barcounter-1];
                return scale(d.value);
             })
             //.attr("y", d => yScale(d.value))
             .attr("width", xcatsScale.bandwidth())
             .attr("height", function(d,i) {
-               let scale = yScales[i];
+               that.barcounter2 = that.barcounter2 + 1;
+               let scale = yScales[that.barcounter2-1];
+               //let scale = yScales[i];
                return scale(0) - scale(d.value);
             })
             //.attr("height", d => yScale(0) - yScale(d.value))
