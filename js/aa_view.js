@@ -1040,8 +1040,8 @@ class aa_view {
         for (let i = 1; i < chosenVariables.length; i++) {
             let arrayofData = [];
 
-            for (let k = 0; k < filteredData.length; k++) {
-                let number = parseInt(rawData[k][""+chosenVariables[i]])
+            for (let k = 0; k < this.raw.length; k++) {
+                let number = parseInt(this.raw[k][""+chosenVariables[i]])
                 arrayofData.push(number);
             }
             rawDataVarSpecific.push(arrayofData);
@@ -1146,11 +1146,11 @@ class aa_view {
             .selectAll("g")
             .data(array_of_variable_objects)
             .join("g")
-            .attr("transform", d => `translate(${xlargeScale(d[var_id])+20},0)`)
+            .attr("transform", d => `translate(${xlargeScale(d[var_id])+25},0)`)
             .selectAll("rect")
             .data(d => that.chosenIDs.map(key => ({key, value: d[key]})))
             .join("rect")
-            .attr("x", d => xcatsScale(d.key))
+            .attr("x", d => xcatsScale(d.key) + 5)
             .attr("y", function(d,i) {
                let scale = yScales[i];
                return scale(d.value);
@@ -1279,14 +1279,16 @@ class aa_view {
                     let yaxis = svg.append("g")
                                 .attr("id", "y-axis" + i);
 
-                    yaxis.call(d3.axisLeft(yScales[i-1]).ticks(5))
-                        .attr("transform", "translate(" + (displace+20) + ",0)")
+                    let that = this;
+
+                    yaxis.call(d3.axisLeft(yScales[(i*that.chosenIDs.length)-1]).ticks(5))
+                        .attr("transform", "translate(" + (displace+30) + ",0)")
                         //.attr("transform", "translate(" + ((i-1)*(w/(chosenVariables.length-1))+4*margin.left+10) + ",0)")
                         .attr("class", "axis_line");
                     
                     let xaxis = svg.append("g")
                         .attr("id", "x-axis")
-                        .attr("transform", "translate("+ (displace+20) +","+ (h - margin.bottom)+")")
+                        .attr("transform", "translate("+ (displace+30) +","+ (h - margin.bottom)+")")
                         //.attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(4*margin.left+10))+","+ (h-5)+")")
                         .call(d3.axisBottom(xcatsScale));
 
@@ -1298,8 +1300,9 @@ class aa_view {
                     yaxis.append("text")
                             .text(""+chosenVariables[i])
                             .attr("class", "axis-label")
+                            .attr("font-size", "7")
                             //.attr("text-anchor", "middle")
-                            .attr("transform", "translate(" + (displace-35) + "," + h/2+")rotate(-90)");
+                            .attr("transform", "translate(" + (displace-40) + "," + h/2+")rotate(-90)");
                             //.attr("transform", "translate(" + (-50+((i-1))) +","+h/2+")rotate(-90)");
                     
                 }
