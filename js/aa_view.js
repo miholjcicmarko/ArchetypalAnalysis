@@ -75,6 +75,7 @@ class aa_view {
         }
 
         this.color = d3.scaleOrdinal()
+                .domain([0,4])
                 .range(["#e41a1c","#984ea3","#ff7f00","#999999","#f781bf"]);
 
         let newS = [];
@@ -911,11 +912,11 @@ class aa_view {
                 .classed("selectedCircle", true)
                 .attr("fill", function () {
                     let index = that.chosenIDs.length;
-                    return that.color(index-1);
+                    return that.color(index);
                 })
                 .attr("stroke", function () {
                     let index = that.chosenIDs.length;
-                    return that.color(index-1);
+                    return that.color(index);
                 })
                 .attr("id", function(d) {
                     return point.variable_name + "";
@@ -1169,7 +1170,7 @@ class aa_view {
                return scale(0) - scale(d.value);
             })
             //.attr("height", d => yScale(0) - yScale(d.value))
-            .attr("fill", d => that.color(d.key));
+            .attr("fill", (d,i) => that.color(i));
          
 
 
