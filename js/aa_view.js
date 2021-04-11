@@ -1412,18 +1412,22 @@ class aa_view {
                 arrayofData.push(number);
             }
 
+            let avg_xlabel = ["avg"];
+
             let x_var = d3.scaleBand()
-                          .domain(this.chosenIDs.map((d) => d[""+chosenVariables[i]]))
+                          .domain(avg_xlabel)
                           .range([0,w/(chosenVariables.length-1) - barpadding]);
             xScales.push(x_var);
 
             let yScaleOne = d3.scaleLinear()
                                .domain([d3.max(arrayofData), 0])
-                               .range([0, (h)]);
+                               .range([margin.top, h]);
             yScales.push(yScaleOne);
         }
 
         let that = this;
+
+        if (barData !== []) {
 
         for (let i = 0; i < yScales.length; i++) {
             let that = this;
@@ -1439,7 +1443,7 @@ class aa_view {
                 .append('rect')
                 .attr("x", function (d,i) {
                     //return d => xScales(d.id);
-                    return i * (w/(chosenVars.length));
+                    return ((i)*(w/(chosenVariables.length-1))+3*margin.left+10);
                 })
                 .attr("y", function(d,i) {
                     let scale = yscales[i];
@@ -1451,7 +1455,8 @@ class aa_view {
                     return h-scale(d.value);
                 })
                 .attr("fill","orangered")
-                .attr("transform", "translate(" +(70*i)+",5)");
+                .attr("transform", "translate(" +((i)*(w/(chosenVariables.length-1))+3*margin.left+10)+",0)");
+        }
         }
 
         for (let i = 0; i < chosenVariables.length; i++) {
@@ -1469,7 +1474,7 @@ class aa_view {
                 let xaxis = svg.append("g")
                     .attr("id", "x-axis")
                     //.attr("transform", "translate("+ (displace+20) +","+ (h - margin.bottom)+")")
-                    .attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(3*margin.left+10))+","+ (h-5)+")")
+                    .attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(3*margin.left+10))+","+ (h)+")")
                     .call(d3.axisBottom(xScales[i-1])); 
             
                 yaxis.append("text")
