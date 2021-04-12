@@ -666,9 +666,9 @@ class aa_view {
 
         onscreenData.on("click", function(d,i) {
             this.id = this.id.toLowerCase();
-            that.onSearch(this,that.dataS, that.numberOfArchetypes, true);
             that.variable_name = this.id.toLowerCase();
             that.chosenIDs.push(this.id.toLowerCase());
+            that.onSearch(this,that.dataS, that.numberOfArchetypes, true);
             that.drawIds();
         })
 

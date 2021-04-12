@@ -406,10 +406,11 @@ class imageAnalysis {
         })
 
         onscreenData.on("click", function(d,i) {
+            that.displayImages(this);
             this.id = this.id.toLowerCase();
-            that.onSearch(this,that.dataS, that.numberOfArchetypes, true);
             that.variable_name = this.id.toLowerCase();
             that.chosenIDs.push(this.id.toLowerCase());
+            that.onSearch(this,that.dataS, that.numberOfArchetypes, true);
             that.drawIds();
         })
 
@@ -462,9 +463,7 @@ class imageAnalysis {
                 circles.append("circle")
                 .attr("cx", circleScale(point.value))
                 .attr("cy", function() {
-                    if (numberOfArch <= 3) {
                         return 45;
-                    }
                 })
                 .attr("r", function() {
                         return 7;
@@ -482,36 +481,6 @@ class imageAnalysis {
                     return point.variable_name + "";
                 })
                 .classed("tooltipCircle"+that.count, true);
-            }
-
-            if (this.timeline === true) {
-
-                let objarray = this.lineData;
-                let line = this.line;
-        
-                let itemArray = objarray.filter(key => key.id.toLowerCase() === value);
-        
-                let svg = d3.select("#svg-time");
-        
-                let lines = svg.selectAll("lines")
-                            .data(itemArray)
-                            .enter()
-                            .append("g")
-                            .attr("transform", "translate(" + 60 + "," + 0 + ")");
-
-                let that = this;
-        
-                lines.append("path")
-                     .attr("d", function(d) { return line(d.values)})
-                     .classed("timeLine", false)
-                     .attr("stroke", function () {
-                        let index = that.chosenIDs.length;
-                        return that.color(index-1);
-                     })
-                     .attr("stroke-width", 3)
-                     .attr("id", function(d) {
-                        return "selectedLine"+value;
-                     });
             }
         }
         let data_circ = d3.selectAll("#oned").selectAll("circle");
