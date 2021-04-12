@@ -488,7 +488,7 @@ class imageAnalysis {
         this.tooltip(data_circ);
     }
 
-    displayImages (circleData) {
+    displayImages (circleData, clicked) {
 
         let selectedFile = circleData.id;
 
@@ -519,7 +519,14 @@ class imageAnalysis {
 
             d3.select("#bar1").append("img1")
                 .attr("transform", "translate(0,100)")
-                .classed("imgdiv", true)
+                .classed("imgdiv", function() {
+                    if (clicked !== true) {
+                        return true;
+                    }
+                    else  {
+                        return false;
+                    }
+                })
                 .append("img")
                 .attr("id", "selectedImg")
                 .attr("src", "#")
@@ -530,7 +537,7 @@ class imageAnalysis {
 
             reader.onload = function (e) {
                 d3.select("#selectedImg")
-                    .attr("border-color", "steelblue")
+                    .style("border-color", "steelblue")
                     .attr("src", e.target.result);
             }
 
