@@ -560,7 +560,7 @@ class imageAnalysis {
                 else if (clicked === false) {
                     d3.select("#selectedImg" + that.count + "tooltip")
                     .style("border-color", function() {
-                        let id = document.getElementById('selectedImg'+ that.count);
+                        let id = document.getElementById('selectedImg'+ that.count + "tooltip");
 
                         if (id.className === "imgdiv") {
                             return "rgb(71, 105, 1)";
