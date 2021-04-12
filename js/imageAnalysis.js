@@ -24,6 +24,7 @@ class imageAnalysis {
         this.brushOn = false;
         this.brushedData = [];
         this.imageData = imageData;
+        this.count = 0;
 
         this.filteredData = [];
         //this.chosenVars = ["id"];
@@ -71,7 +72,7 @@ class imageAnalysis {
 
         this.color = d3.scaleOrdinal()
                 .domain([0,4])
-                .range(["blue","orange","black","red","gold"]);
+                .range(["blue","orange","pink","red","gold"]);
 
         let newS = [];
 
@@ -353,7 +354,6 @@ class imageAnalysis {
                 this.onSearch(searchVal,this.dataS, this.numberOfArchetypes, false);
                 //that.variable_name = searchVal;
                 that.chosenIDs.push(searchVal);
-                that.displayImages(this, true);
                 //that.drawIds();
             }
             
@@ -407,11 +407,11 @@ class imageAnalysis {
         })
 
         onscreenData.on("click", function(d,i) {
+            that.displayImages(this, true);
             this.id = this.id.toLowerCase();
             that.variable_name = this.id.toLowerCase();
             that.chosenIDs.push(this.id.toLowerCase());
             that.onSearch(this,that.dataS, that.numberOfArchetypes, true);
-            that.displayImages(this, true);
             that.drawIds();
         })
 
@@ -437,6 +437,7 @@ class imageAnalysis {
             // is tooltip
             //then remove the highlight from chosenID list and visually
         //}
+        else {
 
             for (let i = 0; i < numberOfArch; i++) {
 
@@ -481,13 +482,16 @@ class imageAnalysis {
                 })
                 .classed("tooltipCircle"+that.count, true);
             }
-
+        }
         let data_circ = d3.selectAll("#oned").selectAll("circle");
 
         this.tooltip(data_circ);
     }
 
     displayImages (circleData, clicked) {
+        if (clicked === true) {
+            this.count = this.count + 1;
+        }
 
         let selectedFile = circleData.id;
 
