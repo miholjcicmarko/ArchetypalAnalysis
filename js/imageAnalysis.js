@@ -11,6 +11,7 @@ class imageAnalysis {
         d3.select("#header-wrap").style("opacity", 1);
         d3.select(".topnav").style("opacity", 1);
         d3.select("#brushButton").style("opacity", "1");
+        document.getElementById("submit").innerHTML = 'Image Analysis';
 
         this.XC = data.XC;
         this.S = data.S;
@@ -413,7 +414,7 @@ class imageAnalysis {
         let selectedFile = circleData.id;
 
         let width = 250 - this.margin.right - this.margin.left;
-        let height = 250 - this.margin_top - this.margin.bottom;
+        let height = 250 - this.margin.top - this.margin.bottom;
 
         let target = "0";
 
@@ -441,7 +442,8 @@ class imageAnalysis {
                 .attr("id", "selectedImg")
                 .attr("src", "#")
                 .attr("width", width)
-                .attr("height", height);
+                .attr("height", height)
+                .attr("transform", "translate(10,20)");
 
             let reader = new FileReader();
 
