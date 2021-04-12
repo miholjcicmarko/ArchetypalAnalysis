@@ -78,7 +78,7 @@ class aa_view {
 
         this.color = d3.scaleOrdinal()
                 .domain([0,4])
-                .range(["blue","orange","pink","red","gold"]);
+                .range(["blue","orange","black","red","gold"]);
 
         let newS = [];
 
