@@ -544,7 +544,8 @@ class imageAnalysis {
             let reader = new FileReader();
 
             reader.onload = function (e) {
-                d3.select("#selectedImg" + that.count)
+                if (clicked === true) {
+                    d3.select("#selectedImg" + that.count)
                     .style("border-color", function() {
                         let id = document.getElementById('selectedImg'+ that.count);
 
@@ -555,6 +556,20 @@ class imageAnalysis {
                             return that.color(that.chosenIDs.length - 1);
                         }})
                     .attr("src", e.target.result);
+                }
+                else if (clicked === false) {
+                    d3.select("#selectedImg" + that.count + "tooltip")
+                    .style("border-color", function() {
+                        let id = document.getElementById('selectedImg'+ that.count);
+
+                        if (id.className === "imgdiv") {
+                            return "rgb(71, 105, 1)";
+                        }
+                        else if (id.className !== "imgdiv") {
+                            return that.color(that.chosenIDs.length - 1);
+                        }})
+                    .attr("src", e.target.result);
+                }
             }
 
             reader.readAsDataURL(fileName);
