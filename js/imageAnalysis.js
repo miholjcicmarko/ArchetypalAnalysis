@@ -437,7 +437,6 @@ class imageAnalysis {
             // is tooltip
             //then remove the highlight from chosenID list and visually
         //}
-        else {
 
             for (let i = 0; i < numberOfArch; i++) {
 
@@ -482,7 +481,6 @@ class imageAnalysis {
                 })
                 .classed("tooltipCircle"+that.count, true);
             }
-        }
         let data_circ = d3.selectAll("#oned").selectAll("circle");
 
         this.tooltip(data_circ);
