@@ -361,3 +361,8 @@ div.tooltipLine {
     stroke: steelblue;
     stroke-width: 2.5;
 }
+
+img {
+    border: 5px solid rgb(71, 105, 1);
+}
+

@@ -70,7 +70,8 @@ class imageAnalysis {
         }
 
         this.color = d3.scaleOrdinal()
-                .range(["#e41a1c","#984ea3","#ff7f00","#999999","#f781bf"]);
+                .domain([0,4])
+                .range(["blue","orange","pink","red","gold"]);
 
         let newS = [];
 
@@ -350,7 +351,7 @@ class imageAnalysis {
             let searchVal = searchBar.property("value").toLowerCase();
             if (e.keyCode === 13 || searchVal == "") {
                 this.onSearch(searchVal,this.dataS, this.numberOfArchetypes, false);
-                that.variable_name = searchVal;
+                //that.variable_name = searchVal;
                 that.chosenIDs.push(searchVal);
                 //that.drawIds();
             }
@@ -401,12 +402,121 @@ class imageAnalysis {
         onscreenData.on("mouseout", function(d,i) {
             d3.select(this).classed("hovered",false);
             d3.selectAll(".tempCircle").remove();
-            d3.selectAll("img").remove();
+            d3.selectAll(".imgdiv").remove();
+        })
+
+        onscreenData.on("click", function(d,i) {
+            this.id = this.id.toLowerCase();
+            that.onSearch(this,that.dataS, that.numberOfArchetypes, true);
+            that.variable_name = this.id.toLowerCase();
+            that.chosenIDs.push(this.id.toLowerCase());
+            that.drawIds();
         })
 
         tooltip.transition()
         .duration(500)
         .style("opacity", 0);
+    }
+
+    onSearch(searchVal, data, numberOfArch, isTooltip) {
+        let value = searchVal;
+        if (isTooltip === true) {
+            value = value.id
+        }
+        // if (this.chosenIDs.length > 4 && ((this.chosenIDs.includes(value) !== true) ||
+        // !this.chosenIDs.includes(searchVal.id))) {
+        //     alert("Too many IDs chosen!");
+        // }
+        //else if ((this.chosenIDs.includes(value) === true)){
+        //    let index = this.chosenIDs.indexOf(value);
+        //    this.chosenIDs = this.chosenIDs.splice(index,1);
+
+        //    d3.selectAll(".tooltipCircle"+this.count).remove();
+            // is tooltip
+            //then remove the highlight from chosenID list and visually
+        //}
+        else {
+            this.count = this.count + 1;
+
+            for (let i = 0; i < numberOfArch; i++) {
+
+                if (isTooltip === false) {
+                    this.filteredData = data[i].filter(d => d.variable_name.toLowerCase().includes(searchVal));
+                }
+                else if (isTooltip === true) {
+                    let toolData = searchVal.id;
+                    toolData = toolData.toLowerCase();
+                    this.filteredData = data[i].filter(d => d.variable_name.toLowerCase().includes(toolData));
+                }
+            
+                let point = new PlotData(this.filteredData[0].value,this.filteredData[0].variable_name); 
+
+                let circles = d3.select('#circle' + i);
+
+                let circleScale = this.xScale;
+
+                let margin_top = this.margin.top;
+
+                let that = this;
+            
+                circles.append("circle")
+                .attr("cx", circleScale(point.value))
+                .attr("cy", function() {
+                    if (numberOfArch <= 3) {
+                        return 45;
+                    }
+                })
+                .attr("r", function() {
+                        return 7;
+                })
+                .classed("selectedCircle", true)
+                .attr("fill", function () {
+                    let index = that.chosenIDs.length;
+                    return that.color(index);
+                })
+                .attr("stroke", function () {
+                    let index = that.chosenIDs.length;
+                    return that.color(index);
+                })
+                .attr("id", function(d) {
+                    return point.variable_name + "";
+                })
+                .classed("tooltipCircle"+that.count, true);
+            }
+
+            if (this.timeline === true) {
+
+                let objarray = this.lineData;
+                let line = this.line;
+        
+                let itemArray = objarray.filter(key => key.id.toLowerCase() === value);
+        
+                let svg = d3.select("#svg-time");
+        
+                let lines = svg.selectAll("lines")
+                            .data(itemArray)
+                            .enter()
+                            .append("g")
+                            .attr("transform", "translate(" + 60 + "," + 0 + ")");
+
+                let that = this;
+        
+                lines.append("path")
+                     .attr("d", function(d) { return line(d.values)})
+                     .classed("timeLine", false)
+                     .attr("stroke", function () {
+                        let index = that.chosenIDs.length;
+                        return that.color(index-1);
+                     })
+                     .attr("stroke-width", 3)
+                     .attr("id", function(d) {
+                        return "selectedLine"+value;
+                     });
+            }
+        }
+        let data_circ = d3.selectAll("#oned").selectAll("circle");
+
+        this.tooltip(data_circ);
     }
 
     displayImages (circleData) {
@@ -438,12 +548,14 @@ class imageAnalysis {
 
         if (fileName) {
 
-            d3.select("#bar1").append("img")
+            d3.select("#bar1").append("img1")
+                .attr("transform", "translate(0,100)")
+                .classed("imgdiv", true)
+                .append("img")
                 .attr("id", "selectedImg")
                 .attr("src", "#")
                 .attr("width", width)
-                .attr("height", height)
-                .attr("transform", "translate(10,20)");
+                .attr("height", height);
 
             let reader = new FileReader();
 
@@ -454,21 +566,7 @@ class imageAnalysis {
 
             reader.readAsDataURL(fileName);
 
-            // reader.load = function (e) {
-            //     $('#bar1')
-            //         .attr('src', e.target.result)
-            //         .width(150)
-            //         .height(200);
-            // };
-
-            // let image = document.getElementById("bar1");
-        
-            // image.src = URL.createObjectURL(fileName);
-
-            // reader.onload = image;
-            // reader.readAsDataURL(fileName);
         }
-
 
     }
 
@@ -524,6 +622,33 @@ class imageAnalysis {
             .classed("hovered", true)
             .classed("tempCircle", true);
             }
+        }
+    }
+
+    drawIds () {
+        this.selectionActive = true;
+        let diviDs = document.getElementById("iDs")
+                while (diviDs.firstChild) {
+                    diviDs.removeChild(diviDs.firstChild);
+                }
+
+        let buttons = d3.select("#iDs")
+                        .append("g")
+                        .attr("id", "buttoniDs");
+
+        this.chosenIDs = [... new Set(this.chosenIDs)];
+
+        for (let i = 0; i < this.chosenIDs.length; i++) {
+
+                let button = d3.select('#iDs')
+                    .append("button")
+                    .attr("class", "idbutton")
+                    .classed("idButton", true)
+                    .attr("id", "" + this.chosenIDs[i] + "button")
+                    .style("margin", "5px");       
+
+                document.getElementById("" + this.chosenIDs[i]+ "button").innerHTML = this.chosenIDs[i];
+            
         }
     }
 
