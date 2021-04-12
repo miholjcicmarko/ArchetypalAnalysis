@@ -20,7 +20,6 @@ class imageAnalysis {
         this.updateArch = updateArch;
         this.timeline = data.time_data;
         this.customImplement = customImplement;
-        this.count = 0;
         this.brushOn = false;
         this.brushedData = [];
         this.imageData = imageData;
@@ -539,10 +538,12 @@ class imageAnalysis {
             reader.onload = function (e) {
                 d3.select("#selectedImg" + that.count)
                     .style("border-color", function() {
-                        if (clicked !== true) {
+                        let id = document.getElementById('selectedImg'+ that.count);
+
+                        if (id.className === "imgdiv") {
                             return "rgb(71, 105, 1)";
                         }
-                        else {
+                        else if (id.className !== "imgdiv") {
                             return that.color(that.chosenIDs.length - 1);
                         }})
                     .attr("src", e.target.result);
