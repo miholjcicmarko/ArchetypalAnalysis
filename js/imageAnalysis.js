@@ -498,7 +498,7 @@ class imageAnalysis {
         let target = "0";
 
         for (let i = 0; i < this.raw.length; i++) {
-            if (selectedFile === this.raw[i].id) {
+            if (selectedFile.toLowerCase() === this.raw[i].id.toLowerCase()) {
                 target = this.raw[i];
             }
         }
@@ -510,7 +510,7 @@ class imageAnalysis {
         let fileName; 
 
         for (let i = 0; i < this.imageData.length; i++) {
-            if (targetName === this.imageData[i].name) {
+            if (targetName.toLowerCase() === this.imageData[i].name.toLowerCase()) {
                 fileName = this.imageData[i];
             }
         }
@@ -530,6 +530,7 @@ class imageAnalysis {
 
             reader.onload = function (e) {
                 d3.select("#selectedImg")
+                    .attr("border-color", "steelblue")
                     .attr("src", e.target.result);
             }
 
