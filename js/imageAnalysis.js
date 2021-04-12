@@ -233,15 +233,15 @@ class imageAnalysis {
             }
             else if (numberOfArchetypes >= 45) {
                 oneD.attr("height", (height / numberOfArchetypes) - 3*this.margin.top
-                        - 3*this.margin.bottom);
+                        - this.margin.bottom);
             }
             else if (numberOfArchetypes >= 35) {
                 oneD.attr("height", (height / numberOfArchetypes) - 5*this.margin.top
-                        - 4*this.margin.bottom);
+                        - 3*this.margin.bottom);
             }
             else if (numberOfArchetypes >= 25) {
                 oneD.attr("height", (height / numberOfArchetypes) - 10*this.margin.top
-                        - 5*this.margin.bottom);
+                        - 4*this.margin.bottom);
             }
             else if (numberOfArchetypes >= 15) {
                 oneD.attr("height", (height / numberOfArchetypes) - 14*this.margin.top
