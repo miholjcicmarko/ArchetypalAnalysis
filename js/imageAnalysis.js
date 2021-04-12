@@ -71,7 +71,7 @@ class imageAnalysis {
 
         this.color = d3.scaleOrdinal()
                 .domain([0,4])
-                .range(["blue","orange","pink","red","gold"]);
+                .range(["blue","orange","pink","red","purple"]);
 
         let newS = [];
 
@@ -353,6 +353,7 @@ class imageAnalysis {
                 this.onSearch(searchVal,this.dataS, this.numberOfArchetypes, false);
                 //that.variable_name = searchVal;
                 that.chosenIDs.push(searchVal);
+                that.displayImages(this, true);
                 //that.drawIds();
             }
             
@@ -406,10 +407,10 @@ class imageAnalysis {
         })
 
         onscreenData.on("click", function(d,i) {
-            that.displayImages(this, true);
             this.id = this.id.toLowerCase();
             that.variable_name = this.id.toLowerCase();
             that.chosenIDs.push(this.id.toLowerCase());
+            that.displayImages(this, true);
             that.onSearch(this,that.dataS, that.numberOfArchetypes, true);
             that.drawIds();
         })
@@ -468,11 +469,11 @@ class imageAnalysis {
                 })
                 .classed("selectedCircle", true)
                 .attr("fill", function () {
-                    let index = that.chosenIDs.length;
+                    let index = that.chosenIDs.length - 1;
                     return that.color(index);
                 })
                 .attr("stroke", function () {
-                    let index = that.chosenIDs.length;
+                    let index = that.chosenIDs.length - 1;
                     return that.color(index);
                 })
                 .attr("id", function(d) {
