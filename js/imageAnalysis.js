@@ -24,7 +24,6 @@ class imageAnalysis {
         this.brushOn = false;
         this.brushedData = [];
         this.imageData = imageData;
-        this.count = 0;
 
         this.filteredData = [];
         //this.chosenVars = ["id"];
@@ -354,6 +353,7 @@ class imageAnalysis {
                 this.onSearch(searchVal,this.dataS, this.numberOfArchetypes, false);
                 //that.variable_name = searchVal;
                 that.chosenIDs.push(searchVal);
+                that.displayImages(this, true);
                 //that.drawIds();
             }
             
@@ -407,11 +407,11 @@ class imageAnalysis {
         })
 
         onscreenData.on("click", function(d,i) {
-            that.displayImages(this, true);
             this.id = this.id.toLowerCase();
             that.variable_name = this.id.toLowerCase();
             that.chosenIDs.push(this.id.toLowerCase());
             that.onSearch(this,that.dataS, that.numberOfArchetypes, true);
+            that.displayImages(this, true);
             that.drawIds();
         })
 
@@ -437,8 +437,6 @@ class imageAnalysis {
             // is tooltip
             //then remove the highlight from chosenID list and visually
         //}
-        else {
-            this.count = this.count + 1;
 
             for (let i = 0; i < numberOfArch; i++) {
 
@@ -483,14 +481,13 @@ class imageAnalysis {
                 })
                 .classed("tooltipCircle"+that.count, true);
             }
-        }
+
         let data_circ = d3.selectAll("#oned").selectAll("circle");
 
         this.tooltip(data_circ);
     }
 
     displayImages (circleData, clicked) {
-        this.count = this.count + 1;
 
         let selectedFile = circleData.id;
 
@@ -544,7 +541,7 @@ class imageAnalysis {
                             return "rgb(71, 105, 1)";
                         }
                         else {
-                            return that.color(that.count);
+                            return that.color(that.chosenIDs.length - 1);
                         }})
                     .attr("src", e.target.result);
             }

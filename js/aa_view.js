@@ -18,7 +18,7 @@ class aa_view {
         d3.select("#header-wrap").style("opacity", 1);
         d3.select(".topnav").style("opacity", 1);
         d3.select("#brushButton").style("opacity", "1");
-        document.getElementById("#submit").innerHTML = 'Submit Selected Attributes';
+        document.getElementById("submit").innerHTML = 'Submit Selected Attributes';
 
         this.XC = data.XC;
         this.S = data.S;
