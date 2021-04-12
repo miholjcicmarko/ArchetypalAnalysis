@@ -647,13 +647,18 @@ class imageAnalysis {
         this.chosenIDs = [... new Set(this.chosenIDs)];
 
         for (let i = 0; i < this.chosenIDs.length; i++) {
+                let that = this;
 
                 let button = d3.select('#iDs')
                     .append("button")
                     .attr("class", "idbutton")
                     .classed("idButton", true)
                     .attr("id", "" + this.chosenIDs[i] + "button")
-                    .style("margin", "5px");       
+                    .style("margin", "5px")
+                    .style("background-color", function() {
+                        let index = that.chosenIDs.length - 1;
+                        return that.color(index);
+                    })      
 
                 document.getElementById("" + this.chosenIDs[i]+ "button").innerHTML = this.chosenIDs[i];
             
