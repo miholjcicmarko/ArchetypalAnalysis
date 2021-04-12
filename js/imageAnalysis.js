@@ -24,6 +24,7 @@ class imageAnalysis {
         this.brushOn = false;
         this.brushedData = [];
         this.imageData = imageData;
+        this.count = 0;
 
         this.filteredData = [];
         //this.chosenVars = ["id"];
@@ -396,7 +397,7 @@ class imageAnalysis {
 
             d3.select(this).classed("hovered", true);
             that.createTempCircle(this);
-            that.displayImages(this);
+            that.displayImages(this, false);
         });
 
         onscreenData.on("mouseout", function(d,i) {
@@ -406,7 +407,7 @@ class imageAnalysis {
         })
 
         onscreenData.on("click", function(d,i) {
-            that.displayImages(this);
+            that.displayImages(this, true);
             this.id = this.id.toLowerCase();
             that.variable_name = this.id.toLowerCase();
             that.chosenIDs.push(this.id.toLowerCase());
@@ -489,6 +490,7 @@ class imageAnalysis {
     }
 
     displayImages (circleData, clicked) {
+        this.count = this.count + 1;
 
         let selectedFile = circleData.id;
 
@@ -516,9 +518,10 @@ class imageAnalysis {
         }
 
         if (fileName) {
+            let that = this;
 
-            d3.select("#bar1").append("img1")
-                .attr("transform", "translate(0,100)")
+            d3.select("#bar1")
+                .append("img")
                 .classed("imgdiv", function() {
                     if (clicked !== true) {
                         return true;
@@ -527,8 +530,7 @@ class imageAnalysis {
                         return false;
                     }
                 })
-                .append("img")
-                .attr("id", "selectedImg")
+                .attr("id", "selectedImg" + that.count)
                 .attr("src", "#")
                 .attr("width", width)
                 .attr("height", height);
@@ -536,8 +538,14 @@ class imageAnalysis {
             let reader = new FileReader();
 
             reader.onload = function (e) {
-                d3.select("#selectedImg")
-                    .style("border-color", "steelblue")
+                d3.select("#selectedImg" + that.count)
+                    .style("border-color", function() {
+                        if (clicked !== true) {
+                            return "rgb(71, 105, 1)";
+                        }
+                        else {
+                            return that.color(that.count);
+                        }})
                     .attr("src", e.target.result);
             }
 
