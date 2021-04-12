@@ -529,7 +529,14 @@ class imageAnalysis {
                         return false;
                     }
                 })
-                .attr("id", "selectedImg" + that.count) //the name isnt changed when tooltip
+                .attr("id", function () {
+                    if (clicked !== true) {
+                        return "selectedImg" + that.count + "tooltip"
+                    } 
+                    else {
+                        return "selectedImg" + that.count
+                    }
+                })
                 .attr("src", "#")
                 .attr("width", width)
                 .attr("height", height);
