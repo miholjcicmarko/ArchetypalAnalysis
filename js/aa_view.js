@@ -76,7 +76,7 @@ class aa_view {
 
         this.color = d3.scaleOrdinal()
                 .domain([0,4])
-                .range(["#e41a1c","#984ea3","#ff7f00","#999999","#f781bf"]);
+                .range(["blue","orange","pink","red","gold"]);
 
         let newS = [];
 
@@ -225,7 +225,7 @@ class aa_view {
 
             xaxis.call(d3.axisBottom(this.xScale).ticks(5))
                 .attr("transform", "translate(0,15)")
-                .attr("class", "axis_line")
+                .attr("class", "axis_line");
 
             if (numberOfArchetypes >= 6) {
                 oneD.style("font-size", "7px");
@@ -725,6 +725,8 @@ class aa_view {
         let line = this.line;
         let itemArray = null;
 
+        if (item !== false && brushed !== false) {
+
         if (brushed === undefined) {
             itemArray = objarray.filter(key => key.id.toLowerCase() === item.id.toLowerCase());
         }
@@ -740,9 +742,23 @@ class aa_view {
             itemArray = array;
         }
 
+        }
+        else if (item === false && brushed === false) {
+            let array = [];
+
+            for (let i = 0; i < objarray.length; i++) {
+                for (let j = 0; j < this.chosenIDs.length; j++) {
+                    if (objarray[i].id.toLowerCase() === this.chosenIDs[j].toLowerCase()) {
+                        array.push(objarray[i]);
+                    }
+                }
+            }
+            itemArray = array;
+        }
+
         let svg = d3.select("#svg-time");
 
-        if (brushed === undefined) {
+        if (brushed === undefined || brushed === false) {
 
         let lines = svg.selectAll("lines")
                     .data(itemArray)
@@ -752,6 +768,7 @@ class aa_view {
 
         lines.append("path")
              .attr("d", function (d) { return line(d.values)})
+             
              .classed("hoveredLine", true)
              .classed("tempLine", true)
              .attr("id", function(d) {
@@ -775,12 +792,14 @@ class aa_view {
                      .attr("id", function(d) {
                         return d.id;
                      });  
-              
-                let data_line = d3.selectAll("#timeL").selectAll(".tempLineBrush");
-
-                this.tooltip(data_line);
         }
+        let data_line = d3.selectAll("#timeL").selectAll(".tempLineBrush");
 
+        this.tooltip(data_line);
+
+        let data_line = d3.selectAll("#timeL").selectAll(".tempLine");
+
+        this.tooltip(data_line);
     }
 
     createTempCircleBrush (brushed) {
@@ -1683,6 +1702,10 @@ class aa_view {
 
         if (this.timelineActive === false) {
             d3.select("#timeL").style("opacity", 0);
+        }
+
+        if (this.chosenIDs.length > 1) {
+            this.createTempLine(false, false);
         }
     }
 
