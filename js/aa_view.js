@@ -37,6 +37,7 @@ class aa_view {
         this.timelineActive = false;
         this.dateSelected = false;
         this.date = null;
+        this.selectionActive = false;
 
         let parseTime = d3.timeParse("%Y-%m-%d");
 
@@ -567,6 +568,7 @@ class aa_view {
     }
 
     drawIds () {
+        this.selectionActive = true;
         let diviDs = document.getElementById("iDs")
                 while (diviDs.firstChild) {
                     diviDs.removeChild(diviDs.firstChild);
@@ -766,11 +768,42 @@ class aa_view {
                     .append("g")
                     .attr("transform", "translate(" + 60 + "," + 0 + ")");
 
+        let that = this;
+
+        that.linecounter = 0;
+
+        // svg.append("g")
+        //     .selectAll("g")
+        //     .data(array_of_variable_objects)
+        //     .join("g")
+        //     .attr("transform", d => `translate(${xlargeScale(d[var_id])+25},0)`)
+        //     .selectAll("rect")
+        //     .data(d => that.chosenIDs.map(key => ({key, value: d[key]})))
+        //     .join("rect")
+        //     .attr("x", d => xcatsScale(d.key) + 5)
+        //     .attr("y", function(d,i) {
+        //        that.barcounter = that.barcounter + 1;
+        //        //console.log(that.barcounter);
+        //        let scale = yScales[that.barcounter-1];
+        //        return scale(d.value);
+        //     })
+
         lines.append("path")
              .attr("d", function (d) { return line(d.values)})
-             
-             .classed("hoveredLine", true)
-             .classed("tempLine", true)
+             .attr("stroke", function (d,i) {
+                let index = 0;
+                that.linecounter = that.linecounter + 1;
+                if (that.selectionActive === true) {
+                    index = that.linecounter - 1;
+                }
+                else if (that.selectionActive === false) {
+                    index = i;
+                }
+                return that.color(index);
+             })
+             .attr("stroke-width", 2.5)
+             //.classed("hoveredLine", true)
+             //.classed("tempLine", true)
              .attr("id", function(d) {
                 return d.id;
              }); 
@@ -797,9 +830,9 @@ class aa_view {
 
         this.tooltip(data_line);
 
-        let data_line = d3.selectAll("#timeL").selectAll(".tempLine");
+        let data_line2 = d3.selectAll("#timeL").selectAll(".tempLine");
 
-        this.tooltip(data_line);
+        this.tooltip(data_line2);
     }
 
     createTempCircleBrush (brushed) {
@@ -1710,6 +1743,7 @@ class aa_view {
     }
 
     resetViz () {
+        this.selectionActive = false;
         this.filteredData = [];
         this.chosenVars = ["id"];
         this.chosenIDs = [];
