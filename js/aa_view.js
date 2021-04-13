@@ -39,6 +39,7 @@ class aa_view {
         this.dateSelected = false;
         this.date = null;
         this.selectionActive = false;
+        this.tooltipCircleON = false;
 
         let parseTime = d3.timeParse("%Y-%m-%d");
 
@@ -666,6 +667,7 @@ class aa_view {
                 d3.select(this).classed("hovered", true);
                 that.createTempCircle(this);
                 if (that.timeline === true) {
+                    that.tooltipCircleON = true;
                     that.createTempLine(this);
                 }
             }
@@ -685,6 +687,7 @@ class aa_view {
                 d3.selectAll(".tempCircle").remove();
                 if (that.timeline === true) {
                     d3.select(".tempLine").remove();
+                    that.tooltipCircleON = false;
                 }
             }
             else if (this.localName === "path") {
@@ -804,7 +807,9 @@ class aa_view {
 
         let svg = d3.select("#svg-time");
 
-        if (brushed === undefined || brushed === false && this.slection) {
+        if (brushed === undefined || brushed === false && this.selectionActive) {
+
+        if (this.tooltipCircleON === false) {
 
         let lines = svg.selectAll("lines")
                     .data(itemArray)
@@ -816,22 +821,6 @@ class aa_view {
 
         that.linecounter = 0;
 
-        // svg.append("g")
-        //     .selectAll("g")
-        //     .data(array_of_variable_objects)
-        //     .join("g")
-        //     .attr("transform", d => `translate(${xlargeScale(d[var_id])+25},0)`)
-        //     .selectAll("rect")
-        //     .data(d => that.chosenIDs.map(key => ({key, value: d[key]})))
-        //     .join("rect")
-        //     .attr("x", d => xcatsScale(d.key) + 5)
-        //     .attr("y", function(d,i) {
-        //        that.barcounter = that.barcounter + 1;
-        //        //console.log(that.barcounter);
-        //        let scale = yScales[that.barcounter-1];
-        //        return scale(d.value);
-        //     })
-
         lines.append("path")
              .attr("d", function (d) { return line(d.values)})
              .attr("stroke", function (d,i) {
@@ -841,16 +830,15 @@ class aa_view {
                     index = that.linecounter - 1;
                     return that.color(index);
                 }
-                else if (that.selectionActive === false && that.timelineActive === true) {
+                else if (that.selectionActive === false && 
+                    that.timelineActive === true) {
                     //index = that.linecounter - 1;
                     index = that.chosenIDs.length-1;
                     return that.color(index);
                 }
-                return that.color(index);
              })
              .attr("stroke-width", 2.5)
-             //.classed("hoveredLine", true)
-             //.classed("tempLine", true)
+             .classed("tempLine", true)
              .attr("id", function(d) {
                 return d.id;
              }); 
@@ -873,6 +861,27 @@ class aa_view {
                         return d.id;
                      });  
         }
+        else if (this.tooltipCircleON === true) {
+            let lines = svg.selectAll("lines")
+                    .data(itemArray)
+                    .enter()
+                    .append("g")
+                    .attr("transform", "translate(" + 60 + "," + 0 + ")");
+
+        let that = this;
+
+        lines.append("path")
+             .attr("d", function (d) { return line(d.values)})
+             .classed("hoveredLine", true)
+             .classed("tempLine", true)
+             .attr("id", function(d) {
+                return d.id;
+             }); 
+        }
+        }
+
+
+
         let data_line = d3.selectAll("#timeL").selectAll(".tempLineBrush");
 
         this.tooltip(data_line);
@@ -1629,6 +1638,10 @@ class aa_view {
                 .style("top", (pageY) + "px");
 
             d3.select(this).classed("hovered", true);
+            that.createTempCircle(this);
+            if (that.timelineActive === true) {
+                that.createTempLine(this);
+            }
         });
 
         onscreenData.on("mouseout", function(d,i) {
