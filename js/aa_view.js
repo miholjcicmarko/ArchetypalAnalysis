@@ -662,19 +662,17 @@ class aa_view {
                 .style("left", (pageX) + "px")
                 .style("top", (pageY) + "px");
 
+            if (that.chosenIDs.includes(this.id.toLowerCase())) {
+                let name = this.id.toLowerCase();
+                document.getElementById("" + name+ "button").style.backgroundColor = "rgb(71, 105, 1)";     
+            }
+            
             if (this.localName !== "path") {
                 d3.select(this).classed("hovered", true);
                 that.createTempCircle(this);
                 if (that.timeline === true) {
                     that.tooltipCircleON = true;
                     that.createTempLine(this);
-                }
-                if (that.chosenIDs.includes(this.id.toLowerCase())) {
-                    let name = this.id.toLowerCase();
-                    let button = d3.select("#dateSelect").select("" + name + "button");
-
-                    //let button = document.getElementById("" + name+ "button");
-                    //d3.select("#" + name + "button").classed("hoveredButton", true)
                 }
             }
             else if (this.localName === "path") {
@@ -683,15 +681,16 @@ class aa_view {
                     d3.select(this).classed("hoveredLine", true);
                 }
                 that.createTempCircle(this);
-                if (that.chosenIDs.includes(this.id.toLowerCase())) {
-                    let name = this.id.toLowerCase();
-                    d3.select(name + "button").classed("hoveredButton", true);
-                }
             }
 
         });
 
         onscreenData.on("mouseout", function(d,i) {
+            if (that.chosenIDs.includes(this.id.toLowerCase())) {
+                let name = this.id.toLowerCase();
+                document.getElementById("" + name+ "button").style.backgroundColor = that.color(that.chosenIDs.length - 1);     
+            }
+
             if (this.localName !== "path") {
                 d3.select(this).classed("hovered",false);
                 d3.selectAll(".tempCircle").remove();
@@ -1647,6 +1646,11 @@ class aa_view {
                 .style("left", (pageX) + "px")
                 .style("top", (pageY) + "px");
 
+            if (that.chosenIDs.includes(this.id.toLowerCase())) {
+                let name = this.id.toLowerCase();
+                document.getElementById("" + name+ "button").style.backgroundColor = "rgb(71, 105, 1)";     
+            }
+
             d3.select(this).classed("hovered", true);
             that.createTempCircle(this);
             that.tooltipCircleON = true;
@@ -1656,6 +1660,12 @@ class aa_view {
         });
 
         onscreenData.on("mouseout", function(d,i) {
+            if (that.chosenIDs.includes(this.id.toLowerCase())) {
+                let index = that.chosenIDs.indexOf(this.id.toLowerCase());
+                let name = this.id.toLowerCase();
+                document.getElementById("" + name+ "button").style.backgroundColor = that.color(index);     
+            }
+
             d3.select(this).classed("hovered",false);
 
             d3.selectAll(".tempCircle").remove();
