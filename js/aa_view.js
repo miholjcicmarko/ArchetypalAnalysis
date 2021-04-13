@@ -620,7 +620,6 @@ class aa_view {
 
                 let button = d3.select('#iDs')
                     .append("button")
-                    .attr("class", "idbutton")
                     .classed("idButton", true)
                     .attr("id", "" + this.chosenIDs[i] + "button")
                     .style("margin", "5px")
@@ -672,7 +671,10 @@ class aa_view {
                 }
                 if (that.chosenIDs.includes(this.id.toLowerCase())) {
                     let name = this.id.toLowerCase();
-                    d3.select(name + "button").classed("hoveredButton", true)
+                    let button = d3.select("#dateSelect").select("" + name + "button");
+
+                    //let button = document.getElementById("" + name+ "button");
+                    //d3.select("#" + name + "button").classed("hoveredButton", true)
                 }
             }
             else if (this.localName === "path") {
