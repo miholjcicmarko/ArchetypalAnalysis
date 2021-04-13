@@ -77,9 +77,9 @@ class aa_view {
             this.XC = math.matrix(this.XC);
         }
 
-        this.color = d3.scaleOrdinal()
-                .domain([0,4])
-                .range(["blue","orange"," #D37B23","red","#168787"]);
+        this.color = d3.scaleOrdinal(d3.schemeTableau10)
+                .domain([0,9]);
+                //.range(["blue","orange"," #D37B23","red","#168787"]);
 
         let newS = [];
 
