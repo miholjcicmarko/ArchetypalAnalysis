@@ -10,7 +10,7 @@ class imageAnalysis {
         document.getElementById("Introduction").style.zIndex = "-1";
         d3.select("#header-wrap").style("opacity", 1);
         d3.select(".topnav").style("opacity", 1);
-        d3.select("#brushButton").style("opacity", "1");
+        //d3.select("#brushButton").style("opacity", "1");
         document.getElementById("submit").innerHTML = 'Image Analysis';
 
         this.XC = data.XC;
