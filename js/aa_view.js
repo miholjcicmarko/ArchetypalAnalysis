@@ -18,7 +18,7 @@ class aa_view {
         d3.select("#header-wrap").style("opacity", 1);
         d3.select(".topnav").style("opacity", 1);
         d3.select("#brushButton").style("opacity", "1");
-        document.getElementById("submit").innerHTML = 'Submit Selected Attributes';
+        document.getElementById("submit").innerHTML = 'Submit Selected Attributes/IDs';
 
         this.XC = data.XC;
         this.S = data.S;
@@ -156,6 +156,37 @@ class aa_view {
                 that.resetViz();
             });
 
+        let chooseDataset = d3.select("#header-button");
+
+        chooseDataset.on("click", function () {
+            let div = document.getElementById("oned")
+                    while (div.firstChild) {
+                        div.removeChild(div.firstChild);
+                    }
+
+                    let divBar = document.getElementById("bar1")
+                    while (divBar.firstChild) {
+                        divBar.removeChild(divBar.firstChild);
+                    }
+
+                    let divTimeLine = document.getElementById("timeL");
+                    while (divTimeLine.firstChild) {
+                        divTimeLine.removeChild(divTimeLine.firstChild);
+                    }
+
+                    let divTimeButtons = document.getElementById("timeLButtons");
+                    while (divTimeButtons.firstChild) {
+                        divTimeButtons.removeChild(divTimeButtons.firstChild);
+                    }
+
+                    d3.select("#Introduction").style("opacity", 1);
+                    document.getElementById("Introduction").style.zIndex = "1";
+                    d3.select("#header-wrap").style("opacity", 0.1);
+                    d3.select(".topnav").style("opacity", 0.1);
+                    d3.select("#brushButton").style("opacity", "0");
+                    document.getElementById("submit").innerHTML = 'Submit Selected Attributes/IDs';
+        })
+
         if (this.timeline === true) {
             this.drawTimeLine(this.raw, this.variables[2]);
         }
@@ -164,10 +195,12 @@ class aa_view {
 
         selectRegion.on("click", function () {
             if (that.brushOn === false) {
+                document.getElementById("submit").innerHTML = 'Drag and Select Data Points';
                 that.drawBrush();
                 that.drawIds();
             }
             else if (that.brushOn === true) {
+                document.getElementById("submit").innerHTML = 'Submit Selected Attributes/IDs';
                 that.removeBrush();   
                 d3.selectAll(".brushDataTemp").remove();
                 that.drawIds();
@@ -1609,8 +1642,20 @@ class aa_view {
     }
 
     tooltipRectRender(data) {
-        let text = data.currentTarget.__data__.value;
-        return text;
+        let value = data.currentTarget.__data__.value;
+        let value_display = 0;
+        let num_value = Number(value);
+        let avg_value = num_value.toFixed(1);
+        value_display = avg_value;
+        
+        let name = data.currentTarget.__data__.key;
+
+        if (name === undefined) {
+            name = "Average";
+        }
+
+        return "<h5>" + name + "<br/>" +
+                "Value: " + value_display;
     }
 
     drawTimeLine(data, variable) { 
