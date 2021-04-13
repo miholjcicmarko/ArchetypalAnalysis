@@ -1417,12 +1417,15 @@ class aa_view {
                         //.attr("transform", "translate(" + ((i-1)*(w/(chosenVariables.length-1))+4*margin.left+10) + ",0)")
                         .attr("class", "axis_line");
                     
+                    if (that.chosenIDs.length * that.chosenVars.length < 10) {
+
                     let xaxis = svg.append("g")
                         .attr("id", "x-axis")
                         .attr("transform", "translate("+ (displace+30) +","+ (h - margin.bottom)+")")
                         //.attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(4*margin.left+10))+","+ (h-5)+")")
                         .call(d3.axisBottom(xcatsScale));
 
+                    }
 
                     if (i >= 2) {
                         displace = xcatsScale.bandwidth() * (i-1) - (xcatsScale.bandwidth()/2) - 20;
