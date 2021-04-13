@@ -670,6 +670,7 @@ class aa_view {
                     that.tooltipCircleON = true;
                     that.createTempLine(this);
                 }
+                d3.select(this.id + "button").style("background-color", "rgb(71, 105, 1)")
             }
             else if (this.localName === "path") {
                 if (that.timeline === true) {
@@ -1281,7 +1282,8 @@ class aa_view {
                return scale(0) - scale(d.value);
             })
             //.attr("height", d => yScale(0) - yScale(d.value))
-            .attr("fill", (d,i) => that.color(i));
+            .attr("fill", (d,i) => that.color(i))
+            .attr("id", (d,i) => d.key+"");
          
 
 
@@ -1619,7 +1621,6 @@ class aa_view {
 
     tooltipRect (onscreenData) {
         let that = this;
-        //more specific id
         let tooltip = d3.select('#bartip')
 
         onscreenData.on("mouseover", function(d,i) {
