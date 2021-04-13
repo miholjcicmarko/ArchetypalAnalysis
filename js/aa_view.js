@@ -809,40 +809,58 @@ class aa_view {
 
         if (brushed === undefined || brushed === false && this.selectionActive) {
 
-        if (this.tooltipCircleON === false) {
+            if (this.tooltipCircleON === false) {
 
-        let lines = svg.selectAll("lines")
+                let lines = svg.selectAll("lines")
                     .data(itemArray)
                     .enter()
                     .append("g")
                     .attr("transform", "translate(" + 60 + "," + 0 + ")");
 
-        let that = this;
+                let that = this;
 
-        that.linecounter = 0;
+                that.linecounter = 0;
 
-        lines.append("path")
-             .attr("d", function (d) { return line(d.values)})
-             .attr("stroke", function (d,i) {
-                let index = 0;
-                that.linecounter = that.linecounter + 1;
-                if (that.selectionActive === true) {
-                    index = that.linecounter - 1;
-                    return that.color(index);
-                }
-                else if (that.selectionActive === false && 
-                    that.timelineActive === true) {
-                    //index = that.linecounter - 1;
-                    index = that.chosenIDs.length-1;
-                    return that.color(index);
-                }
-             })
-             .attr("stroke-width", 2.5)
-             .classed("tempLine", true)
-             .attr("id", function(d) {
-                return d.id;
-             }); 
+                lines.append("path")
+                .attr("d", function (d) { return line(d.values)})
+                .attr("stroke", function (d,i) {
+                    let index = 0;
+                    that.linecounter = that.linecounter + 1;
+                    if (that.selectionActive === true) {
+                        index = that.linecounter - 1;
+                        return that.color(index);
+                    }
+                    else if (that.selectionActive === false && 
+                        that.timelineActive === true) {
+                        //index = that.linecounter - 1;
+                        index = that.chosenIDs.length-1;
+                        return that.color(index);
+                    }
+                })
+                .attr("stroke-width", 2.5)
+                .classed("tempLine", true)
+                .attr("id", function(d) {
+                    return d.id;
+                }); 
 
+            }
+            else if (this.tooltipCircleON === true) {
+                let lines = svg.selectAll("lines")
+                        .data(itemArray)
+                        .enter()
+                        .append("g")
+                        .attr("transform", "translate(" + 60 + "," + 0 + ")");
+    
+                let that = this;
+    
+                lines.append("path")
+                 .attr("d", function (d) { return line(d.values)})
+                 .classed("hoveredLine", true)
+                 .classed("tempLine", true)
+                 .attr("id", function(d) {
+                    return d.id;
+                 }); 
+            }
         }
         else if (brushed === true) {
 
@@ -861,26 +879,6 @@ class aa_view {
                         return d.id;
                      });  
         }
-        else if (this.tooltipCircleON === true) {
-            let lines = svg.selectAll("lines")
-                    .data(itemArray)
-                    .enter()
-                    .append("g")
-                    .attr("transform", "translate(" + 60 + "," + 0 + ")");
-
-        let that = this;
-
-        lines.append("path")
-             .attr("d", function (d) { return line(d.values)})
-             .classed("hoveredLine", true)
-             .classed("tempLine", true)
-             .attr("id", function(d) {
-                return d.id;
-             }); 
-        }
-        }
-
-
 
         let data_line = d3.selectAll("#timeL").selectAll(".tempLineBrush");
 
@@ -1639,6 +1637,7 @@ class aa_view {
 
             d3.select(this).classed("hovered", true);
             that.createTempCircle(this);
+            that.tooltipCircleON = true;
             if (that.timelineActive === true) {
                 that.createTempLine(this);
             }
@@ -1646,6 +1645,12 @@ class aa_view {
 
         onscreenData.on("mouseout", function(d,i) {
             d3.select(this).classed("hovered",false);
+
+            d3.selectAll(".tempCircle").remove();
+                if (that.timelineActive === true) {
+                    d3.select(".tempLine").remove();
+                    that.tooltipCircleON = false;
+                }
 
             tooltip.transition()
                 .duration(500)
