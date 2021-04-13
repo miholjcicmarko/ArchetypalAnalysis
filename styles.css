@@ -335,6 +335,7 @@ div.tooltip {
     fill: none;
     stroke: rgb(230, 219, 219);
     stroke-width: 3;
+    opacity: 0.5;
 }
 
 div.tooltipLine {
