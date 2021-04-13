@@ -656,7 +656,7 @@ class imageAnalysis {
                     .attr("id", "" + this.chosenIDs[i] + "button")
                     .style("margin", "5px")
                     .style("background-color", function() {
-                        let index = that.chosenIDs.length - 1;
+                        let index = i;
                         return that.color(index);
                     })      
 
