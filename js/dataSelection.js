@@ -183,6 +183,15 @@ class dataSelection {
             }
         });
 
+        let backbutton = d3.select("#backButton");
+
+        backbutton.on("click", function () {
+            d3.select("#Introduction").style("opacity", 1);
+            document.getElementById("Introduction").style.zIndex = "0";
+            
+            d3.select("#customImplement").style("opacity", 0);
+        });
+
     }
 
     newData (data) {
