@@ -670,7 +670,10 @@ class aa_view {
                     that.tooltipCircleON = true;
                     that.createTempLine(this);
                 }
-                d3.select(this.id + "button").style("background-color", "rgb(71, 105, 1)")
+                if (that.chosenIDs.includes(this.id.toLowerCase())) {
+                    let name = this.id.toLowerCase();
+                    d3.select(name + "button").classed("hoveredButton", true)
+                }
             }
             else if (this.localName === "path") {
                 if (that.timeline === true) {
@@ -678,6 +681,10 @@ class aa_view {
                     d3.select(this).classed("hoveredLine", true);
                 }
                 that.createTempCircle(this);
+                if (that.chosenIDs.includes(this.id.toLowerCase())) {
+                    let name = this.id.toLowerCase();
+                    d3.select(name + "button").classed("hoveredButton", true);
+                }
             }
 
         });
@@ -690,6 +697,7 @@ class aa_view {
                     d3.select(".tempLine").remove();
                     that.tooltipCircleON = false;
                 }
+                d3.select(name + "button").classed("hoveredButton", false);
             }
             else if (this.localName === "path") {
                 if (that.timeline === true) {
@@ -699,6 +707,7 @@ class aa_view {
                     //     d3.select(this).classed("brushedLine", true);
                     // }
                     d3.select(this).classed("hoveredLine", false);
+                    d3.select(name + "button").classed("hoveredButton", false);
                 }
                 for (let i = 0; i < that.numberOfArchetypes; i++) {
                     let circle = d3.select("#circle" + i);

@@ -299,6 +299,10 @@ div.tooltip {
     stroke-width: 3;
 }
 
+.hoveredButton {
+    background-color: "rgb(71, 105, 1)"
+}
+
 .pressed {
     background-color: rgb(255, 55, 55);
     color: white;
