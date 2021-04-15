@@ -1237,6 +1237,8 @@ class aa_view {
                     let name = this.chosenIDs[j];
                     let value = ydata[j][""+var_group_key];
                     obj[""+name] = value;
+                    let variable_name = var_group_key;
+                    obj[""+variable] = variable_name;
                 }
             }
             array_of_variable_objects.push(obj);
@@ -1320,15 +1322,23 @@ class aa_view {
                     }
 
                     if (i >= 2) {
-                        displace = xcatsScale.bandwidth() * (i-1) - (xcatsScale.bandwidth()/2) - 20;
+                        //displace = xcatsScale.bandwidth() * (i-1) - xcatsScale.bandwidth();
+                        //displace = -xcatsScale.bandwidth()
                     }        
                 
                     yaxis.append("text")
                             .text(""+chosenVariables[i])
                             .attr("class", "axis-label")
-                            .attr("font-size", "7")
+                            .attr("font-size", "6")
                             //.attr("text-anchor", "middle")
-                            .attr("transform", "translate(" + (displace-40) + "," + h/2+")rotate(-90)");
+                            .attr("transform", function () {
+                                if(i >= 2) {
+                                    return "translate(" + (-30) + "," + (h/2.5+5)+")rotate(-90)";
+                                }
+                                else if (i === 1) {
+                                    return "translate(" + (displace-35) + "," + (h/2.5+5)+")rotate(-90)";
+                                }
+                            })
                             //.attr("transform", "translate(" + (-50+((i-1))) +","+h/2+")rotate(-90)");
                     
                 }
