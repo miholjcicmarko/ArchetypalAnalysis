@@ -38,8 +38,11 @@ class aa_view {
         this.timelineActive = false;
         this.dateSelected = false;
         this.date = null;
-        this.selectionActive = false;
+        this.selectionActive = false; // selected IDs
         this.tooltipCircleON = false;
+        this.barsOn = false;
+        this.origVar = [];
+        this.origId = [];
 
         let parseTime = d3.timeParse("%Y-%m-%d");
 
@@ -112,6 +115,7 @@ class aa_view {
 
                 }
                 else if (that.brushOn === false) {
+                    that.barsOn = true;
                     that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
                 }
             })
@@ -204,6 +208,8 @@ class aa_view {
                 document.getElementById("submit").innerHTML = 'Submit Selected Attributes/IDs';
                 that.removeBrush();   
                 d3.selectAll(".brushDataTemp").remove();
+                that.chosenIDs = that.origId;
+                that.chosenVars = that.origVar;
                 that.drawIds();
             }
         });
@@ -334,7 +340,7 @@ class aa_view {
         searchBar.on("keyup", (e) => {
 
             let searchVal = searchBar.property("value").toLowerCase();
-            if (e.keyCode === 13) {
+            if (e.keyCode === 13 && e.keyCode !== "") {
                 that.variable_name = searchVal;
                 that.onSearch(searchVal,that.dataS, that.numberOfArchetypes, false);
                 that.drawIds();
@@ -347,6 +353,7 @@ class aa_view {
     let submit = d3.select("#submit");
         submit.on("click", function(d,i) {
             if (that.brushOn === false) {
+                that.barsOn = true;
                 that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
                 that.drawIds();
             }
@@ -438,6 +445,11 @@ class aa_view {
                     activeBrush = brush;
 
                     activeBrushNode = selection;
+
+                    if (that.barsOn === true) {
+                        that.origVar = that.chosenVars;
+                        that.origId = that.chosenIDs;
+                    }
                    
                 });
             brush
@@ -686,8 +698,9 @@ class aa_view {
 
         onscreenData.on("mouseout", function(d,i) {
             if (that.chosenIDs.includes(this.id.toLowerCase())) {
+                let index = that.chosenIDs.indexOf(this.id.toLowerCase());
                 let name = this.id.toLowerCase();
-                document.getElementById("" + name+ "button").style.backgroundColor = that.color(that.chosenIDs.length - 1);     
+                document.getElementById("" + name+ "button").style.backgroundColor = that.color(index);     
             }
 
             if (this.localName !== "path") {
@@ -995,6 +1008,7 @@ class aa_view {
             for (let i = 0; i < numberOfArch; i++) {
 
                 if (isTooltip === false) {
+                    searchVal = searchVal.trim();
                     this.filteredData = data[i].filter(d => d.variable_name.toLowerCase().includes(searchVal));
                 }
                 else if (isTooltip === true) {
