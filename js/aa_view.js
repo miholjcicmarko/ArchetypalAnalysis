@@ -210,6 +210,7 @@ class aa_view {
                 d3.selectAll(".brushDataTemp").remove();
                 that.chosenIDs = that.origId;
                 that.chosenVars = that.origVar;
+                that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
                 that.drawIds();
             }
         });
@@ -539,7 +540,6 @@ class aa_view {
             selectedRegion.style("background-color", "thistle");
 
         d3.selectAll('.brushes').remove();
-        this.drawIds();
     }
 
     drawVariables () {
@@ -1159,32 +1159,10 @@ class aa_view {
 
         let filteredData = this.filterObjsInArr(data, chosenVariables);
 
-        //let specificData = filteredData.filter(d => d.id.toLowerCase().includes(this.variable_name)); 
-
-
-        // let specificData = [];
-
-        // for (let k = 0; k < this.chosenIDs.length; k++) {
-        //     let filter = filteredData.filter(d => d.id.toLowerCase().includes(this.chosenIDs[k])); 
-        //     specificData.push({filter});
-        // }
-
-        // let specificData_arr = [];
-
-        // for (let k = 0; k < this.chosenIDs.length; k++) {
-        //     let object = specificData[k]["filter"][0];
-        //     specificData_arr.push(object);
-        // }
-
-        // let color = d3.scaleOrdinal()
-        //         .range(["red", "steelblue", "darkgreen", "redorange", "black"]);
-
         let rawDataVarSpecific = [];
         let yScales = [];
         let xScales = [];
-        // let ydata = [];
-        // let ydataChosenVar = [];
-
+        
         for (let i = 1; i < chosenVariables.length; i++) {
             let arrayofData = [];
 
@@ -1209,45 +1187,9 @@ class aa_view {
                           .range([0,w/(chosenVariables.length-1) - barpadding]);
             xScales.push(xScaleOne);
 
-        //     let one_chart_ydata = [];
-
-        //     for (let k = 0; k < specificData_arr.length; k++) {
-        //         let object = {id: specificData_arr[k].id,
-        //             chosenVariables[i]: parseInt(specificData_arr[k][""+chosenVariables[i]])
-        //         }
-        //         one_chart_ydata.push(object);
-        //     }
-
-        //     ydata.push(one_chart_ydata);
-
-        //     let yaxis = svg.append("g")
-        //                         .attr("id", "y-axis" + i);
-                           
-        //     yaxis.append("text")
-        //         .text(""+chosenVariables[i])
-        //         .attr("class", "axis-label")
-        //         .attr("text-anchor", "middle")
-        //         .attr("transform", "translate(" + (-60+((i-1))) +","+h/2+")rotate(-90)");
-                           
-        //     yaxis.call(d3.axisLeft(yScales[i-1]).ticks(5))
-        //          .attr("transform", "translate(" + ((i-1)*(w/(chosenVariables.length-1))+3*margin.left+10) + ",5)")
-        //          .attr("class", "axis_line");
-                   
-        //     let xaxis = svg.append("g")
-        //                     .attr("id", "x-axis")
-        //                     .attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(3*margin.left+10))+","+ h+")")
-        //                     .call(d3.axisBottom(xScales[i-1]));
-
-        //     for (let k = 1; k < chosenVariables.length; k++) {
-        //         let value = {value: parseInt(ydata[0][i][""+chosenVariables[k]])}
-        //         ydataChosenVar.push(value);
-        //     }
         }
 
-        //let rawDataVarSpecific = [];
         let ydata = [];
-        //let yScales = [];
-        //let xScales = [];
         
         for (let p = 0; p < this.chosenIDs.length; p++) {
             let specificData = filteredData.filter(d => d.id.toLowerCase().includes(this.chosenIDs[p])); 
@@ -1319,112 +1261,7 @@ class aa_view {
             //.attr("height", d => yScale(0) - yScale(d.value))
             .attr("fill", (d,i) => that.color(i))
             .attr("id", (d,i) => d.key+"");
-         
-
-
-        //Kinda
-        // for (let p = 0; p < this.chosenIDs.length; p++) {
-        //     let specificData = filteredData.filter(d => d.id.toLowerCase().includes(this.chosenIDs[p])); 
-        //     ydata.push(specificData[0]);
-        // }
-
-
-        // let barData = [];
-
-        // for (let i = 1; i < chosenVariables.length; i++) {
-        //     let barDataOneID = [];
-        //     for (let m = 0; m < this.chosenIDs.length; m++) {
-        //         let number = ydata[m][0][""+chosenVariables[i]];
-        //         barDataOneID.push(number);
-        //     }
-        //     barData.push(barDataOneID);
-            
-        //     let arrayofData = [];
-        //     for (let k = 0; k < filteredData.length; k++) {
-        //         let number = parseInt(filteredData[k][""+chosenVariables[i]])
-        //         arrayofData.push(number);
-        //     }
-        //     rawDataVarSpecific.push(arrayofData);
-
-        //     let x_var = d3.scaleBand()
-        //                   .domain(this.chosenIDs.map((d) => d[""+chosenVariables[i]]))
-        //                   .range([0,w/(chosenVariables.length-1) - barpadding])
-        //                   .padding(0.5);
-        //     xScales.push(x_var);
-
-        //     let yScaleOne = d3.scaleLinear()
-        //                        .domain([d3.max(arrayofData), 0])
-        //                        .range([0, (h-5)]);
-        //     yScales.push(yScaleOne);
-        // }
-
-        //Meh
-            // object = {id: specificData[p].id}
-
-            // for (let i = 0; i < chosenVariables.length; i++) {
-
-            //     if (chosenVariables[i] !== "id") {
-            //         object[""+chosenVariables[i]] = parseInt(specificData[p][""+chosenVariables[i]]);   
-        
-            //         let arrayofData = [];
-
-            //         for (let k = 0; k < filteredData.length; k++) {
-            //             let number = parseInt(filteredData[k][""+chosenVariables[i]])
-            //             arrayofData.push(number);
-            //         }
-            //         rawDataVarSpecific.push(arrayofData);
-            //     }
-            // }
-            // ydata.push(object); 
-            
-        //         let x_lab = [];
-        //         let yScale = [];
-
-        //         for (let i = 1; i < chosenVariables.length; i++) {
-        //             let x_var = d3.scaleBand()
-        //                   .domain(["" + this.variable_name])
-        //                   .range([0,w/(chosenVariables.length-1) - barpadding]);
-        //             x_lab.push(x_var);
-
-        //             let arrayRaw = rawDataVarSpecific[i-1];
-
-        //             let yScaleOne = d3.scaleLinear()
-        //                        .domain([d3.max(arrayRaw), 0])
-        //                        .range([0, (h-5)]);
-        //             yScale.push(yScaleOne);
-        //         }
-        // }
-
-        // let that = this;
-
-        // for (let i = 0; i < yScales.length; i++) {
-        //     let that = this;
-
-        //     let data = barData[i];
-
-        //     svg.selectAll()
-        //         .data(data)
-        //         .enter()
-        //         .append("g")
-        //         .append("rect")
-        //         .attr("x", function (d,i) {
-        //             return d => xScales(d.id);
-        //             //i * (w/(chosenVariables.length));
-        //         })
-        //         .attr("y", function(d,i) {
-        //             let scale = yScales[i];
-        //             return scale(d);
-        //         })
-        //         .attr("width", w/(that.chosenIDs.length) - barpadding)
-        //         .attr("height", function(d,i) {
-        //             let scale = yScales[i];
-        //             return h-scale(d);
-        //         })
-        //         .attr("fill","orangered")
-        //         .attr("transform", "translate(70,0)");
-        // }
-
-        
+     
 //GOOOD AREA
             for (let i = 0; i < chosenVariables.length; i++) {
 
@@ -1583,6 +1420,17 @@ class aa_view {
 
             let yscales = yScales;
 
+            let na_true = false;
+
+            for (let k = 0; k < currData.length; k++) {
+                if (Object.is(currData[k].value, NaN)) {
+                    na_true = true;
+                    break;
+                }
+            }
+
+            if (na_true === false) {
+
             svg.selectAll()
                 .data(currData)
                 .enter()
@@ -1602,6 +1450,8 @@ class aa_view {
                 })
                 .attr("fill","steelblue")
                 .attr("transform", "translate(" +((i)*(w/(chosenVariables.length-1))+3*margin.left+10)+",0)");
+        
+            }
         }
         }
 
