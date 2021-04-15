@@ -334,10 +334,9 @@ class aa_view {
         searchBar.on("keyup", (e) => {
 
             let searchVal = searchBar.property("value").toLowerCase();
-            if (e.keyCode === 13 || searchVal == "") {
-                this.onSearch(searchVal,this.dataS, this.numberOfArchetypes, false);
+            if (e.keyCode === 13) {
                 that.variable_name = searchVal;
-                that.chosenIDs.push(searchVal);
+                that.onSearch(searchVal,that.dataS, that.numberOfArchetypes, false);
                 that.drawIds();
             }
             
@@ -724,9 +723,11 @@ class aa_view {
         onscreenData.on("click", function(d,i) {
             this.id = this.id.toLowerCase();
             that.variable_name = this.id.toLowerCase();
-            that.chosenIDs.push(this.id.toLowerCase());
-            that.onSearch(this,that.dataS, that.numberOfArchetypes, true);
-            that.drawIds();
+            if (!that.chosenIDs.includes(this.id)) {
+                that.chosenIDs.push(this.id.toLowerCase());
+                that.onSearch(this,that.dataS, that.numberOfArchetypes, true);
+                that.drawIds();
+            }
         })
 
     }
@@ -1002,6 +1003,12 @@ class aa_view {
                     this.filteredData = data[i].filter(d => d.variable_name.toLowerCase().includes(toolData));
                 }
             
+                if (!this.chosenIDs.includes(this.filteredData[0].variable_name)) {
+
+                this.chosenIDs.push(this.filteredData[0].variable_name.toLowerCase());
+
+                this.chosenIDs = [...new Set(this.chosenIDs)];
+
                 let point = new PlotData(this.filteredData[0].value,this.filteredData[0].variable_name); 
 
                 let circles = d3.select('#circle' + i);
@@ -1046,6 +1053,7 @@ class aa_view {
                     return point.variable_name + "";
                 })
                 .classed("tooltipCircle"+that.count, true);
+            }
             }
 
             if (this.timeline === true && this.timelineActive === true) {
