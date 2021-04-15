@@ -1493,7 +1493,8 @@ class aa_view {
                     return h-scale(d.value);
                 })
                 .attr("fill","steelblue")
-                .attr("transform", "translate(" +((i)*(w/(chosenVariables.length-1))+3*margin.left+10)+",0)");
+                .attr("transform", "translate(" +(i*(w/(chosenVariables.length-1))+
+                (xScales[i].bandwidth()/2-(w/(that.chosenVars.length) - barpadding)/2))+",0)");
         
             }
         }
