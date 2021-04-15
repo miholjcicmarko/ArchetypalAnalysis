@@ -1335,8 +1335,11 @@ class aa_view {
                                 if(i >= 2) {
                                     return "translate(" + (-30) + "," + (h/2.5+5)+")rotate(-90)";
                                 }
-                                else if (i === 1) {
+                                else if (i === 1 && chosenVariables.length > 2) {
                                     return "translate(" + (displace-35) + "," + (h/2.5+5)+")rotate(-90)";
+                                }
+                                else if (i === 1 && chosenVariables.length === 2) {
+                                    return "translate(" + (displace-95) + "," + (h/2.5+5)+")rotate(-90)";
                                 }
                             })
                             //.attr("transform", "translate(" + (-50+((i-1))) +","+h/2+")rotate(-90)");
@@ -1456,7 +1459,8 @@ class aa_view {
             let that = this;
 
             let currData = [{id: "average",
-                            value: barData[i]}];
+                            value: barData[i], 
+                            variable_name: chosenVariables[i+1]}];
 
             let yscales = yScales;
 
