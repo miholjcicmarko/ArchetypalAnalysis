@@ -265,8 +265,8 @@ input:checked + .slider:before {
 div.tooltip {
     position: absolute;
     text-align: center;
-    min-width: 5%;
-    min-height: 5%;
+    min-width: 2%;
+    min-height: 2%;
     padding: 2px;
     stroke: gray;
     border-radius: 6px;
@@ -275,7 +275,27 @@ div.tooltip {
     font-weight: bold;
 }
 
+div.tooltipRect {
+    position: absolute;
+    text-align: center;
+    min-width: 2%;
+    min-height: 2%;
+    padding: 2px;
+    background: white;
+    stroke: gray;
+    border-radius: 6px;
+    pointer-events: none;
+    margin: auto;
+    font-weight: bold;
+}
+
 .tooltip h5 {
+    margin: auto;
+    font: 12px sans-serif;
+    font-weight: bold;
+}
+
+.tooltipRect h5 {
     margin: auto;
     font: 12px sans-serif;
     font-weight: bold;

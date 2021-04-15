@@ -1168,7 +1168,7 @@ class aa_view {
         d3.select('#bar1')
             .append('div')
             .attr("id", "bartip")
-            .attr("class", "tooltip")
+            .attr("class", "tooltipRect")
             .style("opacity", 0);
 
         let numberOfArch = this.numberOfArchetypes;
@@ -1238,7 +1238,7 @@ class aa_view {
                     let value = ydata[j][""+var_group_key];
                     obj[""+name] = value;
                     let variable_name = var_group_key;
-                    obj[""+variable] = variable_name;
+                    obj[""+variable_name] = variable_name;
                 }
             }
             array_of_variable_objects.push(obj);
@@ -1273,7 +1273,7 @@ class aa_view {
             .join("g")
             .attr("transform", d => `translate(${xlargeScale(d[var_id])+25},0)`)
             .selectAll("rect")
-            .data(d => that.chosenIDs.map(key => ({key, value: d[key]})))
+            .data(d => that.chosenIDs.map(key => ({key, value: d[key], variable_name: d["var"]})))
             .join("rect")
             .attr("x", d => xcatsScale(d.key) + 5)
             .attr("y", function(d,i) {
@@ -1605,6 +1605,7 @@ class aa_view {
         let num_value = Number(value);
         let avg_value = num_value.toFixed(1);
         value_display = avg_value;
+        let variable_name = data.currentTarget.__data__.variable_name;
         
         let name = data.currentTarget.__data__.key;
 
@@ -1612,7 +1613,8 @@ class aa_view {
             name = "Average";
         }
 
-        return "<h5>" + name + "<br/>" +
+        return "<h5>" + "ID:" + name + "<br/>" +
+                "Attribute: " + variable_name + "<br/>" +
                 "Value: " + value_display;
     }
 
