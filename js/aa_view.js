@@ -146,6 +146,11 @@ class aa_view {
                     while (divTimeButtons.firstChild) {
                         divTimeButtons.removeChild(divTimeButtons.firstChild);
                     }
+
+                    let diviDs = document.getElementById("iDs")
+                    while (diviDs.firstChild) {
+                        diviDs.removeChild(diviDs.firstChild);
+                    }
                 
                     that.updateArch(number, "same");
                 }
@@ -199,10 +204,16 @@ class aa_view {
         let selectRegion = d3.select("#brushButton");
 
         selectRegion.on("click", function () {
+            that.origVar= that.chosenVars;
             if (that.brushOn === false) {
-                document.getElementById("submit").innerHTML = 'Drag and Select Data Points';
-                that.drawBrush();
-                that.drawIds();
+                if (that.chosenVars.length > 1) {
+                    that.drawBrush();
+                    that.drawIds();
+                    document.getElementById("submit").innerHTML = 'Drag and Select ID Points';
+                }
+                else {
+                    alert("Select One or More Attributes");
+                }
             }
             else if (that.brushOn === true) {
                 document.getElementById("submit").innerHTML = 'Submit Selected Attributes/IDs';
@@ -210,8 +221,23 @@ class aa_view {
                 d3.selectAll(".brushDataTemp").remove();
                 that.chosenIDs = that.origId;
                 that.chosenVars = that.origVar;
-                that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
-                that.drawIds();
+                if (that.chosenIDs.length === 0) {
+                    alert("Select ID/IDs");
+                    let divBar = document.getElementById("bar1")
+                        while (divBar.firstChild) {
+                            divBar.removeChild(divBar.firstChild);
+                        }
+
+                    let diviDs = document.getElementById("iDs")
+                        while (diviDs.firstChild) {
+                            diviDs.removeChild(diviDs.firstChild);
+                        }
+                    
+                }
+                else if (that.chosenIDs.length > 0) {
+                    that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
+                    that.drawIds();
+                }
             }
         });
     }
@@ -341,7 +367,7 @@ class aa_view {
         searchBar.on("keyup", (e) => {
 
             let searchVal = searchBar.property("value").toLowerCase();
-            if (e.keyCode === 13 && e.keyCode !== "") {
+            if (e.keyCode === 13 && searchVal !== "") {
                 that.variable_name = searchVal;
                 that.onSearch(searchVal,that.dataS, that.numberOfArchetypes, false);
                 that.drawIds();
@@ -355,8 +381,13 @@ class aa_view {
         submit.on("click", function(d,i) {
             if (that.brushOn === false) {
                 that.barsOn = true;
-                that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
-                that.drawIds();
+                if (that.chosenIDs.length !== 0) {
+                    that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
+                    that.drawIds();
+                }
+                else {
+                    alert("Select ID/IDs");
+                }
             }
             else if (that.brushOn === true) {
                 that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
@@ -426,6 +457,10 @@ class aa_view {
         let that = this;
         let activeBrush = null;
         let activeBrushNode = null;
+        if (that.barsOn === true) {
+            that.origVar = that.chosenVars;
+            that.origId = that.chosenIDs;
+        }
 
         brush_chart.each(function() {
             let selectionThis = this;
@@ -446,11 +481,6 @@ class aa_view {
                     activeBrush = brush;
 
                     activeBrushNode = selection;
-
-                    if (that.barsOn === true) {
-                        that.origVar = that.chosenVars;
-                        that.origId = that.chosenIDs;
-                    }
                    
                 });
             brush
@@ -1734,6 +1764,16 @@ class aa_view {
                 while (divBar.firstChild) {
                     divBar.removeChild(divBar.firstChild);
                 }
+
+        let diviDs = document.getElementById("iDs")
+                while (diviDs.firstChild) {
+                    diviDs.removeChild(diviDs.firstChild);
+                }
+
+        if (this.brushOn === true) {
+            this.brushOn = false;
+            this.removeBrush();
+        }
         
         this.drawCircleChart(this.numberOfArchetypes);
     }
