@@ -47,7 +47,12 @@ class aa_view {
         let parseTime = d3.timeParse("%Y-%m-%d");
 
         if (this.timeline === true) {
-            let dates = [...this.raw];
+            let dataTime = [];
+            for (let i = 0; i < this.raw.length; i++) {
+                let datapoint = {...this.raw[i]};
+                dataTime.push(datapoint);
+            }
+            let dates = dataTime;
             let date1 = dates[0]["date"];
             let date2 = dates[dates.length - 1]["date"];
             let date1D = 0;
@@ -1156,7 +1161,14 @@ class aa_view {
                     divBar.removeChild(divBar.firstChild);
                 }
         
-        let data = [...rawData];
+        let dataTime = [];
+
+        for (let i = 0; i < rawData.length; i++) {
+            let datapoint = {...rawData[i]};
+            dataTime.push(datapoint);
+        }
+        
+        let data = dataTime;
         
         if (timeSeries === true) {
             let filteredDateData = [];
@@ -1237,7 +1249,9 @@ class aa_view {
         
         for (let p = 0; p < this.chosenIDs.length; p++) {
             let specificData = filteredData.filter(d => d.id.toLowerCase().includes(this.chosenIDs[p])); 
-            ydata.push(specificData[0]);
+            if (specificData[0] !== undefined) {
+                ydata.push(specificData[0]);
+            }
         }
 
         let variables = chosenVariables.slice(1);
@@ -1256,6 +1270,15 @@ class aa_view {
                 }
             }
             array_of_variable_objects.push(obj);
+        }
+
+        for (let i = 0; i < this.chosenIDs.length; i++) {
+            let name = this.chosenIDs[i];
+            for (let j = 0; j < this.chosenVars.length; j++) {
+                if (array_of_variable_objects[j]["" + name] === undefined) {
+                    array_of_variable_objects[j]["" + name] = 0;
+                }
+            }
         }
 
         let var_id = "var";
@@ -1701,8 +1724,8 @@ class aa_view {
 
                     let newValuesArray = [];
 
-                    for (let p = 0; p < dataTime.length; p++) {
-                        if (uniqueID_arr[k] === dataTime[p].id) {
+                    for (let p = 0; p < data.length; p++) {
+                        if (uniqueID_arr[k] === data[p].id) {
                             let values = {};
                             let date = dataTime[p].date;
                             let number = dataTime[p][""+variable];
@@ -1731,7 +1754,7 @@ class aa_view {
         this.lineData = newObjArray;
 
         let xScale = d3.scaleTime()
-                        .domain(d3.extent(data, function(d) {
+                        .domain(d3.extent(dataTime, function(d) {
                             return d.date;
                         }))
                         .range([0, w-50]);
