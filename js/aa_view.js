@@ -382,6 +382,17 @@ class aa_view {
     
     let that = this;
 
+    let submitButton = d3.select("#submitMagniGlass");
+
+    submitButton.on("click", function (d,i) {
+        let searchVal = searchBar.property("value").toLowerCase();
+            if (searchVal !== "") {
+                that.variable_name = searchVal;
+                that.onSearch(searchVal,that.dataS, that.numberOfArchetypes, false);
+                that.drawIds();
+            }
+    })
+
     let searchBar = d3.select("#search-bar");
         searchBar.on("keyup", (e) => {
 
@@ -651,6 +662,7 @@ class aa_view {
             buttons.on("click", function (d) {
                 that.addChosenVar(d);
                 that.chosenVars.push(d.srcElement.id);
+                that.chosenVars = [... new Set(that.chosenVars)];
             })
         }
     }
@@ -1274,9 +1286,9 @@ class aa_view {
 
         for (let i = 0; i < this.chosenIDs.length; i++) {
             let name = this.chosenIDs[i];
-            for (let j = 0; j < this.chosenVars.length; j++) {
-                if (array_of_variable_objects[j]["" + name] === undefined) {
-                    array_of_variable_objects[j]["" + name] = 0;
+            for (let j = 1; j < this.chosenVars.length; j++) {
+                if (array_of_variable_objects[j-1]["" + name] === undefined) {
+                    array_of_variable_objects[j-1]["" + name] = 0;
                 }
             }
         }
@@ -1667,7 +1679,7 @@ class aa_view {
             name = "Average";
         }
 
-        return "<h5>" + "ID:" + name + "<br/>" +
+        return "<h5>" + "ID: " + name + "<br/>" +
                 "Attribute: " + variable_name + "<br/>" +
                 "Value: " + value_display;
     }
