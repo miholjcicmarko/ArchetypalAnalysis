@@ -1792,6 +1792,8 @@ class aa_view {
                 divTimeButtons.removeChild(divTimeButtons.firstChild);
             }
             this.date = this.origDate;
+
+            document.getElementById("dateInput").value = this.date;
         }
 
 
