@@ -75,6 +75,8 @@ class aa_view {
 
         }
 
+        this.origDate = this.date;
+
         if (this.customImplement === true) {
             this.S = math.matrix(this.S);
             this.XC = math.matrix(this.XC);
@@ -1494,7 +1496,7 @@ class aa_view {
                 })
                 .attr("fill","steelblue")
                 .attr("transform", "translate(" +(i*(w/(chosenVariables.length-1))+
-                (xScales[i].bandwidth()/2-(w/(that.chosenVars.length) - barpadding)/2))+",0)");
+                (xScales[i].bandwidth()/2-(w/(that.chosenVars.length) - barpadding)/2)+30)+",0)");
         
             }
         }
@@ -1503,27 +1505,39 @@ class aa_view {
         for (let i = 0; i < chosenVariables.length; i++) {
 
             if (chosenVariables[i] !== "id") {
-                   
+
                 let yaxis = svg.append("g")
                             .attr("id", "y-axis" + i);
 
                 yaxis.call(d3.axisLeft(yScales[i-1]).ticks(5))
                     //.attr("transform", "translate(" + (displace+20) + ",0)")
-                    .attr("transform", "translate(" + ((i-1)*(w/(chosenVariables.length-1))+3*margin.left+10) + ",0)")
+                    .attr("transform", "translate(" + ((i-1)*(w/(chosenVariables.length-1))+3*margin.left+40) + ",0)")
+                    //.attr("transform", "translate(" + (20) + ",0)")
                     .attr("class", "axis_line");
                 
                 let xaxis = svg.append("g")
                     .attr("id", "x-axis")
                     //.attr("transform", "translate("+ (displace+20) +","+ (h - margin.bottom)+")")
-                    .attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(3*margin.left+10))+","+ (h)+")")
+                    .attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(3*margin.left+40))+","+ (h)+")")
                     .call(d3.axisBottom(xScales[i-1])); 
             
                 yaxis.append("text")
                         .text(""+chosenVariables[i])
                         .attr("class", "axis-label")
+                        .attr("transform", function () {
+                            if(i >= 2) {
+                                return "translate(" + (-30) + "," + (h/2.5+5)+")rotate(-90)";
+                            }
+                            else if (i === 1 && chosenVariables.length > 2) {
+                                return "translate(" + (-35) + "," + (h/2.5+5)+")rotate(-90)";
+                            }
+                            else if (i === 1 && chosenVariables.length === 2) {
+                                return "translate(" + (-95) + "," + (h/2.5+5)+")rotate(-90)";
+                            }
+                        })
                         //.attr("text-anchor", "middle")
                         //.attr("transform", "translate(" + (displace-35) + "," + h/2+")rotate(-90)");
-                        .attr("transform", "translate(" + (-50+((i-1))) +","+h/2+")rotate(-90)");
+                        //.attr("transform", "translate(" + (-50+((i-1))) +","+h/2+")rotate(-90)");
                 
             }
         }
@@ -1767,6 +1781,21 @@ class aa_view {
     }
 
     resetViz () {
+        if (this.timeline === true) {
+            let divTimeL = document.getElementById("timeL")
+                while (divTimeL.firstChild) {
+                    divTimeL.removeChild(divTimeL.firstChild);
+                }
+
+            let divTimeButtons = document.getElementById("timeLButtons")
+            while (divTimeButtons.firstChild) {
+                divTimeButtons.removeChild(divTimeButtons.firstChild);
+            }
+            this.date = this.origDate;
+        }
+
+
+
         this.selectionActive = false;
         this.filteredData = [];
         this.chosenVars = ["id"];
