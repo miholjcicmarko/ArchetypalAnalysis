@@ -153,6 +153,18 @@ class aa_view {
                     while (diviDs.firstChild) {
                         diviDs.removeChild(diviDs.firstChild);
                     }
+
+                    if (this.timeline === true) {
+                        let divTimeL = document.getElementById("timeL")
+                            while (divTimeL.firstChild) {
+                                divTimeL.removeChild(divTimeL.firstChild);
+                            }
+            
+                        let divTimeButtons = document.getElementById("timeLButtons")
+                        while (divTimeButtons.firstChild) {
+                            divTimeButtons.removeChild(divTimeButtons.firstChild);
+                        }
+                    }
                 
                     that.updateArch(number, "same");
                 }
@@ -1638,7 +1650,13 @@ class aa_view {
     }
 
     drawTimeLine(data, variable) { 
-        let dataTime = [...data];
+        let dataTime = [];
+        for (let i = 0; i < data.length; i++) {
+            let datapoint = {...data[i]};
+            dataTime.push(datapoint);
+        }
+
+        //let dataTime = [...data];
 
         if (this.timelineActive === true) {
             d3.select("#svg-time").remove();
@@ -1651,7 +1669,7 @@ class aa_view {
 
         let parseTime = d3.timeParse("%Y-%m-%d");
 
-        if (this.timelineActive === false) {
+        //if (this.timelineActive === false) {
             if ((typeof dataTime[0]["date"]) !== "object") {
                 dataTime.forEach(function(d) {
                     d.date = parseTime(d.date);
@@ -1662,7 +1680,7 @@ class aa_view {
                 .append('div')
                 .attr("class", "tooltip")
                 .style("opacity", 0);
-        }
+        //}
 
         let uniqueID_arr = [];
 
@@ -1677,17 +1695,17 @@ class aa_view {
         for (let k = 0; k < uniqueID_arr.length; k++) {
             let newObj = {};
             for (let i = 0; i < dataTime.length; i++) {
-                if (uniqueID_arr[k] === data[i].id) {
-                    let id = data[i].id;
+                if (uniqueID_arr[k] === dataTime[i].id) {
+                    let id = dataTime[i].id;
                     newObj["id"] = id;
 
                     let newValuesArray = [];
 
-                    for (let p = 0; p < data.length; p++) {
-                        if (uniqueID_arr[k] === data[p].id) {
+                    for (let p = 0; p < dataTime.length; p++) {
+                        if (uniqueID_arr[k] === dataTime[p].id) {
                             let values = {};
-                            let date = data[p].date;
-                            let number = data[p][""+variable];
+                            let date = dataTime[p].date;
+                            let number = dataTime[p][""+variable];
                             number = parseInt(number);
                             values["date"] = date;
                             values["number"] = number;
@@ -1795,8 +1813,6 @@ class aa_view {
 
             document.getElementById("dateInput").value = this.date;
         }
-
-
 
         this.selectionActive = false;
         this.filteredData = [];
