@@ -1412,8 +1412,15 @@ class aa_view {
                     divBar.removeChild(divBar.firstChild);
                 }
         
-        let data = [...raw];
-        
+        let dataTime = [];
+
+        for (let i = 0; i < raw.length; i++) {
+            let datapoint = {...raw[i]};
+            dataTime.push(datapoint);
+        }
+                
+        let data = dataTime;
+
         if (timeSeries === true) {
             let filteredDateData = [];
 
@@ -1476,7 +1483,12 @@ class aa_view {
         for (let i = 1; i < chosenVariables.length; i++) {
             let barDataAvg = 0;
             for (let m = 0; m < this.chosenIDs.length; m++) {
-                barDataAvg = barDataAvg + Number(ydata[m][""+chosenVariables[i]]);
+                if (ydata[m] !== undefined) {
+                    barDataAvg = barDataAvg + Number(ydata[m][""+chosenVariables[i]]);
+                } 
+                else {
+                    barDataAvg = barDataAvg + 0;
+                }
             }
             barDataAvg = barDataAvg/this.chosenIDs.length;
             barData.push(barDataAvg);
@@ -1524,6 +1536,9 @@ class aa_view {
 
             if (na_true === false) {
 
+            that.barcounter = 0;
+            that.barcounter2 = 0;
+
             svg.selectAll()
                 .data(currData)
                 .enter()
@@ -1533,13 +1548,19 @@ class aa_view {
                     return ((i)*(w/(chosenVariables.length-1))+3*margin.left+10);
                 })
                 .attr("y", function(d,i) {
-                    let scale = yscales[i];
-                    return scale(d.value);
+                    that.barcounter = that.barcounter + 1;
+                    //console.log(that.barcounter);
+                    let scale = yScales[that.barcounter-1];
+                    return h - scale(d.value);
                 })
                 .attr("width", w/(that.chosenVars.length) - barpadding)
                 .attr("height", function(d,i) {
-                    let scale = yscales[i];
-                    return h-scale(d.value);
+                    that.barcounter = that.barcounter + 1;
+                    //console.log(that.barcounter);
+                    let scale = yScales[that.barcounter-1];
+                    return h - scale(d.value);
+                    //let scale = yscales[i];
+                    //return h-scale(d.value);
                 })
                 .attr("fill","steelblue")
                 .attr("transform", "translate(" +(i*(w/(chosenVariables.length-1))+
