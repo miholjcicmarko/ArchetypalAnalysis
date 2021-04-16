@@ -1536,8 +1536,8 @@ class aa_view {
 
             if (na_true === false) {
 
-            that.barcounter = 0;
-            that.barcounter2 = 0;
+            that.barcounter3 = 0;
+            that.barcounter4 = 0;
 
             svg.selectAll()
                 .data(currData)
@@ -1548,16 +1548,16 @@ class aa_view {
                     return ((i)*(w/(chosenVariables.length-1))+3*margin.left+10);
                 })
                 .attr("y", function(d,i) {
-                    that.barcounter = that.barcounter + 1;
+                    that.barcounter3 = that.barcounter3 + 1;
                     //console.log(that.barcounter);
-                    let scale = yScales[that.barcounter-1];
+                    let scale = yScales[that.barcounter3-1];
                     return h - scale(d.value);
                 })
                 .attr("width", w/(that.chosenVars.length) - barpadding)
                 .attr("height", function(d,i) {
-                    that.barcounter = that.barcounter + 1;
+                    that.barcounter4 = that.barcounter4 + 1;
                     //console.log(that.barcounter);
-                    let scale = yScales[that.barcounter-1];
+                    let scale = yScales[that.barcounter4-1];
                     return h - scale(d.value);
                     //let scale = yscales[i];
                     //return h-scale(d.value);
