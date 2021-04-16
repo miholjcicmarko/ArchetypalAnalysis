@@ -63,6 +63,7 @@ class aa_view {
                 document.getElementById("dateInput").value = date2;
                 document.getElementById("dateInput").min = date2;
                 document.getElementById("dateInput").max = date1;
+                this.origDate = date2;
                 this.date = date2D;
             }
             else if (date2D > date1D || date2 > date1) {
@@ -70,12 +71,11 @@ class aa_view {
                 document.getElementById("dateInput").value = date1;
                 document.getElementById("dateInput").min = date1;
                 document.getElementById("dateInput").max = date2;
+                this.origDate = date1;
                 this.date = date1D;
             }
 
         }
-
-        this.origDate = this.date;
 
         if (this.customImplement === true) {
             this.S = math.matrix(this.S);
