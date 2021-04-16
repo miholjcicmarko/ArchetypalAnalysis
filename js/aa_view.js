@@ -1535,7 +1535,7 @@ class aa_view {
             }
 
             if (na_true === false) {
-
+                //work on this
             that.barcounter3 = 0;
             that.barcounter4 = 0;
 
