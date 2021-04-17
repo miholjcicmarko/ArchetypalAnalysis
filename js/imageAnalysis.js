@@ -855,7 +855,6 @@ class imageAnalysis {
                     })      
 
                 document.getElementById("" + this.chosenIDs[i]+ "button").innerHTML = this.chosenIDs[i];
-            
         }
     }
 
