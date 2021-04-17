@@ -217,9 +217,9 @@ class aa_view {
                     document.getElementById("submit").innerHTML = 'Submit Selected Attributes/IDs';
         })
 
-        if (this.timeline === true) {
-            this.drawTimeLine(this.raw, this.variables[2]);
-        }
+        // if (this.timeline === true) {
+        //     this.drawTimeLine(this.raw, this.variables[2]);
+        // }
 
         let selectRegion = d3.select("#brushButton");
 
@@ -230,6 +230,7 @@ class aa_view {
                     that.drawBrush();
                     that.drawIds();
                     document.getElementById("submit").innerHTML = 'Drag and Select ID Points';
+                    d3.selectAll(".tempLine").remove();
                 }
                 else {
                     alert("Select One or More Attributes");
@@ -241,8 +242,8 @@ class aa_view {
                 d3.selectAll(".brushDataTemp").remove();
                 that.chosenIDs = that.origId;
                 that.chosenVars = that.origVar;
-                if (that.chosenIDs.length === 0) {
-                    alert("Select ID/IDs");
+                //if (that.chosenIDs.length === 0) {
+                    //alert("Select ID/IDs");
                     let divBar = document.getElementById("bar1")
                         while (divBar.firstChild) {
                             divBar.removeChild(divBar.firstChild);
@@ -253,11 +254,11 @@ class aa_view {
                             diviDs.removeChild(diviDs.firstChild);
                         }
                     
-                }
-                else if (that.chosenIDs.length > 0) {
+                //}
+                //else if (that.chosenIDs.length > 0) {
                     that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
                     that.drawIds();
-                }
+                //}
             }
         });
     }
@@ -484,14 +485,16 @@ class aa_view {
     }
 
     brush(svg, brush_chart, brush_width, brush_height) {
+        d3.selectAll(".tempLine").remove();
+        
         this.brushOn = true;
         let that = this;
         let activeBrush = null;
         let activeBrushNode = null;
-        if (that.barsOn === true) {
-            that.origVar = that.chosenVars;
-            that.origId = that.chosenIDs;
-        }
+        //if (that.barsOn === true) {
+        that.origVar = that.chosenVars;
+        that.origId = that.chosenIDs;
+        //}
 
         brush_chart.each(function() {
             let selectionThis = this;
@@ -913,19 +916,30 @@ class aa_view {
                 .attr("stroke", function (d,i) {
                     let index = 0;
                     that.linecounter = that.linecounter + 1;
-                    if (that.selectionActive === true) {
+                    if (that.selectionActive === true && that.brushOn === false) {
                         index = that.linecounter - 1;
                         return that.color(index);
                     }
                     else if (that.selectionActive === false && 
-                        that.timelineActive === true) {
+                        that.timelineActive === true && that.brushOn === false) {
                         //index = that.linecounter - 1;
                         index = that.chosenIDs.length-1;
                         return that.color(index);
                     }
+                    else if (that.brushOn === true) {
+                        return "steelblue";
+                    }
                 })
                 .attr("stroke-width", 2.5)
                 .classed("tempLine", true)
+                .classed("tempLineBrush", function () {
+                    if (that.brushOn === true) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                })
                 .attr("id", function(d) {
                     return d.id;
                 })
