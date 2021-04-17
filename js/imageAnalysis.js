@@ -177,17 +177,211 @@ class imageAnalysis {
 
         // let selectRegion = d3.select("#brushButton");
 
-        // selectRegion.on("click", function () {
-        //     if (that.brushOn === false) {
-        //         that.drawBrush();
-        //         that.drawIds();
-        //     }
-        //     else if (that.brushOn === true) {
-        //         that.removeBrush();   
-        //         d3.selectAll(".brushDataTemp").remove();
-        //         that.drawIds();
-        //     }
-        // });
+        selectRegion.on("click", function () {
+            that.origVar = that.chosenVars;
+            if (that.brushOn === false) {
+                //if (that.chosenVars.length > 1) {
+                    that.drawBrush();
+                    that.drawIds();
+                    document.getElementById("submit").innerHTML = 'Drag and Select ID Points';
+                //}
+            }
+            else if (that.brushOn === true) {
+                document.getElementById("submit").innerHTML = 'Image Analysis';
+                that.removeBrush();   
+                d3.selectAll(".brushDataTemp").remove();
+                that.chosenIDs = that.origId;
+                that.chosenVars = that.origVar;
+                //if (that.chosenIDs.length === 0) {
+                    //alert("Select ID/IDs");
+                    let divBar = document.getElementById("bar1")
+                        while (divBar.firstChild) {
+                            divBar.removeChild(divBar.firstChild);
+                        }
+
+                    let diviDs = document.getElementById("iDs")
+                        while (diviDs.firstChild) {
+                            diviDs.removeChild(diviDs.firstChild);
+                        }
+                    
+                //}
+                //else if (that.chosenIDs.length > 0) {
+                    //that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
+                    //that.drawTimeLine(that.raw, that.chosenLineVar);
+                    that.drawIds();
+                //}
+            }
+        });
+    }
+
+    drawBrush() {
+        let selectedRegion = d3.select("#brushButton");
+            selectedRegion.style("background-color", "steelblue");
+
+        let numberOfArchetypes = this.numberOfArchetypes;
+
+        this.margin = {top: 10, right: 10, bottom: 10, left: 10};
+        
+        let width = 450 - this.margin.right - this.margin.left;
+        let height = 350 - this.margin.bottom - this.margin.top;
+
+        this.max_brush_width = width;
+        let height_1d = 0;
+        for (let i = 0; i < this.numberOfArchetypes; i++) {
+            let g = d3.select('#oned').select("#label"+i)
+                        .append('g').classed('brushes', true)
+                        .attr("id", "brush"+i);
+                    
+            if (numberOfArchetypes >= 5) {
+                g.attr("height", (height / numberOfArchetypes));
+                height_1d = (height / numberOfArchetypes)
+            }
+            else if (numberOfArchetypes === 4) {
+                g.attr("height", (height / numberOfArchetypes) - this.margin.top
+                                - this.margin.bottom);
+                height_1d = (height / numberOfArchetypes) - this.margin.top 
+                - this.margin.bottom;
+            }
+            else {
+                g.attr("height", (height / numberOfArchetypes) - this.margin.top
+                                - this.margin.bottom);
+                height_1d = (height / numberOfArchetypes) - this.margin.top
+                - this.margin.bottom
+            }
+    
+            g.attr("transform", 'translate(0,'+(25)+')');
+        }
+    
+        let svg = d3.select('#oned');
+    
+        let brush_chart = d3.selectAll('.brushes');
+    
+        let brush_width = this.xScale(this.max_brush_width);
+        let brush_height = height_1d;
+        
+        this.brush(svg, brush_chart, brush_width, brush_height);
+    }
+
+    brush(svg, brush_chart, brush_width, brush_height) {
+        d3.selectAll(".tempLine").remove();
+        
+        this.brushOn = true;
+        let that = this;
+        let activeBrush = null;
+        let activeBrushNode = null;
+        //if (that.barsOn === true) {
+        that.origVar = that.chosenVars;
+        that.origId = that.chosenIDs;
+        //}
+
+        brush_chart.each(function() {
+            let selectionThis = this;
+            let layer = selectionThis.id;
+            layer = layer.substr(layer.length-1);
+            let brushData = [...that.dataS];
+            brushData = brushData[layer];
+
+            let selection = d3.select(selectionThis);
+
+            let brush = d3.brushX().extent([[0,0], [brush_width, brush_height]]);
+
+            brush
+                .on('start', function() {
+                    if (activeBrush && selection !== activeBrushNode) {
+                        activeBrushNode.call(activeBrush.move, null);
+                    }
+                    activeBrush = brush;
+
+                    activeBrushNode = selection;
+                   
+                });
+            brush
+                .on('brush', function () {
+                    
+                    let brushSelection = d3.brushSelection(selectionThis);
+
+                    let selectedData = [];
+                    if (brushSelection) {
+
+                        let [x1,x2] = brushSelection;
+                        
+                        let selectionData = brushData.filter(d => d.value >= that.xScale.invert(x1) &&
+                                                    d.value <= that.xScale.invert(x2));   
+                            
+                        svg.selectAll("circle").classed("notbrushed", true);
+
+                        that.createTempCircleBrush(selectionData);
+                        
+                        that.brushedData = selectionData;
+
+                        that.chosenIDs = [];
+
+                        for (let i = 0; i < that.brushedData.length; i++) {
+                            let id = that.brushedData[i].variable_name;
+                            that.chosenIDs.push(id);
+                        }
+                        that.chosenIDs = [... new Set(that.chosenIDs)];
+                        that.drawIds();
+
+                        if (that.timeline === true) {
+                            that.createTempLine(selectionData, true);
+                        }
+
+                        that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
+                    }
+                });
+            brush   
+                .on('end', function() {
+                    
+                    let brushSelection = d3.brushSelection(selectionThis);
+                    if(!brushSelection){
+                        svg.selectAll("circle").classed("notbrushed",false);
+                        return;
+                    }
+                 
+                    if (brushSelection !== null) {
+                        let [x1,x2] = brushSelection;
+                        
+                        let selectionData = brushData.filter(d => d.value >= that.xScale.invert(x1) &&
+                                                d.value <= that.xScale.invert(x2));
+
+                        svg.selectAll("circle").classed("notbrushed", true);
+
+                        that.createTempCircleBrush(selectionData);
+
+                        if (that.timeline === true) {
+                            that.createTempLine(selectionData, true);
+                        }
+
+                        that.brushedData = selectionData;
+
+                        that.chosenIDs = [];
+
+                        for (let i = 0; i < that.brushedData.length; i++) {
+                            let id = that.brushedData[i].variable_name;
+                            that.chosenIDs.push(id);
+                        }
+                        that.chosenIDs = [... new Set(that.chosenIDs)];
+                        that.drawIds();
+
+                        that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
+                    }
+                    
+                });
+            selection.call(brush);
+        });
+    }
+
+    removeBrush () {
+        let svg = d3.select('#oned');
+
+        svg.selectAll("circle").classed("notbrushed", false);
+
+        this.brushOn = false;
+        let selectedRegion = d3.select("#brushButton");
+            selectedRegion.style("background-color", "thistle");
+
+        d3.selectAll('.brushes').remove();
     }
 
     drawCircleChart (numberOfArchetypes) {
