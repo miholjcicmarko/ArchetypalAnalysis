@@ -121,7 +121,7 @@ class aa_view {
                 if (that.brushOn === true) {
 
                 }
-                else if (that.brushOn === false) {
+                else if (that.brushOn === false && (that.chosenVars.length > 1)) {
                     that.barsOn = true;
                     that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
                 }
@@ -1507,14 +1507,17 @@ class aa_view {
             xScales.push(x_var);
 
             let yScaleOne = d3.scaleLinear()
-                               .domain([d3.max(arrayofData), 0])
-                               .range([margin.top, h]);
+                               .domain([0, d3.max(arrayofData)])
+                               .range([h, margin.top]);
             yScales.push(yScaleOne);
         }
 
         let that = this;
 
         if (barData !== []) {
+
+        that.barcounter3 = 0;
+        that.barcounter4 = 0;
 
         for (let i = 0; i < yScales.length; i++) {
             let that = this;
@@ -1536,8 +1539,6 @@ class aa_view {
 
             if (na_true === false) {
                 //work on this
-            that.barcounter3 = 0;
-            that.barcounter4 = 0;
 
             svg.selectAll()
                 .data(currData)
@@ -1551,14 +1552,14 @@ class aa_view {
                     that.barcounter3 = that.barcounter3 + 1;
                     //console.log(that.barcounter);
                     let scale = yScales[that.barcounter3-1];
-                    return h - scale(d.value);
+                    return scale(d.value);
                 })
                 .attr("width", w/(that.chosenVars.length) - barpadding)
                 .attr("height", function(d,i) {
                     that.barcounter4 = that.barcounter4 + 1;
                     //console.log(that.barcounter);
                     let scale = yScales[that.barcounter4-1];
-                    return h - scale(d.value);
+                    return scale(0) - scale(d.value);
                     //let scale = yscales[i];
                     //return h-scale(d.value);
                 })
@@ -1651,6 +1652,8 @@ class aa_view {
                 .style("left", (pageX) + "px")
                 .style("top", (pageY) + "px");
 
+            if (that.brushOn === false) {
+
             if (that.chosenIDs.includes(this.id.toLowerCase())) {
                 let name = this.id.toLowerCase();
                 document.getElementById("" + name+ "button").style.backgroundColor = "rgb(71, 105, 1)";     
@@ -1661,6 +1664,7 @@ class aa_view {
             that.tooltipCircleON = true;
             if (that.timelineActive === true) {
                 that.createTempLine(this);
+            }
             }
         });
 
