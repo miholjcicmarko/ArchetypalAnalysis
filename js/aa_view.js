@@ -119,7 +119,8 @@ class aa_view {
         let dateSubmit = d3.select("#dateSubmit");
             dateSubmit.on("click", function () {
                 if (that.brushOn === true) {
-
+                    that.barsOn = true;
+                    that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
                 }
                 else if (that.brushOn === false && (that.chosenVars.length > 1)) {
                     that.barsOn = true;
@@ -1652,6 +1653,9 @@ class aa_view {
                 .style("left", (pageX) + "px")
                 .style("top", (pageY) + "px");
 
+            d3.select(this).classed("hovered", true);
+            that.tooltipCircleON = true;
+
             if (that.brushOn === false) {
 
             if (that.chosenIDs.includes(this.id.toLowerCase())) {
@@ -1659,9 +1663,7 @@ class aa_view {
                 document.getElementById("" + name+ "button").style.backgroundColor = "rgb(71, 105, 1)";     
             }
 
-            d3.select(this).classed("hovered", true);
             that.createTempCircle(this);
-            that.tooltipCircleON = true;
             if (that.timelineActive === true) {
                 that.createTempLine(this);
             }
