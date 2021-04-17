@@ -859,4 +859,48 @@ class imageAnalysis {
         }
     }
 
+    resetViz () {
+        if (this.timeline === true) {
+            let divTimeL = document.getElementById("timeL")
+                while (divTimeL.firstChild) {
+                    divTimeL.removeChild(divTimeL.firstChild);
+                }
+
+            let divTimeButtons = document.getElementById("timeLButtons")
+            while (divTimeButtons.firstChild) {
+                divTimeButtons.removeChild(divTimeButtons.firstChild);
+            }
+            this.date = this.origDate;
+
+            document.getElementById("dateInput").value = this.date;
+        }
+
+        this.selectionActive = false;
+        this.filteredData = [];
+        this.chosenVars = ["id"];
+        this.chosenIDs = [];
+
+        let div = document.getElementById("oned")
+                while (div.firstChild) {
+                    div.removeChild(div.firstChild);
+                }
+
+        let divBar = document.getElementById("bar1")
+                while (divBar.firstChild) {
+                    divBar.removeChild(divBar.firstChild);
+                }
+
+        let diviDs = document.getElementById("iDs")
+                while (diviDs.firstChild) {
+                    diviDs.removeChild(diviDs.firstChild);
+                }
+
+        if (this.brushOn === true) {
+            this.brushOn = false;
+            this.removeBrush();
+        }
+        
+        this.drawCircleChart(this.numberOfArchetypes);
+    }
+
 }
