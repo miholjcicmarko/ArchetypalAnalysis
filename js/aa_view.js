@@ -257,6 +257,7 @@ class aa_view {
                 //}
                 //else if (that.chosenIDs.length > 0) {
                     that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
+                    that.drawTimeLine(that.raw, that.chosenLineVar);
                     that.drawIds();
                 //}
             }
