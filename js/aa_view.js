@@ -520,7 +520,9 @@ class aa_view {
                 });
             brush
                 .on('brush', function () {
-                    
+                    d3.selectAll(".tempLine").remove();
+                    d3.selectAll(".selectedLine").remove();
+
                     let brushSelection = d3.brushSelection(selectionThis);
 
                     let selectedData = [];
@@ -749,12 +751,12 @@ class aa_view {
                 that.createTempCircle(this);
                 if (that.timeline === true) {
                     that.tooltipCircleON = true;
-                    that.createTempLine(this);
+                    that.createTempLine(this, undefined, true);
                 }
             }
             else if (this.localName === "path") {
                 if (that.timeline === true) {
-                    d3.select(this).classed("timeLine", false);
+                    //d3.select(this).classed("timeLine", false);
                     d3.select(this).classed("hoveredLine", true);
                 }
                 that.createTempCircle(this);
@@ -773,7 +775,7 @@ class aa_view {
                 d3.select(this).classed("hovered",false);
                 d3.selectAll(".tempCircle").remove();
                 if (that.timeline === true) {
-                    d3.select(".tempLine").remove();
+                    d3.select(".toolTempLine").remove();
                     that.tooltipCircleON = false;
                 }
                 d3.select(name + "button").classed("hoveredButton", false);
@@ -781,7 +783,7 @@ class aa_view {
             else if (this.localName === "path") {
                 if (that.timeline === true) {
                     
-                    d3.select(this).classed("timeLine", true);
+                    //d3.select(this).classed("timeLine", true);
                     // if (that.brushOn === true) {
                     //     d3.select(this).classed("brushedLine", true);
                     // }
@@ -859,7 +861,9 @@ class aa_view {
         }
     }
 
-    createTempLine (item, brushed) {
+    createTempLine (item, brushed, tooltipLineOn) {
+        if (this.timelineActive === true) {
+
         d3.selectAll("#timeL").selectAll(".tempLineBrush").remove();
         let objarray = this.lineData;
         let line = this.line;
@@ -959,6 +963,14 @@ class aa_view {
                 lines.append("path")
                  .attr("d", function (d) { return line(d.values)})
                  .classed("hoveredLine", true)
+                 .classed("toolTempLine", function () {
+                    if (tooltipLineOn === true) {
+                        return true
+                    } 
+                    else {
+                        return false;
+                    }
+                 })
                  .classed("tempLine", true)
                  .attr("id", function(d) {
                     return d.id;
@@ -991,6 +1003,7 @@ class aa_view {
         let data_line2 = d3.selectAll("#timeL").selectAll(".tempLine");
 
         this.tooltip(data_line2);
+        }
     }
 
     createTempCircleBrush (brushed) {
@@ -1149,6 +1162,8 @@ class aa_view {
 
             if (this.timeline === true && this.timelineActive === true) {
 
+                //this.createTempLine()
+
                 let objarray = this.lineData;
                 let line = this.line;
         
@@ -1166,14 +1181,14 @@ class aa_view {
         
                 lines.append("path")
                      .attr("d", function(d) { return line(d.values)})
-                     .classed("timeLine", false)
+                     .classed("selectedLine", true)
                      .attr("stroke", function () {
                         let index = that.chosenIDs.length - 1;
                         return that.color(index);
                      })
                      .attr("stroke-width", 3)
                      .attr("id", function(d) {
-                        return "selectedLine"+value;
+                        return ""+value;
                      })
                      .attr("fill", "none");
             }
@@ -1181,6 +1196,10 @@ class aa_view {
         let data_circ = d3.selectAll("#oned").selectAll("circle");
 
         this.tooltip(data_circ);
+
+        let line_data = d3.selectAll("#timeL").selectAll(".selectedLine");
+
+        this.tooltip(line_data);
     }
 
     makeBarCharts (chosenVariables, rawData, timeSeries) {
@@ -1870,7 +1889,7 @@ class aa_view {
             d3.select("#timeL").style("opacity", 0);
         }
 
-        if (this.chosenIDs.length > 1) {
+        if (this.chosenIDs.length > 0) {
             this.createTempLine(false, false);
         }
     }
