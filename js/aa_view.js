@@ -230,7 +230,6 @@ class aa_view {
                     that.drawBrush();
                     that.drawIds();
                     document.getElementById("submit").innerHTML = 'Drag and Select ID Points';
-                    d3.selectAll(".tempLine").remove();
                 }
                 else {
                     alert("Select One or More Attributes");
@@ -489,7 +488,6 @@ class aa_view {
     }
 
     brush(svg, brush_chart, brush_width, brush_height) {
-        d3.selectAll(".tempLine").remove();
         
         this.brushOn = true;
         let that = this;
@@ -938,6 +936,7 @@ class aa_view {
                 that.linecounter = 0;
 
                 lines.append("path")
+                .style('fill', 'none')
                 .attr("d", function (d) { return line(d.values)})
                 .attr("stroke", function (d,i) {
                     if (that.brushOn === false) {
@@ -974,8 +973,7 @@ class aa_view {
                 })
                 .attr("id", function(d) {
                     return d.id;
-                })
-                .style("fill", "none"); 
+                }); 
 
             }
             else if (this.tooltipCircleON === true) {
@@ -988,6 +986,7 @@ class aa_view {
                 let that = this;
     
                 lines.append("path")
+                .style('fill', 'none')
                  .attr("d", function (d) { return line(d.values)})
                  .classed("hoveredLine", true)
                  .classed("toolTempLine", function () {
@@ -1001,8 +1000,7 @@ class aa_view {
                  .classed("tempLine", true)
                  .attr("id", function(d) {
                     return d.id;
-                 })
-                 .style("fill", "none"); 
+                 });
             }
         }
         else if (brushed === true) {
@@ -1014,14 +1012,14 @@ class aa_view {
                     .attr("transform", "translate(" + 60 + "," + 0 + ")");
 
                 lines.append("path")
+                     .style("fill", "none")
                      .attr("d", function (d) { return line(d.values)})
                      .attr("stroke", "steelblue")
                      .attr("stroke-width", 2.5)
                      .classed("tempLineBrush", true)
                      .attr("id", function(d) {
                         return d.id;
-                     })
-                     .style("fill", "none");  
+                     });  
         }
 
         let data_line = d3.selectAll("#timeL").selectAll(".tempLineBrush");
@@ -1900,14 +1898,16 @@ class aa_view {
                     .append("g")
                     .attr("id", function (d) {
                         return "line"+ d.id;
-                    });
+                    })
+                    .style("fill", "none");
 
         lines.append("path")
              .attr("d", function(d) { return line(d.values)})
              .classed("timeLine", true)
              .attr("id", function(d) {
                 return d.id + "";
-            }); 
+            })
+            .style("fill", "none"); 
 
         let data_line = d3.selectAll("#timeL").selectAll(".timeLine");
 
