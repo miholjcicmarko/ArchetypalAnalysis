@@ -218,7 +218,7 @@ class imageAnalysis {
                             
                         svg.selectAll("circle").classed("notbrushed", true);
 
-                        that.createTempCircle(selectionData);
+                        //that.createTempCircleBrush(selectionData);
                         
                         that.brushedData = selectionData;
 
@@ -253,7 +253,7 @@ class imageAnalysis {
 
                         svg.selectAll("circle").classed("notbrushed", true);
 
-                        that.createTempCircle(selectionData);
+                        //that.createTempCircleBrush(selectionData);
 
                         that.brushedData = selectionData;
 
@@ -579,7 +579,7 @@ class imageAnalysis {
         if (clicked === true) {
             this.count = this.count + 1;
         }
-
+        
         let selectedFile = circleData.id;
 
         let width = 250 - this.margin.right - this.margin.left;
