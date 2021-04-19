@@ -412,7 +412,7 @@ class aa_view {
 
     let submit = d3.select("#submit");
         submit.on("click", function(d,i) {
-            if (that.brushOn === false) {
+            if (that.brushOn === false && that.chosenVars.length > 1) {
                 that.barsOn = true;
                 if (that.chosenIDs.length !== 0) {
                     that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
@@ -422,9 +422,12 @@ class aa_view {
                     alert("Select ID/IDs");
                 }
             }
-            else if (that.brushOn === true) {
+            else if (that.brushOn === true && that.chosenVars.length > 1) {
                 that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
                 that.drawIds();
+            }
+            else if (that.chosenVars.length === 1) {
+                alert("Select an Attribute/Attributes");
             }
         });
 
@@ -756,12 +759,19 @@ class aa_view {
             }
             else if (this.localName === "path") {
                 if (that.timeline === true) {
-                    //d3.select(this).classed("timeLine", false);
-                    d3.select(this).classed("hoveredLine", true);
+                    if (!that.chosenIDs.includes(this.id.toLowerCase())) {
+                        d3.select(this).classed("timeLine", false);
+                        d3.select(this).classed("hoveredLine", true);
+                    }
+                    else {
+                        d3.select(this).classed("hoveredLine", true);
+                    }
                 }
                 that.createTempCircle(this);
             }
-
+            if (that.barsOn === true) {
+                d3.select("#bar1").select("#bars").selectAll("#"+this.id.toLowerCase()).classed("hovered", true);
+            }
         });
 
         onscreenData.on("mouseout", function(d,i) {
@@ -787,13 +797,24 @@ class aa_view {
                     // if (that.brushOn === true) {
                     //     d3.select(this).classed("brushedLine", true);
                     // }
-                    d3.select(this).classed("hoveredLine", false);
+                    if (!that.chosenIDs.includes(this.id.toLowerCase())) {
+                        d3.select(this).classed("hoveredLine", false);
+                        d3.select(this).classed("timeLine", true);
+                    }
+                    else {
+                        d3.select(this).classed("hoveredLine", false);
+                    }
+                    //d3.select(this).classed("hoveredLine", false);
                     d3.select(name + "button").classed("hoveredButton", false);
                 }
                 for (let i = 0; i < that.numberOfArchetypes; i++) {
                     let circle = d3.select("#circle" + i);
                     d3.selectAll(".tempCircle").remove();
                 }
+            }
+
+            if (that.barsOn === true) {
+                d3.select("#bar1").select("#bars").selectAll("#"+this.id.toLowerCase()).classed("hovered", false);
             }
 
             tooltip.transition()
@@ -919,18 +940,24 @@ class aa_view {
                 lines.append("path")
                 .attr("d", function (d) { return line(d.values)})
                 .attr("stroke", function (d,i) {
-                    let index = 0;
-                    that.linecounter = that.linecounter + 1;
-                    if (that.selectionActive === true && that.brushOn === false) {
-                        index = that.linecounter - 1;
+                    if (that.brushOn === false) {
+                        let array = [...that.chosenIDs];
+                        array = array.map(d => d.toLowerCase())
+                        let index = array.indexOf(d.id.toLowerCase());
                         return that.color(index);
                     }
-                    else if (that.selectionActive === false && 
-                        that.timelineActive === true && that.brushOn === false) {
-                        //index = that.linecounter - 1;
-                        index = that.chosenIDs.length-1;
-                        return that.color(index);
-                    }
+                    //let index = 0;
+                    // that.linecounter = that.linecounter + 1;
+                    // if (that.selectionActive === true && that.brushOn === false) {
+                    //     index = that.linecounter - 1;
+                    //     return that.color(index);
+                    // }
+                    // else if (that.selectionActive === false && 
+                    //     that.timelineActive === true && that.brushOn === false) {
+                    //     //index = that.linecounter - 1;
+                    //     index = that.chosenIDs.length-1;
+                    //     return that.color(index);
+                    // }
                     else if (that.brushOn === true) {
                         return "steelblue";
                     }
@@ -1699,7 +1726,7 @@ class aa_view {
 
             that.createTempCircle(this);
             if (that.timelineActive === true) {
-                that.createTempLine(this);
+                that.createTempLine(this, undefined, true);
             }
             }
         });
@@ -1715,7 +1742,7 @@ class aa_view {
 
             d3.selectAll(".tempCircle").remove();
                 if (that.timelineActive === true) {
-                    d3.select(".tempLine").remove();
+                    d3.select(".toolTempLine").remove();
                     that.tooltipCircleON = false;
                 }
 
@@ -1914,6 +1941,7 @@ class aa_view {
         this.filteredData = [];
         this.chosenVars = ["id"];
         this.chosenIDs = [];
+        this.chosenLineVar = ["id"];
 
         let div = document.getElementById("oned")
                 while (div.firstChild) {
