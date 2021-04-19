@@ -33,7 +33,7 @@ class imageAnalysis {
         }
 
         this.color = d3.scaleOrdinal(d3.schemeTableau10)
-                .domain([0,4])
+                .domain([0,9])
                 //.range(["blue","orange","pink","red","purple"]);
 
         let newS = [];
@@ -92,7 +92,7 @@ class imageAnalysis {
         let selectRegion = d3.select("#brushButton");
 
         selectRegion.on("click", function () {
-            that.origVar = that.chosenVars;
+            that.origVar = that.chosenIDs;
             if (that.brushOn === false) {
                 //if (that.chosenVars.length > 1) {
                     that.drawBrush();
