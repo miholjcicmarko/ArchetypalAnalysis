@@ -218,7 +218,7 @@ class imageAnalysis {
                             
                         svg.selectAll("circle").classed("notbrushed", true);
 
-                        that.createTempCircleBrush(selectionData);
+                        that.createTempCircle(selectionData);
                         
                         that.brushedData = selectionData;
 
@@ -231,7 +231,9 @@ class imageAnalysis {
                         that.chosenIDs = [... new Set(that.chosenIDs)];
                         that.drawIds();
 
-                        that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
+                        that.displayMultipleImages(that.chosenIDs);
+
+                        //that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
                     }
                 });
             brush   
@@ -251,7 +253,7 @@ class imageAnalysis {
 
                         svg.selectAll("circle").classed("notbrushed", true);
 
-                        that.createTempCircleBrush(selectionData);
+                        that.createTempCircle(selectionData);
 
                         that.brushedData = selectionData;
 
@@ -264,12 +266,19 @@ class imageAnalysis {
                         that.chosenIDs = [... new Set(that.chosenIDs)];
                         that.drawIds();
 
-                        that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
+                        that.displayMultipleImages(that.chosenIDs);
+                        //that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
                     }
                     
                 });
             selection.call(brush);
         });
+    }
+
+    displayMultipleImages (circleData) {
+        for (let i = 0; i < circleData.length; i++) {
+            this.displayImages(circleData[i], true);
+        }
     }
 
     removeBrush () {
