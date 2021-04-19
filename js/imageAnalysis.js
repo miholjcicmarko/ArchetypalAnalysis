@@ -22,6 +22,7 @@ class imageAnalysis {
         this.brushedData = [];
         this.imageData = imageData;
         this.count = 0;
+        this.origId = [];
 
         this.filteredData = [];
         //this.chosenVars = ["id"];
@@ -50,10 +51,6 @@ class imageAnalysis {
         this.S = newS;
         this.numberOfArchetypes = parseInt(numArch, 10);
         this.drawCircleChart(this.numberOfArchetypes);
-        let selectNowButton = document.getElementById('selectNow')
-                        while (selectNowButton.firstChild) {
-                            selectNowButton.removeChild(selectNowButton.firstChild);
-                        }
 
         let dropdownMenu = d3.select('#selectNow');
 
@@ -92,7 +89,7 @@ class imageAnalysis {
         let selectRegion = d3.select("#brushButton");
 
         selectRegion.on("click", function () {
-            that.origVar = that.chosenIDs;
+            that.origId = that.chosenIDs;
             if (that.brushOn === false) {
                 //if (that.chosenVars.length > 1) {
                     that.drawBrush();
@@ -105,7 +102,6 @@ class imageAnalysis {
                 that.removeBrush();   
                 d3.selectAll(".brushDataTemp").remove();
                 that.chosenIDs = that.origId;
-                that.chosenVars = that.origVar;
                 //if (that.chosenIDs.length === 0) {
                     //alert("Select ID/IDs");
                     let divBar = document.getElementById("bar1")
@@ -466,20 +462,6 @@ class imageAnalysis {
             }
             
         });
-
-    //that.drawVariables();
-
-    // let submit = d3.select("#submit");
-    //     submit.on("click", function(d,i) {
-    //         if (that.brushOn === false) {
-    //             that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
-    //             that.drawIds();
-    //         }
-    //         else if (that.brushOn === true) {
-    //             that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
-    //             that.drawIds();
-    //         }
-    //     });
 
     let data_circ = d3.selectAll("#oned").selectAll("circle");
 
