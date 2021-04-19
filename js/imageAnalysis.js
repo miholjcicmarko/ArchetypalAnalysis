@@ -173,14 +173,12 @@ class imageAnalysis {
     }
 
     brush(svg, brush_chart, brush_width, brush_height) {
-        d3.selectAll(".tempLine").remove();
         
         this.brushOn = true;
         let that = this;
         let activeBrush = null;
         let activeBrushNode = null;
         //if (that.barsOn === true) {
-        that.origVar = that.chosenVars;
         that.origId = that.chosenIDs;
         //}
 
@@ -233,10 +231,6 @@ class imageAnalysis {
                         that.chosenIDs = [... new Set(that.chosenIDs)];
                         that.drawIds();
 
-                        if (that.timeline === true) {
-                            that.createTempLine(selectionData, true);
-                        }
-
                         that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
                     }
                 });
@@ -258,10 +252,6 @@ class imageAnalysis {
                         svg.selectAll("circle").classed("notbrushed", true);
 
                         that.createTempCircleBrush(selectionData);
-
-                        if (that.timeline === true) {
-                            that.createTempLine(selectionData, true);
-                        }
 
                         that.brushedData = selectionData;
 
