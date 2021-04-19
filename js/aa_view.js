@@ -975,7 +975,7 @@ class aa_view {
                 .attr("id", function(d) {
                     return d.id;
                 })
-                .attr("fill", "none"); 
+                .style("fill", "none"); 
 
             }
             else if (this.tooltipCircleON === true) {
@@ -1001,7 +1001,8 @@ class aa_view {
                  .classed("tempLine", true)
                  .attr("id", function(d) {
                     return d.id;
-                 }); 
+                 })
+                 .style("fill", "none"); 
             }
         }
         else if (brushed === true) {
@@ -1020,7 +1021,7 @@ class aa_view {
                      .attr("id", function(d) {
                         return d.id;
                      })
-                     .attr("fill", "none");  
+                     .style("fill", "none");  
         }
 
         let data_line = d3.selectAll("#timeL").selectAll(".tempLineBrush");
@@ -1207,6 +1208,7 @@ class aa_view {
                 let that = this;
         
                 lines.append("path")
+                     .style('fill', 'none')
                      .attr("d", function(d) { return line(d.values)})
                      .classed("selectedLine", true)
                      .attr("stroke", function () {
@@ -1216,8 +1218,7 @@ class aa_view {
                      .attr("stroke-width", 3)
                      .attr("id", function(d) {
                         return ""+value;
-                     })
-                     .attr("fill", "none");
+                     });
             }
         }
         let data_circ = d3.selectAll("#oned").selectAll("circle");

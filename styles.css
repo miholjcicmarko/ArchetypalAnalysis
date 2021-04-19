@@ -351,6 +351,10 @@ div.tooltipRect {
     stroke-width: 2.5;
 }
 
+.selectedLine {
+    fill: none;
+}
+
 .timeLine {
     fill: none;
     stroke: rgb(230, 219, 219);
@@ -385,6 +389,7 @@ div.tooltipLine {
 .brushedLine {
     stroke: steelblue;
     stroke-width: 2.5;
+    fill: none;
 }
 
 img {
