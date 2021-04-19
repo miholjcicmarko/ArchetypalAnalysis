@@ -9,8 +9,6 @@ class aa_view {
 
     constructor(data, numArch, updateArch, customImplement) {
 
-        //write time series part
-
         d3.select("#customImplement").style("opacity", 0);
         document.getElementById("customImplement").style.zIndex = "-2";
         d3.select("#Introduction").style("opacity", 0);
