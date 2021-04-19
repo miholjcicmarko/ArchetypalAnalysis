@@ -7,7 +7,7 @@ class PlotData {
 
 class aa_view {
 
-    constructor(data, numArch, updateArch, customImplement) {
+    constructor(data, numArch, updateArch, customImplement, imageData) {
 
         d3.select("#customImplement").style("opacity", 0);
         document.getElementById("customImplement").style.zIndex = "-2";
@@ -25,6 +25,7 @@ class aa_view {
         this.updateArch = updateArch;
         this.timeline = data.time_data;
         this.customImplement = customImplement;
+        this.imageData = imageData;
         this.count = 0;
         this.brushOn = false;
         this.brushedData = [];
@@ -80,14 +81,14 @@ class aa_view {
 
         }
 
+        this.color = d3.scaleOrdinal(d3.schemeTableau10)
+                .domain([0,9]);
+                //.range(["blue","orange"," #D37B23","red","#168787"]);
+
         if (this.customImplement === true) {
             this.S = math.matrix(this.S);
             this.XC = math.matrix(this.XC);
         }
-
-        this.color = d3.scaleOrdinal(d3.schemeTableau10)
-                .domain([0,9]);
-                //.range(["blue","orange"," #D37B23","red","#168787"]);
 
         let newS = [];
 
@@ -103,7 +104,29 @@ class aa_view {
         this.S = newS;
         this.numberOfArchetypes = parseInt(numArch, 10);
         this.drawCircleChart(this.numberOfArchetypes);
-        document.getElementById('selectNow').selectedIndex=this.numberOfArchetypes - 1;
+        if (this.customImplement !== true) {
+            document.getElementById('selectNow').selectedIndex=this.numberOfArchetypes - 1;
+        }
+        else if (this.customImplement === true) {
+            let dropdownMenu = d3.select('#selectNow');
+
+            let numberOfArchetypes_array = [];
+
+            for (let i = 0; i < this.numberOfArchetypes; i++) {
+                let number = i+1;
+                numberOfArchetypes_array.push(number);
+            }
+
+            dropdownMenu.selectAll('option')
+                    .data(numberOfArchetypes_array)
+                    .enter().append("option")
+                    .attr("value", function (d) { return d; })
+                    .text(function (d) {
+                        return d; 
+                    });
+
+            document.getElementById('selectNow').selectedIndex=this.numberOfArchetypes - 1;
+        }
 
         let that = this;
 
@@ -223,7 +246,7 @@ class aa_view {
 
         selectRegion.on("click", function () {
             that.origVar= that.chosenVars;
-            if (that.brushOn === false) {
+            if (that.brushOn === false && customImplement === false) {
                 if (that.chosenVars.length > 1) {
                     that.drawBrush();
                     that.drawIds();
@@ -233,7 +256,7 @@ class aa_view {
                     alert("Select One or More Attributes");
                 }
             }
-            else if (that.brushOn === true) {
+            else if (that.brushOn === true && customImplement === false) {
                 document.getElementById("submit").innerHTML = 'Submit Selected Attributes/IDs';
                 that.removeBrush();   
                 d3.selectAll(".brushDataTemp").remove();
@@ -258,6 +281,28 @@ class aa_view {
                     that.drawIds();
                 //}
             }
+            else if (that.brushOn === false && that.customImplement === true) {
+                that.drawBrush();
+                that.drawIds();
+                document.getElementById("submit").innerHTML = 'Drag and Select ID Points';
+            }
+            else if (that.brushOn === true && that.customImplement === true) {
+                document.getElementById("submit").innerHTML = 'Image Analysis';
+                that.removeBrush();   
+                d3.selectAll(".brushDataTemp").remove();
+                that.chosenIDs = that.origId;
+                    let divBar = document.getElementById("bar1")
+                        while (divBar.firstChild) {
+                            divBar.removeChild(divBar.firstChild);
+                        }
+
+                    let diviDs = document.getElementById("iDs")
+                        while (diviDs.firstChild) {
+                            diviDs.removeChild(diviDs.firstChild);
+                        }
+                    
+                    that.drawIds();
+            }
         });
     }
 
@@ -268,7 +313,9 @@ class aa_view {
         this.margin = {top: 10, right: 10, bottom: 10, left: 10};
         
         let width = 450 - this.margin.right - this.margin.left;
-        let height = 350 - this.margin.bottom - this.margin.top;
+        if (this.customImplement === false) {
+            let height = 350 - this.margin.bottom - this.margin.top;
+        }
 
         d3.select('#oned')
             .append('div')
@@ -437,8 +484,6 @@ class aa_view {
     drawBrush() {
         let selectedRegion = d3.select("#brushButton");
             selectedRegion.style("background-color", "steelblue");
-        // creates the brushes
-    //if (this.timeline === true) {
 
         let numberOfArchetypes = this.numberOfArchetypes;
 
@@ -492,7 +537,9 @@ class aa_view {
         let activeBrush = null;
         let activeBrushNode = null;
         //if (that.barsOn === true) {
-        that.origVar = that.chosenVars;
+        if (that.customImplement === false) {
+            that.origVar = that.chosenVars;
+        }
         that.origId = that.chosenIDs;
         //}
 
@@ -551,7 +598,12 @@ class aa_view {
                             that.createTempLine(selectionData, true);
                         }
 
-                        that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
+                        if (that.customImplement === false) {
+                            that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
+                        }
+                        else {
+                            that.displayMultipleImages(that.chosenIDs);
+                        }
                     }
                 });
             brush   
@@ -588,12 +640,25 @@ class aa_view {
                         that.chosenIDs = [... new Set(that.chosenIDs)];
                         that.drawIds();
 
-                        that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
+                        if (that.customImplement === false) {
+                            that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
+                        }
+                        else {
+                            that.displayMultipleImages(that.chosenIDs);
+                        }
+
+                        //that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
                     }
                     
                 });
             selection.call(brush);
         });
+    }
+    
+    displayMultipleImages (circleData) {
+        for (let i = 0; i < circleData.length; i++) {
+            this.displayImages(circleData[i], true);
+        }
     }
 
     removeBrush () {

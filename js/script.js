@@ -69,7 +69,8 @@ Promise.all([preProcessData]).then(data => {
         }
 
         if (imageBoolean === true) {
-            let plots = new imageAnalysis(matricies, numArch, updateArch, true, imageData);
+            //let plots = new imageAnalysis(matricies, numArch, updateArch, true, imageData);
+            let plots = new aa_view(matricies, numArch, updateArch, true, imageData);
         }
         else if (imageBoolean !== true) {
             let plots = new aa_view(matricies, numArch, updateArch, true);
