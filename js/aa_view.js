@@ -671,9 +671,13 @@ class aa_view {
     displayMultipleImages (circleData) {
         d3.selectAll("img").remove();
         this.count = 0;
-        for (let i = 0; i < circleData.length; i++) {
-            this.displayImages(circleData[i], false, true);
-        }
+
+        circleData.forEach(d => {
+            this.displayImages(d, false, true)
+        })        
+        //for (let i = 0; i < circleData.length; i++) {
+            //this.displayImages(circleData[i], false, true);
+        //}
     }
 
     displayImages (circleData, clicked, brushed) {
@@ -744,7 +748,7 @@ class aa_view {
 
             let reader = new FileReader();
 
-            reader.onload = function (e) {
+            reader.onloadend = function (e) {
                 if (clicked === true) {
                     d3.select("#selectedImg" + that.count)
                     .style("border-color", function() {
@@ -756,23 +760,27 @@ class aa_view {
                         else if (id.className !== "imgdiv") {
                             return that.color(that.chosenIDs.length - 1);
                         }})
-                    .attr("src", e.target.result);
+                    .attr("src", function () {
+                        that.count = that.count + 1;
+                        return e.target.result});
                 }
                 else if (clicked === false) {
                     d3.select("#selectedImg" + that.count + "tooltip")
                     .style("border-color", function() {
                         let id = document.getElementById('selectedImg'+ that.count + "tooltip");
 
-                        if (id.className === "imgdiv") {
+                        if (id.className === "imgdiv" && that.brushOn === false) {
                             return "rgb(71, 105, 1)";
                         }
-                        else if (id.className !== "imgdiv" && brushed === undefined) {
+                        else if (id.className !== "imgdiv" && that.brushOn === false) {
                             return that.color(that.chosenIDs.length - 1);
                         }
-                        else if (id.className !== "imgdiv" && brushed === undefined) {
-
+                        else if (id.className !== "imgdiv" && that.brushOn === true) {
+                            return "steelblue";
                         }})
-                    .attr("src", e.target.result);
+                    .attr("src", function () {
+                        that.count = that.count - 1;
+                        return e.target.result});
                 }
             }
             reader.readAsDataURL(fileName);
