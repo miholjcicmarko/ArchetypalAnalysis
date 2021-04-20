@@ -313,7 +313,7 @@ class aa_view {
         this.margin = {top: 10, right: 10, bottom: 10, left: 10};
         
         let width = 450 - this.margin.right - this.margin.left;
-        let height = numberOfArchetypes*11 + this.margin.bottom + this.margin.top;
+        let height = 5000 - this.margin.bottom - this.margin.top;
         if (this.imageData === undefined) {
             height = 350 - this.margin.bottom - this.margin.top;
         }
@@ -332,9 +332,19 @@ class aa_view {
                 .append('svg')
                 .attr("id", "label" + i)
                 .attr("width", width);
+
+            let that = this;
             
             if (numberOfArchetypes >= 5) {
-                oneD.attr("height", (height / numberOfArchetypes));
+                oneD.attr("height", function () {
+                    if (that.imageData === undefined) {
+                        return (height / numberOfArchetypes);
+                    }
+                    else if (that.imageData !== undefined) {
+                        return (height / numberOfArchetypes) - 
+                        24*that.margin.top - 20*that.margin.bottom;
+                    }  
+                })
             }
             else if (numberOfArchetypes === 4) {
                 oneD.attr("height", (height / numberOfArchetypes) - this.margin.top
@@ -412,7 +422,7 @@ class aa_view {
                 }
             })
             .attr("r", function() {
-                if (numberOfArchetypes >= 5) {
+                if (numberOfArchetypes >= 5 && numberOfArchetypes <= 7) {
                     return 3;
                 }
                 else if (numberOfArchetypes === 4) {
@@ -664,6 +674,95 @@ class aa_view {
         }
     }
 
+    displayImages (circleData, clicked) {
+        if (clicked === true) {
+            this.count = this.count + 1;
+        }
+        
+        let selectedFile = circleData.id;
+
+        let width = 250 - this.margin.right - this.margin.left;
+        let height = 250 - this.margin.top - this.margin.bottom;
+
+        let target = "0";
+
+        for (let i = 0; i < this.raw.length; i++) {
+            if (selectedFile.toLowerCase() === this.raw[i].id.toLowerCase()) {
+                target = this.raw[i];
+            }
+        }
+
+        let targetName = target.id.split("/");
+
+        targetName = targetName[targetName.length - 1];
+
+        let fileName; 
+
+        for (let i = 0; i < this.imageData.length; i++) {
+            if (targetName.toLowerCase() === this.imageData[i].name.toLowerCase()) {
+                fileName = this.imageData[i];
+            }
+        }
+
+        if (fileName) {
+            let that = this;
+
+            d3.select("#bar1")
+                .append("img")
+                .classed("imgdiv", function() {
+                    if (clicked !== true) {
+                        return true;
+                    }
+                    else  {
+                        return false;
+                    }
+                })
+                .attr("id", function () {
+                    if (clicked !== true) {
+                        return "selectedImg" + that.count + "tooltip"
+                    } 
+                    else {
+                        return "selectedImg" + that.count
+                    }
+                })
+                .attr("src", "#")
+                .attr("width", width)
+                .attr("height", height);
+
+            let reader = new FileReader();
+
+            reader.onload = function (e) {
+                if (clicked === true) {
+                    d3.select("#selectedImg" + that.count)
+                    .style("border-color", function() {
+                        let id = document.getElementById('selectedImg'+ that.count);
+
+                        if (id.className === "imgdiv") {
+                            return "rgb(71, 105, 1)";
+                        }
+                        else if (id.className !== "imgdiv") {
+                            return that.color(that.chosenIDs.length - 1);
+                        }})
+                    .attr("src", e.target.result);
+                }
+                else if (clicked === false) {
+                    d3.select("#selectedImg" + that.count + "tooltip")
+                    .style("border-color", function() {
+                        let id = document.getElementById('selectedImg'+ that.count + "tooltip");
+
+                        if (id.className === "imgdiv") {
+                            return "rgb(71, 105, 1)";
+                        }
+                        else if (id.className !== "imgdiv") {
+                            return that.color(that.chosenIDs.length - 1);
+                        }})
+                    .attr("src", e.target.result);
+                }
+            }
+            reader.readAsDataURL(fileName);
+        }
+    }
+
     removeBrush () {
         let svg = d3.select('#oned');
 
@@ -808,12 +907,12 @@ class aa_view {
                 .style("left", (pageX) + "px")
                 .style("top", (pageY) + "px");
 
-            if (that.chosenIDs.includes(this.id.toLowerCase())) {
+            if (that.chosenIDs.includes(this.id.toLowerCase()) && that.imageData === undefined) {
                 let name = this.id.toLowerCase();
                 document.getElementById("" + name+ "button").style.backgroundColor = "rgb(71, 105, 1)";     
             }
             
-            if (this.localName !== "path") {
+            if (this.localName !== "path" && that.imageData === undefined) {
                 d3.select(this).classed("hovered", true);
                 that.createTempCircle(this);
                 if (that.timeline === true) {
@@ -821,7 +920,7 @@ class aa_view {
                     that.createTempLine(this, undefined, true);
                 }
             }
-            else if (this.localName === "path") {
+            else if (this.localName === "path" && that.imageData === undefined) {
                 if (that.timeline === true) {
                     if (!that.chosenIDs.includes(this.id.toLowerCase())) {
                         d3.select(this).classed("timeLine", false);
@@ -833,19 +932,26 @@ class aa_view {
                 }
                 that.createTempCircle(this);
             }
-            if (that.barsOn === true) {
+            if (that.barsOn === true && that.imageData === undefined) {
                 d3.select("#bar1").select("#bars").selectAll("#"+this.id.toLowerCase()).classed("hovered", true);
             }
+
+            if (that.imageData !== undefined) {
+                d3.select(this).classed("hovered", true);
+                that.createTempCircle(this);
+                that.displayImages(this, false);
+            }
+
         });
 
         onscreenData.on("mouseout", function(d,i) {
-            if (that.chosenIDs.includes(this.id.toLowerCase())) {
+            if (that.chosenIDs.includes(this.id.toLowerCase()) && that.imageData === undefined) {
                 let index = that.chosenIDs.indexOf(this.id.toLowerCase());
                 let name = this.id.toLowerCase();
                 document.getElementById("" + name+ "button").style.backgroundColor = that.color(index);     
             }
 
-            if (this.localName !== "path") {
+            if (this.localName !== "path" && that.imageData === undefined) {
                 d3.select(this).classed("hovered",false);
                 d3.selectAll(".tempCircle").remove();
                 if (that.timeline === true) {
@@ -854,7 +960,7 @@ class aa_view {
                 }
                 d3.select(name + "button").classed("hoveredButton", false);
             }
-            else if (this.localName === "path") {
+            else if (this.localName === "path" && that.imageData === undefined) {
                 if (that.timeline === true) {
                     
                     //d3.select(this).classed("timeLine", true);
@@ -877,6 +983,12 @@ class aa_view {
                 }
             }
 
+            if (that.imageData !== undefined) {
+                d3.select(this).classed("hovered",false);
+                d3.selectAll(".tempCircle").remove();
+                d3.selectAll(".imgdiv").remove();
+            }
+
             if (that.barsOn === true) {
                 d3.select("#bar1").select("#bars").selectAll("#"+this.id.toLowerCase()).classed("hovered", false);
             }
@@ -893,6 +1005,10 @@ class aa_view {
                 that.chosenIDs.push(this.id.toLowerCase());
                 that.onSearch(this,that.dataS, that.numberOfArchetypes, true);
                 that.drawIds();
+
+                if (that.imageData !== undefined) {
+                    that.displayImages(this, true);
+                }
             }
         })
 
@@ -928,12 +1044,15 @@ class aa_view {
                 else if (numberOfArch == 4) {
                     return 43;
                 }
-                else {
+                else if (numberOfArch >= 5 && numberOfArch <= 7) {
                     return 45 - (margin_top);
+                }
+                else if (numberOfArch > 7) {
+                    return 45;
                 }
             })
             .attr("r", function() {
-                if (numberOfArch >= 5) {
+                if (numberOfArch >= 5 && numberOfArch <= 7) {
                     return 3;
                 }
                 else {
@@ -1179,10 +1298,10 @@ class aa_view {
         if (isTooltip === true) {
             value = value.id
         }
-        if (this.chosenIDs.length > 4 && ((this.chosenIDs.includes(value) !== true) ||
-        !this.chosenIDs.includes(searchVal.id))) {
-            alert("Too many IDs chosen!");
-        }
+        // if (this.chosenIDs.length > 4 && ((this.chosenIDs.includes(value) !== true) ||
+        // !this.chosenIDs.includes(searchVal.id))) {
+        //     alert("Too many IDs chosen!");
+        // }
         //else if ((this.chosenIDs.includes(value) === true)){
         //    let index = this.chosenIDs.indexOf(value);
         //    this.chosenIDs = this.chosenIDs.splice(index,1);
@@ -1231,12 +1350,15 @@ class aa_view {
                     else if (numberOfArch == 4) {
                         return 43;
                     }
-                    else {
+                    else if (numberOfArch >= 5 && numberOfArch <= 7) {
                         return 45 - (margin_top);
+                    }
+                    else if (numberOfArch > 7) {
+                        return 45;
                     }
                 })
                 .attr("r", function() {
-                    if (numberOfArch >= 5) {
+                    if (numberOfArch >= 5 && numberOfArch <= 7) {
                         return 3;
                     }
                     else {
@@ -1259,7 +1381,8 @@ class aa_view {
             }
             }
 
-            if (this.timeline === true && this.timelineActive === true) {
+            if (this.timeline === true && this.timelineActive === true
+                && this.imageData === undefined) {
 
                 //this.createTempLine()
 
@@ -1296,9 +1419,11 @@ class aa_view {
 
         this.tooltip(data_circ);
 
-        let line_data = d3.selectAll("#timeL").selectAll(".selectedLine");
+        if (this.timeline === true) {
+            let line_data = d3.selectAll("#timeL").selectAll(".selectedLine");
 
-        this.tooltip(line_data);
+            this.tooltip(line_data);
+        }
     }
 
     makeBarCharts (chosenVariables, rawData, timeSeries) {
