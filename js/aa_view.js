@@ -277,7 +277,9 @@ class aa_view {
                 //}
                 //else if (that.chosenIDs.length > 0) {
                     that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
-                    that.drawTimeLine(that.raw, that.chosenLineVar);
+                    if (that.timeline === true) {
+                        that.drawTimeLine(that.raw, that.chosenLineVar);
+                    }
                     that.drawIds();
                 //}
             }
@@ -1013,7 +1015,7 @@ class aa_view {
                 d3.selectAll(".imgdiv").remove();
             }
 
-            if (that.barsOn === true) {
+            if (that.barsOn === true && that.chosenIDs.includes(this.id)) {
                 d3.select("#bar1").select("#bars").selectAll("#"+this.id.toLowerCase()).classed("hovered", false);
             }
 
