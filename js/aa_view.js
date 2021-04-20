@@ -85,7 +85,7 @@ class aa_view {
                 .domain([0,9]);
                 //.range(["blue","orange"," #D37B23","red","#168787"]);
 
-        if (this.customImplement === true) {
+        if (this.imageData !== undefined) {
             this.S = math.matrix(this.S);
             this.XC = math.matrix(this.XC);
         }
@@ -104,10 +104,10 @@ class aa_view {
         this.S = newS;
         this.numberOfArchetypes = parseInt(numArch, 10);
         this.drawCircleChart(this.numberOfArchetypes);
-        if (this.customImplement !== true) {
+        if (this.imageData === undefined) {
             document.getElementById('selectNow').selectedIndex=this.numberOfArchetypes - 1;
         }
-        else if (this.customImplement === true) {
+        else if (this.imageData !== undefined) {
             let dropdownMenu = d3.select('#selectNow');
 
             let numberOfArchetypes_array = [];
@@ -152,7 +152,7 @@ class aa_view {
         let dropdown = d3.select("#selectNow");
 
             dropdown.on("change", function () {
-                if (that.customImplement === false) {
+                if (that.imageData === undefined) {
 
                     let number = this.value;
 
@@ -195,7 +195,7 @@ class aa_view {
                 
                     that.updateArch(number, "same");
                 }
-                else if (that.customImplement === true) {
+                else if (that.imageData !== undefined) {
                     alert("This feature is not available for Custom Implementations");
                     document.getElementById('selectNow').selectedIndex = that.numberOfArchetypes - 1;
                 }
@@ -246,7 +246,7 @@ class aa_view {
 
         selectRegion.on("click", function () {
             that.origVar= that.chosenVars;
-            if (that.brushOn === false && customImplement === false) {
+            if (that.brushOn === false && imageData === undefined) {
                 if (that.chosenVars.length > 1) {
                     that.drawBrush();
                     that.drawIds();
@@ -256,7 +256,7 @@ class aa_view {
                     alert("Select One or More Attributes");
                 }
             }
-            else if (that.brushOn === true && customImplement === false) {
+            else if (that.brushOn === true && imageData === undefined) {
                 document.getElementById("submit").innerHTML = 'Submit Selected Attributes/IDs';
                 that.removeBrush();   
                 d3.selectAll(".brushDataTemp").remove();
@@ -281,12 +281,12 @@ class aa_view {
                     that.drawIds();
                 //}
             }
-            else if (that.brushOn === false && that.customImplement === true) {
+            else if (that.brushOn === false && that.imageData !== undefined) {
                 that.drawBrush();
                 that.drawIds();
                 document.getElementById("submit").innerHTML = 'Drag and Select ID Points';
             }
-            else if (that.brushOn === true && that.customImplement === true) {
+            else if (that.brushOn === true && that.imageData !== undefined) {
                 document.getElementById("submit").innerHTML = 'Image Analysis';
                 that.removeBrush();   
                 d3.selectAll(".brushDataTemp").remove();
@@ -313,8 +313,9 @@ class aa_view {
         this.margin = {top: 10, right: 10, bottom: 10, left: 10};
         
         let width = 450 - this.margin.right - this.margin.left;
-        if (this.customImplement === false) {
-            let height = 350 - this.margin.bottom - this.margin.top;
+        let height = numberOfArchetypes*11 + this.margin.bottom + this.margin.top;
+        if (this.imageData === undefined) {
+            height = 350 - this.margin.bottom - this.margin.top;
         }
 
         d3.select('#oned')
@@ -406,7 +407,7 @@ class aa_view {
                 else if (numberOfArchetypes == 4) {
                     return 42;
                 }
-                else {
+                else  if (numberOfArchetypes >= 5) {
                     return 45 - margin_top;
                 }
             })
@@ -452,7 +453,8 @@ class aa_view {
             
         });
 
-    that.drawVariables();
+    if (that.imageData === undefined) {
+        that.drawVariables();
 
     let submit = d3.select("#submit");
         submit.on("click", function(d,i) {
@@ -474,6 +476,7 @@ class aa_view {
                 alert("Select an Attribute/Attributes");
             }
         });
+    }
 
     let data_circ = d3.selectAll("#oned").selectAll("circle");
 
@@ -537,7 +540,7 @@ class aa_view {
         let activeBrush = null;
         let activeBrushNode = null;
         //if (that.barsOn === true) {
-        if (that.customImplement === false) {
+        if (that.imageData === undefined) {
             that.origVar = that.chosenVars;
         }
         that.origId = that.chosenIDs;
@@ -598,10 +601,10 @@ class aa_view {
                             that.createTempLine(selectionData, true);
                         }
 
-                        if (that.customImplement === false) {
+                        if (that.imageData === undefined) {
                             that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
                         }
-                        else {
+                        else if (that.imageData !== undefined) {
                             that.displayMultipleImages(that.chosenIDs);
                         }
                     }
@@ -640,10 +643,10 @@ class aa_view {
                         that.chosenIDs = [... new Set(that.chosenIDs)];
                         that.drawIds();
 
-                        if (that.customImplement === false) {
+                        if (that.imageData === undefined) {
                             that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
                         }
-                        else {
+                        else if (that.imageData !== undefined) {
                             that.displayMultipleImages(that.chosenIDs);
                         }
 
@@ -801,7 +804,7 @@ class aa_view {
                 .duration(200)
                 .style("opacity", 0.9);
         
-            tooltip.html(that.tooltipRender(d))
+            tooltip.html(that.tooltipRender(d, that.imageData))
                 .style("left", (pageX) + "px")
                 .style("top", (pageY) + "px");
 
@@ -1159,9 +1162,16 @@ class aa_view {
         }
     }
 
-    tooltipRender(data) {
+    tooltipRender(data, imageData) {
         let text = data.currentTarget.id;
-        return text;
+        if (imageData === undefined) {
+            return text;
+        }
+        else if (imageData !== undefined) {
+            let text_arr = text.split("/");
+            text = text_arr[text_arr.length -1];
+            return text;
+        }
     }
 
     onSearch(searchVal, data, numberOfArch, isTooltip) {
