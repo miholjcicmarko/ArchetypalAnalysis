@@ -669,17 +669,22 @@ class aa_view {
     }
     
     displayMultipleImages (circleData) {
+        d3.selectAll("img").remove();
+        this.count = 0;
         for (let i = 0; i < circleData.length; i++) {
-            this.displayImages(circleData[i], true);
+            this.displayImages(circleData[i], false, true);
         }
     }
 
-    displayImages (circleData, clicked) {
-        if (clicked === true) {
+    displayImages (circleData, clicked, brushed) {
+        if (clicked === true || brushed === true) {
             this.count = this.count + 1;
         }
         
-        let selectedFile = circleData.id;
+        let selectedFile = circleData;
+        if (brushed === undefined) {
+            selectedFile = circleData.id;
+        }
 
         let width = 250 - this.margin.right - this.margin.left;
         let height = 250 - this.margin.top - this.margin.bottom;
@@ -714,6 +719,14 @@ class aa_view {
                         return true;
                     }
                     else  {
+                        return false;
+                    }
+                })
+                .classed("imgBrush", function () {
+                    if (brushed === true) {
+                        return true;
+                    }
+                    else {
                         return false;
                     }
                 })
@@ -753,8 +766,11 @@ class aa_view {
                         if (id.className === "imgdiv") {
                             return "rgb(71, 105, 1)";
                         }
-                        else if (id.className !== "imgdiv") {
+                        else if (id.className !== "imgdiv" && brushed === undefined) {
                             return that.color(that.chosenIDs.length - 1);
+                        }
+                        else if (id.className !== "imgdiv" && brushed === undefined) {
+
                         }})
                     .attr("src", e.target.result);
                 }
@@ -1258,11 +1274,11 @@ class aa_view {
                     return 42;
                 }
                 else {
-                    return 45 - margin_top;
+                    return 45;
                 }
             })
             .attr("r", function() {
-                if (numberOfArchetypes >= 5) {
+                if (numberOfArchetypes >= 5 && numberOfArchetypes <= 7) {
                     return 3;
                 }
                 else if (numberOfArchetypes === 4) {
