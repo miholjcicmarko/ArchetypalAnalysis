@@ -418,7 +418,7 @@ class aa_view {
                     return 42;
                 }
                 else  if (numberOfArchetypes >= 5) {
-                    return 45 - margin_top;
+                    return 45;
                 }
             })
             .attr("r", function() {
@@ -1298,10 +1298,10 @@ class aa_view {
         if (isTooltip === true) {
             value = value.id
         }
-        // if (this.chosenIDs.length > 4 && ((this.chosenIDs.includes(value) !== true) ||
-        // !this.chosenIDs.includes(searchVal.id))) {
-        //     alert("Too many IDs chosen!");
-        // }
+        if (this.chosenIDs.length > 4 && ((this.chosenIDs.includes(value) !== true) ||
+        !this.chosenIDs.includes(searchVal.id))) {
+            alert("Too many IDs chosen!");
+        }
         //else if ((this.chosenIDs.includes(value) === true)){
         //    let index = this.chosenIDs.indexOf(value);
         //    this.chosenIDs = this.chosenIDs.splice(index,1);
