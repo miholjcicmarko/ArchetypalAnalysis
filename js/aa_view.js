@@ -83,6 +83,7 @@ class aa_view {
 
         this.color = d3.scaleOrdinal(d3.schemeTableau10)
                 .domain([0,9]);
+                //.range(["blue","orange"," #D37B23","red","#168787"]);
 
         if (this.imageData !== undefined) {
             this.S = math.matrix(this.S);
@@ -237,6 +238,10 @@ class aa_view {
                     document.getElementById("submit").innerHTML = 'Submit Selected Attributes/IDs';
         })
 
+        // if (this.timeline === true) {
+        //     this.drawTimeLine(this.raw, this.variables[2]);
+        // }
+
         let selectRegion = d3.select("#brushButton");
 
         selectRegion.on("click", function () {
@@ -257,7 +262,8 @@ class aa_view {
                 d3.selectAll(".brushDataTemp").remove();
                 that.chosenIDs = that.origId;
                 that.chosenVars = that.origVar;
-                
+                //if (that.chosenIDs.length === 0) {
+                    //alert("Select ID/IDs");
                     let divBar = document.getElementById("bar1")
                         while (divBar.firstChild) {
                             divBar.removeChild(divBar.firstChild);
@@ -268,12 +274,14 @@ class aa_view {
                             diviDs.removeChild(diviDs.firstChild);
                         }
                     
-                
+                //}
+                //else if (that.chosenIDs.length > 0) {
                     that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
                     if (that.timeline === true) {
                         that.drawTimeLine(that.raw, that.chosenLineVar);
                     }
                     that.drawIds();
+                //}
             }
             else if (that.brushOn === false && that.imageData !== undefined) {
                 that.drawBrush();
@@ -299,7 +307,7 @@ class aa_view {
                 if (that.chosenIDs.length > 0) {
                     for (let i = 0; i < that.chosenIDs.length; i++) { 
                         that.displayImages(that.chosenIDs[i], true, false); // sort of works
-                        // have to put a flag for that it is bringing back old clicked imgs
+                        // have to put a flag for that it is bringing back old clicked
                     }
                 }
             }
@@ -675,6 +683,9 @@ class aa_view {
         circleData.forEach(d => {
             this.displayImages(d, false, true)
         })        
+        //for (let i = 0; i < circleData.length; i++) {
+            //this.displayImages(circleData[i], false, true);
+        //}
     }
 
     displayImages (circleData, clicked, brushed) {
@@ -984,6 +995,10 @@ class aa_view {
             else if (this.localName === "path" && that.imageData === undefined) {
                 if (that.timeline === true) {
                     
+                    //d3.select(this).classed("timeLine", true);
+                    // if (that.brushOn === true) {
+                    //     d3.select(this).classed("brushedLine", true);
+                    // }
                     if (!that.chosenIDs.includes(this.id.toLowerCase())) {
                         d3.select(this).classed("hoveredLine", false);
                         d3.select(this).classed("timeLine", true);
@@ -991,6 +1006,7 @@ class aa_view {
                     else {
                         d3.select(this).classed("hoveredLine", false);
                     }
+                    //d3.select(this).classed("hoveredLine", false);
                     d3.select(name + "button").classed("hoveredButton", false);
                 }
                 for (let i = 0; i < that.numberOfArchetypes; i++) {
