@@ -306,7 +306,7 @@ class aa_view {
                     that.drawIds();
                 if (that.chosenIDs.length > 0) {
                     for (let i = 0; i < that.chosenIDs.length; i++) { 
-                        that.displayMultipleImages(that.chosenIDs, true);
+                        that.displayMultipleImages(that.chosenIDs, true, false);
                     }
                 }
             }
