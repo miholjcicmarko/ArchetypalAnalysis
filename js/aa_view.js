@@ -306,8 +306,7 @@ class aa_view {
                     that.drawIds();
                 if (that.chosenIDs.length > 0) {
                     for (let i = 0; i < that.chosenIDs.length; i++) { 
-                        that.displayImages(that.chosenIDs[i], true, false); // sort of works
-                        // have to put a flag for that it is bringing back old clicked
+                        that.displayMultipleImages(that.chosenIDs, true);
                     }
                 }
             }
@@ -676,16 +675,20 @@ class aa_view {
         });
     }
     
-    displayMultipleImages (circleData) {
+    displayMultipleImages (circleData, oldData) {
         d3.selectAll("img").remove();
         this.count = 0;
 
-        circleData.forEach(d => {
-            this.displayImages(d, false, true)
-        })        
-        //for (let i = 0; i < circleData.length; i++) {
-            //this.displayImages(circleData[i], false, true);
-        //}
+        if (oldData === undefined) {
+            circleData.forEach(d => {
+                this.displayImages(d, false, true)
+            }) 
+        }
+        else if (oldData === true) {
+            circleData.forEach(d => {
+                this.displayImages(d, true)
+            }) 
+        }       
     }
 
     displayImages (circleData, clicked, brushed) {
