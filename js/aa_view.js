@@ -306,7 +306,7 @@ class aa_view {
                     that.drawIds();
                 if (that.chosenIDs.length > 0) {
                     for (let i = 0; i < that.chosenIDs.length; i++) { 
-                        that.displayMultipleImages(that.chosenIDs, true, false);
+                        that.displayMultipleImages(that.chosenIDs, true);
                     }
                 }
             }
@@ -686,7 +686,7 @@ class aa_view {
         }
         else if (oldData === true) {
             circleData.forEach(d => {
-                this.displayImages(d, true)
+                this.displayImages(d, true, false)
             }) 
         }       
     }
