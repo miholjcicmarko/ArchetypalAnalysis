@@ -26,7 +26,7 @@ class aa_view {
         this.timeline = data.time_data;
         this.customImplement = customImplement;
         this.imageData = imageData;
-        this.count = 0;
+        this.count = 0; // count for the cicles 
         this.brushOn = false;
         this.brushedData = [];
 
@@ -42,6 +42,7 @@ class aa_view {
         this.barsOn = false;
         this.origVar = [];
         this.origId = [];
+        this.countImages = 0;
 
         let parseTime = d3.timeParse("%Y-%m-%d");
 
@@ -677,7 +678,7 @@ class aa_view {
     
     displayMultipleImages (circleData, oldData) {
         d3.selectAll("img").remove();
-        this.count = 0;
+        this.countImages = 0;
 
         if (oldData === undefined) {
             circleData.forEach(d => {
@@ -693,7 +694,7 @@ class aa_view {
 
     displayImages (circleData, clicked, brushed) {
         if (clicked === true || brushed === true) {
-            this.count = this.count + 1;
+            this.countImages = this.countImages + 1;
         }
         
         let selectedFile = circleData;
@@ -747,10 +748,10 @@ class aa_view {
                 })
                 .attr("id", function () {
                     if (clicked !== true) {
-                        return "selectedImg" + that.count + "tooltip"
+                        return "selectedImg" + that.countImages + "tooltip";
                     } 
                     else {
-                        return "selectedImg" + that.count
+                        return "selectedImg" + that.countImages;
                     }
                 })
                 .attr("src", "#")
@@ -769,29 +770,41 @@ class aa_view {
                             return "rgb(71, 105, 1)";
                         }
                         else if (id.className !== "imgdiv") {
-                            return that.color(that.chosenIDs.length - 1);
+                            let target_id = target.id.toLowerCase();
+                            let index = that.chosenIDs.indexOf(target_id);
+                            return that.color(index);
                         }})
                     .attr("src", function () {
-                        that.count = that.count + 1;
-                        return e.target.result});
+                        if (brushed === undefined) {
+                            that.count = that.count + 1;
+                        }
+                        else if (brushed === false) {
+                            that.count = that.count - 1;
+                        }
+                        return e.target.result;
+                        });
                 }
                 else if (clicked === false) {
-                    d3.select("#selectedImg" + that.count + "tooltip")
+                    d3.select("#selectedImg" + that.countImages + "tooltip")
                     .style("border-color", function() {
-                        let id = document.getElementById('selectedImg'+ that.count + "tooltip");
+                        let id = document.getElementById('selectedImg'+ that.countImages + "tooltip");
 
                         if (id.className === "imgdiv" && that.brushOn === false) {
                             return "rgb(71, 105, 1)";
                         }
                         else if (id.className !== "imgdiv" && that.brushOn === false) {
-                            return that.color(that.chosenIDs.length - 1);
+                            let target_id = target.id.toLowerCase();
+                            let index = that.chosenIDs.indexOf(target_id);
+                            return that.color(index);
                         }
                         else if (id.className !== "imgdiv" && that.brushOn === true) {
                             return "steelblue";
                         }})
                     .attr("src", function () {
-                        that.count = that.count - 1;
-                        return e.target.result});
+                        if (brushed === true || brushed === false) {
+                            that.count = that.count - 1;
+                        }
+                         return e.target.result});
                 }
             }
             reader.readAsDataURL(fileName);
@@ -974,6 +987,7 @@ class aa_view {
             if (that.imageData !== undefined) {
                 d3.select(this).classed("hovered", true);
                 that.createTempCircle(this);
+                this.countImages = 0;
                 that.displayImages(this, false);
             }
 
@@ -2176,6 +2190,8 @@ class aa_view {
         this.chosenVars = ["id"];
         this.chosenIDs = [];
         this.chosenLineVar = ["id"];
+        this.count = 0;
+        this.countImages = 0;
 
         let div = document.getElementById("oned")
                 while (div.firstChild) {
