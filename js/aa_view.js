@@ -43,6 +43,7 @@ class aa_view {
         this.origVar = [];
         this.origId = [];
         this.countImages = 0;
+        this.imageBrushToggled = false;
 
         let parseTime = d3.timeParse("%Y-%m-%d");
 
@@ -246,6 +247,7 @@ class aa_view {
         let selectRegion = d3.select("#brushButton");
 
         selectRegion.on("click", function () {
+            that.imageBrushToggled = false;
             that.origVar= that.chosenVars;
             if (that.brushOn === false && imageData === undefined) {
                 if (that.chosenVars.length > 1) {
@@ -308,6 +310,7 @@ class aa_view {
                 if (that.chosenIDs.length > 0) {
                     for (let i = 0; i < that.chosenIDs.length; i++) { 
                         that.displayMultipleImages(that.chosenIDs, true);
+                        that.imageBrushToggled = true;
                     }
                 }
             }
@@ -693,6 +696,7 @@ class aa_view {
     }
 
     displayImages (circleData, clicked, brushed) {
+
         if (clicked === true || brushed === true) {
             this.countImages = this.countImages + 1;
         }
@@ -987,7 +991,6 @@ class aa_view {
             if (that.imageData !== undefined) {
                 d3.select(this).classed("hovered", true);
                 that.createTempCircle(this);
-                this.countImages = 0;
                 that.displayImages(this, false);
             }
 
@@ -1056,6 +1059,9 @@ class aa_view {
                 that.drawIds();
 
                 if (that.imageData !== undefined) {
+                    if (that.imageBrushToggled === true) {
+                        that.countImages = that.countImages + that.chosenIDs.length - 1;
+                    }
                     that.displayImages(this, true);
                 }
             }
