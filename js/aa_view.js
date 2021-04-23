@@ -1480,8 +1480,8 @@ class aa_view {
             this.tooltip(line_data);
         }
 
-        if (this.imageData !== undefined) {
-            this.displayImages(this, true);
+        if (this.imageData !== undefined && isTooltip === false) {
+            this.displayImages(this.filteredData[0].variable_name.toLowerCase(), true, false);
         }
     }
 
