@@ -706,8 +706,8 @@ class aa_view {
             selectedFile = circleData.id;
         }
 
-        let width = 250 - this.margin.right - this.margin.left;
-        let height = 250 - this.margin.top - this.margin.bottom;
+        let width = 150 - this.margin.right - this.margin.left;
+        let height = 150 - this.margin.top - this.margin.bottom;
 
         let target = "0";
 
@@ -733,6 +733,9 @@ class aa_view {
             let that = this;
 
             d3.select("#bar1")
+                //.append("fieldset")
+                //.append("legend")
+                //.text("HI")
                 .append("img")
                 .classed("imgdiv", function() {
                     if (clicked !== true) {
@@ -808,7 +811,8 @@ class aa_view {
                         if (brushed === true || brushed === false) {
                             that.countImages = that.countImages - 1;
                         }
-                         return e.target.result});
+                        return e.target.result});
+
                 }
             }
             reader.readAsDataURL(fileName);
