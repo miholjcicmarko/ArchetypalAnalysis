@@ -762,9 +762,9 @@ class aa_view {
 
             reader.onloadend = function (e) {
                 if (clicked === true) {
-                    d3.select("#selectedImg" + that.count)
+                    d3.select("#selectedImg" + that.countImages)
                     .style("border-color", function() {
-                        let id = document.getElementById('selectedImg'+ that.count);
+                        let id = document.getElementById('selectedImg'+ that.countImages);
 
                         if (id.className === "imgdiv") {
                             return "rgb(71, 105, 1)";
@@ -776,10 +776,10 @@ class aa_view {
                         }})
                     .attr("src", function () {
                         if (brushed === undefined) {
-                            that.count = that.count + 1;
+                            that.countImages = that.countImages + 1;
                         }
                         else if (brushed === false) {
-                            that.count = that.count - 1;
+                            that.countImages = that.countImages - 1;
                         }
                         return e.target.result;
                         });
@@ -802,7 +802,7 @@ class aa_view {
                         }})
                     .attr("src", function () {
                         if (brushed === true || brushed === false) {
-                            that.count = that.count - 1;
+                            that.countImages = that.countImages - 1;
                         }
                          return e.target.result});
                 }
