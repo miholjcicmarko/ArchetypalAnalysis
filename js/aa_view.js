@@ -1479,6 +1479,10 @@ class aa_view {
 
             this.tooltip(line_data);
         }
+
+        if (this.imageData !== undefined) {
+            this.displayImages(this, true);
+        }
     }
 
     makeBarCharts (chosenVariables, rawData, timeSeries) {
