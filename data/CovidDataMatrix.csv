@@ -1,4 +1,4 @@
-state,date,cases,cases_avg,cases_avg_per_100k,deaths,deaths_avg,deaths_avg_per_100k
+id,date,cases,cases_avg,cases_avg_per_100k,deaths,deaths_avg,deaths_avg_per_100k
 Washington,2020-01-21,1,0.14,0.0,0,0.0,0.0
 Washington,2020-01-22,0,0.14,0.0,0,0.0,0.0
 Washington,2020-01-23,0,0.14,0.0,0,0.0,0.0
