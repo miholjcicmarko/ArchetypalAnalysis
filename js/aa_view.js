@@ -1039,7 +1039,7 @@ class aa_view {
                 }
             }
 
-            if (that.imageData !== undefined) {
+            if (that.imageData !== undefined || that.customImplement) {
                 d3.select(this).classed("hovered",false);
                 d3.selectAll(".tempCircle").remove();
                 d3.selectAll(".imgdiv").remove();
