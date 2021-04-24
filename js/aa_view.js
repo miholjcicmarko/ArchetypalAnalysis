@@ -87,7 +87,7 @@ class aa_view {
                 .domain([0,9]);
                 //.range(["blue","orange"," #D37B23","red","#168787"]);
 
-        if (this.imageData !== undefined) {
+        if (this.imageData !== undefined || this.customImplement === true) {
             this.S = math.matrix(this.S);
             this.XC = math.matrix(this.XC);
         }
