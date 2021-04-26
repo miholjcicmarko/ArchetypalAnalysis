@@ -12,7 +12,7 @@ async function loadPreProcessData () {
     let diabetes = await d3.csv("./data/DiabetesData.csv");
 
     let dataobject = {
-        "covid": covid,
+        "COVID": covid,
         "diabetes": diabetes
     };
 
@@ -23,8 +23,8 @@ async function loadPreProcessData () {
         let diabetesS = await d3.csv("./data/DiabetesSMatrix" + index + ".csv");
         let diabetesXC = await d3.csv("./data/DiabetesXCMatrix" + index + ".csv");
 
-        dataobject["covidS"+index] = covidS;
-        dataobject["covidXC"+index] = covidXC;
+        dataobject["COVIDS"+index] = covidS;
+        dataobject["COVIDXC"+index] = covidXC;
         dataobject["diabetesS"+index] = diabetesS;
         dataobject["diabetesXC"+index] = diabetesXC;
     }
@@ -41,11 +41,13 @@ Promise.all([preProcessData]).then(data => {
     function updateData (id, data) {
         if (id === "diabetesButton") {
         //if (id === "fifaButton") {
-            selectedData.newData(preData["fifa"]);
+            selectedData.newData(preData["diabetes"]);
+            selectedData.preloaded = true;
             document.getElementById('csv').value= null;
         }
         else if (id === "covidButton") {
-            selectedData.newData(preData["covid"]);
+            selectedData.newData(preData["COVID"]);
+            selectedData.preloaded = true;
             document.getElementById('csv').value= null;
         }
         else if (id === "custom") {
@@ -60,12 +62,16 @@ Promise.all([preProcessData]).then(data => {
     function updateArch (number, sameData) {
         selectedData.newArch(number);
 
-        if (sameData === "same") {
+        if (sameData === "same" && selectedData.preloaded === false) {
             performAnalysis(selectedData.data, number);
+        }
+        else if (sameData === "same" && (selectedData.preloaded === "diabetes" || 
+        selectedData.preloaded === "COVID")) {
+            performAnalysis(selectedData.data, number, selectedData.preloaded);
         }
     }
 
-    function performAnalysis (data, numArch) {
+    function performAnalysis (data, numArch, preloaded) {
         if (data === null && numArch !== null) {
             alert("Error! Select Data Set");
         }
@@ -75,11 +81,14 @@ Promise.all([preProcessData]).then(data => {
         else if (data === null && numArch === null || data === null && numArch === '-') {
             alert("Error! Select Data Set and Number of Archetypes");
         }
-        else {
-            // fix this area
+        else if (preloaded === undefined) {
             let aa_result = new Algorithms(data, numArch);
             let matricies = result_to_Object(aa_result);
             let plots = new aa_view(matricies, numArch, updateArch, false);
+        }
+        else if (preloaded !== undefined) {
+            let matricies = preloaded_to_Object(preloaded, numArch);
+            let plots = new aa_view(matricies, numArch, updateArch, false, false, true);
         }
     }
 
@@ -107,12 +116,30 @@ Promise.all([preProcessData]).then(data => {
             "XC": result.XC,
             "S": result.S,
             "raw": result.origData,
-            //"data_id_less": result.data,
             "time_data": result.timeSeries
         }
     }
 
+    function preloaded_to_Object(preload, numArch) {
+        if (preload === "COVID") {
+            return {
+                "XC": preData["COVIDXC"+numArch], 
+                "S": preData["COVIDS"+numArch],
+                "raw": preData["COVID"],
+                "time_data": true
+            }
+        }
+        else if (preload === "diabetes") {
+            return {
+                "XC": preData["diabetesXC"+numArch], 
+                "S": preData["diabetesS"+numArch],
+                "raw": preData["diabetes"],
+                "time_data": false
+            }
+        }
+    }
+
     let selectedData = new dataSelection(preData, updateData, 
-                        updateArch, performAnalysis, customAnalysis);
+                        updateArch, performAnalysis, customAnalysis, false);
 
 })

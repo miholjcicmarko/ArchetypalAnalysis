@@ -1,6 +1,6 @@
 class dataSelection {
 
-    constructor(data, updateData, updateArch, performAnalysis, customAnalysis) {
+    constructor(data, updateData, updateArch, performAnalysis, customAnalysis, preloaded) {
         this.data = null;
         this.numArch = null;
         this.updateData = updateData;
@@ -13,6 +13,7 @@ class dataSelection {
         this.customAnalysis = customAnalysis;
         this.image = false;
         this.imageData = null;
+        this.preloaded = preloaded;
 
         this.timeSeries = false;
 
@@ -25,6 +26,7 @@ class dataSelection {
             document.getElementById("diabetesButton").style.color = "black"
             document.getElementById("diabetesButton").style.backgroundColor = "silver"
             that.updateData("diabetesButton");
+            that.preloaded = "diabetes";
         });
 
         let covid = d3.select("#covidButton");
@@ -34,6 +36,7 @@ class dataSelection {
             document.getElementById("covidButton").style.color = "black"
             document.getElementById("covidButton").style.backgroundColor = "silver";
             that.updateData("covidButton");
+            that.preloaded = "COVID";
         });
 
         let dropdown = d3.select("#selectNowInitial");
@@ -57,7 +60,7 @@ class dataSelection {
 
         let performButton = d3.select("#performButton");
         performButton.on("click", function () {
-            that.performAnalysis(that.data, that.numArch);
+            that.performAnalysis(that.data, that.numArch, that.preloaded);
         });
 
         let uploadImplementation = d3.select("#uploadImplementButton");

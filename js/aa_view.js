@@ -7,7 +7,7 @@ class PlotData {
 
 class aa_view {
 
-    constructor(data, numArch, updateArch, customImplement, imageData) {
+    constructor(data, numArch, updateArch, customImplement, imageData, preload) {
 
         d3.select("#customImplement").style("opacity", 0);
         document.getElementById("customImplement").style.zIndex = "-2";
@@ -86,7 +86,7 @@ class aa_view {
                 .domain([0,9]);
                 //.range(["blue","orange"," #D37B23","red","#168787"]);
 
-        if (this.imageData !== undefined || this.customImplement === true) {
+        if (this.imageData !== undefined || this.customImplement === true || preload === true) {
             this.S = math.matrix(this.S);
             this.XC = math.matrix(this.XC);
         }
