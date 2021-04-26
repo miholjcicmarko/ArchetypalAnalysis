@@ -48,6 +48,7 @@ class aa_view {
         let parseTime = d3.timeParse("%Y-%m-%d");
 
         if (this.timeline === true) {
+            d3.select("#dateInput").style("opacity", 1);
             let dataTime = [];
             for (let i = 0; i < this.raw.length; i++) {
                 let datapoint = {...this.raw[i]};
@@ -65,7 +66,6 @@ class aa_view {
             }
 
             if (date2D <= date1D || date2 <= date1) {
-                d3.select("#dateInput").style("opacity", 1);
                 document.getElementById("dateInput").value = date2;
                 document.getElementById("dateInput").min = date2;
                 document.getElementById("dateInput").max = date1;
@@ -73,7 +73,6 @@ class aa_view {
                 this.date = date2D;
             }
             else if (date2D > date1D || date2 > date1) {
-                d3.select("dateInput").style("opacity", 0);
                 document.getElementById("dateInput").value = date1;
                 document.getElementById("dateInput").min = date1;
                 document.getElementById("dateInput").max = date2;
@@ -95,16 +94,19 @@ class aa_view {
         let newS = [];
         let id_list = [];
 
+        for (let i = 0; i < this.raw.length; i++) {
+            if (!id_list.includes(this.raw[i].id)) {
+                id_list.push(this.raw[i].id);
+            }
+        }
+
         for (let i = 0; i < this.S._data[0].length; i++) {
             let newObj = {};
             for (let k = 0; k < this.S._data.length; k++) {
                 newObj[""+k] = this.S._data[k][i];
             }
-            if (!id_list.includes(this.raw[i].id)) {
-                newObj["id"] = this.raw[i].id;
-                newS.push(newObj);
-                id_list.push(this.rawp[i].id);
-            }
+            newObj["id"] = id_list[i];
+            newS.push(newObj);
         }
 
         this.S = newS;
