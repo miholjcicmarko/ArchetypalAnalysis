@@ -39,7 +39,7 @@ Promise.all([preProcessData]).then(data => {
     let preData = data[0];
 
     function updateData (id, data) {
-        if (id === "diabetes") {
+        if (id === "diabetesButton") {
         //if (id === "fifaButton") {
             selectedData.newData(preData["fifa"]);
             document.getElementById('csv').value= null;
@@ -76,6 +76,7 @@ Promise.all([preProcessData]).then(data => {
             alert("Error! Select Data Set and Number of Archetypes");
         }
         else {
+            // fix this area
             let aa_result = new Algorithms(data, numArch);
             let matricies = result_to_Object(aa_result);
             let plots = new aa_view(matricies, numArch, updateArch, false);
