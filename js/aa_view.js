@@ -93,14 +93,18 @@ class aa_view {
         }
 
         let newS = [];
+        let id_list = [];
 
         for (let i = 0; i < this.S._data[0].length; i++) {
             let newObj = {};
             for (let k = 0; k < this.S._data.length; k++) {
                 newObj[""+k] = this.S._data[k][i];
             }
-            newObj["id"] = this.raw[i].id;
-            newS.push(newObj);
+            if (!id_list.includes(this.raw[i].id)) {
+                newObj["id"] = this.raw[i].id;
+                newS.push(newObj);
+                id_list.push(this.rawp[i].id);
+            }
         }
 
         this.S = newS;
