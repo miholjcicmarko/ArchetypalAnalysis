@@ -1390,7 +1390,7 @@ class aa_view {
                     this.filteredData = data[i].filter(d => d.variable_name.toLowerCase().includes(toolData));
                 }
             
-                if (!this.chosenIDs.includes(this.filteredData[0].variable_name)) {
+            //    if (!this.chosenIDs.includes(this.filteredData[0].variable_name)) {
 
                 this.chosenIDs.push(this.filteredData[0].variable_name.toLowerCase());
 
@@ -1443,7 +1443,7 @@ class aa_view {
                     return point.variable_name + "";
                 })
                 .classed("tooltipCircle"+that.count, true);
-            }
+            //}
             }
 
             if (this.timeline === true && this.timelineActive === true
