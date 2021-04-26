@@ -18,10 +18,10 @@ async function loadPreProcessData () {
 
     for (let i = 0; i < 7; i++) {
         let index = i+1;
-        let covidS = d3.csv("./data/COVIDSMatrix" + index + ".csv");
-        let covidXC = d3.csv("./data/COVIDXCMatrix" + index + ".csv");
-        let diabetesS = d3.csv("./data/DiabetesSMatrix" + index + ".csv");
-        let diabetesXC = d3.csv("./data/DiabetesXCMatrix" + index + ".csv");
+        let covidS = await d3.csv("./data/COVIDSMatrix" + index + ".csv");
+        let covidXC = await d3.csv("./data/COVIDXCMatrix" + index + ".csv");
+        let diabetesS = await d3.csv("./data/DiabetesSMatrix" + index + ".csv");
+        let diabetesXC = await d3.csv("./data/DiabetesXCMatrix" + index + ".csv");
 
         dataobject["covidS"+index] = covidS;
         dataobject["covidXC"+index] = covidXC;
