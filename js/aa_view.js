@@ -203,7 +203,7 @@ class aa_view {
                 
                     that.updateArch(number, "same");
                 }
-                else if (that.imageData !== undefined) {
+                else if (that.customImplement === true) {
                     alert("This feature is not available for Custom Implementations");
                     document.getElementById('selectNow').selectedIndex = that.numberOfArchetypes - 1;
                 }

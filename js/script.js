@@ -50,8 +50,8 @@ Promise.all([preProcessData]).then(data => {
         }
         else if (id === "custom") {
             selectedData.newData(data);
-            document.getElementById("fifaButton").style.color = "white";
-            document.getElementById("fifaButton").style.backgroundColor = "rgb(134, 124, 189)";
+            document.getElementById("diabetesButton").style.color = "white";
+            document.getElementById("diabetesButton").style.backgroundColor = "rgb(134, 124, 189)";
             document.getElementById("covidButton").style.color = "white";
             document.getElementById("covidButton").style.backgroundColor = "rgb(134, 124, 189)";
         }
