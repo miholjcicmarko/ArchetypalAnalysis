@@ -86,9 +86,19 @@ class aa_view {
                 .domain([0,9]);
                 //.range(["blue","orange"," #D37B23","red","#168787"]);
 
-        if (this.imageData !== undefined || this.customImplement === true || preload === true) {
+        if (this.imageData !== false || this.customImplement === true) {
             this.S = math.matrix(this.S);
             this.XC = math.matrix(this.XC);
+        }
+
+        let matrix_data = [];
+
+        if (preload === true) {
+            for (let m = 0; m < this.S.length; m++) {
+                let vals = Object.values(this.S[m]);
+                matrix_data.push(vals);
+            }
+            this.S = math.matrix(matrix_data);
         }
 
         let newS = [];
@@ -160,7 +170,7 @@ class aa_view {
         let dropdown = d3.select("#selectNow");
 
             dropdown.on("change", function () {
-                if (that.imageData === undefined) {
+                if (that.imageData === false) {
 
                     let number = this.value;
 
@@ -255,7 +265,7 @@ class aa_view {
         selectRegion.on("click", function () {
             that.imageBrushToggled = false;
             that.origVar= that.chosenVars;
-            if (that.brushOn === false && imageData === undefined) {
+            if (that.brushOn === false && imageData === false) {
                 if (that.chosenVars.length > 1) {
                     that.drawBrush();
                     that.drawIds();
@@ -265,7 +275,7 @@ class aa_view {
                     alert("Select One or More Attributes");
                 }
             }
-            else if (that.brushOn === true && imageData === undefined) {
+            else if (that.brushOn === true && imageData === false) {
                 document.getElementById("submit").innerHTML = 'Submit Selected Attributes/IDs';
                 that.removeBrush();   
                 d3.selectAll(".brushDataTemp").remove();
@@ -292,12 +302,12 @@ class aa_view {
                     that.drawIds();
                 //}
             }
-            else if (that.brushOn === false && that.imageData !== undefined) {
+            else if (that.brushOn === false && that.imageData !== false) {
                 that.drawBrush();
                 that.drawIds();
                 document.getElementById("submit").innerHTML = 'Drag and Select ID Points';
             }
-            else if (that.brushOn === true && that.imageData !== undefined) {
+            else if (that.brushOn === true && that.imageData !== false) {
                 document.getElementById("submit").innerHTML = 'Image Analysis';
                 that.removeBrush();   
                 d3.selectAll(".brushDataTemp").remove();
@@ -331,7 +341,7 @@ class aa_view {
         
         let width = 450 - this.margin.right - this.margin.left;
         let height = 5000 - this.margin.bottom - this.margin.top;
-        if (this.imageData === undefined) {
+        if (this.imageData === false) {
             height = 350 - this.margin.bottom - this.margin.top;
         }
 
@@ -354,10 +364,10 @@ class aa_view {
             
             if (numberOfArchetypes >= 5) {
                 oneD.attr("height", function () {
-                    if (that.imageData === undefined) {
+                    if (that.imageData === false) {
                         return (height / numberOfArchetypes);
                     }
-                    else if (that.imageData !== undefined) {
+                    else if (that.imageData !== false) {
                         return (height / numberOfArchetypes) - 
                         24*that.margin.top - 20*that.margin.bottom;
                     }  
@@ -480,7 +490,7 @@ class aa_view {
             
         });
 
-    if (that.imageData === undefined) {
+    if (that.imageData === false) {
         that.drawVariables();
 
     let submit = d3.select("#submit");
@@ -567,7 +577,7 @@ class aa_view {
         let activeBrush = null;
         let activeBrushNode = null;
         //if (that.barsOn === true) {
-        if (that.imageData === undefined) {
+        if (that.imageData === false) {
             that.origVar = that.chosenVars;
         }
         that.origId = that.chosenIDs;
@@ -628,10 +638,10 @@ class aa_view {
                             that.createTempLine(selectionData, true);
                         }
 
-                        if (that.imageData === undefined) {
+                        if (that.imageData === false) {
                             that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
                         }
-                        else if (that.imageData !== undefined) {
+                        else if (that.imageData !== false) {
                             that.displayMultipleImages(that.chosenIDs);
                         }
                     }
@@ -670,10 +680,10 @@ class aa_view {
                         that.chosenIDs = [... new Set(that.chosenIDs)];
                         that.drawIds();
 
-                        if (that.imageData === undefined) {
+                        if (that.imageData === false) {
                             that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
                         }
-                        else if (that.imageData !== undefined) {
+                        else if (that.imageData !== false) {
                             that.displayMultipleImages(that.chosenIDs);
                         }
 
@@ -969,12 +979,12 @@ class aa_view {
                 .style("left", (pageX) + "px")
                 .style("top", (pageY) + "px");
 
-            if (that.chosenIDs.includes(this.id.toLowerCase()) && that.imageData === undefined) {
+            if (that.chosenIDs.includes(this.id.toLowerCase()) && that.imageData === false) {
                 let name = this.id.toLowerCase();
                 document.getElementById("" + name+ "button").style.backgroundColor = "rgb(71, 105, 1)";     
             }
             
-            if (this.localName !== "path" && that.imageData === undefined) {
+            if (this.localName !== "path" && that.imageData === false) {
                 d3.select(this).classed("hovered", true);
                 that.createTempCircle(this);
                 if (that.timeline === true) {
@@ -982,7 +992,7 @@ class aa_view {
                     that.createTempLine(this, undefined, true);
                 }
             }
-            else if (this.localName === "path" && that.imageData === undefined) {
+            else if (this.localName === "path" && that.imageData === false) {
                 if (that.timeline === true) {
                     if (!that.chosenIDs.includes(this.id.toLowerCase())) {
                         d3.select(this).classed("timeLine", false);
@@ -994,11 +1004,11 @@ class aa_view {
                 }
                 that.createTempCircle(this);
             }
-            if (that.barsOn === true && that.imageData === undefined) {
+            if (that.barsOn === true && that.imageData === false) {
                 d3.select("#bar1").select("#bars").selectAll("#"+this.id.toLowerCase()).classed("hovered", true);
             }
 
-            if (that.imageData !== undefined) {
+            if (that.imageData !== false) {
                 d3.select(this).classed("hovered", true);
                 that.createTempCircle(this);
                 that.displayImages(this, false);
@@ -1007,13 +1017,13 @@ class aa_view {
         });
 
         onscreenData.on("mouseout", function(d,i) {
-            if (that.chosenIDs.includes(this.id.toLowerCase()) && that.imageData === undefined) {
+            if (that.chosenIDs.includes(this.id.toLowerCase()) && that.imageData === false) {
                 let index = that.chosenIDs.indexOf(this.id.toLowerCase());
                 let name = this.id.toLowerCase();
                 document.getElementById("" + name+ "button").style.backgroundColor = that.color(index);     
             }
 
-            if (this.localName !== "path" && that.imageData === undefined) {
+            if (this.localName !== "path" && that.imageData === false) {
                 d3.select(this).classed("hovered",false);
                 d3.selectAll(".tempCircle").remove();
                 if (that.timeline === true) {
@@ -1022,7 +1032,7 @@ class aa_view {
                 }
                 d3.select(name + "button").classed("hoveredButton", false);
             }
-            else if (this.localName === "path" && that.imageData === undefined) {
+            else if (this.localName === "path" && that.imageData === false) {
                 if (that.timeline === true) {
                     
                     //d3.select(this).classed("timeLine", true);
@@ -1045,7 +1055,7 @@ class aa_view {
                 }
             }
 
-            if (that.imageData !== undefined || that.customImplement) {
+            if (that.imageData !== false || that.customImplement) {
                 d3.select(this).classed("hovered",false);
                 d3.selectAll(".tempCircle").remove();
                 d3.selectAll(".imgdiv").remove();
@@ -1068,7 +1078,7 @@ class aa_view {
                 that.onSearch(this,that.dataS, that.numberOfArchetypes, true);
                 that.drawIds();
 
-                if (that.imageData !== undefined) {
+                if (that.imageData !== false) {
                     if (that.imageBrushToggled === true) {
                         that.countImages = that.countImages + that.chosenIDs.length - 1;
                     }
@@ -1348,10 +1358,10 @@ class aa_view {
 
     tooltipRender(data, imageData) {
         let text = data.currentTarget.id;
-        if (imageData === undefined) {
+        if (imageData === false) {
             return text;
         }
-        else if (imageData !== undefined) {
+        else if (imageData !== false) {
             let text_arr = text.split("/");
             text = text_arr[text_arr.length -1];
             return text;
@@ -1447,7 +1457,7 @@ class aa_view {
             }
 
             if (this.timeline === true && this.timelineActive === true
-                && this.imageData === undefined) {
+                && this.imageData === false) {
 
                 //this.createTempLine()
 
@@ -1490,7 +1500,7 @@ class aa_view {
             this.tooltip(line_data);
         }
 
-        if (this.imageData !== undefined && isTooltip === false) {
+        if (this.imageData !== false && isTooltip === false) {
             this.displayImages(this.filteredData[0].variable_name.toLowerCase(), true, false);
         }
     }
@@ -1558,6 +1568,7 @@ class aa_view {
         let rawDataVarSpecific = [];
         let yScales = [];
         let xScales = [];
+        let maxes = [];
         
         for (let i = 1; i < chosenVariables.length; i++) {
             let arrayofData = [];
@@ -1569,6 +1580,8 @@ class aa_view {
             rawDataVarSpecific.push(arrayofData);
 
             let arrayRaw = rawDataVarSpecific[i-1];
+
+            maxes.push(d3.max(arrayRaw));
             
             let yScaleOne = d3.scaleLinear()
                                 .domain([0, d3.max(arrayRaw)])
@@ -1686,7 +1699,19 @@ class aa_view {
                     yaxis.call(d3.axisLeft(yScales[(i*that.chosenIDs.length)-1]).ticks(5))
                         .attr("transform", "translate(" + (displace+30) + ",0)")
                         //.attr("transform", "translate(" + ((i-1)*(w/(chosenVariables.length-1))+4*margin.left+10) + ",0)")
-                        .attr("class", "axis_line");
+                        .attr("class", "axis_line")
+                        .style("font-size", function () {
+                            let scale = yScales[i]
+                            if (scale(maxes[i] > 10000) && scale(maxes[i] < 100000)) {
+                                return "6";
+                            }
+                            else if (scale(maxes[i] > 100000)) {
+                                return "5";
+                            }
+                            else {
+                                return "8"
+                            }
+                        })
                     
                     if (that.chosenIDs.length * that.chosenVars.length < 10) {
 
@@ -1719,7 +1744,6 @@ class aa_view {
                                     return "translate(" + (displace-95) + "," + (h/2.5+5)+")rotate(-90)";
                                 }
                             })
-                            //.attr("transform", "translate(" + (-50+((i-1))) +","+h/2+")rotate(-90)");
                     
                 }
 

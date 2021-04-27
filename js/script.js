@@ -56,6 +56,7 @@ Promise.all([preProcessData]).then(data => {
             document.getElementById("diabetesButton").style.backgroundColor = "rgb(134, 124, 189)";
             document.getElementById("covidButton").style.color = "white";
             document.getElementById("covidButton").style.backgroundColor = "rgb(134, 124, 189)";
+            selectedData.preloaded = false;
         }
     }
 
@@ -81,10 +82,10 @@ Promise.all([preProcessData]).then(data => {
         else if (data === null && numArch === null || data === null && numArch === '-') {
             alert("Error! Select Data Set and Number of Archetypes");
         }
-        else if (preloaded === undefined) {
+        else if (preloaded === undefined || preloaded === false) {
             let aa_result = new Algorithms(data, numArch);
             let matricies = result_to_Object(aa_result);
-            let plots = new aa_view(matricies, numArch, updateArch, false);
+            let plots = new aa_view(matricies, numArch, updateArch, false, false);
         }
         else if (preloaded !== undefined) {
             let matricies = preloaded_to_Object(preloaded, numArch);
@@ -106,7 +107,7 @@ Promise.all([preProcessData]).then(data => {
             let plots = new aa_view(matricies, numArch, updateArch, true, imageData);
         }
         else if (imageBoolean !== true) {
-            let plots = new aa_view(matricies, numArch, updateArch, true);
+            let plots = new aa_view(matricies, numArch, updateArch, true, false);
         }
         
     }
