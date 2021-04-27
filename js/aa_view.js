@@ -1568,6 +1568,7 @@ class aa_view {
         let rawDataVarSpecific = [];
         let yScales = [];
         let xScales = [];
+        let maxes = [];
         
         for (let i = 1; i < chosenVariables.length; i++) {
             let arrayofData = [];
@@ -1579,6 +1580,8 @@ class aa_view {
             rawDataVarSpecific.push(arrayofData);
 
             let arrayRaw = rawDataVarSpecific[i-1];
+
+            maxes.push(d3.max(arrayRaw));
             
             let yScaleOne = d3.scaleLinear()
                                 .domain([0, d3.max(arrayRaw)])
@@ -1696,7 +1699,19 @@ class aa_view {
                     yaxis.call(d3.axisLeft(yScales[(i*that.chosenIDs.length)-1]).ticks(5))
                         .attr("transform", "translate(" + (displace+30) + ",0)")
                         //.attr("transform", "translate(" + ((i-1)*(w/(chosenVariables.length-1))+4*margin.left+10) + ",0)")
-                        .attr("class", "axis_line");
+                        .attr("class", "axis_line")
+                        .style("font-size", function () {
+                            let scale = yScales[i]
+                            if (scale(maxes[i] > 10000) && scale(maxes[i] < 100000)) {
+                                return "6";
+                            }
+                            else if (scale(maxes[i] > 100000)) {
+                                return "5";
+                            }
+                            else {
+                                return "8"
+                            }
+                        })
                     
                     if (that.chosenIDs.length * that.chosenVars.length < 10) {
 
@@ -1729,7 +1744,6 @@ class aa_view {
                                     return "translate(" + (displace-95) + "," + (h/2.5+5)+")rotate(-90)";
                                 }
                             })
-                            //.attr("transform", "translate(" + (-50+((i-1))) +","+h/2+")rotate(-90)");
                     
                 }
 

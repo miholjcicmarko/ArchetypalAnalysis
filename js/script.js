@@ -56,6 +56,7 @@ Promise.all([preProcessData]).then(data => {
             document.getElementById("diabetesButton").style.backgroundColor = "rgb(134, 124, 189)";
             document.getElementById("covidButton").style.color = "white";
             document.getElementById("covidButton").style.backgroundColor = "rgb(134, 124, 189)";
+            selectedData.preloaded = false;
         }
     }
 
