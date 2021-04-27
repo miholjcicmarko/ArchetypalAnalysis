@@ -265,7 +265,7 @@ class aa_view {
         selectRegion.on("click", function () {
             that.imageBrushToggled = false;
             that.origVar= that.chosenVars;
-            if (that.brushOn === false && imageData === undefined) {
+            if (that.brushOn === false && imageData === false) {
                 if (that.chosenVars.length > 1) {
                     that.drawBrush();
                     that.drawIds();
@@ -275,7 +275,7 @@ class aa_view {
                     alert("Select One or More Attributes");
                 }
             }
-            else if (that.brushOn === true && imageData === undefined) {
+            else if (that.brushOn === true && imageData === false) {
                 document.getElementById("submit").innerHTML = 'Submit Selected Attributes/IDs';
                 that.removeBrush();   
                 d3.selectAll(".brushDataTemp").remove();
@@ -1358,10 +1358,10 @@ class aa_view {
 
     tooltipRender(data, imageData) {
         let text = data.currentTarget.id;
-        if (imageData === undefined) {
+        if (imageData === false) {
             return text;
         }
-        else if (imageData !== undefined) {
+        else if (imageData !== false) {
             let text_arr = text.split("/");
             text = text_arr[text_arr.length -1];
             return text;
