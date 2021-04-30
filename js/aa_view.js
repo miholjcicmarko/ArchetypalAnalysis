@@ -1061,7 +1061,7 @@ class aa_view {
                 d3.selectAll(".imgdiv").remove();
             }
 
-            if (that.barsOn === true && that.chosenIDs.includes(this.id)) {
+            if (that.barsOn === true && that.chosenIDs.includes(this.id.toLowerCase())) {
                 d3.select("#bar1").select("#bars").selectAll("#"+this.id.toLowerCase()).classed("hovered", false);
             }
 

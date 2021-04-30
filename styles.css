@@ -353,13 +353,14 @@ div.tooltipRect {
 
 .selectedLine {
     fill: none;
+    stroke-width: 3;
 }
 
 .timeLine {
     fill: none;
     stroke: rgb(230, 219, 219);
-    stroke-width: 3;
-    opacity: 0.5;
+    stroke-width: 1.5;
+    opacity: 0.2;
 }
 
 div.tooltipLine {
@@ -373,17 +374,20 @@ div.tooltipLine {
     pointer-events: none;
     margin: auto;
     font-weight: bold;
+    stroke-width: 3;
 }
 
 .tooltipLine h5 {
     margin: auto;
     font: 12px sans-serif;
     font-weight: bold;
+    stroke-width: 3;
 }
 
 .notbrushed {
     fill: gray;
-    opacity: 0.1;
+    opacity: 0.2;
+    stroke-width: 1.5;
 }
 
 .brushedLine {
