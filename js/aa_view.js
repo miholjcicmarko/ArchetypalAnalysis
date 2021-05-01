@@ -1031,6 +1031,7 @@ class aa_view {
             if (this.localName !== "path" && that.imageData === false) {
                 d3.select(this).classed("hovered",false);
                 d3.selectAll(".tempCircle").remove();
+                d3.selectAll(".datapoint").remove();
                 if (that.timeline === true) {
                     d3.select(".toolTempLine").remove();
                     that.tooltipCircleON = false;
@@ -1140,9 +1141,34 @@ class aa_view {
                 }
             })
             .classed("hovered", true)
-            .classed("tempCircle", true);
+            .classed("tempCircle", function () {
+                if (layer !== i) {
+                    return true;
+                }
+                else if (layer === i) {
+                    return false;
+                }})
+            .classed("datapoint", function () {
+                if (layer !== i) {
+                    return false;
+                }
+                else if (layer === i) {
+                    return true;
+                }})
+            .attr("id", function(d) {
+                if (layer === i) {
+                    return point.variable_name + "";
+                }
+                else {
+                    return "";
+                }
+            }); 
             //}
         }
+
+        let data_circ = d3.selectAll("#oned").selectAll(".datapoint");
+
+        this.tooltip(data_circ);
     }
 
     createTempLine (item, brushed, tooltipLineOn) {
