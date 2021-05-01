@@ -21,6 +21,9 @@ class aa_view {
         this.XC = data.XC;
         this.S = data.S;
         this.raw = data.raw; 
+        for (let i = 0; i < this.raw.length; i++) {
+            this.raw[i].id = this.raw[i].id.replace(/\s/g, "");
+        }
         this.variables = Object.keys(this.raw[0]);
         this.updateArch = updateArch;
         this.timeline = data.time_data;
