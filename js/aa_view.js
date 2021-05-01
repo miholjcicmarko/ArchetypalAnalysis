@@ -990,6 +990,8 @@ class aa_view {
             if (this.localName !== "path" && that.imageData === false) {
                 d3.select(this).classed("hovered", true);
                 that.createTempCircle(this);
+                //tooltip.append('circle')
+
                 if (that.timeline === true) {
                     that.tooltipCircleON = true;
                     that.createTempLine(this, undefined, true);
@@ -1111,7 +1113,7 @@ class aa_view {
             let layerlen = layer.length;
             layer = Number(layer[layerlen-1]);
 
-            if (layer !== i) {
+            //if (layer !== i) {
             
             circle.append("circle")
             .attr("cx", circleScale(point.value))
@@ -1139,7 +1141,7 @@ class aa_view {
             })
             .classed("hovered", true)
             .classed("tempCircle", true);
-            }
+            //}
         }
     }
 
