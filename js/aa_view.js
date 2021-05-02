@@ -574,7 +574,9 @@ class aa_view {
     }
 
     brush(svg, brush_chart, brush_width, brush_height) {
-        
+        let tooltip = d3.selectAll('.tooltip');
+        tooltip.style("z-index", "-2");
+
         this.brushOn = true;
         let that = this;
         let activeBrush = null;
@@ -977,6 +979,12 @@ class aa_view {
             tooltip.transition()
                 .duration(200)
                 .style("opacity", 0.9);
+
+            if (that.brushOn === true) {
+                tooltip.html("");
+            }
+
+            if (that.brushOn === false) {
         
             tooltip.html(that.tooltipRender(d, that.imageData))
                 .style("left", (pageX) + "px")
@@ -990,7 +998,6 @@ class aa_view {
             if (this.localName !== "path" && that.imageData === false) {
                 d3.select(this).classed("hovered", true);
                 that.createTempCircle(this);
-                //tooltip.append('circle')
 
                 if (that.timeline === true) {
                     that.tooltipCircleON = true;
@@ -1009,7 +1016,7 @@ class aa_view {
                 }
                 that.createTempCircle(this);
             }
-            if (that.barsOn === true && that.imageData === false) {
+            if (that.barsOn === true && that.imageData === false && that.brushOn === false) {
                 d3.select("#bar1").select("#bars").selectAll("#"+this.id.toLowerCase()).classed("hovered", true);
             }
 
@@ -1019,9 +1026,12 @@ class aa_view {
                 that.displayImages(this, false);
             }
 
+            }
         });
 
         onscreenData.on("mouseout", function(d,i) {
+            if (that.brushOn === false) {
+
             if (that.chosenIDs.includes(this.id.toLowerCase()) && that.imageData === false) {
                 let index = that.chosenIDs.indexOf(this.id.toLowerCase());
                 let name = this.id.toLowerCase();
@@ -1031,14 +1041,13 @@ class aa_view {
             if (this.localName !== "path" && that.imageData === false) {
                 d3.select(this).classed("hovered",false);
                 d3.selectAll(".tempCircle").remove();
-                d3.selectAll(".datapoint").remove();
                 if (that.timeline === true) {
                     d3.select(".toolTempLine").remove();
                     that.tooltipCircleON = false;
                 }
                 d3.select(name + "button").classed("hoveredButton", false);
             }
-            else if (this.localName === "path" && that.imageData === false) {
+            else if (this.localName === "path" && that.imageData === false && that.brushOn === false) {
                 if (that.timeline === true) {
                     
                     //d3.select(this).classed("timeLine", true);
@@ -1071,12 +1080,14 @@ class aa_view {
                 d3.select("#bar1").select("#bars").selectAll("#"+this.id.toLowerCase()).classed("hovered", false);
             }
 
+            }
             tooltip.transition()
                 .duration(500)
                 .style("opacity", 0);
         });
 
         onscreenData.on("click", function(d,i) {
+            if (that.brushOn === false) {
             this.id = this.id.toLowerCase();
             that.variable_name = this.id.toLowerCase();
             if (!that.chosenIDs.includes(this.id)) {
@@ -1090,6 +1101,7 @@ class aa_view {
                     }
                     that.displayImages(this, true);
                 }
+            }
             }
         })
 
@@ -1114,7 +1126,7 @@ class aa_view {
             let layerlen = layer.length;
             layer = Number(layer[layerlen-1]);
 
-            //if (layer !== i) {
+            if (layer !== i) {
             
             circle.append("circle")
             .attr("cx", circleScale(point.value))
@@ -1141,34 +1153,9 @@ class aa_view {
                 }
             })
             .classed("hovered", true)
-            .classed("tempCircle", function () {
-                if (layer !== i) {
-                    return true;
-                }
-                else if (layer === i) {
-                    return false;
-                }})
-            .classed("datapoint", function () {
-                if (layer !== i) {
-                    return false;
-                }
-                else if (layer === i) {
-                    return true;
-                }})
-            .attr("id", function(d) {
-                if (layer === i) {
-                    return point.variable_name + "";
-                }
-                else {
-                    return "";
-                }
-            }); 
-            //}
+            .classed("tempCircle", true);
+            }
         }
-
-        let data_circ = d3.selectAll("#oned").selectAll(".datapoint");
-
-        this.tooltip(data_circ);
     }
 
     createTempLine (item, brushed, tooltipLineOn) {
