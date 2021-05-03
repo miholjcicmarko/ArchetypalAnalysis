@@ -1006,6 +1006,7 @@ class aa_view {
                 }
             }
             else if (this.localName === "path" && that.imageData === false) {
+                d3.select(this.parentNode).raise();
                 if (that.timeline === true) {
                     if (!that.chosenIDs.includes(this.id.toLowerCase())) {
                         d3.select(this).classed("timeLine", false);
@@ -1041,8 +1042,12 @@ class aa_view {
 
             if (this.localName !== "path" && that.imageData === false) {
                 d3.select(this).classed("hovered",false);
-                if (this.classed)
                 d3.select(this).lower();
+
+                if (this.classList[0] === "selectedCircle") {
+                    d3.select(this).raise();
+                }
+                
                 d3.selectAll(".tempCircle").remove();
                 if (that.timeline === true) {
                     d3.select(".toolTempLine").remove();
@@ -1051,6 +1056,7 @@ class aa_view {
                 d3.select(name + "button").classed("hoveredButton", false);
             }
             else if (this.localName === "path" && that.imageData === false && that.brushOn === false) {
+                d3.select(this.parentNode).lower();
                 if (that.timeline === true) {
                     
                     //d3.select(this).classed("timeLine", true);
@@ -1106,6 +1112,9 @@ class aa_view {
                     }
                     that.displayImages(this, true);
                 }
+            }
+            for (let i = 0; i < that.chosenIDs.length; i++) {
+                d3.select("#line"+ that.chosenIDs[i]).raise();
             }
             }
         })
