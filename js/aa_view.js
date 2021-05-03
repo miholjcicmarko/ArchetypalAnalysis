@@ -997,6 +997,7 @@ class aa_view {
             
             if (this.localName !== "path" && that.imageData === false) {
                 d3.select(this).classed("hovered", true);
+                d3.select(this).raise();
                 that.createTempCircle(this);
 
                 if (that.timeline === true) {
@@ -1040,6 +1041,8 @@ class aa_view {
 
             if (this.localName !== "path" && that.imageData === false) {
                 d3.select(this).classed("hovered",false);
+                if (this.classed)
+                d3.select(this).lower();
                 d3.selectAll(".tempCircle").remove();
                 if (that.timeline === true) {
                     d3.select(".toolTempLine").remove();
@@ -1088,6 +1091,8 @@ class aa_view {
 
         onscreenData.on("click", function(d,i) {
             if (that.brushOn === false) {
+            d3.selectAll(".circleData").lower();
+
             this.id = this.id.toLowerCase();
             that.variable_name = this.id.toLowerCase();
             if (!that.chosenIDs.includes(this.id)) {
@@ -1471,6 +1476,7 @@ class aa_view {
                     return point.variable_name + "";
                 })
                 .classed("tooltipCircle"+that.count, true);
+
             //}
             }
 
