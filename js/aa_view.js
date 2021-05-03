@@ -1057,7 +1057,11 @@ class aa_view {
             }
             else if (this.localName === "path" && that.imageData === false && that.brushOn === false) {
                 d3.select(this.parentNode).lower();
+
                 if (that.timeline === true) {
+                    if (this.classList[0] === "selectedLine") {
+                        d3.select(this).raise();
+                    }
                     
                     //d3.select(this).classed("timeLine", true);
                     // if (that.brushOn === true) {
@@ -1499,13 +1503,13 @@ class aa_view {
         
                 let itemArray = objarray.filter(key => key.id.toLowerCase() === value);
         
-                let svg = d3.select("#svg-time");
+                let svg = d3.select("#svg-time").select("#lineGroup");
         
                 let lines = svg.selectAll("lines")
                             .data(itemArray)
                             .enter()
                             .append("g")
-                            .attr("transform", "translate(" + 60 + "," + 0 + ")");
+                            .attr("transform", "translate(" + 0 + "," + 0 + ")");
 
                 let that = this;
         
@@ -2202,7 +2206,8 @@ class aa_view {
             .attr("width", w + margin.right + margin.left)
             .attr("height", h + margin.top + margin.bottom)
             .append("g")
-            .attr("transform", "translate(" + 3*margin.left + "," + 0 + ")");
+            .attr("transform", "translate(" + 3*margin.left + "," + 0 + ")")
+            .attr("id", "lineGroup");
 
         svg.append("g")
             .attr("id", "x-axis")
