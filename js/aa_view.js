@@ -1409,7 +1409,7 @@ class aa_view {
         if (isTooltip === true) {
             value = value.id
         }
-        if (this.chosenIDs.length > 4 && ((this.chosenIDs.includes(value) !== true) ||
+        if (this.chosenIDs.length > 10 && ((this.chosenIDs.includes(value) !== true) ||
         !this.chosenIDs.includes(searchVal.id))) {
             alert("Too many IDs chosen!");
         }
@@ -1478,11 +1478,13 @@ class aa_view {
                 })
                 .classed("selectedCircle", true)
                 .attr("fill", function () {
-                    let index = that.chosenIDs.length-1;
+                    let target_id = point.variable_name.toLowerCase();
+                    let index = that.chosenIDs.indexOf(target_id);
                     return that.color(index);
                 })
                 .attr("stroke", function () {
-                    let index = that.chosenIDs.length-1;
+                    let target_id = point.variable_name.toLowerCase();
+                    let index = that.chosenIDs.indexOf(target_id);
                     return that.color(index);
                 })
                 .attr("id", function(d) {
@@ -1503,13 +1505,13 @@ class aa_view {
         
                 let itemArray = objarray.filter(key => key.id.toLowerCase() === value);
         
-                let svg = d3.select("#svg-time");
+                let svg = d3.select("#lineGroup");
         
                 let lines = svg.selectAll("lines")
                             .data(itemArray)
                             .enter()
                             .append("g")
-                            .attr("transform", "translate(" + 60 + "," + 0 + ")");
+                            .attr("transform", "translate(" + 0 + "," + 0 + ")");
 
                 let that = this;
         
@@ -1518,7 +1520,8 @@ class aa_view {
                      .attr("d", function(d) { return line(d.values)})
                      .classed("selectedLine", true)
                      .attr("stroke", function () {
-                        let index = that.chosenIDs.length - 1;
+                        let target_id = value.toLowerCase();
+                        let index = that.chosenIDs.indexOf(target_id);
                         return that.color(index);
                      })
                      .attr("stroke-width", 3)
@@ -2247,7 +2250,10 @@ class aa_view {
         }
 
         if (this.chosenIDs.length > 0) {
-            this.createTempLine(false, false);
+            for (let i = 0; i < this.chosenIDs.length; i++) {
+                let val = this.chosenIDs[i];
+                this.onSearch(val,this.dataS, this.numberOfArchetypes, false);
+            }
         }
     }
 
