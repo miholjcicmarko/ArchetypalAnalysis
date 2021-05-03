@@ -1060,7 +1060,7 @@ class aa_view {
 
                 if (that.timeline === true) {
                     if (this.classList[0] === "selectedLine") {
-                        d3.select(this).raise();
+                        d3.select(this.parentNode).raise();
                     }
                     
                     //d3.select(this).classed("timeLine", true);
@@ -1503,13 +1503,13 @@ class aa_view {
         
                 let itemArray = objarray.filter(key => key.id.toLowerCase() === value);
         
-                let svg = d3.select("#svg-time").select("#lineGroup");
+                let svg = d3.select("#svg-time");
         
                 let lines = svg.selectAll("lines")
                             .data(itemArray)
                             .enter()
                             .append("g")
-                            .attr("transform", "translate(" + 0 + "," + 0 + ")");
+                            .attr("transform", "translate(" + 60 + "," + 0 + ")");
 
                 let that = this;
         
