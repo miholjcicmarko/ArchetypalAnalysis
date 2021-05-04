@@ -345,7 +345,7 @@ class aa_view {
         let width = 450 - this.margin.right - this.margin.left;
         let height = 5000 - this.margin.bottom - this.margin.top;
         if (this.imageData === false) {
-            height = 350 - this.margin.bottom - this.margin.top;
+            height = 345 - this.margin.bottom - this.margin.top;
         }
 
         d3.select('#oned')
@@ -533,7 +533,7 @@ class aa_view {
         this.margin = {top: 10, right: 10, bottom: 10, left: 10};
         
         let width = 450 - this.margin.right - this.margin.left;
-        let height = 350 - this.margin.bottom - this.margin.top;
+        let height = 345 - this.margin.bottom - this.margin.top;
 
         this.max_brush_width = width;
         let height_1d = 0;
@@ -1594,7 +1594,7 @@ class aa_view {
         let margin = {top: 10, right: 10, bottom: 10, left: 10};
         
         let w = 500 - margin.right - margin.left;
-        let h = 350 - margin.bottom - margin.top;
+        let h = 345 - margin.bottom - margin.top;
         let barpadding = 70;
 
         let svg = d3.select("#bar1")
@@ -1847,7 +1847,7 @@ class aa_view {
         let margin = {top: 10, right: 10, bottom: 10, left: 10};
         
         let w = 500 - margin.right - margin.left;
-        let h = 350 - margin.bottom - margin.top;
+        let h = 345 - margin.bottom - margin.top;
         let barpadding = 70;
 
         let svg = d3.select("#bar1")
@@ -2249,11 +2249,14 @@ class aa_view {
             d3.select("#timeL").style("opacity", 0);
         }
 
-        if (this.chosenIDs.length > 0) {
+        if (this.chosenIDs.length > 0 && this.brushOn === false) {
             for (let i = 0; i < this.chosenIDs.length; i++) {
                 let val = this.chosenIDs[i];
                 this.onSearch(val,this.dataS, this.numberOfArchetypes, false);
             }
+        }
+        else if (this.brushOn === true) {
+            this.createTempLine(this.brushedData, true);
         }
     }
 
