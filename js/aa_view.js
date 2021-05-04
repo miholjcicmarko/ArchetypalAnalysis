@@ -1614,8 +1614,11 @@ class aa_view {
             let arrayofData = [];
 
             for (let k = 0; k < this.raw.length; k++) {
-                let number = parseInt(this.raw[k][""+chosenVariables[i]])
-                arrayofData.push(number);
+                if (this.chosenIDs.includes(this.raw[k]["id"].toLowerCase())){
+                    let number = parseInt(this.raw[k][""+chosenVariables[i]])
+                    arrayofData.push(number);
+                }
+
             }
             rawDataVarSpecific.push(arrayofData);
 
