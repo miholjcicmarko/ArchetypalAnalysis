@@ -1409,9 +1409,10 @@ class aa_view {
         if (isTooltip === true) {
             value = value.id
         }
-        if (this.chosenIDs.length > 10 && ((this.chosenIDs.includes(value) !== true) ||
-        !this.chosenIDs.includes(searchVal.id))) {
+        if (this.chosenIDs.length > 10) {
+            this.chosenIDs.pop();
             alert("Too many IDs chosen!");
+            return;
         }
         //else if ((this.chosenIDs.includes(value) === true)){
         //    let index = this.chosenIDs.indexOf(value);
@@ -1618,7 +1619,6 @@ class aa_view {
                     let number = parseInt(this.raw[k][""+chosenVariables[i]])
                     arrayofData.push(number);
                 }
-
             }
             rawDataVarSpecific.push(arrayofData);
 
@@ -1890,8 +1890,10 @@ class aa_view {
             
             let arrayofData = [];
             for (let k = 0; k < filteredData.length; k++) {
-                let number = parseInt(filteredData[k][""+chosenVariables[i]])
-                arrayofData.push(number);
+                if (this.chosenIDs.includes(filteredData[k]["id"].toLowerCase())){
+                    let number = parseInt(filteredData[k][""+chosenVariables[i]])
+                    arrayofData.push(number);
+                }
             }
 
             let avg_xlabel = ["avg"];
