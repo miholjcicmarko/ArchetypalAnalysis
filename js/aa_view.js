@@ -754,9 +754,6 @@ class aa_view {
             let that = this;
 
             d3.select("#bar1")
-                //.append("fieldset")
-                //.append("legend")
-                //.text("HI")
                 .append("img")
                 .classed("imgdiv", function() {
                     if (clicked !== true) {
@@ -790,7 +787,7 @@ class aa_view {
 
             reader.onloadend = function (e) {
                 if (clicked === true) {
-                    d3.select("#selectedImg" + that.countImages)
+                    let image = d3.select("#selectedImg" + that.countImages)
                     .style("border-color", function() {
                         let id = document.getElementById('selectedImg'+ that.countImages);
 
@@ -811,9 +808,13 @@ class aa_view {
                         }
                         return e.target.result;
                         });
+
+                    // image.append("text")
+                    //     .attr("dy", ".35em")
+                    //     .text(e.target + "");
                 }
                 else if (clicked === false) {
-                    d3.select("#selectedImg" + that.countImages + "tooltip")
+                    let image = d3.select("#selectedImg" + that.countImages + "tooltip")
                     .style("border-color", function() {
                         let id = document.getElementById('selectedImg'+ that.countImages + "tooltip");
 
@@ -834,6 +835,9 @@ class aa_view {
                         }
                         return e.target.result});
 
+                    // image.append("text")
+                    //     .attr("dy", ".35em")
+                    //     .text(target.id + "");
                 }
             }
             reader.readAsDataURL(fileName);
