@@ -47,6 +47,7 @@ class aa_view {
         this.origId = [];
         this.countImages = 0;
         this.imageBrushToggled = false;
+        this.imageNames = [];
 
         let parseTime = d3.timeParse("%Y-%m-%d");
 
@@ -754,6 +755,8 @@ class aa_view {
             let that = this;
 
             d3.select("#bar1")
+                .append("div")
+                .attr("id", "Img" + that.countImages)
                 .append("img")
                 .classed("imgdiv", function() {
                     if (clicked !== true) {
@@ -841,6 +844,8 @@ class aa_view {
                 }
             }
             reader.readAsDataURL(fileName);
+            that.imageNames.push(fileName);
+            that.drawIds();
         }
     }
 
@@ -941,7 +946,9 @@ class aa_view {
 
         this.chosenIDs = [... new Set(this.chosenIDs)];
 
-        for (let i = 0; i < this.chosenIDs.length; i++) {
+        if (this.imageData === undefined) {
+
+            for (let i = 0; i < this.chosenIDs.length; i++) {
                 let that = this;
 
                 let button = d3.select('#iDs')
@@ -959,7 +966,29 @@ class aa_view {
                         }
                     })      
 
-                document.getElementById("" + this.chosenIDs[i]+ "button").innerHTML = this.chosenIDs[i];
+                document.getElementById("" + this.chosenIDs[i]+ "button").innerHTML = this.chosenIDs[i];   
+            }
+        }
+        else if (this.imageData != undefined) {
+            this.imageNames = [...new Set(this.imageNames)];
+
+            let img = document.getElementById("Img"+ this.imageNames.length);
+                img
+                    .append("button")
+                    .classed("idButton", true)
+                    .attr("id", "" + this.imageNames[this.imageNames.length - 1] + "button")
+                    .style("margin", "5px")
+                    .style("background-color", function() {
+                        if (that.brushOn === false) {
+                            let index = i;
+                            return that.color(index);
+                        }
+                        else if (that.brushOn === true) {
+                            return "steelblue";
+                        }
+                    })
+            document.getElementById("" + this.imageNames[this.imageNames.length - 1]+ "button")
+                .innerHTML = this.imageNames[this.imageNames.length - 1];
             
         }
     }
