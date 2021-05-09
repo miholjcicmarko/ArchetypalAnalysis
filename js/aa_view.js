@@ -946,7 +946,7 @@ class aa_view {
 
         this.chosenIDs = [... new Set(this.chosenIDs)];
 
-        if (this.imageData === undefined) {
+        //if (this.imageData === undefined) {
 
             for (let i = 0; i < this.chosenIDs.length; i++) {
                 let that = this;
@@ -968,29 +968,29 @@ class aa_view {
 
                 document.getElementById("" + this.chosenIDs[i]+ "button").innerHTML = this.chosenIDs[i];   
             }
-        }
-        else if (this.imageData != undefined) {
-            this.imageNames = [...new Set(this.imageNames)];
+        //}
+        // else if (this.imageData != undefined) {
+        //     this.imageNames = [...new Set(this.imageNames)];
 
-            let img = document.getElementById("Img"+ this.imageNames.length);
-                img
-                    .append("button")
-                    .classed("idButton", true)
-                    .attr("id", "" + this.imageNames[this.imageNames.length - 1] + "button")
-                    .style("margin", "5px")
-                    .style("background-color", function() {
-                        if (that.brushOn === false) {
-                            let index = i;
-                            return that.color(index);
-                        }
-                        else if (that.brushOn === true) {
-                            return "steelblue";
-                        }
-                    })
-            document.getElementById("" + this.imageNames[this.imageNames.length - 1]+ "button")
-                .innerHTML = this.imageNames[this.imageNames.length - 1];
+        //     let img = document.getElementById("Img"+ this.imageNames.length);
+        //         img
+        //             .append("button")
+        //             .classed("idButton", true)
+        //             .attr("id", "" + this.imageNames[this.imageNames.length - 1] + "button")
+        //             .style("margin", "5px")
+        //             .style("background-color", function() {
+        //                 if (that.brushOn === false) {
+        //                     let index = i;
+        //                     return that.color(index);
+        //                 }
+        //                 else if (that.brushOn === true) {
+        //                     return "steelblue";
+        //                 }
+        //             })
+        //     document.getElementById("" + this.imageNames[this.imageNames.length - 1]+ "button")
+        //         .innerHTML = this.imageNames[this.imageNames.length - 1];
             
-        }
+        // }
     }
 
     changeTimeLineVarColor (event) {
