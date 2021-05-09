@@ -1890,7 +1890,7 @@ class aa_view {
             
             let arrayofData = [];
             for (let k = 0; k < filteredData.length; k++) {
-                if (this.chosenIDs.includes(filteredData[k]["id"].toLowerCase())){
+                if (this.chosenIDs.includes(filteredData[k]["id"])){
                     let number = parseInt(filteredData[k][""+chosenVariables[i]])
                     arrayofData.push(number);
                 }
@@ -1904,8 +1904,12 @@ class aa_view {
             xScales.push(x_var);
 
             let yScaleOne = d3.scaleLinear()
-                               .domain([0, d3.max(arrayofData)])
-                               .range([h, margin.top]);
+                                .domain([0, d3.max(arrayofData)])
+                                .range([h - margin.bottom, margin.top]);
+
+            //let yScaleOne = d3.scaleLinear()
+            //                   .domain([0, d3.max(arrayofData)])
+            //                   .range([h, margin.top]);
             yScales.push(yScaleOne);
         }
 
@@ -1984,7 +1988,7 @@ class aa_view {
                 let xaxis = svg.append("g")
                     .attr("id", "x-axis")
                     //.attr("transform", "translate("+ (displace+20) +","+ (h - margin.bottom)+")")
-                    .attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(3*margin.left+40))+","+ (h)+")")
+                    .attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(3*margin.left+40))+","+ (h - margin.bottom)+")")
                     .call(d3.axisBottom(xScales[i-1])); 
             
                 yaxis.append("text")
