@@ -92,7 +92,7 @@ class aa_view {
 
         if (this.imageData !== false || this.customImplement === true) {
             this.S = math.matrix(this.S);
-            this.XC = math.matrix(this.XC);
+            //this.XC = math.matrix(this.XC);
         }
 
         let matrix_data = [];
