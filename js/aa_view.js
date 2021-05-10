@@ -1041,6 +1041,10 @@ class aa_view {
                     that.tooltipCircleON = true;
                     that.createTempLine(this, undefined, true);
                 }
+                if (that.barsOn === true && that.imageData === false && that.brushOn === false
+                    && that.chosenIDs.includes(this.id.toLowerCase())) {
+                    d3.select("#bar1").select("#bars").selectAll("#"+this.id.toLowerCase()).classed("hovered", true);
+                }
             }
             else if (this.localName === "path" && that.imageData === false) {
                 d3.select(this.parentNode).raise();
@@ -1092,6 +1096,10 @@ class aa_view {
                     that.tooltipCircleON = false;
                 }
                 d3.select(name + "button").classed("hoveredButton", false);
+
+                if (that.barsOn === true && that.chosenIDs.includes(this.id.toLowerCase())) {
+                    d3.select("#bar1").select("#bars").selectAll("#"+this.id.toLowerCase()).classed("hovered", false);
+                }
             }
             else if (this.localName === "path" && that.imageData === false && that.brushOn === false) {
                 d3.select(this.parentNode).lower();
@@ -1800,13 +1808,15 @@ class aa_view {
                     let scale = yScales[that.barcounter-1];
                     return scale(d.value); 
                }
-               else if (that.barcounter >= 2 && (that.chosenIDs.length % 2 === 1)) {
-                    let scale = yScales[(that.barcounter-1) * (that.chosenVars.length - 1)];
-                    return scale(d.value);
-               }
-               else if (that.barcounter >= 2 && (that.chosenIDs.length % 2 === 0)) {
-                    let scale = yScales[(that.barcounter-1) * (that.chosenVars.length - 1) - 1];
-                    return scale(d.value);
+               else if (that.barcounter >= 2) {
+                   if (((that.barcounter-1)*(that.chosenIDs.length-1)) === yScales.length) {
+                        let scale = yScales[(that.barcounter-1) * (that.chosenIDs.length) - 1];
+                        return scale(d.value);
+                   }
+                   else if (((that.barcounter-1)*(that.chosenIDs.length-1)) !== yScales.length) {
+                        let scale = yScales[(that.barcounter-1) * (that.chosenIDs.length)];
+                        return scale(d.value);
+                   }
                }
             })
             .attr("width", xcatsScale.bandwidth()/2)
@@ -1816,13 +1826,15 @@ class aa_view {
                     let scale = yScales[that.barcounter2-1];
                     return scale(0) - scale(d.value);
                }
-               else if (that.barcounter2 >= 2 && (that.chosenIDs.length % 2 === 1)) {
-                    let scale = yScales[(that.barcounter2-1) * (that.chosenVars.length - 1)];
-                    return scale(0) - scale(d.value);
-               }
-               else if (that.barcounter2 >= 2 && (that.chosenIDs.length % 2 === 0)) {
-                    let scale = yScales[(that.barcounter2-1) * (that.chosenVars.length - 1) - 1];
-                    return scale(0) - scale(d.value);
+               else if (that.barcounter2 >= 2) {
+                    if (((that.barcounter2-1)*(that.chosenIDs.length-1)) === yScales.length) {
+                        let scale = yScales[(that.barcounter2-1) * (that.chosenIDs.length) - 1];
+                        return scale(0) - scale(d.value);
+                    }
+                    else if (((that.barcounter2-1)*(that.chosenIDs.length-1)) !== yScales.length) {
+                        let scale = yScales[(that.barcounter2-1) * (that.chosenIDs.length)];
+                        return scale(0) - scale(d.value);
+                    }
                 }
             })
             .attr("fill", (d,i) => that.color(i))
