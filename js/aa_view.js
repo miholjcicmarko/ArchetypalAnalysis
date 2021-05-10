@@ -163,11 +163,13 @@ class aa_view {
             dateSubmit.on("click", function () {
                 if (that.brushOn === true) {
                     that.barsOn = true;
-                    that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
+                    //that.makeBrushedBarCharts(that.chosenVars, that.raw, that.timeline, true);
+                    that.makeBarCharts(that.chosenVars, that.raw, that.timeline, true);
                 }
                 else if (that.brushOn === false && (that.chosenVars.length > 1)) {
                     that.barsOn = true;
-                    that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
+                    //that.makeBarCharts(that.chosenVars, that.raw, that.timeline, false);
+                    that.makeBarCharts(that.chosenVars, that.raw, that.timeline, false);
                 }
             })
 
@@ -299,7 +301,7 @@ class aa_view {
                     
                 //}
                 //else if (that.chosenIDs.length > 0) {
-                    that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
+                    that.makeBarCharts(that.chosenVars, that.raw, that.timeline, false);
                     if (that.timeline === true) {
                         that.drawTimeLine(that.raw, that.chosenLineVar);
                     }
@@ -502,7 +504,7 @@ class aa_view {
             if (that.brushOn === false && that.chosenVars.length > 1) {
                 that.barsOn = true;
                 if (that.chosenIDs.length !== 0) {
-                    that.makeBarCharts(that.chosenVars, that.raw, that.timeline);
+                    that.makeBarCharts(that.chosenVars, that.raw, that.timeline, false);
                     that.drawIds();
                 }
                 else {
@@ -510,7 +512,8 @@ class aa_view {
                 }
             }
             else if (that.brushOn === true && that.chosenVars.length > 1) {
-                that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
+                //that.makeBrushedBarCharts(that.chosenVars, that.raw, that.timeline, true);
+                that.makeBarCharts(that.chosenVars, that.raw, that.timeline, true);
                 that.drawIds();
             }
             else if (that.chosenVars.length === 1) {
@@ -645,7 +648,7 @@ class aa_view {
                         }
 
                         if (that.imageData === false) {
-                            that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
+                            that.makeBarCharts(that.chosenVars, that.raw, that.timeline, true);
                         }
                         else if (that.imageData !== false) {
                             that.displayMultipleImages(that.chosenIDs);
@@ -687,7 +690,8 @@ class aa_view {
                         that.drawIds();
 
                         if (that.imageData === false) {
-                            that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
+                            //that.makeBrushedBarCharts(that.chosenVars, that.raw, that.timeline, true);
+                            that.makeBarCharts(that.chosenVars, that.raw, that.timeline, true);
                         }
                         else if (that.imageData !== false) {
                             that.displayMultipleImages(that.chosenIDs);
@@ -1051,7 +1055,8 @@ class aa_view {
                 }
                 that.createTempCircle(this);
             }
-            if (that.barsOn === true && that.imageData === false && that.brushOn === false) {
+            if (that.barsOn === true && that.imageData === false && that.brushOn === false
+                && that.chosenIDs.includes(this.id)) {
                 d3.select("#bar1").select("#bars").selectAll("#"+this.id.toLowerCase()).classed("hovered", true);
             }
 
@@ -1442,7 +1447,7 @@ class aa_view {
         if (isTooltip === true) {
             value = value.id
         }
-        if (this.chosenIDs.length > 10) {
+        if (this.chosenIDs.length > 20) {
             this.chosenIDs.pop();
             alert("Too many IDs chosen!");
             return;
@@ -1579,7 +1584,7 @@ class aa_view {
         }
     }
 
-    makeBarCharts (chosenVariables, rawData, timeSeries) {
+    makeBarCharts (chosenVariables, rawData, timeSeries, brushed) {
         let divBar = document.getElementById("bar1")
                 while (divBar.firstChild) {
                     divBar.removeChild(divBar.firstChild);
@@ -1648,7 +1653,8 @@ class aa_view {
             let arrayofData = [];
 
             for (let k = 0; k < this.raw.length; k++) {
-                if (this.chosenIDs.includes(this.raw[k]["id"].toLowerCase())){
+                if (this.chosenIDs.includes(this.raw[k]["id"].toLowerCase()) ||
+                this.chosenIDs.includes(this.raw[k]["id"])) {
                     let number = parseInt(this.raw[k][""+chosenVariables[i]])
                     arrayofData.push(number);
                 }
@@ -1677,7 +1683,7 @@ class aa_view {
         let ydata = [];
         
         for (let p = 0; p < this.chosenIDs.length; p++) {
-            let specificData = filteredData.filter(d => d.id.toLowerCase().includes(this.chosenIDs[p])); 
+            let specificData = filteredData.filter(d => d.id.toLowerCase().includes(this.chosenIDs[p].toLowerCase())); 
             if (specificData[0] !== undefined) {
                 ydata.push(specificData[0]);
             }
@@ -1716,22 +1722,20 @@ class aa_view {
         let xlargeScale = d3.scaleBand()
                 .domain(array_of_variable_objects.map(d => d[var_id]))
                 .range([margin.left, w - margin.right])
-                .paddingInner(0.25);
+                .paddingInner(0.5);
 
         let xcatsScale = d3.scaleBand()
                 .domain(that.chosenIDs)
                 .range([0, xlargeScale.bandwidth()]);
-                //.padding(0.05);
 
-        // possibly build multiple y axes
         let yScale = d3.scaleLinear()
                .domain([0, d3.max(array_of_variable_objects, d => d3.max(that.chosenIDs, key => d[key]))]).nice()
                .range([h - margin.bottom, margin.top]);
 
-        // Possibly try a for loop
-
         that.barcounter = 0;
         that.barcounter2 = 0;
+
+        if (brushed === false) {     
 
         svg.append("g")
             .selectAll("g")
@@ -1744,23 +1748,64 @@ class aa_view {
             .attr("x", d => xcatsScale(d.key) + 5)
             .attr("y", function(d,i) {
                that.barcounter = that.barcounter + 1;
-               //console.log(that.barcounter);
                let scale = yScales[that.barcounter-1];
                return scale(d.value);
             })
-            //.attr("y", d => yScale(d.value))
             .attr("width", xcatsScale.bandwidth())
             .attr("height", function(d,i) {
                that.barcounter2 = that.barcounter2 + 1;
                let scale = yScales[that.barcounter2-1];
-               //let scale = yScales[i];
                return scale(0) - scale(d.value);
             })
-            //.attr("height", d => yScale(0) - yScale(d.value))
             .attr("fill", (d,i) => that.color(i))
             .attr("id", (d,i) => d.key+"");
+        }
+        else if (brushed === true) {
+            
+            let array_of_avg_objects = [];
+
+            for (let i = 0; i < array_of_variable_objects.length; i++) {
+                let obj = {"var": array_of_variable_objects[i]["var"]}
+                let avg = 0
+                for (let j = 0; j < this.chosenIDs.length; j++) {
+                    avg = avg + parseInt(array_of_variable_objects[i][this.chosenIDs[j]])
+                }
+                avg = avg/this.chosenIDs.length;
+                obj["avg"] = avg;
+                array_of_avg_objects.push(obj);
+            }
+
+            let avg_list = ["avg"]
+
+            let xcatsScale = d3.scaleBand()
+                .domain(avg_list)
+                .range([0, xlargeScale.bandwidth()]);
+
+            svg.append("g")
+            .selectAll("g")
+            .data(array_of_avg_objects)
+            .join("g")
+            .attr("transform", d => `translate(${xlargeScale(d[var_id])+25},0)`)
+            .selectAll("rect")
+            .data(d => avg_list.map(key => ({key, value: d["avg"], variable_name: d["var"]})))
+            .join("rect")
+            .attr("x", d => xcatsScale("avg") + 5)
+            .attr("y", function(d,i) {
+               that.barcounter = that.barcounter + 1;
+               let scale = yScales[that.barcounter-1];
+               return scale(d.value);
+            })
+            .attr("width", xcatsScale.bandwidth())
+            .attr("height", function(d,i) {
+               that.barcounter2 = that.barcounter2 + 1;
+               let scale = yScales[that.barcounter2-1];
+               return scale(0) - scale(d.value);
+            })
+            .attr("fill", (d,i) => that.color(i))
+            .attr("id", (d,i) => d.variable_name+"Rect");
+
+        }
      
-//GOOOD AREA
             for (let i = 0; i < chosenVariables.length; i++) {
 
                 if (chosenVariables[i] !== "id") {
@@ -1774,18 +1819,17 @@ class aa_view {
 
                     yaxis.call(d3.axisLeft(yScales[(i*that.chosenIDs.length)-1]).ticks(5))
                         .attr("transform", "translate(" + (displace+30) + ",0)")
-                        //.attr("transform", "translate(" + ((i-1)*(w/(chosenVariables.length-1))+4*margin.left+10) + ",0)")
                         .attr("class", "axis_line")
                         .style("font-size", function () {
-                            let scale = yScales[i]
-                            if (scale(maxes[i] > 10000) && scale(maxes[i] < 100000)) {
-                                return "6";
-                            }
-                            else if (scale(maxes[i] > 100000)) {
+                            let scale = yScales[i-1]
+                            if (scale(maxes[i-1]) > 10000 && scale(maxes[i]) < 100000) {
                                 return "5";
                             }
-                            else {
-                                return "8"
+                            else if (scale(maxes[i-1]) > 100000) {
+                                return "4";
+                            }
+                            else if (scale(maxes[i-1]) < 10000) {
+                                return "7";
                             }
                         })
                     
@@ -1794,36 +1838,44 @@ class aa_view {
                     let xaxis = svg.append("g")
                         .attr("id", "x-axis")
                         .attr("transform", "translate("+ (displace+30) +","+ (h - margin.bottom)+")")
-                        //.attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(4*margin.left+10))+","+ (h-5)+")")
                         .call(d3.axisBottom(xcatsScale));
 
-                    }
-
-                    if (i >= 2) {
-                        //displace = xcatsScale.bandwidth() * (i-1) - xcatsScale.bandwidth();
-                        //displace = -xcatsScale.bandwidth()
-                    }        
+                    }   
                 
                     yaxis.append("text")
                             .text(""+chosenVariables[i])
                             .attr("class", "axis-label")
-                            .attr("font-size", "6")
-                            //.attr("text-anchor", "middle")
+                            .style("font-size", function() {
+                                return 10;
+                            }
+                            )
                             .attr("transform", function () {
-                                if(i >= 2) {
+                                if(i >= 2 && chosenVariables[i].length > 8) {
+                                    return "translate(" + (-30) + "," + (h/3+5)+")rotate(-90)";
+                                }
+                                else if(i >= 2 && chosenVariables[i].length <= 8) {
                                     return "translate(" + (-30) + "," + (h/2.5+5)+")rotate(-90)";
                                 }
-                                else if (i === 1 && chosenVariables.length > 2) {
+                                else if (i === 1 && chosenVariables.length > 2 && chosenVariables[i].length > 8) {
+                                    return "translate(" + (displace-35) + "," + (h/3+5)+")rotate(-90)";
+                                }
+                                else if (i === 1 && chosenVariables.length > 2 && chosenVariables[i].length <= 8) {
                                     return "translate(" + (displace-35) + "," + (h/2.5+5)+")rotate(-90)";
                                 }
-                                else if (i === 1 && chosenVariables.length === 2) {
-                                    return "translate(" + (displace-95) + "," + (h/2.5+5)+")rotate(-90)";
+                                else if (i === 1 && (chosenVariables.length === 2 || chosenVariables.length === 1) &&
+                                chosenVariables[i].length > 8) {
+                                    return "translate(" + (displace-155) + "," + (h/2.5+5)+")rotate(-90)";
+                                }
+                                else if (i === 1 && (chosenVariables.length === 2 || chosenVariables.length === 1) &&
+                                chosenVariables[i].length <= 8) {
+                                    return "translate(" + (displace-155) + "," + (h/2.5+5)+")rotate(-90)";
                                 }
                             })
                     
                 }
 
             }
+    
             let data_rect = d3.selectAll("#bar1").selectAll("rect");
 
             if (this.timeline === true) {
@@ -1940,13 +1992,21 @@ class aa_view {
                                 .domain([0, d3.max(arrayofData)])
                                 .range([h - margin.bottom, margin.top]);
 
-            //let yScaleOne = d3.scaleLinear()
-            //                   .domain([0, d3.max(arrayofData)])
-            //                   .range([h, margin.top]);
             yScales.push(yScaleOne);
         }
 
         let that = this;
+
+        let xlargeScale = d3.scaleBand()
+                .domain(that.chosenVars)
+                .range([margin.left, w - margin.right])
+                .paddingInner(0.5);
+
+        avg_xlabel = ["avg"]
+
+        let xcatsScale = d3.scaleBand()
+                .domain(avg_xlabel)
+                .range([0, xlargeScale.bandwidth()]);
 
         if (barData !== []) {
 
@@ -1972,30 +2032,25 @@ class aa_view {
             }
 
             if (na_true === false) {
-                //work on this
 
             svg.selectAll()
                 .data(currData)
                 .enter()
                 .append('rect')
                 .attr("x", function (d,i) {
-                    //return d => xScales(d.id);
-                    return ((i)*(w/(chosenVariables.length-1))+3*margin.left+10);
+                    return xlargeScale(d.variable_name);
+                    //return ((i)*(w/(chosenVariables.length-1))+3*margin.left+10);
                 })
                 .attr("y", function(d,i) {
                     that.barcounter3 = that.barcounter3 + 1;
-                    //console.log(that.barcounter);
                     let scale = yScales[that.barcounter3-1];
                     return scale(d.value);
                 })
-                .attr("width", w/(that.chosenVars.length) - barpadding)
+                .attr("width", w/(that.chosenVars.length) - barpadding/(that.chosenVars.length))
                 .attr("height", function(d,i) {
                     that.barcounter4 = that.barcounter4 + 1;
-                    //console.log(that.barcounter);
                     let scale = yScales[that.barcounter4-1];
                     return scale(0) - scale(d.value);
-                    //let scale = yscales[i];
-                    //return h-scale(d.value);
                 })
                 .attr("fill","steelblue")
                 .attr("transform", "translate(" +(i*(w/(chosenVariables.length-1))+
@@ -2013,14 +2068,11 @@ class aa_view {
                             .attr("id", "y-axis" + i);
 
                 yaxis.call(d3.axisLeft(yScales[i-1]).ticks(5))
-                    //.attr("transform", "translate(" + (displace+20) + ",0)")
                     .attr("transform", "translate(" + ((i-1)*(w/(chosenVariables.length-1))+3*margin.left+40) + ",0)")
-                    //.attr("transform", "translate(" + (20) + ",0)")
                     .attr("class", "axis_line");
                 
                 let xaxis = svg.append("g")
                     .attr("id", "x-axis")
-                    //.attr("transform", "translate("+ (displace+20) +","+ (h - margin.bottom)+")")
                     .attr("transform", "translate("+ ((i-1)*(w/(chosenVariables.length-1))+(3*margin.left+40))+","+ (h - margin.bottom)+")")
                     .call(d3.axisBottom(xScales[i-1])); 
             
@@ -2029,7 +2081,7 @@ class aa_view {
                         .attr("class", "axis-label")
                         .attr("transform", function () {
                             if(i >= 2) {
-                                return "translate(" + (-30) + "," + (h/2.5+5)+")rotate(-90)";
+                                return "translate(" + (-35) + "," + (h/2.5+5)+")rotate(-90)";
                             }
                             else if (i === 1 && chosenVariables.length > 2) {
                                 return "translate(" + (-35) + "," + (h/2.5+5)+")rotate(-90)";
@@ -2038,9 +2090,6 @@ class aa_view {
                                 return "translate(" + (-95) + "," + (h/2.5+5)+")rotate(-90)";
                             }
                         })
-                        //.attr("text-anchor", "middle")
-                        //.attr("transform", "translate(" + (displace-35) + "," + h/2+")rotate(-90)");
-                        //.attr("transform", "translate(" + (-50+((i-1))) +","+h/2+")rotate(-90)");
                 
             }
         }
