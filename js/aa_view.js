@@ -1728,9 +1728,11 @@ class aa_view {
                 .domain(that.chosenIDs)
                 .range([0, xlargeScale.bandwidth()]);
 
-        let yScale = d3.scaleLinear()
-               .domain([0, d3.max(array_of_variable_objects, d => d3.max(that.chosenIDs, key => d[key]))]).nice()
-               .range([h - margin.bottom, margin.top]);
+        let altXscale = xcatsScale;
+
+        //let yScale = d3.scaleLinear()
+        //       .domain([0, d3.max(array_of_variable_objects, d => d3.max(that.chosenIDs, key => d[key]))]).nice()
+        //       .range([h - margin.bottom, margin.top]);
 
         that.barcounter = 0;
         that.barcounter2 = 0;
@@ -1780,6 +1782,8 @@ class aa_view {
             let xcatsScale = d3.scaleBand()
                 .domain(avg_list)
                 .range([0, xlargeScale.bandwidth()]);
+
+            altXscale = xcatsScale;
 
             svg.append("g")
             .selectAll("g")
@@ -1833,14 +1837,20 @@ class aa_view {
                             }
                         })
                     
-                    if (that.chosenIDs.length * that.chosenVars.length < 10) {
+                    if (that.chosenIDs.length * that.chosenVars.length < 10 && brushed === false) {
 
-                    let xaxis = svg.append("g")
+                        let xaxis = svg.append("g")
                         .attr("id", "x-axis")
                         .attr("transform", "translate("+ (displace+30) +","+ (h - margin.bottom)+")")
                         .call(d3.axisBottom(xcatsScale));
 
-                    }   
+                    }
+                    else if (brushed === true) {
+                        let xaxis = svg.append("g")
+                        .attr("id", "x-axis")
+                        .attr("transform", "translate("+ (displace+30) +","+ (h - margin.bottom)+")")
+                        .call(d3.axisBottom(altXscale));
+                    }
                 
                     yaxis.append("text")
                             .text(""+chosenVariables[i])
