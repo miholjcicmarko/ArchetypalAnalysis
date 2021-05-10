@@ -1655,7 +1655,7 @@ class aa_view {
             for (let k = 0; k < this.raw.length; k++) {
                 if (this.chosenIDs.includes(this.raw[k]["id"].toLowerCase()) ||
                 this.chosenIDs.includes(this.raw[k]["id"])) {
-                    let number = parseInt(this.raw[k][""+chosenVariables[i]])
+                    let number = parseFloat(this.raw[k][""+chosenVariables[i]])
                     arrayofData.push(number);
                 }
             }
@@ -1762,7 +1762,7 @@ class aa_view {
             .attr("fill", (d,i) => that.color(i))
             .attr("id", (d,i) => d.key+"");
         }
-        else if (brushed === true) {
+        else if (brushed === true && yScales.length !== 0) {
             
             let array_of_avg_objects = [];
 
@@ -1770,7 +1770,7 @@ class aa_view {
                 let obj = {"var": array_of_variable_objects[i]["var"]}
                 let avg = 0
                 for (let j = 0; j < this.chosenIDs.length; j++) {
-                    avg = avg + parseInt(array_of_variable_objects[i][this.chosenIDs[j]])
+                    avg = avg + parseFloat(array_of_variable_objects[i][this.chosenIDs[j]])
                 }
                 avg = avg/this.chosenIDs.length;
                 obj["avg"] = avg;
@@ -1796,23 +1796,44 @@ class aa_view {
             .attr("x", d => xcatsScale("avg") + 5)
             .attr("y", function(d,i) {
                that.barcounter = that.barcounter + 1;
-               let scale = yScales[that.barcounter-1];
-               return scale(d.value);
+               if (that.barcounter === 1 || that.chosenIDs.length === 1) {
+                    let scale = yScales[that.barcounter-1];
+                    return scale(d.value); 
+               }
+               else if (that.barcounter >= 2 && (that.chosenIDs.length % 2 === 1)) {
+                    let scale = yScales[(that.barcounter-1) * (that.chosenVars.length - 1)];
+                    return scale(d.value);
+               }
+               else if (that.barcounter >= 2 && (that.chosenIDs.length % 2 === 0)) {
+                    let scale = yScales[(that.barcounter-1) * (that.chosenVars.length - 1) - 1];
+                    return scale(d.value);
+               }
             })
-            .attr("width", xcatsScale.bandwidth())
+            .attr("width", xcatsScale.bandwidth()/2)
             .attr("height", function(d,i) {
                that.barcounter2 = that.barcounter2 + 1;
-               let scale = yScales[that.barcounter2-1];
-               return scale(0) - scale(d.value);
+               if (that.barcounter2 === 1 || that.chosenIDs.length === 1) {
+                    let scale = yScales[that.barcounter2-1];
+                    return scale(0) - scale(d.value);
+               }
+               else if (that.barcounter2 >= 2 && (that.chosenIDs.length % 2 === 1)) {
+                    let scale = yScales[(that.barcounter2-1) * (that.chosenVars.length - 1)];
+                    return scale(0) - scale(d.value);
+               }
+               else if (that.barcounter2 >= 2 && (that.chosenIDs.length % 2 === 0)) {
+                    let scale = yScales[(that.barcounter2-1) * (that.chosenVars.length - 1) - 1];
+                    return scale(0) - scale(d.value);
+                }
             })
             .attr("fill", (d,i) => that.color(i))
-            .attr("id", (d,i) => d.variable_name+"Rect");
+            .attr("id", (d,i) => d.variable_name+"Rect")
+            .attr("transform", "translate("+(xlargeScale.bandwidth()/4 + ",0)"));
 
         }
      
             for (let i = 0; i < chosenVariables.length; i++) {
 
-                if (chosenVariables[i] !== "id") {
+                if (chosenVariables[i] !== "id" && yScales.length !== 0) {
                     let var_id = chosenVariables[i];
                     let displace = xlargeScale(var_id);
                        
@@ -1861,16 +1882,16 @@ class aa_view {
                             )
                             .attr("transform", function () {
                                 if(i >= 2 && chosenVariables[i].length > 8) {
-                                    return "translate(" + (-30) + "," + (h/3+5)+")rotate(-90)";
+                                    return "translate(" + (-35) + "," + (h/3+5)+")rotate(-90)";
                                 }
                                 else if(i >= 2 && chosenVariables[i].length <= 8) {
-                                    return "translate(" + (-30) + "," + (h/2.5+5)+")rotate(-90)";
+                                    return "translate(" + (-35) + "," + (h/2.5+5)+")rotate(-90)";
                                 }
                                 else if (i === 1 && chosenVariables.length > 2 && chosenVariables[i].length > 8) {
-                                    return "translate(" + (displace-35) + "," + (h/3+5)+")rotate(-90)";
+                                    return "translate(" + (displace-42) + "," + (h/3+5)+")rotate(-90)";
                                 }
                                 else if (i === 1 && chosenVariables.length > 2 && chosenVariables[i].length <= 8) {
-                                    return "translate(" + (displace-35) + "," + (h/2.5+5)+")rotate(-90)";
+                                    return "translate(" + (displace-42) + "," + (h/2.5+5)+")rotate(-90)";
                                 }
                                 else if (i === 1 && (chosenVariables.length === 2 || chosenVariables.length === 1) &&
                                 chosenVariables[i].length > 8) {
@@ -2260,7 +2281,7 @@ class aa_view {
                             let values = {};
                             let date = dataTime[p].date;
                             let number = dataTime[p][""+variable];
-                            number = parseInt(number);
+                            number = parseFloat(number);
                             values["date"] = date;
                             values["number"] = number;
                             newValuesArray.push(values);
@@ -2277,7 +2298,7 @@ class aa_view {
         for (let i = 0; i < newObjArray.length; i++) {
             for (let j = 0; j < newObjArray[i]["values"].length; j++) {
                 let num = newObjArray[i]["values"][j]["number"];
-                num = parseInt(num);
+                num = parseFloat(num);
                 yScaleData.push(num);
             }
         }
