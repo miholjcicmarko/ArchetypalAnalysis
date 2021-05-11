@@ -350,7 +350,7 @@ class aa_view {
             this.height = height;
         }
         else {
-            this.height = height;
+            this.height = height/10;
         }
 
         d3.select('#oned')
@@ -443,16 +443,16 @@ class aa_view {
             })
             .attr("cy", function() {
                 if (numberOfArchetypes <= 3) {
-                    return this.height/numberOfArchetypes/2.5;
+                    return that.height/numberOfArchetypes/2.5;
                 }
                 else if (numberOfArchetypes === 4) {
-                    return this.height/numberOfArchetypes/2;
+                    return that.height/numberOfArchetypes/2;
                 }
                 else if (numberOfArchetypes === 5) {
-                    return this.height/numberOfArchetypes/1.6;
+                    return that.height/numberOfArchetypes/1.6;
                 }
                 else  if (numberOfArchetypes >= 6) {
-                    return this.height/numberOfArchetypes/1.3;
+                    return that.height/numberOfArchetypes/1.3;
                 }
             })
             .attr("r", function() {
