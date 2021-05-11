@@ -2,6 +2,8 @@
 class Algorithms {
 
     constructor(data, noc, I, U) {
+        var start = new Date().getTime();
+
         let origData = data;
         let fullData = [];
         for (let i = 0; i < origData.length; i++) {
@@ -54,6 +56,9 @@ class Algorithms {
         this.SSE = SSE;
         this.varexpl = varexpl;
         this.origData = origData;
+        var end = new Date().getTime();
+        var time = end - start;
+        console.log(time);
     }
 
     phca(X, noc, I, U, delta, conv_crit, maxiter) {
