@@ -262,10 +262,6 @@ class aa_view {
                     document.getElementById("submit").innerHTML = 'Submit Selected Attributes/IDs';
         })
 
-        // if (this.timeline === true) {
-        //     this.drawTimeLine(this.raw, this.variables[2]);
-        // }
-
         let selectRegion = d3.select("#brushButton");
 
         selectRegion.on("click", function () {
@@ -302,7 +298,7 @@ class aa_view {
                 //}
                 //else if (that.chosenIDs.length > 0) {
                     that.makeBarCharts(that.chosenVars, that.raw, that.timeline, false);
-                    if (that.timeline === true) {
+                    if (that.timeline === true && that.timelineActive === true) {
                         that.drawTimeLine(that.raw, that.chosenLineVar);
                     }
                     that.drawIds();
@@ -351,6 +347,8 @@ class aa_view {
             height = 345 - this.margin.bottom - this.margin.top;
         }
 
+        this.height = height;
+
         d3.select('#oned')
             .append('div')
             .attr("class", "tooltip")
@@ -379,10 +377,6 @@ class aa_view {
                     }  
                 })
             }
-            else if (numberOfArchetypes === 4) {
-                oneD.attr("height", (height / numberOfArchetypes) - this.margin.top
-                            - this.margin.bottom);
-            }
             else {
                 oneD.attr("height", (height / numberOfArchetypes) - this.margin.top
                             - this.margin.bottom);
@@ -408,7 +402,7 @@ class aa_view {
 
             if (numberOfArchetypes >= 6) {
                 oneD.style("font-size", "7px");
-                xaxis.style("font-size", "5px");
+                xaxis.style("font-size", "7px");
             }
             else if (numberOfArchetypes < 6 && numberOfArchetypes >= 5) {
                 oneD.style("font-size", "10px");
@@ -445,20 +439,20 @@ class aa_view {
             })
             .attr("cy", function() {
                 if (numberOfArchetypes <= 3) {
-                    return 45;
+                    return height/numberOfArchetypes/2.5;
                 }
-                else if (numberOfArchetypes == 4) {
-                    return 42;
+                else if (numberOfArchetypes === 4) {
+                    return height/numberOfArchetypes/2;
                 }
-                else  if (numberOfArchetypes >= 5) {
-                    return 45;
+                else if (numberOfArchetypes === 5) {
+                    return height/numberOfArchetypes/1.6;
+                }
+                else  if (numberOfArchetypes >= 6) {
+                    return height/numberOfArchetypes/1.3;
                 }
             })
             .attr("r", function() {
-                if (numberOfArchetypes >= 5 && numberOfArchetypes <= 7) {
-                    return 3;
-                }
-                else if (numberOfArchetypes === 4) {
+                if (numberOfArchetypes >= 4 && numberOfArchetypes <= 7) {
                     return 5;
                 }
                 else {
@@ -1192,25 +1186,27 @@ class aa_view {
 
             if (layer !== i) {
             
+            let that = this;
+            
             circle.append("circle")
             .attr("cx", circleScale(point.value))
             .attr("cy", function() {
                 if (numberOfArch <= 3) {
-                    return 45;
+                    return that.height/numberOfArch/2.5;
                 }
-                else if (numberOfArch == 4) {
-                    return 43;
+                else if (numberOfArch === 4) {
+                    return that.height/numberOfArch/2;
                 }
-                else if (numberOfArch >= 5 && numberOfArch <= 7) {
-                    return 45 - (margin_top);
+                else if (numberOfArch === 5) {
+                    return that.height/numberOfArch/1.6;
                 }
-                else if (numberOfArch > 7) {
-                    return 45;
+                else  if (numberOfArch >= 6) {
+                    return that.height/numberOfArch/1.3;
                 }
             })
             .attr("r", function() {
-                if (numberOfArch >= 5 && numberOfArch <= 7) {
-                    return 3;
+                if (numberOfArch >= 4 && numberOfArch <= 7) {
+                    return 5;
                 }
                 else {
                     return 7;
@@ -1287,18 +1283,6 @@ class aa_view {
                         let index = array.indexOf(d.id.toLowerCase());
                         return that.color(index);
                     }
-                    //let index = 0;
-                    // that.linecounter = that.linecounter + 1;
-                    // if (that.selectionActive === true && that.brushOn === false) {
-                    //     index = that.linecounter - 1;
-                    //     return that.color(index);
-                    // }
-                    // else if (that.selectionActive === false && 
-                    //     that.timelineActive === true && that.brushOn === false) {
-                    //     //index = that.linecounter - 1;
-                    //     index = that.chosenIDs.length-1;
-                    //     return that.color(index);
-                    // }
                     else if (that.brushOn === true) {
                         return "steelblue";
                     }
@@ -1403,26 +1387,28 @@ class aa_view {
 
             for (let i = 0; i < filteredData.length; i++) {
 
+                let that = this;
+
             circle.append("circle")
             .attr("cx", function(d) {
                 return circleScale(filteredData[i].value);
             })
             .attr("cy", function() {
                 if (numberOfArchetypes <= 3) {
-                    return 45;
+                    return that.height/numberOfArchetypes/2.5;
                 }
-                else if (numberOfArchetypes == 4) {
-                    return 42;
+                else if (numberOfArchetypes === 4) {
+                    return that.height/numberOfArchetypes/2;
                 }
-                else {
-                    return 45;
+                else if (numberOfArchetypes === 5) {
+                    return that.height/numberOfArchetypes/1.6;
+                }
+                else  if (numberOfArchetypes >= 6) {
+                    return that.height/numberOfArchetypes/1.3;
                 }
             })
             .attr("r", function() {
-                if (numberOfArchetypes >= 5 && numberOfArchetypes <= 7) {
-                    return 3;
-                }
-                else if (numberOfArchetypes === 4) {
+                if (numberOfArchetypes >= 4 || numberOfArchetypes <= 7) {
                     return 5;
                 }
                 else {
@@ -1503,21 +1489,21 @@ class aa_view {
                 .attr("cx", circleScale(point.value))
                 .attr("cy", function() {
                     if (numberOfArch <= 3) {
-                        return 45;
+                        return that.height/numberOfArch/2.5;
                     }
-                    else if (numberOfArch == 4) {
-                        return 43;
+                    else if (numberOfArch === 4) {
+                        return that.height/numberOfArch/2;
                     }
-                    else if (numberOfArch >= 5 && numberOfArch <= 7) {
-                        return 45 - (margin_top);
+                    else if (numberOfArch === 5) {
+                        return that.height/numberOfArch/1.6;
                     }
-                    else if (numberOfArch > 7) {
-                        return 45;
+                    else  if (numberOfArch >= 6) {
+                        return that.height/numberOfArch/1.3;
                     }
                 })
                 .attr("r", function() {
                     if (numberOfArch >= 5 && numberOfArch <= 7) {
-                        return 3;
+                        return 5;
                     }
                     else {
                         return 7;
