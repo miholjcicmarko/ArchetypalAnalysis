@@ -2236,7 +2236,9 @@ class aa_view {
                 "Value: " + value_display;
     }
 
-    drawTimeLine(data, variable) { 
+    drawTimeLine(data, variable) {
+        if (this.chosenLineVar.length !== 0) {
+
         let dataTime = [];
         for (let i = 0; i < data.length; i++) {
             let datapoint = {...data[i]};
@@ -2391,6 +2393,7 @@ class aa_view {
         }
         else if (this.brushOn === true) {
             this.createTempLine(this.brushedData, true);
+        }
         }
     }
 
