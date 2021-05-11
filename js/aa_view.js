@@ -176,7 +176,7 @@ class aa_view {
         let dropdown = d3.select("#selectNow");
 
             dropdown.on("change", function () {
-                if (that.imageData === false) {
+                if (that.imageData === false && that.customImplement === false) {
 
                     let number = this.value;
 
@@ -1870,7 +1870,7 @@ class aa_view {
                             }
                         })
                     
-                    if (that.chosenIDs.length * that.chosenVars.length < 10 && brushed === false) {
+                    if (that.chosenIDs.length === 1 && brushed === false) {
 
                         let xaxis = svg.append("g")
                         .attr("id", "x-axis")
