@@ -17,6 +17,8 @@ class aa_view {
         d3.select(".topnav").style("opacity", 1);
         d3.select("#brushButton").style("opacity", "1");
         document.getElementById("submit").innerHTML = 'Submit Selected Attributes/IDs';
+        let selectedRegion = d3.select("#brushButton");
+            selectedRegion.style("background-color", "thistle");
 
         this.XC = data.XC;
         this.S = data.S;
@@ -345,9 +347,11 @@ class aa_view {
         let height = 5000 - this.margin.bottom - this.margin.top;
         if (this.imageData === false) {
             height = 345 - this.margin.bottom - this.margin.top;
+            this.height = height;
         }
-
-        this.height = height;
+        else {
+            this.height = height - 24*that.margin.top - 20*that.margin.bottom;
+        }
 
         d3.select('#oned')
             .append('div')
@@ -439,16 +443,16 @@ class aa_view {
             })
             .attr("cy", function() {
                 if (numberOfArchetypes <= 3) {
-                    return height/numberOfArchetypes/2.5;
+                    return this.height/numberOfArchetypes/2.5;
                 }
                 else if (numberOfArchetypes === 4) {
-                    return height/numberOfArchetypes/2;
+                    return this.height/numberOfArchetypes/2;
                 }
                 else if (numberOfArchetypes === 5) {
-                    return height/numberOfArchetypes/1.6;
+                    return this.height/numberOfArchetypes/1.6;
                 }
                 else  if (numberOfArchetypes >= 6) {
-                    return height/numberOfArchetypes/1.3;
+                    return this.height/numberOfArchetypes/1.3;
                 }
             })
             .attr("r", function() {
