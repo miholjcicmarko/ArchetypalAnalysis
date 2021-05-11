@@ -350,7 +350,7 @@ class aa_view {
             this.height = height;
         }
         else {
-            this.height = height/numberOfArchetypes - 24*this.margin.top - 20*this.margin.bottom;
+            this.height = height;
         }
 
         d3.select('#oned')
