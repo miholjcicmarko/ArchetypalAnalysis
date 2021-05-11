@@ -123,7 +123,7 @@ Promise.all([preProcessData]).then(data => {
     function preloaded_to_Object(preload, numArch) {
         if (preload === "COVID") {
             return {
-                "XC": preData["COVIDXC"+numArch], 
+                "XC": null, 
                 "S": preData["COVIDS"+numArch],
                 "raw": preData["COVID"],
                 "time_data": true
@@ -131,7 +131,7 @@ Promise.all([preProcessData]).then(data => {
         }
         else if (preload === "diabetes") {
             return {
-                "XC": preData["diabetesXC"+numArch], 
+                "XC": null, 
                 "S": preData["diabetesS"+numArch],
                 "raw": preData["diabetes"],
                 "time_data": false
