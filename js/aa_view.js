@@ -759,12 +759,20 @@ class aa_view {
             d3.select("#bar1")
                 .append("div")
                 .attr("id", "Img" + that.countImages)
+                .classed("imgdiv", function() {
+                    if (clicked !== true) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                })
                 .append("img")
                 .classed("imgdiv", function() {
                     if (clicked !== true) {
                         return true;
                     }
-                    else  {
+                    else {
                         return false;
                     }
                 })
@@ -813,7 +821,7 @@ class aa_view {
                         }
                         return e.target.result;
                         });
-
+                        that.imageNames.push(fileName);
                     // image.append("text")
                     //     .attr("dy", ".35em")
                     //     .text(e.target + "");
@@ -846,7 +854,6 @@ class aa_view {
                 }
             }
             reader.readAsDataURL(fileName);
-            that.imageNames.push(fileName);
             that.drawIds();
         }
     }
