@@ -117,9 +117,6 @@ class Algorithms {
         let CtXtXC = math.multiply(math.matrix(math.transpose(XC)), math.matrix(XC));
 
         let S = math.multiply(-1, math.log(math.random([noc, U._data.length])));
-        
-        //test S with 0.5
-        //let S = math.multiply(-1, math.log(math.subtract(math.ones([noc,U._data.length]),0.5)));
 
         let S_sum_0axis = math.matrix(math.apply(S, 0, sum));
 
