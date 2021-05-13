@@ -8,7 +8,7 @@ async function loadPreProcessData () {
     //     "fifa" : fifadata,
     //     "covid" : covid
     // }
-    let covid = await d3.csv("./data/COVIDDataMatrix.csv");
+    let covid = await d3.csv("./data/CovidDataMatrix.csv");
     let diabetes = await d3.csv("./data/DiabetesData.csv");
 
     let dataobject = {
