@@ -928,14 +928,9 @@ class aa_view {
             let buttons = d3.select('#bar1').selectAll("button");
 
             buttons.on("click", function (d) {
-                if (that.chosenVars.length <= 6) {
-                    that.addChosenVar(d);
-                    that.chosenVars.push(d.srcElement.id);
-                    that.chosenVars = [... new Set(that.chosenVars)];
-                }
-                else if (that.chosenVars.length >= 7) {
-                    alert("Too many variables chosen!");
-                }
+                that.addChosenVar(d);
+                that.chosenVars.push(d.srcElement.id);
+                that.chosenVars = [... new Set(that.chosenVars)];
             })
         }
     }
