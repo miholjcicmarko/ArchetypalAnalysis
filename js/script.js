@@ -1,13 +1,7 @@
 /** The script to run the program on the webpage */
 
 async function loadPreProcessData () {
-    // let fifadata = await d3.csv("./data/fifaRatingsSmall.csv");
-    // let covid = await d3.csv("./data/COVID19time.csv");
-
-    // return {
-    //     "fifa" : fifadata,
-    //     "covid" : covid
-    // }
+    
     let covid = await d3.csv("./data/COVIDDataMatrix.csv");
     let diabetes = await d3.csv("./data/DiabetesData.csv");
 
@@ -19,14 +13,10 @@ async function loadPreProcessData () {
     for (let i = 0; i < 7; i++) {
         let index = i+1;
         let covidS = await d3.csv("./data/COVIDSMatrix" + index + ".csv");
-        //let covidXC = await d3.csv("./data/COVIDXCMatrix" + index + ".csv");
         let diabetesS = await d3.csv("./data/DiabetesSMatrix" + index + ".csv");
-        //let diabetesXC = await d3.csv("./data/DiabetesXCMatrix" + index + ".csv");
 
         dataobject["COVIDS"+index] = covidS;
-        //dataobject["COVIDXC"+index] = covidXC;
         dataobject["diabetesS"+index] = diabetesS;
-        //dataobject["diabetesXC"+index] = diabetesXC;
     }
 
     return dataobject;
@@ -40,7 +30,6 @@ Promise.all([preProcessData]).then(data => {
 
     function updateData (id, data) {
         if (id === "diabetesButton") {
-        //if (id === "fifaButton") {
             selectedData.newData(preData["diabetes"]);
             selectedData.preloaded = true;
             document.getElementById('csv').value= null;
