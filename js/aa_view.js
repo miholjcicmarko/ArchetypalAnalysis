@@ -90,6 +90,7 @@ class aa_view {
 
         this.color = d3.scaleOrdinal(d3.schemeTableau10)
                 .domain([0,9]);
+                //.range(["blue","orange"," #D37B23","red","#168787"]);
 
         if (this.imageData !== false || this.customImplement === true) {
             this.S = math.matrix(this.S);
@@ -164,10 +165,12 @@ class aa_view {
             dateSubmit.on("click", function () {
                 if (that.brushOn === true) {
                     that.barsOn = true;
+                    //that.makeBrushedBarCharts(that.chosenVars, that.raw, that.timeline, true);
                     that.makeBarCharts(that.chosenVars, that.raw, that.timeline, true);
                 }
                 else if (that.brushOn === false && (that.chosenVars.length > 1)) {
                     that.barsOn = true;
+                    //that.makeBarCharts(that.chosenVars, that.raw, that.timeline, false);
                     that.makeBarCharts(that.chosenVars, that.raw, that.timeline, false);
                 }
             })
@@ -282,7 +285,8 @@ class aa_view {
                 d3.selectAll(".brushDataTemp").remove();
                 that.chosenIDs = that.origId;
                 that.chosenVars = that.origVar;
-                
+                //if (that.chosenIDs.length === 0) {
+                    //alert("Select ID/IDs");
                     let divBar = document.getElementById("bar1")
                         while (divBar.firstChild) {
                             divBar.removeChild(divBar.firstChild);
@@ -293,12 +297,14 @@ class aa_view {
                             diviDs.removeChild(diviDs.firstChild);
                         }
                     
+                //}
+                //else if (that.chosenIDs.length > 0) {
                     that.makeBarCharts(that.chosenVars, that.raw, that.timeline, false);
                     if (that.timeline === true && that.timelineActive === true) {
                         that.drawTimeLine(that.raw, that.chosenLineVar);
                     }
                     that.drawIds();
-                
+                //}
             }
             else if (that.brushOn === false && that.imageData !== false) {
                 that.drawBrush();
@@ -504,6 +510,7 @@ class aa_view {
                 }
             }
             else if (that.brushOn === true && that.chosenVars.length > 1) {
+                //that.makeBrushedBarCharts(that.chosenVars, that.raw, that.timeline, true);
                 that.makeBarCharts(that.chosenVars, that.raw, that.timeline, true);
                 that.drawIds();
             }
@@ -565,6 +572,7 @@ class aa_view {
         let brush_height = height_1d;
         
         this.brush(svg, brush_chart, brush_width, brush_height);
+    //    }
     }
 
     brush(svg, brush_chart, brush_width, brush_height) {
@@ -575,12 +583,12 @@ class aa_view {
         let that = this;
         let activeBrush = null;
         let activeBrushNode = null;
-       
+        //if (that.barsOn === true) {
         if (that.imageData === false) {
             that.origVar = that.chosenVars;
         }
         that.origId = that.chosenIDs;
-        
+        //}
 
         brush_chart.each(function() {
             let selectionThis = this;
@@ -680,11 +688,14 @@ class aa_view {
                         that.drawIds();
 
                         if (that.imageData === false) {
+                            //that.makeBrushedBarCharts(that.chosenVars, that.raw, that.timeline, true);
                             that.makeBarCharts(that.chosenVars, that.raw, that.timeline, true);
                         }
                         else if (that.imageData !== false) {
                             that.displayMultipleImages(that.chosenIDs);
                         }
+
+                        //that.makeBrushedBarCharts(that.chosenVars, that.raw, that.brushedData, that.timeline);
                     }
                     
                 });
@@ -811,6 +822,9 @@ class aa_view {
                         return e.target.result;
                         });
                         that.imageNames.push(fileName);
+                    // image.append("text")
+                    //     .attr("dy", ".35em")
+                    //     .text(e.target + "");
                 }
                 else if (clicked === false) {
                     let image = d3.select("#selectedImg" + that.countImages + "tooltip")
@@ -833,6 +847,10 @@ class aa_view {
                             that.countImages = that.countImages - 1;
                         }
                         return e.target.result});
+
+                    // image.append("text")
+                    //     .attr("dy", ".35em")
+                    //     .text(target.id + "");
                 }
             }
             reader.readAsDataURL(fileName);
@@ -942,6 +960,8 @@ class aa_view {
 
         this.chosenIDs = [... new Set(this.chosenIDs)];
 
+        //if (this.imageData === undefined) {
+
             for (let i = 0; i < this.chosenIDs.length; i++) {
                 let that = this;
 
@@ -962,7 +982,29 @@ class aa_view {
 
                 document.getElementById("" + this.chosenIDs[i]+ "button").innerHTML = this.chosenIDs[i];   
             }
+        //}
+        // else if (this.imageData != undefined) {
+        //     this.imageNames = [...new Set(this.imageNames)];
 
+        //     let img = document.getElementById("Img"+ this.imageNames.length);
+        //         img
+        //             .append("button")
+        //             .classed("idButton", true)
+        //             .attr("id", "" + this.imageNames[this.imageNames.length - 1] + "button")
+        //             .style("margin", "5px")
+        //             .style("background-color", function() {
+        //                 if (that.brushOn === false) {
+        //                     let index = i;
+        //                     return that.color(index);
+        //                 }
+        //                 else if (that.brushOn === true) {
+        //                     return "steelblue";
+        //                 }
+        //             })
+        //     document.getElementById("" + this.imageNames[this.imageNames.length - 1]+ "button")
+        //         .innerHTML = this.imageNames[this.imageNames.length - 1];
+            
+        // }
     }
 
     changeTimeLineVarColor (event) {
@@ -1077,6 +1119,10 @@ class aa_view {
                         d3.select(this.parentNode).raise();
                     }
                     
+                    //d3.select(this).classed("timeLine", true);
+                    // if (that.brushOn === true) {
+                    //     d3.select(this).classed("brushedLine", true);
+                    // }
                     if (!that.chosenIDs.includes(this.id.toLowerCase())) {
                         d3.select(this).classed("hoveredLine", false);
                         d3.select(this).classed("timeLine", true);
@@ -1084,7 +1130,7 @@ class aa_view {
                     else {
                         d3.select(this).classed("hoveredLine", false);
                     }
-                    
+                    //d3.select(this).classed("hoveredLine", false);
                     d3.select(name + "button").classed("hoveredButton", false);
                 }
                 for (let i = 0; i < that.numberOfArchetypes; i++) {
@@ -1416,6 +1462,14 @@ class aa_view {
             alert("Too many IDs chosen!");
             return;
         }
+        //else if ((this.chosenIDs.includes(value) === true)){
+        //    let index = this.chosenIDs.indexOf(value);
+        //    this.chosenIDs = this.chosenIDs.splice(index,1);
+
+        //    d3.selectAll(".tooltipCircle"+this.count).remove();
+            // is tooltip
+            //then remove the highlight from chosenID list and visually
+        //}
         else {
             this.count = this.count + 1;
 
@@ -1430,6 +1484,8 @@ class aa_view {
                     toolData = toolData.toLowerCase();
                     this.filteredData = data[i].filter(d => d.variable_name.toLowerCase().includes(toolData));
                 }
+            
+            //    if (!this.chosenIDs.includes(this.filteredData[0].variable_name)) {
 
                 this.chosenIDs.push(this.filteredData[0].variable_name.toLowerCase());
 
@@ -1485,10 +1541,13 @@ class aa_view {
                 })
                 .classed("tooltipCircle"+that.count, true);
 
+            //}
             }
 
             if (this.timeline === true && this.timelineActive === true
                 && this.imageData === false) {
+
+                //this.createTempLine()
 
                 let objarray = this.lineData;
                 let line = this.line;
@@ -1680,6 +1739,10 @@ class aa_view {
                 .range([0, xlargeScale.bandwidth()]);
 
         let altXscale = xcatsScale;
+
+        //let yScale = d3.scaleLinear()
+        //       .domain([0, d3.max(array_of_variable_objects, d => d3.max(that.chosenIDs, key => d[key]))]).nice()
+        //       .range([h - margin.bottom, margin.top]);
 
         that.barcounter = 0;
         that.barcounter2 = 0;
@@ -2184,6 +2247,8 @@ class aa_view {
             dataTime.push(datapoint);
         }
 
+        //let dataTime = [...data];
+
         if (this.timelineActive === true) {
             d3.select("#svg-time").remove();
         }
@@ -2195,6 +2260,7 @@ class aa_view {
 
         let parseTime = d3.timeParse("%Y-%m-%d");
 
+        //if (this.timelineActive === false) {
             if ((typeof dataTime[0]["date"]) !== "object") {
                 dataTime.forEach(function(d) {
                     d.date = parseTime(d.date);
@@ -2205,6 +2271,7 @@ class aa_view {
                 .append('div')
                 .attr("class", "tooltip")
                 .style("opacity", 0);
+        //}
 
         let uniqueID_arr = [];
 
