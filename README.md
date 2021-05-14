@@ -1,3 +1,22 @@
 # ArchetypalAnalysis
+
+This project visualizes the results of performing Archetypal Analysis (Principal Convex Hull Analysis) on a dataset. Upon entering the website, the user can upload their dataset for the built-in analysis, loading results from pre-computed datasets, and uploading the results from their custom implementation. The user will have the choice of choosing the number of archetypes for the built-in implementation. Additionally, the user will have the ability to download the pre-computed datasets.
+
+Once the user selects the built-in function, pre-computed dataset, or uploads the results from their custom implementation, the website will take the user to visualization. For numerical and time-series datasets, the user will see a series of one-dimensional plots corresponding to each archetype and a list of variables in the dataset. Each item in the dataset will correspond to one circle in each one-dimensional plot. The circle's location on each one-dimensional plot is determined by the embedding vector that communicates the archetype proportions for each data item. The user will have the ability to hover over each circle on each one-dimensional plot to identify the data item. The user can search for the names of the different data items using the search bar.
+Additionally, the user will have the ability to select specific data points across the one-dimensional plots and compare their raw data by selecting and submitting variables. Upon submitting data for comparison, one bar chart will appear per variable chosen. Each bar chart will display the values for the selected data points. 
+
+For time-series datasets, the user will see a line chart below the one-dimensional archetype plots. The line chart will display the raw time-series data for each data item. The user will have the ability to select specific data items in the line chart, which will result in the selection of the corresponding data item in each one-dimensional archetype plot. Furthermore, the user can compare the selected items for a specific date using the bar charts. 
+
+For image datasets, the user will solely see the different one-dimensional plots. When utilizing the image feature, the user will have the ability to select data items in the one-dimensional plots. Selection will result in the display of the corresponding image. 
+
+The user will have the option of selecting large regions of each one-dimensional plot using a brush. This selection will display the averages for the selected data points in each bar chart. For time-series datasets, the bar charts will display averages for a specific day, and the selected data items will be highlighted in the line chart. For image datasets, the selection of an item results in the display of the corresponding image. 
+
+When using the built-in implementation or the pre-computed dataset, the user will have the ability to switch between different numbers of archetypes. This feature is disabled for the visualization of custom results. 
+
+Users who want to test the built-in implementation can download the data files on the home page and upload the "CovidWeekDataMatrix.csv" under the "Select a local CSV File:" header. 
  
+Users who want to use the custom implementation can download the data files on the home page and upload the file, "CovidSMatrix4Custom.csv," as the S matrix, and "CovidDataMatrix.csv," as the data file. These two files will display a custom analysis of time series data performed for four different archetypes. Another option is to upload "DiabetesSmatrix4Custom.csv" as the S matrix and "DiabetesData.csv" as the data file. These two files will display results for a custom analysis of numerical data performed for four different archetypes. Finally, users can use the custom image implementation for ten archetypes by uploading the 200 image files and uploading "MNISTSImageMatrix10_200.csv," as the S matrix "MNISTSImageMatrix_200.csv," as the data file. 
+
+All of the code in this project was completed by Marko Miholjcic. Math.js, jquery.js, numjs.js, and d3 packages were imported and used to develop this visualization. The Archetypal Analysis algorithm implementation was based on the python implementation of Principle Convex Hull Analysis developed by Ulf Aslak. 
+
 Link to project website: https://miholjcicmarko.github.io/ArchetypalAnalysis/

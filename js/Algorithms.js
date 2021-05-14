@@ -1,4 +1,4 @@
-/** Class implementing the Algorithms on the data. */
+/** Class implementing the Archetypal Analysis Algorithm on the data. */
 class Algorithms {
 
     constructor(data, noc, I, U) {
